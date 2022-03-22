@@ -1,7 +1,6 @@
 const colors = {
   primary: {
-    100: '#3063CB',
-    20: '#3063CB20',
+    100: '#9650FF',
   },
   tip: {
     100: '#FF7E41',
@@ -11,12 +10,15 @@ const colors = {
     666: '#666666',
     333: '#333333',
     orange: '#FF7E41',
+    gray: '#8E8895',
   },
   bg: {
     f9: '#f9f9f9',
     f5: '#F5F5F5',
-    darkblue: '#004895',
-    blue: '#266CF3',
+    darkGray: '#F1F0F3',
+  },
+  border: {
+    gray: '#C7C4CC',
   },
 };
 

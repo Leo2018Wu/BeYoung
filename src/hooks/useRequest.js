@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {useState, useEffect, useRef} from 'react';
 import {useToast} from 'native-base';
-
-// const BASE_URL = 'https://lms.hymjweb.com:9443/flps';
-const BASE_URL = 'https://worker.zyxsnet.com:8443/hwds/cgi/';
+import {BASE_URL} from '../util/config';
+import getStorage from '../util/Storage';
 
 const headers = {
   Accept: 'application/json',
@@ -21,7 +20,7 @@ const useRequest = (
   url,
   body = {},
   options = {
-    manual: false,
+    manual: true,
   },
 ) => {
   const Toast = useToast();
@@ -31,6 +30,7 @@ const useRequest = (
   const [error] = useState(null);
 
   useEffect(() => {
+    console.log('options', options);
     if (!controllerRef.current) {
       // eslint-disable-next-line no-undef
       controllerRef.current = new AbortController();
@@ -42,24 +42,40 @@ const useRequest = (
     return () => controllerRef.current.abort(); // 组件卸载时中断未完成的请求
   }, []);
 
-  const run = async () => {
+  const run = async (params = body) => {
+    console.log('run', params);
+    const userInfo = await getStorage(['userInfo']);
+    console.log('userInfo', userInfo);
     setLoading(true);
     try {
+      if (userInfo) {
+        headers.ACCESS_TOKEN = JSON.parse(userInfo).accessToken;
+      }
+      console.log('header', headers, BASE_URL + url);
       const response = await fetch(BASE_URL + url, {
         method: 'POST',
         headers,
-        body: JSON.stringify(body),
+        body: JSON.stringify(params),
         signal: controllerRef.current.signal,
       });
+      console.log('response', response);
       if (response.status === 200) {
         setLoading(false);
         const responseJSON = await response.json();
-        const {data, message} = responseJSON;
-        setResult(data);
-        Toast.show({
-          description: message,
-          placement: 'top',
-        });
+        console.log('responseJSON', responseJSON);
+        const {success, data, message, type} = responseJSON;
+        if (!success) {
+          // 请求失败
+          return;
+        }
+        if (type !== 'SUCCESS') {
+          Toast.show({
+            description: message,
+            placement: 'top',
+          });
+        } else {
+          setResult(data);
+        }
       }
     } catch (errMsg) {
       console.error(errMsg);
