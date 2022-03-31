@@ -44,7 +44,7 @@ const useRequest = (
 
   const run = async (params = body) => {
     console.log('run', params);
-    const userInfo = await getStorage(['userInfo']);
+    const userInfo = await getStorage(['USERINFO']);
     console.log('userInfo', userInfo);
     setLoading(true);
     try {

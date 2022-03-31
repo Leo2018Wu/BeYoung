@@ -4,13 +4,17 @@ const colors = {
   },
   tip: {
     100: '#FF7E41',
-    badge: '#FF6B25',
+    badge: '#1EBA2E',
   },
   fontColors: {
     666: '#666666',
     333: '#333333',
+    999: '#999999',
     orange: '#FF7E41',
     gray: '#8E8895',
+    _6f: '#6F6F6F',
+    _72: '#727272',
+    b2: '#b2b2b2',
   },
   bg: {
     f9: '#f9f9f9',

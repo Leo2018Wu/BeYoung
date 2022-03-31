@@ -16,3 +16,23 @@ export const verifyCode = {
   url: 'cgi/core/login/verifyCode',
   options: {},
 };
+
+// 更新用户信息
+export const updateUserInfo = {
+  url: 'cgi/core/user/updateUserInfo',
+  options: {},
+};
+
+// 获取用户信息
+export const fetchUserInfo = {
+  url: 'cgi/core/user/fetchUserInfo',
+  options: {},
+};
+
+// 获取我的信息
+export const fetchMyInfo = {
+  url: 'cgi/core/user/fetchMyInfo',
+  options: {
+    manual: false,
+  },
+};

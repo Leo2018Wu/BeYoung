@@ -13,8 +13,8 @@ const Index = () => {
     {code: 'GENDER_FEMALE', iconName: 'female', value: '女', color: '#FF5FB0'},
   ];
 
-  const chooseSex = (item: any) => {
-    run({gender: item.code});
+  const chooseSex = async (item: any) => {
+    await run({gender: item.code});
     if (item.code === 'GENDER_MALE') {
       AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', 'MALE_LOGIN');
       DeviceEventEmitter.emit('LOGIN_EVENT', 'MALE_LOGIN');

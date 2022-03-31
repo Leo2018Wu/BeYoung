@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect} from 'react';
+import {DeviceEventEmitter} from 'react-native';
 import {Box, Input, Text} from 'native-base';
 import {sendCode, verifyCode} from '../../api/common.js';
 import useRequest from '../../hooks/useRequest';
@@ -29,6 +30,13 @@ const Index = ({...props}) => {
         props.navigation.navigate('ChooseSex');
       } else {
         // 否则直接进入主页
+        if (result.gender === 'GENDER_MALE') {
+          AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', 'MALE_LOGIN');
+          DeviceEventEmitter.emit('LOGIN_EVENT', 'MALE_LOGIN');
+        } else if (result.gender === 'GENDER_FEMALE') {
+          AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', 'FEMALE_LOGIN');
+          DeviceEventEmitter.emit('LOGIN_EVENT', 'FEMALE_LOGIN');
+        }
       }
     }
   }, [result]);

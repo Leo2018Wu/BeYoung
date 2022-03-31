@@ -1,9 +1,10 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Center, HStack, Pressable, Text} from 'native-base';
+import {Center, HStack, Image, Pressable, Text} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import HomeScreen from '../../bossPages/home/Home';
+import DailyScreen from '../../bossPages/daily/Index';
 import CommunicateScreen from '../../bossPages/communication/Index';
 import MineScreen from '../../bossPages/mine/Mine';
 
@@ -31,6 +32,7 @@ const MyTabs = () => {
         }}>
         {state.routes.map((route: routeItem, index: number) => {
           const {options} = descriptors[route.key];
+          console.log('route', options);
           const label =
             options.tabBarLabel !== undefined
               ? options.tabBarLabel
@@ -55,10 +57,10 @@ const MyTabs = () => {
               flex={1}
               key={route.key}
               onPress={onPress}
-              bg={isFocused ? 'primary.100' : '#fff'}
+              // bg={isFocused ? 'primary.100' : '#fff'}
               pb={INSET_BOTTOM / 2}>
               <Center h="full">
-                <Text style={{color: isFocused ? '#fff' : '#999'}}>
+                <Text style={{color: isFocused ? '#9650FF' : '#999'}}>
                   {label}
                 </Text>
               </Center>
@@ -81,6 +83,14 @@ const MyTabs = () => {
         }}
         name="Home"
         component={HomeScreen}
+      />
+      <Tab.Screen
+        options={{
+          headerShown: false,
+          tabBarLabel: '动态',
+        }}
+        name="Daily"
+        component={DailyScreen}
       />
       <Tab.Screen
         options={{
