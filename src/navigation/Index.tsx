@@ -3,8 +3,7 @@ import {StatusBar} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {DeviceEventEmitter} from 'react-native';
 import getStorage from '../util/Storage';
-import StackBossMain from './boss/Main';
-import StackGirlsMain from './girls/Main';
+import StackMain from './boss/Main';
 import StackLogin from './Login';
 import Splash from './Splash';
 
@@ -14,8 +13,6 @@ const Index = () => {
 
   useEffect(() => {
     // AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
-    // AsyncStorage.setItem('USER_INFO', '');
-    // DeviceEventEmitter.emit('LOGIN_EVENT', '');
     getStorage(['USER_INFO']).then(res => {
       console.log('USER_INFO', res);
     });
@@ -43,8 +40,7 @@ const Index = () => {
         backgroundColor="transparent"
         translucent
       />
-      {isLogin === 'MALE_LOGIN' && <StackBossMain />}
-      {isLogin === 'FEMALE_LOGIN' && <StackGirlsMain />}
+      {isLogin === 'MALE_LOGIN' && <StackMain />}
       {!isLogin && <StackLogin />}
     </>
   );
