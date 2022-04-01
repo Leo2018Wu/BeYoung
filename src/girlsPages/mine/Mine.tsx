@@ -27,9 +27,9 @@ const Mine = (props: any) => {
       <LinkList
         onPress={(routeName: any) => {
           if (routeName === 'logout') {
-            AsyncStorage.removeItem('USER_INFO');
-            AsyncStorage.removeItem('LOGIN_NAVIGAITON_NAME');
-            DeviceEventEmitter.emit('LOGIN_EVENT', false);
+            AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
+            AsyncStorage.setItem('USER_INFO', '');
+            DeviceEventEmitter.emit('LOGIN_EVENT', '');
           } else {
             navigation.navigate(routeName);
           }

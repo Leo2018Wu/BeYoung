@@ -16,6 +16,8 @@ target 'TypeScriptAppNativeBase' do
 
   pod 'react-native-pager-view', :path => '../node_modules/react-native-pager-view'
 
+  pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
+
   target 'TypeScriptAppNativeBaseTests' do
     inherit! :complete
     # Pods for testing

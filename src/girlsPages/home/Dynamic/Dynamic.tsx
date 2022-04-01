@@ -7,9 +7,16 @@ import {queryMyDynamic} from '../../api/dynamic';
 import useRequest from '../../../hooks/useRequest';
 import {useCountdown} from '../../../hooks/useTimeDown';
 
-const Login = () => {
+const Login = ({navigation}: any) => {
   const [showLoading, setLoading] = useState(false);
-  const [listData, setList] = useState([]);
+  const [listData, setList] = useState([
+    {id: 0},
+    {id: 1},
+    {id: 2},
+    {id: 3},
+    {id: 3},
+    {id: 4},
+  ]);
   const [total, setTotal] = useState(null);
   const [params, setParams] = useState({
     pageNum: 1,
@@ -23,10 +30,10 @@ const Login = () => {
     ],
   });
 
-  const {run: runQueryMyDynamic, result} = useRequest(
-    queryMyDynamic.url,
-    params,
-  );
+  // const {run: runQueryMyDynamic, result} = useRequest(
+  //   queryMyDynamic.url,
+  //   params,
+  // );
 
   // useFocusEffect(
   //   React.useCallback(() => {
@@ -34,13 +41,13 @@ const Login = () => {
   //   }, [runQueryMyDynamic]),
   // );
 
-  useEffect(() => {
-    runQueryMyDynamic();
-    if (result) {
-      setList(result);
-      console.log('--result--', result);
-    }
-  }, []);
+  // useEffect(() => {
+  //   runQueryMyDynamic();
+  //   if (result) {
+  //     setList(result);
+  //     console.log('--result--', result);
+  //   }
+  // }, []);
 
   return (
     <View>

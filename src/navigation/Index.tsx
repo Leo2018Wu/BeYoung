@@ -14,6 +14,8 @@ const Index = () => {
 
   useEffect(() => {
     // AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
+    // AsyncStorage.setItem('USER_INFO', '');
+    // DeviceEventEmitter.emit('LOGIN_EVENT', '');
     getStorage(['USER_INFO']).then(res => {
       console.log('USER_INFO', res);
     });

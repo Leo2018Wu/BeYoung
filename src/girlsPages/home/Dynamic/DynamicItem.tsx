@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {Pressable, StyleSheet} from 'react-native';
 import {View, Text, Image} from 'native-base';
+import {useNavigation} from '@react-navigation/native';
 
 import layout from '../../common/Layout';
 
 const Login = ({...props}) => {
+  const navigation = useNavigation();
   console.log('----props---', props);
   const {item} = props;
   const [imgList, setImgList] = useState([{id: 0}, {id: 1}, {id: 2}]);
@@ -27,7 +29,7 @@ const Login = ({...props}) => {
 
   return (
     <Pressable
-      onPress={() => props.navigation.navigate('DynamicItemDetail')}
+      onPress={() => navigation.navigate('DynamicItemDetail')}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 15,
