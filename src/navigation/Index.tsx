@@ -3,7 +3,8 @@ import {StatusBar} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {DeviceEventEmitter} from 'react-native';
 import getStorage from '../util/Storage';
-import StackMain from './boss/Main';
+import StackBossMain from './boss/Main';
+import StackGirlsMain from './girls/Main';
 import StackLogin from './Login';
 import Splash from './Splash';
 
@@ -40,7 +41,8 @@ const Index = () => {
         backgroundColor="transparent"
         translucent
       />
-      {isLogin === 'MALE_LOGIN' && <StackMain />}
+      {isLogin === 'MALE_LOGIN' && <StackBossMain />}
+      {isLogin === 'FEMALE_LOGIN' && <StackGirlsMain />}
       {!isLogin && <StackLogin />}
     </>
   );
