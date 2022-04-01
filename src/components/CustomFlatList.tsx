@@ -101,7 +101,7 @@ export default class CustomFlatList extends React.Component<any, any> {
 
   renderEmpty = () => {
     return (
-      <Center py={2} flex={1}>
+      <Center my={4} flex={1}>
         <Text>暂无数据</Text>
       </Center>
     );
@@ -109,14 +109,14 @@ export default class CustomFlatList extends React.Component<any, any> {
 
   renderLoadAll = () => {
     return (
-      <Box py={2} alignItems={'center'}>
+      <Box my={4} alignItems={'center'}>
         <Text>已全部加载</Text>
       </Box>
     );
   };
   renderLoadMore = () => {
     return (
-      <Box py={2} alignItems={'center'}>
+      <Box my={4} alignItems={'center'}>
         <Text>加载更多</Text>
       </Box>
     );

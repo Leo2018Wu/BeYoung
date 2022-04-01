@@ -5,6 +5,7 @@ const colors = {
   tip: {
     100: '#FF7E41',
     badge: '#1EBA2E',
+    placeholder: '#C1C0C9',
   },
   fontColors: {
     666: '#666666',
