@@ -70,7 +70,6 @@ const useRequest = (
         }
         if (type !== 'SUCCESS') {
           Toast.show({
-            duration: Toast.durations.SHORT,
             description: message,
             placement: 'top',
           });
