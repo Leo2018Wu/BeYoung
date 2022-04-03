@@ -81,13 +81,18 @@ const Home = () => {
         w={'full'}
         style={{position: 'absolute', top: 140, zIndex: 1}}
         px={4}>
-        <Image
+        <Box
           mx={3}
-          source={require('../../images/test.jpg')}
-          alt="avatar"
-          borderRadius={100}
-          style={styles.avatar}
-        />
+          style={{
+            zIndex: 2,
+          }}>
+          <Image
+            source={require('../../images/test.jpg')}
+            alt="avatar"
+            borderRadius={100}
+            style={styles.avatar}
+          />
+        </Box>
         <Box
           alignItems={'center'}
           pt={12}

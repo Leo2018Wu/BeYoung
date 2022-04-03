@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useWindowDimensions} from 'react-native';
 import Tab from './DailyTab';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -163,6 +163,14 @@ const Index = () => {
           placeholder="输入你的消息..."
           placeholderTextColor={'tip.placeholder'}
           flex={1}
+        />
+        <Ionicons
+          style={{
+            marginRight: 16,
+          }}
+          name="gift"
+          size={26}
+          color="#9650FF"
         />
         <FontAwesome name="send" size={24} color="#9650FF" />
       </HStack>
