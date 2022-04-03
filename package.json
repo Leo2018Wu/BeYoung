@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "bundle-android": "react-native bundle --entry-file ./index.js --dev false --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res --platform android",
+    "bundle-ios": "react-native bundle --entry-file ./index.js --dev false --bundle-output ./ios/bundle/index.jsbundle --assets-dest ./ios/bundle --platform ios"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.12.1",
@@ -18,9 +20,14 @@
     "native-base": "3.3.5",
     "react": "17.0.1",
     "react-native": "0.64.1",
+    "react-native-fast-image": "^8.5.11",
+    "react-native-image-crop-picker": "^0.37.3",
+    "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-pager-view": "^5.4.15",
+    "react-native-permissions": "^3.3.1",
     "react-native-safe-area-context": "^3.2.0",
+    "aliyun-oss-react-native-self": "^1.0.2",
     "react-native-screens": "^3.10.1",
     "react-native-svg": "^12.1.1",
     "react-native-tab-view": "^3.1.1",

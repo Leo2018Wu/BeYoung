@@ -70,12 +70,12 @@ const useRequest = (
         }
         if (type !== 'SUCCESS') {
           Toast.show({
+            duration: Toast.durations.SHORT,
             description: message,
             placement: 'top',
           });
-        } else {
-          setResult(data);
         }
+        setResult(JSON.parse(JSON.stringify(data)));
       }
     } catch (errMsg) {
       console.error(errMsg);
