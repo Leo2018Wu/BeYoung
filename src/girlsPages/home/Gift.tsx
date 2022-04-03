@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet} from 'react-native';
-import {View, Text, Image} from 'native-base';
+import {Pressable, StyleSheet, Image} from 'react-native';
+import {View, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
 import layout from '../common/Layout';

@@ -53,8 +53,8 @@ const MyStack = () => {
         name="Wallet"
         component={Wallet}
         options={() => ({
-          title: '钱包',
-          headerStyle: {backgroundColor: '#fff'},
+          title: '',
+          headerShown: false,
         })}
       />
       <Stack.Screen

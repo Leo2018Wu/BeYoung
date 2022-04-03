@@ -3,19 +3,22 @@ import {
   View,
   Text,
   StyleSheet,
-  StatusBar,
   Image,
   ImageBackground,
   Platform,
   FlatList,
   Pressable,
 } from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import layout from '../common/Layout';
 import WalletItem from './WalletItem';
 
 const Mine = (props: any) => {
   const {navigation} = props;
+  const insets = useSafeAreaInsets();
   const [list, setList] = useState([
     {id: 0},
     {id: 1},
@@ -27,13 +30,40 @@ const Mine = (props: any) => {
 
   return (
     <View style={{backgroundColor: '#fff', flex: 1}}>
-      <StatusBar backgroundColor="transparent" translucent />
       <View
-        style={{backgroundColor: '#fff', height: '40%', position: 'relative'}}>
+        style={{backgroundColor: '#fff', height: '50%', position: 'relative'}}>
         <ImageBackground
           source={require('../assets/mineBg.png')}
           style={styles.banner}
           resizeMode="cover">
+          <View
+            style={{
+              position: 'absolute',
+              top: insets.top * 1.5,
+              width: layout.width,
+            }}>
+            <Pressable
+              style={{
+                width: 24,
+                height: 24,
+                left: 20,
+                position: 'absolute',
+                zIndex: 10,
+              }}
+              onPress={() => {
+                navigation.navigate('Mine');
+              }}>
+              <Icon name="arrow-back" size={24} color="#fff" />
+            </Pressable>
+            <Text
+              style={{
+                color: '#FFFFFF',
+                fontSize: 18,
+                textAlign: 'center',
+              }}>
+              钱包
+            </Text>
+          </View>
           <View style={styles.walletContain}>
             <View style={styles.contain_text}>
               <Text style={{color: '#fff', fontSize: 16}}>青回币</Text>
@@ -89,16 +119,19 @@ const Mine = (props: any) => {
         <Text style={styles.withdrawal}>提现记录</Text>
       </View>
       <FlatList
-        contentContainerStyle={styles.main}
         data={list}
         onEndReachedThreshold={0.1}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => <WalletItem item={item} />}
         keyExtractor={item => item.id}
       />
-      <View style={styles.btnView}>
-        <Text style={styles.btnTextView}>提交</Text>
-      </View>
+      <LinearGradient
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={['#D988FF', '#8B5CFF']}
+        style={styles.linearGradient}>
+        <Text style={styles.buttonText}>提现</Text>
+      </LinearGradient>
     </View>
   );
 };
@@ -108,7 +141,7 @@ export default Mine;
 const styles = StyleSheet.create({
   banner: {
     width: layout.width,
-    height: 180,
+    height: 280,
     ...Platform.select({
       ios: {
         paddingTop: 28 + 40,
@@ -124,7 +157,7 @@ const styles = StyleSheet.create({
   },
   walletContain: {
     position: 'absolute',
-    top: '40%',
+    top: '60%',
     left: 30,
   },
   contain_text: {
@@ -135,7 +168,7 @@ const styles = StyleSheet.create({
     width: '90%',
     backgroundColor: '#fff',
     position: 'absolute',
-    top: '45%',
+    top: '58%',
     left: '5%',
     flex: 1,
     flexDirection: 'row',
@@ -153,20 +186,21 @@ const styles = StyleSheet.create({
     color: '#554C5F',
     fontSize: 14,
   },
-  main: {},
-  btnView: {
+  linearGradient: {
     width: layout.width - 60,
     marginLeft: 30,
     marginTop: 20,
     height: 50,
-    backgroundColor: '#D988FF',
     borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: '5%',
   },
-  btnTextView: {
-    color: '#fff',
+  buttonText: {
     fontSize: 16,
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    height: 56,
+    lineHeight: 56,
+    color: '#ffffff',
+    backgroundColor: 'transparent',
   },
 });

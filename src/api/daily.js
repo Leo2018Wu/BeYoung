@@ -22,3 +22,15 @@ export const queryDynamic = {
   url: 'cgi/core/dynamic/queryDynamic',
   options: {},
 };
+
+// 发布动态-女生端
+export const addDynamic = {
+  url: 'cgi/core/dynamic/addDynamic',
+  options: {},
+};
+
+// 查询我的动态-女生端
+export const queryMyDynamic = {
+  url: 'cgi/core/dynamic/queryMyDynamic',
+  options: {},
+};

@@ -18,6 +18,14 @@ target 'TypeScriptAppNativeBase' do
 
   pod 'RNFastImage', :path => '../node_modules/react-native-fast-image'
 
+  pod 'RNPermissions', :path => '../node_modules/react-native-permissions'
+
+  pod 'RNImageCropPicker', :path => '../node_modules/react-native-image-crop-picker'
+
+  pod 'aliyun-oss-react-native-self', :path => '../node_modules/aliyun-oss-react-native-self'
+
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   target 'TypeScriptAppNativeBaseTests' do
     inherit! :complete
     # Pods for testing

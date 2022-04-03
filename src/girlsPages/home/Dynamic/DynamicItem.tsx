@@ -1,18 +1,23 @@
 import React, {useState, useEffect} from 'react';
-import {Pressable, StyleSheet} from 'react-native';
-import {View, Text, Image} from 'native-base';
+import {Pressable, StyleSheet, Image} from 'react-native';
+import {View, Text} from 'native-base';
+import FastImage from 'react-native-fast-image';
 import {useNavigation} from '@react-navigation/native';
+import {BASE_DOWN_URL} from '../../../util/config';
 
 import layout from '../../common/Layout';
 
 const Login = ({...props}) => {
   const navigation = useNavigation();
-  console.log('----props---', props);
   const {item} = props;
-  const [imgList, setImgList] = useState([{id: 0}, {id: 1}, {id: 2}]);
+  const [imgList, setImgList] = useState([]);
   const [time, setTime] = useState('');
 
   useEffect(() => {
+    if (item.images && JSON.parse(item.images).length) {
+      setImgList(JSON.parse(item.images));
+    }
+    console.log('-sd-s-d-d-s', imgList);
     let tempTime = Math.ceil(
       (new Date().getTime() - new Date(item.createTime).getTime()) / 1000,
     );
@@ -45,27 +50,32 @@ const Login = ({...props}) => {
       <View style={styles.itemContain}>
         <Text style={{color: '#8E8895', fontSize: 14}}>啦啦啦</Text>
         <Text style={{color: '#c7c7c7', fontSize: 10}}>{time}</Text>
+        <Text style={{color: '#554C5F', fontSize: 14}}>{item.content}</Text>
         <View
           style={{
             marginVertical: 10,
             flexDirection: 'row',
-            justifyContent: 'space-around',
           }}>
           {imgList &&
             imgList.map((item, index) => {
               return (
-                <Image
-                  source={require('../../assets/IMG_2728.png')}
+                <FastImage
                   style={{
                     width: 85,
                     height: 85,
                     borderRadius: 10,
                   }}
+                  source={{
+                    uri:
+                      item.substr(0, 3) !== 'img' ? item : BASE_DOWN_URL + item,
+                    headers: {Authorization: 'someAuthToken'},
+                    priority: FastImage.priority.normal,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
                 />
               );
             })}
         </View>
-        <Text style={{color: '#554C5F', fontSize: 14}}>{item.content}</Text>
         <View style={styles.optContain}>
           <Text style={styles.optSize}>评分{item.score}</Text>
           <View style={styles.optView}>

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {View, Text, Input} from 'native-base';
+import {View, Text, Input, ScrollView, NativeBaseProvider} from 'native-base';
+import LinearGradient from 'react-native-linear-gradient';
 
 import layout from '../common/Layout';
 
@@ -13,28 +14,43 @@ const Login = () => {
     {id: 3},
     {id: 3},
     {id: 4},
+    {id: 4},
+    {id: 4},
   ]);
 
   return (
-    <View style={styles.quickContain}>
-      {list &&
-        list.map((item, index) => {
-          return (
-            <View>
-              <Text style={styles.quickTitle}>花小钱开启聊天场景</Text>
-              <Input
-                value={goodsName}
-                onChangeText={text => setGoodsName(text)}
-                variant="outline"
-                placeholder="请输入货物名称"
-                fontSize={14}
-                borderRadius={10}
-                borderColor={'#C7C4CC'}
-              />
-            </View>
-          );
-        })}
-    </View>
+    <NativeBaseProvider>
+      <ScrollView style={styles.quickContain}>
+        <View style={{paddingBottom: 20}}>
+          {list &&
+            list.map((item, index) => {
+              return (
+                <View>
+                  <Text style={styles.quickTitle}>花小钱开启聊天场景</Text>
+                  <Input
+                    value={goodsName}
+                    onChangeText={text => setGoodsName(text)}
+                    variant="outline"
+                    placeholder="请输入货物名称"
+                    fontSize={14}
+                    borderRadius={10}
+                    borderColor={'#C7C4CC'}
+                  />
+                </View>
+              );
+            })}
+        </View>
+      </ScrollView>
+      <View style={{backgroundColor: '#fff'}}>
+        <LinearGradient
+          start={{x: 0, y: 0}}
+          end={{x: 1, y: 0}}
+          colors={['#D988FF', '#8B5CFF']}
+          style={styles.linearGradient}>
+          <Text style={styles.buttonText}>保存</Text>
+        </LinearGradient>
+      </View>
+    </NativeBaseProvider>
   );
 };
 
@@ -52,5 +68,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 15,
     marginVertical: 20,
+  },
+  linearGradient: {
+    width: '90%',
+    marginLeft: '5%',
+    marginVertical: 20,
+    borderRadius: 28,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    height: 56,
+    lineHeight: 56,
+    color: '#ffffff',
+    backgroundColor: 'transparent',
   },
 });
