@@ -35,8 +35,10 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>青回想使用您的相机，允许吗？</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>青回想访问您的相册，允许吗？</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
