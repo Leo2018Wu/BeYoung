@@ -2,7 +2,8 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import TabNav from './TabNav';
-import DynamicItemDetail from '../../girlsPages/home/Dynamic/DynamicItemDetail';
+// import DynamicItemDetail from '../../girlsPages/home/Dynamic/DynamicItemDetail';
+import DailyDetail from '../../commonPages/daily/DailyDetail';
 import UserInfoSetting from '../../girlsPages/mine/UserInfoSetting';
 import QuickReply from '../../girlsPages/mine/QuickReply';
 import Wallet from '../../girlsPages/wallet/Wallet';
@@ -26,8 +27,8 @@ const MyStack = () => {
         component={TabNav}
       />
       <Stack.Screen
-        name="DynamicItemDetail"
-        component={DynamicItemDetail}
+        name="DailyDetail"
+        component={DailyDetail}
         options={() => ({
           title: '帖子详情',
           headerStyle: {backgroundColor: '#fff'},

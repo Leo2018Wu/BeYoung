@@ -3,7 +3,7 @@ import {Box, Center, Spinner, Text} from 'native-base';
 import {FlatList} from 'react-native';
 import fetchData from '../util/request';
 
-const DEFAULT_SIZE = 10;
+const DEFAULT_SIZE = 100;
 //分页
 const PAGE_IS_LOADING = 'pageIsLoading';
 const PAGE_IS_NEXTPAGE = 'pageIsNextPage';
@@ -97,6 +97,14 @@ export default class CustomFlatList extends React.Component<any, any> {
 
   _loadMore = async () => {
     // 此时加载下一页数据 合并前一页数据
+    // this.setState(
+    //   {
+    //     pageNum: this.state.pageNum + 1,
+    //   },
+    //   () => {
+    //     this._getList();
+    //   },
+    // );
   };
 
   renderEmpty = () => {
