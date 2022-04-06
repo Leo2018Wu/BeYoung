@@ -40,6 +40,8 @@ export default class CustomFlatList extends React.Component<any, any> {
   }
   // 获取列表数据
   _getList = async () => {
+    console.log('this._getList', this.state);
+
     try {
       let isPage = this.props.isPage || this.state.isPage;
       const {api} = this.props;
@@ -65,7 +67,7 @@ export default class CustomFlatList extends React.Component<any, any> {
     const {data, total} = result;
     const {queryList, pageNum} = this.state;
     console.log('[][[]][', total, data);
-    if (data.length === 0) {
+    if (data.length === 0 && queryList.length === 0) {
       this.setState({
         pageStatus: IS_EMPTY,
       });
@@ -97,6 +99,16 @@ export default class CustomFlatList extends React.Component<any, any> {
 
   _loadMore = async () => {
     // 此时加载下一页数据 合并前一页数据
+    let _this = this;
+    _this.setState(
+      {
+        pageNum: _this.state.pageNum + 1,
+      },
+      () => {
+        console.log('_this.state.pageNum', _this.state.pageNum);
+        _this._getList();
+      },
+    );
   };
 
   renderEmpty = () => {
@@ -168,11 +180,13 @@ export default class CustomFlatList extends React.Component<any, any> {
         ListFooterComponent={this.renderFooter}
         keyExtractor={(item, index) => `key${index}`}
         onEndReached={this._onEndReached}
-        onEndReachedThreshold={0.2}
+        onEndReachedThreshold={0.01}
       />
     );
   };
   _onEndReached = () => {
+    console.log('_onEndReached', this.state);
+
     const {pagingStatus} = this.state;
     if (pagingStatus === PAGE_IS_NEXTPAGE) {
       this._loadMore();

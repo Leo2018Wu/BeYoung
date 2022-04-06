@@ -14,8 +14,10 @@ const fetchData = async (url, params) => {
     headers,
     body: JSON.stringify(params),
   });
+
   if (response.status === 200) {
     const responseJSON = await response.json();
+    console.log('fetchresponseJSON', responseJSON);
     return responseJSON;
   }
 };

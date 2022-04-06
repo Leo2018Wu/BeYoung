@@ -5,6 +5,7 @@ import {
   Divider,
   HStack,
   Image,
+  Pressable,
   ScrollView,
   Text,
   VStack,
@@ -14,29 +15,35 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 import {StyleSheet, useWindowDimensions} from 'react-native';
 import useRequest from '../../hooks/useRequest';
 import {fetchMyInfo} from '../../api/common';
+import {useFocusEffect} from '@react-navigation/native';
 
 const link_group1_list = [
   {
     name: '女生微信',
     icon: require('../../images/mine_link_icon1.png'),
+    pageName: 'WeChatNum',
   },
   {
     name: '我的礼物',
     icon: require('../../images/mine_link_icon2.png'),
+    pageName: '',
   },
   {
     name: '帮助教程',
     icon: require('../../images/mine_link_icon3.png'),
+    pageName: '',
   },
 ];
 const link_group2_list = [
   {
     name: '钱包',
     icon: require('../../images/mine_link_icon4.png'),
+    pageName: '',
   },
   {
     name: '联系客服',
     icon: require('../../images/mine_link_icon5.png'),
+    pageName: 'Service',
   },
   // {
   //   name: '黑名单',
@@ -45,16 +52,25 @@ const link_group2_list = [
   {
     name: '设置',
     icon: require('../../images/mine_link_icon6.png'),
+    pageName: 'Setting',
   },
 ];
 
-const Home = () => {
+const Home = ({...props}) => {
   const {width} = useWindowDimensions();
-  const {result: userInfo} = useRequest(
-    fetchMyInfo.url,
-    {},
-    fetchMyInfo.options,
+  const {result: userInfo, run} = useRequest(fetchMyInfo.url);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      run();
+    }, []),
   );
+
+  const jumpPage = (routeName: String) => {
+    console.log('routeName', routeName);
+
+    props.navigation.navigate(routeName);
+  };
 
   return (
     <ScrollView
@@ -87,7 +103,7 @@ const Home = () => {
             zIndex: 2,
           }}>
           <Image
-            source={require('../../images/test.jpg')}
+            source={require('../../images/default_avatar.jpg')}
             alt="avatar"
             borderRadius={100}
             style={styles.avatar}
@@ -101,10 +117,10 @@ const Home = () => {
           borderRadius={4}
           bg="white">
           <Text fontWeight={'bold'} mt={2} fontSize={'2xl'}>
-            {userInfo?.nickName || '老大叔'}
+            {userInfo?.nickName || '暂无昵称'}
           </Text>
           <Text color={'fontColors.gray'} fontSize={'md'}>
-            ID: 64983274
+            ID: {userInfo?.id}
           </Text>
           <Divider my={4} />
           <HStack justifyContent={'space-around'}>
@@ -130,36 +146,42 @@ const Home = () => {
         </Box>
         <Box mt={5} shadow={1} borderRadius={4} bg="white">
           {link_group1_list.map((item, index) => (
-            <HStack
-              borderBottomColor={'bg.f5'}
-              borderBottomWidth={index < 2 ? 1 : 0}
-              px={2}
-              py={2}
-              alignItems={'center'}
+            <Pressable
+              onPress={() => jumpPage(item.pageName)}
               key={`key${index}`}>
-              <Image source={item.icon} alt="icon" style={styles.link_icon} />
-              <Text ml={2} mr="auto" fontSize={'md'} color="fontColors.333">
-                {item.name}
-              </Text>
-              <Icon name="chevron-right" color="#C5C6C7" size={32} />
-            </HStack>
+              <HStack
+                borderBottomColor={'bg.f5'}
+                borderBottomWidth={index < 2 ? 1 : 0}
+                px={2}
+                py={2}
+                alignItems={'center'}>
+                <Image source={item.icon} alt="icon" style={styles.link_icon} />
+                <Text ml={2} mr="auto" fontSize={'md'} color="fontColors.333">
+                  {item.name}
+                </Text>
+                <Icon name="chevron-right" color="#C5C6C7" size={32} />
+              </HStack>
+            </Pressable>
           ))}
         </Box>
         <Box mt={5} shadow={1} borderRadius={4} bg="white">
           {link_group2_list.map((item, index) => (
-            <HStack
-              borderBottomColor={'bg.f5'}
-              borderBottomWidth={index < 3 ? 1 : 0}
-              px={2}
-              py={2}
-              alignItems={'center'}
+            <Pressable
+              onPress={() => jumpPage(item.pageName)}
               key={`key${index}`}>
-              <Image source={item.icon} alt="icon" style={styles.link_icon} />
-              <Text ml={2} mr="auto" fontSize={'md'} color="fontColors.333">
-                {item.name}
-              </Text>
-              <Icon name="chevron-right" color="#C5C6C7" size={32} />
-            </HStack>
+              <HStack
+                borderBottomColor={'bg.f5'}
+                borderBottomWidth={index < 3 ? 1 : 0}
+                px={2}
+                py={2}
+                alignItems={'center'}>
+                <Image source={item.icon} alt="icon" style={styles.link_icon} />
+                <Text ml={2} mr="auto" fontSize={'md'} color="fontColors.333">
+                  {item.name}
+                </Text>
+                <Icon name="chevron-right" color="#C5C6C7" size={32} />
+              </HStack>
+            </Pressable>
           ))}
         </Box>
       </Box>
