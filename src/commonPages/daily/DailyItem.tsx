@@ -118,7 +118,7 @@ const Index = ({...props}) => {
               评分
             </Text>
             <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              24
+              {item.score}
             </Text>
           </HStack>
           <HStack alignItems={'center'}>
@@ -128,19 +128,19 @@ const Index = ({...props}) => {
               color={false ? '#9650FF' : '#C7C4CC'}
             />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              72
+              {item.likeNum}
             </Text>
           </HStack>
           <HStack alignItems={'center'}>
             <Icon name="message1" size={18} color="#C7C4CC" />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              13
+              {item.commentNum}
             </Text>
           </HStack>
           <HStack alignItems={'center'}>
             <Icon name="gift" size={18} color="#C7C4CC" />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              4
+              {item.giftNum}
             </Text>
           </HStack>
         </Stack>

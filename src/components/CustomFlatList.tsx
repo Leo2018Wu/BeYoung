@@ -3,7 +3,7 @@ import {Box, Center, Spinner, Text} from 'native-base';
 import {FlatList} from 'react-native';
 import fetchData from '../util/request';
 
-const DEFAULT_SIZE = 100;
+const DEFAULT_SIZE = 10;
 //分页
 const PAGE_IS_LOADING = 'pageIsLoading';
 const PAGE_IS_NEXTPAGE = 'pageIsNextPage';

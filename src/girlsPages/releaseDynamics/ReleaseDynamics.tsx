@@ -4,17 +4,22 @@ import {
   TextInput,
   Image,
   Modal,
+  StatusBar,
+  Platform,
   ActivityIndicator,
 } from 'react-native';
 import {Box, Text, Center, Pressable, View} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
 import FastImage from 'react-native-fast-image';
+import LinearGradient from 'react-native-linear-gradient';
 import {openPicker} from '../../util/openPicker';
 import {BASE_DOWN_URL} from '../../util/config';
 import {upload} from '../../util/upload';
 import {addDynamic} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
+
+import layout from '../common/Layout';
 
 const Index = (props: any) => {
   const {navigation} = props;
@@ -100,18 +105,24 @@ const Index = (props: any) => {
   };
 
   return (
-    <Box flex={1} bg="white">
-      <Box justifyContent="center" style={{paddingTop: insets.top}}>
-        <Center px={3} h={16} alignItems="center">
-          <Text color={'fontColors.333'} fontSize={'xl'}>
-            发帖
-          </Text>
-          <Pressable
-            onPress={() => checkSubmit()}
-            style={{position: 'absolute', right: 10, top: 20}}>
-            <Text>发送</Text>
-          </Pressable>
-        </Center>
+    <Box flex={1}>
+      <StatusBar backgroundColor="transparent" translucent />
+      <Box justifyContent="center" style={styles.banner}>
+        <LinearGradient
+          start={{x: 0, y: 0}}
+          end={{x: 0, y: 1}}
+          colors={['#D988FF', '#8B5CFF']}>
+          <Center px={3} h={24} alignItems="center">
+            <Text color={'#fff'} fontSize={'xl'} paddingTop={5}>
+              发帖
+            </Text>
+            <Pressable
+              onPress={() => checkSubmit()}
+              style={{position: 'absolute', right: 10, top: 48}}>
+              <Text color={'#fff'}>发送</Text>
+            </Pressable>
+          </Center>
+        </LinearGradient>
       </Box>
       <Modal animationType="fade" transparent visible={loading}>
         <View style={styles.toastViewer}>
@@ -121,7 +132,7 @@ const Index = (props: any) => {
           <Text style={styles.toastText}>正在上传...</Text>
         </View>
       </Modal>
-      <Box my={4} px={4} flex={1}>
+      <Box my={0} px={4} bg="white">
         <TextInput
           style={{
             minHeight: 100,
@@ -134,7 +145,8 @@ const Index = (props: any) => {
           onChangeText={text => setTextAreaValue(text)}
           value={textAreaValue}
         />
-        <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        <View
+          style={{flexDirection: 'row', flexWrap: 'wrap', marginBottom: 30}}>
           {list &&
             list.map((item, index) => {
               return (
@@ -197,6 +209,16 @@ const Index = (props: any) => {
 export default Index;
 
 const styles = StyleSheet.create({
+  banner: {
+    ...Platform.select({
+      ios: {
+        paddingTop: 28 + 40,
+      },
+      android: {
+        // paddingTop: layout.STATUSBAR_HEIGHT + 0,
+      },
+    }),
+  },
   img_item: {
     width: 60,
     height: 60,
