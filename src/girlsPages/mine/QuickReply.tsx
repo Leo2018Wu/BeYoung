@@ -8,14 +8,10 @@ import layout from '../common/Layout';
 const Login = () => {
   const [goodsName, setGoodsName] = useState('');
   const [list, setList] = useState([
-    {id: 0},
-    {id: 1},
-    {id: 2},
-    {id: 3},
-    {id: 3},
-    {id: 4},
-    {id: 4},
-    {id: 4},
+    {id: 0, title: '花大钱开启聊天'},
+    {id: 1, title: '花大钱开启聊天'},
+    {id: 2, title: '聊天后收到礼物'},
+    {id: 3, title: '聊天后连续或收到高额礼物'},
   ]);
 
   return (
@@ -26,12 +22,14 @@ const Login = () => {
             list.map((item, index) => {
               return (
                 <View>
-                  <Text style={styles.quickTitle}>花小钱开启聊天场景</Text>
+                  <Text style={styles.quickTitle}>
+                    {index + 1}、{item.title}
+                  </Text>
                   <Input
                     value={goodsName}
                     onChangeText={text => setGoodsName(text)}
                     variant="outline"
-                    placeholder="请输入货物名称"
+                    placeholder="添加你的回复..."
                     fontSize={14}
                     borderRadius={10}
                     borderColor={'#C7C4CC'}
