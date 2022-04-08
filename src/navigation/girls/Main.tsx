@@ -6,10 +6,13 @@ import TabNav from './TabNav';
 import DailyDetail from '../../commonPages/daily/DailyDetail';
 import UserInfoSetting from '../../girlsPages/mine/UserInfoSetting';
 import QuickReply from '../../girlsPages/mine/QuickReply';
+import ReplyExpPackage from '../../girlsPages/mine/ReplyExpPackage';
+import PhotoSelection from '../../girlsPages/mine/PhotoSelection';
 import Wallet from '../../girlsPages/wallet/Wallet';
 import TransferDetail from '../../girlsPages/wallet/TransferDetail';
 import WithdrawalDetail from '../../girlsPages/wallet/WithdrawalDetail';
 import Preview from '../../girlsPages/common/Preview';
+import EditUser from '../../girlsPages/mine/setting/EditUser';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +54,22 @@ const MyStack = () => {
         })}
       />
       <Stack.Screen
+        name="ReplyExpPackage"
+        component={ReplyExpPackage}
+        options={() => ({
+          title: '回复表情包',
+          headerStyle: {backgroundColor: '#fff'},
+        })}
+      />
+      <Stack.Screen
+        name="PhotoSelection"
+        component={PhotoSelection}
+        options={() => ({
+          title: '精选照片',
+          headerStyle: {backgroundColor: '#fff'},
+        })}
+      />
+      <Stack.Screen
         name="Wallet"
         component={Wallet}
         options={() => ({
@@ -81,6 +100,14 @@ const MyStack = () => {
           headerTitle: '',
           headerTransparent: true,
         }}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerBackVisible: true,
+        }}
+        name="EditUser"
+        component={EditUser}
       />
     </Stack.Navigator>
   );

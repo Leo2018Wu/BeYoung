@@ -13,8 +13,7 @@ import layout from '../common/Layout';
 import UserInfo from './UserInfo';
 import LinkList from './LinkList';
 
-const Mine = (props: any) => {
-  const {navigation} = props;
+const Mine = ({...props}) => {
   return (
     <View>
       <StatusBar backgroundColor="transparent" translucent />
@@ -31,7 +30,7 @@ const Mine = (props: any) => {
             AsyncStorage.setItem('USER_INFO', '');
             DeviceEventEmitter.emit('LOGIN_EVENT', '');
           } else {
-            navigation.navigate(routeName);
+            props.navigation.navigate(routeName);
           }
         }}
       />

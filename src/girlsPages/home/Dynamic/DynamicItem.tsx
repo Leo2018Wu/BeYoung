@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Pressable, StyleSheet, Image} from 'react-native';
 import {View, Text} from 'native-base';
 import FastImage from 'react-native-fast-image';
+import CFastImage from '../../../components/CFastImage';
 import {useNavigation} from '@react-navigation/native';
 import {BASE_DOWN_URL} from '../../../util/config';
 
@@ -63,19 +64,27 @@ const Login = ({...props}) => {
           {imgList &&
             imgList.map((item, index) => {
               return (
-                <FastImage
-                  style={{
+                // <FastImage
+                //   style={{
+                //     width: 85,
+                //     height: 85,
+                //     borderRadius: 10,
+                //   }}
+                //   source={{
+                //     uri:
+                //       item.substr(0, 3) !== 'img' ? item : BASE_DOWN_URL + item,
+                //     headers: {Authorization: 'someAuthToken'},
+                //     priority: FastImage.priority.normal,
+                //   }}
+                //   resizeMode={FastImage.resizeMode.cover}
+                // />
+                <CFastImage
+                  url={item}
+                  styles={{
                     width: 85,
                     height: 85,
                     borderRadius: 10,
                   }}
-                  source={{
-                    uri:
-                      item.substr(0, 3) !== 'img' ? item : BASE_DOWN_URL + item,
-                    headers: {Authorization: 'someAuthToken'},
-                    priority: FastImage.priority.normal,
-                  }}
-                  resizeMode={FastImage.resizeMode.cover}
                 />
               );
             })}

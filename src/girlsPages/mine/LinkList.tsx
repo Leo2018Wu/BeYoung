@@ -5,9 +5,9 @@ import layout from '../common/Layout';
 
 const list = [
   {
-    routeName: 'photo',
+    routeName: 'PhotoSelection',
     iconUrl: require('../assets/account_security.png'),
-    name: '照片精选',
+    name: '精选照片',
   },
   {
     routeName: 'QuickReply',
@@ -15,7 +15,7 @@ const list = [
     name: '快捷回复设置',
   },
   {
-    routeName: 'privacy',
+    routeName: 'ReplyExpPackage',
     iconUrl: require('../assets/privacy.png'),
     name: '回复表情包上传',
   },
@@ -24,11 +24,11 @@ const list = [
     iconUrl: require('../assets/wallet.png'),
     name: '钱包',
   },
-  {
-    routeName: 'Promote',
-    iconUrl: require('../assets/Promote.png'),
-    name: '帮助教程',
-  },
+  // {
+  //   routeName: 'Promote',
+  //   iconUrl: require('../assets/Promote.png'),
+  //   name: '帮助教程',
+  // },
   {
     routeName: 'logout',
     iconUrl: require('../assets/logout.png'),

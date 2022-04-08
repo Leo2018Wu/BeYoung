@@ -1,10 +1,23 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import IconNew from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import useRequest from '../../hooks/useRequest';
+import {fetchMyInfo} from '../../api/common';
+import {useFocusEffect} from '@react-navigation/native';
+import CFastImage from '../../components/CFastImage';
 
 const Index = () => {
   const navigation = useNavigation();
+  const {result, run} = useRequest(fetchMyInfo.url);
+
+  useFocusEffect(
+    useCallback(() => {
+      run();
+      console.log('---result---', result);
+    }, []),
+  );
+
   return (
     <View style={styles.userView}>
       <Pressable onPress={() => navigation.navigate('UserInfoSetting')}>
@@ -19,16 +32,20 @@ const Index = () => {
           <Text style={{fontSize: 12, color: '#fff', marginLeft: 2}}>101</Text>
         </View>
         <View style={{alignItems: 'center', marginVertical: 20}}>
-          <Image
+          {/* <Image
             source={require('../assets/defaultAva.png')}
             style={{
               width: 85,
               height: 85,
             }}
+          /> */}
+          <CFastImage
+            url={result?.headImg}
+            styles={{width: 85, height: 85, borderRadius: 50}}
           />
           <View style={styles.editView}>
             <Text style={{color: '#fff', fontSize: 14, marginRight: 8}}>
-              啦啦啦
+              {result?.nickName || '请设置昵称'}
             </Text>
             <IconNew name="edit-3" size={14} color="#fff" />
           </View>

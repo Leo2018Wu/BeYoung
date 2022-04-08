@@ -3,7 +3,7 @@ import {HStack, ScrollView, Box, Image, View, VStack, Text} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useWindowDimensions} from 'react-native';
 import useRequest from '../../hooks/useRequest';
-import {fetchGift, queryGiftGiving} from '../../api/gift';
+import {queryGiftGiving} from '../../api/gift';
 
 const Index = () => {
   const insets = useSafeAreaInsets();

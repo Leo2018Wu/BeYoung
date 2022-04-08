@@ -13,7 +13,7 @@ const Index = ({styles, url}: {styles: any; url: string}) => {
     <FastImage
       style={styles}
       source={{
-        uri: BASE_DOWN_URL + url,
+        uri: url.substr(0, 3) !== 'img' ? url : BASE_DOWN_URL + url,
         headers: {Authorization: 'someAuthToken'},
         priority: FastImage.priority.normal,
       }}

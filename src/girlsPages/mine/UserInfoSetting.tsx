@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {StyleSheet} from 'react-native';
 import {
   View,
@@ -7,13 +7,17 @@ import {
   Select,
   CheckIcon,
   ScrollView,
+  Pressable,
   NativeBaseProvider,
 } from 'native-base';
 import IconNew from 'react-native-vector-icons/AntDesign';
+import {useFocusEffect} from '@react-navigation/native';
+import useRequest from '../../hooks/useRequest';
+import {fetchMyInfo} from '../../api/common';
 
 import layout from '../common/Layout';
 
-const Setting = () => {
+const Setting = ({...props}) => {
   const [service, setService] = useState('');
   const [list, setList] = useState([
     {id: 0},
@@ -23,6 +27,22 @@ const Setting = () => {
     {id: 3},
     {id: 4},
   ]);
+
+  const {result, run} = useRequest(fetchMyInfo.url);
+
+  useFocusEffect(
+    useCallback(() => {
+      run();
+    }, []),
+  );
+
+  const editUser = (type, value, keyName) => {
+    props.navigation.navigate('EditUser', {
+      type: type,
+      value: value,
+      keyName: keyName,
+    });
+  };
 
   return (
     <NativeBaseProvider>
@@ -47,7 +67,9 @@ const Setting = () => {
             }}
           />
         </View>
-        <View style={styles.itemView}>
+        <Pressable
+          onPress={() => editUser('昵称', result?.nickName, 'nickName')}
+          style={styles.itemView}>
           <Text>昵称</Text>
           <View
             style={{
@@ -55,11 +77,15 @@ const Setting = () => {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Text style={{color: '#919191', marginRight: 4}}>昵称</Text>
+            <Text style={{color: '#919191', marginRight: 4}}>
+              {result?.nickName || '请设置昵称'}
+            </Text>
             <IconNew name="right" size={16} color="#919191" />
           </View>
-        </View>
-        <View style={styles.itemView}>
+        </Pressable>
+        <Pressable
+          onPress={() => editUser('姓名', result?.name, 'name')}
+          style={styles.itemView}>
           <Text>姓名</Text>
           <View
             style={{
@@ -67,10 +93,12 @@ const Setting = () => {
               flexDirection: 'row',
               alignItems: 'center',
             }}>
-            <Text style={{color: '#919191', marginRight: 4}}>昵称</Text>
+            <Text style={{color: '#919191', marginRight: 4}}>
+              {result?.name || '请设置姓名'}
+            </Text>
             <IconNew name="right" size={16} color="#919191" />
           </View>
-        </View>
+        </Pressable>
         <View style={styles.itemView}>
           <Text>身份证号</Text>
           <View

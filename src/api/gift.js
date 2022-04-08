@@ -12,3 +12,11 @@ export const fetchGift = {
     options: false,
   },
 };
+
+// 查询用户送礼
+export const queryGiftGiving = {
+  url: 'cgi/core/dynamic/queryGiftGiving',
+  options: {
+    options: false,
+  },
+};
