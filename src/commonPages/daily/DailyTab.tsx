@@ -7,8 +7,8 @@ import {
   NavigationState,
   SceneRendererProps,
 } from 'react-native-tab-view';
-import Comment from './Comment';
-import Gift from './Gift';
+import GirlsComment from '../../girlsPages/home/Dynamic/Comment';
+import GirlsGift from '../../girlsPages/home/Dynamic/Gift';
 
 type Route = {
   key: string;
@@ -19,8 +19,6 @@ type State = NavigationState<Route>;
 
 export default class CustomTabBarExample extends React.Component<{}, State> {
   constructor({props}: any) {
-    console.log('--rop', props);
-
     super(props);
     this.state = {
       index: 0,
@@ -96,8 +94,8 @@ export default class CustomTabBarExample extends React.Component<{}, State> {
   );
 
   private renderScene = SceneMap({
-    comment: Comment,
-    gift: Gift,
+    comment: GirlsComment,
+    gift: GirlsGift,
   });
 
   render() {

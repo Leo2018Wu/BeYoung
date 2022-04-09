@@ -20,10 +20,13 @@ import Tab from './DailyTab';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import getStorage from '../../util/Storage';
 import {BASE_DOWN_URL} from '../../util/config';
+import CFastImage from '../../components/CFastImage';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Index = ({...props}) => {
-  console.log('-1-props-1-', props);
   const {item} = props.route.params;
+  console.log('-1-props-1-', props, item.id);
+  AsyncStorage.setItem('DynamicId', item.id); // 存储动态id
   const insets = useSafeAreaInsets();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 60) / 3;
@@ -39,36 +42,14 @@ const Index = ({...props}) => {
     }
   }, []);
 
-  const IMGS = [
-    {
-      id: 0,
-      url: {
-        uri: 'https://picsum.photos/200/180?random=8',
-      },
-    },
-    {
-      id: 1,
-      url: {uri: 'https://picsum.photos/200/200?random=1'},
-    },
-    {
-      id: 2,
-      url: {uri: 'https://picsum.photos/200/200?random=2'},
-    },
-  ];
-
   return (
     <Box flex={1}>
       <ScrollView contentContainerStyle={{flex: 1}} py={4} bg="white">
         <Box px={5} pb={4}>
           <HStack alignItems="center">
-            <Image
-              w={12}
-              h={12}
-              borderRadius="full"
-              alt="avatar"
-              source={{
-                uri: 'https://picsum.photos/200/180?random=8',
-              }}
+            <CFastImage
+              url={item.headImg}
+              styles={{width: 50, height: 50, borderRadius: 50}}
             />
             <VStack flex={1} mr={'auto'} ml={2} justifyContent={'space-around'}>
               <Text
@@ -76,7 +57,7 @@ const Index = ({...props}) => {
                 style={{
                   color: '#8E8895',
                 }}>
-                闫有筠
+                {item.nickName}
               </Text>
               <Text
                 fontSize={'xs'}
@@ -156,7 +137,7 @@ const Index = ({...props}) => {
           <Tab />
         </Box>
       </ScrollView>
-      <HStack
+      {/* <HStack
         shadow={2}
         alignItems="center"
         w={'full'}
@@ -189,7 +170,7 @@ const Index = ({...props}) => {
           color="#9650FF"
         />
         <FontAwesome name="send" size={24} color="#9650FF" />
-      </HStack>
+      </HStack> */}
     </Box>
   );
 };

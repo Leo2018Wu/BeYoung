@@ -13,8 +13,6 @@ const Index = ({...props}) => {
   const {run} = useRequest(updateUserInfo.url);
 
   useEffect(() => {
-    console.log('--', params.keyName);
-
     setType(params.type);
   }, []);
 
@@ -23,12 +21,25 @@ const Index = ({...props}) => {
   }, [inputValue]);
 
   const edit = async () => {
-    if (params.keyName == 'nickName') {
-      await run({nickName: inputValue});
-    } else if (params.keyName == 'name') {
-      await run({name: inputValue});
+    switch (params.type) {
+      case '昵称':
+        await run({nickName: inputValue});
+        break;
+      case '姓名':
+        await run({name: inputValue});
+        break;
+      case '身份证号':
+        await run({cardNum: inputValue});
+        break;
+      case '微信号':
+        await run({weChat: inputValue});
+        break;
+      case 'QQ号':
+        await run({qq: inputValue});
+        break;
+      default:
+        break;
     }
-    // await run({`${params.keyName}`: inputValue});
     props.navigation.goBack();
   };
 
@@ -95,6 +106,53 @@ const Index = ({...props}) => {
             fontSize={'md'}
             value={inputValue}
             placeholder="请输入姓名"
+          />
+        </HStack>
+      )}
+      {editType === '身份证号' && (
+        <HStack px={4} alignItems={'center'} h={16}>
+          <Text fontWeight={'bold'} fontSize={'md'}>
+            编辑身份证号：
+          </Text>
+          <Input
+            clearButtonMode="while-editing"
+            onChangeText={e => setValue(e)}
+            keyboardType="phone-pad"
+            flex={1}
+            fontSize={'md'}
+            value={inputValue}
+            placeholder="请输入身份证号"
+          />
+        </HStack>
+      )}
+      {editType === '微信号' && (
+        <HStack px={4} alignItems={'center'} h={16}>
+          <Text fontWeight={'bold'} fontSize={'md'}>
+            编辑微信号：
+          </Text>
+          <Input
+            clearButtonMode="while-editing"
+            onChangeText={e => setValue(e)}
+            flex={1}
+            fontSize={'md'}
+            value={inputValue}
+            placeholder="请输入微信号"
+          />
+        </HStack>
+      )}
+      {editType === 'QQ号' && (
+        <HStack px={4} alignItems={'center'} h={16}>
+          <Text fontWeight={'bold'} fontSize={'md'}>
+            编辑QQ号：
+          </Text>
+          <Input
+            clearButtonMode="while-editing"
+            onChangeText={e => setValue(e)}
+            keyboardType="phone-pad"
+            flex={1}
+            fontSize={'md'}
+            value={inputValue}
+            placeholder="请输入QQ号"
           />
         </HStack>
       )}

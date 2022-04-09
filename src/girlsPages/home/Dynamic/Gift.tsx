@@ -1,22 +1,29 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {HStack, ScrollView, Box, Image, View, VStack, Text} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useWindowDimensions} from 'react-native';
 import useRequest from '../../../hooks/useRequest';
 import {queryGiftGiving} from '../../../api/gift';
+import getStorage from '../../../util/Storage';
 
 const Index = () => {
   const insets = useSafeAreaInsets();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 32) / 3;
   const IMG_ITEM_HEIGHT = 1.2 * IMG_ITEM_WIDTH;
+  const {run: runGiftList, result} = useRequest(queryGiftGiving.url);
 
-  const {result: giftList} = useRequest(
-    queryGiftGiving.url,
-    {},
-    queryGiftGiving.options,
-  );
-  console.log('giftList', giftList);
+  useEffect(() => {
+    getList();
+  }, []);
+
+  const getList = async () => {
+    let tempId = await getStorage(['DynamicId']);
+    await runGiftList({
+      dynamicId: tempId,
+    });
+    console.log('----', result);
+  };
 
   const IMGS = [
     {

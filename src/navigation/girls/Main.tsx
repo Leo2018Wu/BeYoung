@@ -7,7 +7,7 @@ import DailyDetail from '../../commonPages/daily/DailyDetail';
 import UserInfoSetting from '../../girlsPages/mine/UserInfoSetting';
 import QuickReply from '../../girlsPages/mine/QuickReply';
 import ReplyExpPackage from '../../girlsPages/mine/ReplyExpPackage';
-import PhotoSelection from '../../girlsPages/mine/PhotoSelection';
+import PhotoSelection from '../../girlsPages/mine/photoSelect/PhotoSelection';
 import Wallet from '../../girlsPages/wallet/Wallet';
 import TransferDetail from '../../girlsPages/wallet/TransferDetail';
 import WithdrawalDetail from '../../girlsPages/wallet/WithdrawalDetail';
