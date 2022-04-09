@@ -5,6 +5,12 @@
  *  msg: 展示返回message 默认不展示
  */
 
+// 获取字典信息
+export const querySysDic = {
+  url: 'cgi/core/dic/querySysDic',
+  options: {},
+};
+
 // 获取验证码
 export const sendCode = {
   url: 'cgi/core/login/sendCode',
