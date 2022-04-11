@@ -28,7 +28,7 @@ const Mine = (props: any) => {
         onPress={(routeName: any) => {
           if (routeName === 'logout') {
             AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
-            AsyncStorage.setItem('USER_INFO', '');
+            AsyncStorage.setItem('USERINFO', '');
             DeviceEventEmitter.emit('LOGIN_EVENT', '');
           } else {
             navigation.navigate(routeName);

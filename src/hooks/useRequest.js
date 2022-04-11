@@ -5,6 +5,7 @@ import {BASE_URL} from '../util/config';
 import getStorage from '../util/Storage';
 import AsyncStorage from '@react-native-community/async-storage';
 import {DeviceEventEmitter} from 'react-native';
+import {logout} from '../nim/link';
 
 const headers = {
   Accept: 'application/json',
@@ -47,7 +48,6 @@ const useRequest = (
   const run = async (params = body) => {
     console.log('run', params);
     const userInfo = await getStorage(['USERINFO']);
-    console.log('userInfo', userInfo);
     setLoading(true);
     try {
       if (userInfo) {
@@ -67,13 +67,11 @@ const useRequest = (
         console.log('responseJSON', responseJSON);
         const {success, data, message, type} = responseJSON;
         if (data === '访问凭据已过期，请重新登陆') {
+          logout();
           AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
-          AsyncStorage.setItem('USER_INFO', '');
+          AsyncStorage.setItem('USERINFO', '');
+          AsyncStorage.setItem('chatAccount', '');
           DeviceEventEmitter.emit('LOGIN_EVENT', '');
-          return;
-        }
-        if (!success) {
-          // 请求失败
           return;
         }
         if (type !== 'SUCCESS') {
@@ -81,6 +79,10 @@ const useRequest = (
             description: message,
             placement: 'top',
           });
+        }
+        if (!success) {
+          // 请求失败
+          return;
         }
         setResult(JSON.parse(JSON.stringify(data)));
         return data;
