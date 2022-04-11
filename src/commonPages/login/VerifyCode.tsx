@@ -6,8 +6,6 @@ import {sendCode, verifyCode} from '../../api/common.js';
 import useRequest from '../../hooks/useRequest';
 import {useCountdown} from '../../hooks/useTimeDown';
 import AsyncStorage from '@react-native-community/async-storage';
-import {fetchChatAccount} from '../../api/common';
-import {login} from '../../nim/link.js';
 
 const SEND_CODE_DURATION = 60 * 1000; // 发送验证码倒计时秒数
 const Index = ({...props}) => {
@@ -17,7 +15,6 @@ const Index = ({...props}) => {
   });
   const {run: runVerifyCode, result} = useRequest(verifyCode.url);
   const {count, reset} = useCountdown(SEND_CODE_DURATION);
-  const {run: runChatAccount} = useRequest(fetchChatAccount.url);
 
   useEffect(() => {
     runSendCode();
@@ -44,22 +41,7 @@ const Index = ({...props}) => {
 
   const checkCode = async (code: any) => {
     if (code.length === 4) {
-      try {
-        const chatAccount = await runChatAccount();
-        if (chatAccount.account) {
-          // 拿到了聊天账号
-          AsyncStorage.setItem(
-            'chatAccount',
-            JSON.stringify(chatAccount),
-            () => {
-              login(chatAccount.account, chatAccount.token); // 初始化聊天账号
-              runVerifyCode({phone: route.params.phone, code});
-            },
-          );
-        }
-      } catch (error) {
-        console.log('error', error);
-      }
+      runVerifyCode({phone: route.params.phone, code});
     }
   };
 

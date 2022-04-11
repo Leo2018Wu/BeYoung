@@ -18,7 +18,8 @@ const Index = ({...props}) => {
 
   const logOut = () => {
     AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
-    AsyncStorage.setItem('USER_INFO', '');
+    AsyncStorage.setItem('chatAccount', '');
+    AsyncStorage.setItem('USERINFO', '');
     DeviceEventEmitter.emit('LOGIN_EVENT', '');
   };
 
