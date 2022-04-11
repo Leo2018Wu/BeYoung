@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Box,
   Pressable,
@@ -17,8 +17,21 @@ import Icon from 'react-native-vector-icons/Feather';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import LinearGradient from 'react-native-linear-gradient';
 import {ImageBackground, StyleSheet, useWindowDimensions} from 'react-native';
+import useRequest from '../../hooks/useRequest';
+import constObj from '../../store/constant';
 
 const Home = ({...props}) => {
+  // setTimeout(() => {
+  //   constObj.nim.sendText({
+  //     scene: 'p2p',
+  //     to: 'yx6919098041437783040',
+  //     text: '长江收到',
+  //     done: done => {
+  //       console.log('done');
+  //     },
+  //   });
+  // }, 5000);
+
   const {width, height} = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const GRADES = ['大一', '大二', '大三'];
@@ -137,7 +150,7 @@ const Home = ({...props}) => {
         end={{x: 1, y: 0.5}}
         colors={['#B83AF3', '#6950FB']}>
         <Box justifyContent="center" style={{paddingTop: insets.top}}>
-          <HStack px={3} h={16} alignItems="center">
+          <HStack px={3} style={{height: 52}} alignItems="center">
             {GRADES.map((item, index) => (
               <Pressable
                 onPress={() => setGrade(index)}
