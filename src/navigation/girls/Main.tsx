@@ -14,6 +14,7 @@ import WithdrawalDetail from '../../girlsPages/wallet/WithdrawalDetail';
 import Preview from '../../girlsPages/common/Preview';
 import EditUser from '../../girlsPages/mine/setting/EditUser';
 import StudentCard from '../../girlsPages/mine/setting/StudentCard';
+import Session from '../../bossPages/communication/Session';
 
 const Stack = createNativeStackNavigator();
 
@@ -117,6 +118,13 @@ const MyStack = () => {
         })}
         name="StudentCard"
         component={StudentCard}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Session"
+        component={Session}
       />
     </Stack.Navigator>
   );

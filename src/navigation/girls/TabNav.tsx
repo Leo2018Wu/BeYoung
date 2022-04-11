@@ -168,10 +168,8 @@ const MyTabs = () => {
       />
       <Tab.Screen
         options={{
-          title: '我的消息',
+          headerShown: false,
           tabBarLabel: '消息',
-          headerTitleAlign: 'center',
-          tabBarItemStyle: {borderRadius: 10},
         }}
         name="Communicate"
         component={CommunicateScreen}
