@@ -1,13 +1,5 @@
 import React, {useState} from 'react';
-import {
-  Box,
-  Button,
-  Center,
-  HStack,
-  Pressable,
-  Text,
-  VStack,
-} from 'native-base';
+import {Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -182,13 +174,6 @@ function Basic({...props}) {
         </Box>
       </LinearGradient>
 
-      <Text>{props.currentSessionId}</Text>
-      <Button
-        onPress={() =>
-          mapDispatch({type: 'USERID', userID: '88888888'}, props.dispatch)
-        }>
-        <Text>测试dispatch</Text>
-      </Button>
       <SwipeListView
         data={genSessions(props.listData)}
         renderItem={renderItem}
