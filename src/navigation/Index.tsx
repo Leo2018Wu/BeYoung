@@ -1,7 +1,8 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import {StatusBar} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {DeviceEventEmitter} from 'react-native';
+import {login} from '../nim/link';
+import constObj from '../store/constant';
 import getStorage from '../util/Storage';
 import StackBossMain from './boss/Main';
 import StackGirlsMain from './girls/Main';
@@ -13,15 +14,13 @@ const Index = () => {
   const [isLogin, setIsLogin] = useState(''); // 判断是否登录和登录的性别
 
   useEffect(() => {
-    // AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
-    // AsyncStorage.setItem('USER_INFO', '');
-    // DeviceEventEmitter.emit('LOGIN_EVENT', '');
-    getStorage(['USER_INFO']).then(res => {
-      console.log('USER_INFO', res);
+    getStorage(['chatAccount']).then(res => {
+      const chatAccount = JSON.parse(res) || {};
+      if (!constObj.nim) {
+        login(chatAccount.account, chatAccount.token); // 初始化聊天账号
+      }
     });
     getStorage(['LOGIN_NAVIGAITON_NAME']).then(res => {
-      console.log('LOGIN_NAVIGAITON_NAME', res);
-
       setLoading(false);
       if (res) {
         setIsLogin(res);

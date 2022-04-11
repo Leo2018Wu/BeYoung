@@ -24,6 +24,7 @@ const colors = {
   },
   border: {
     gray: '#C7C4CC',
+    lightGray: '#EFEFEF',
   },
 };
 
