@@ -13,6 +13,7 @@ import TransferDetail from '../../girlsPages/wallet/TransferDetail';
 import WithdrawalDetail from '../../girlsPages/wallet/WithdrawalDetail';
 import Preview from '../../girlsPages/common/Preview';
 import EditUser from '../../girlsPages/mine/setting/EditUser';
+import StudentCard from '../../girlsPages/mine/setting/StudentCard';
 
 const Stack = createNativeStackNavigator();
 
@@ -108,6 +109,14 @@ const MyStack = () => {
         }}
         name="EditUser"
         component={EditUser}
+      />
+      <Stack.Screen
+        options={() => ({
+          title: '学生证上传',
+          headerStyle: {backgroundColor: '#fff'},
+        })}
+        name="StudentCard"
+        component={StudentCard}
       />
     </Stack.Navigator>
   );

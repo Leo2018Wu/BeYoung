@@ -54,7 +54,9 @@ const Setting = ({...props}) => {
             styles={{width: 45, height: 45, borderRadius: 50}}
           />
         </View>
-        <View style={styles.itemView}>
+        <Pressable
+          onPress={() => props.navigation.navigate('StudentCard')}
+          style={styles.itemView}>
           <Text>学生证</Text>
           <Image
             source={require('../assets/defaultAva.png')}
@@ -63,7 +65,7 @@ const Setting = ({...props}) => {
               height: 45,
             }}
           />
-        </View>
+        </Pressable>
         <Pressable
           onPress={() => editUser('昵称', result?.nickName)}
           style={styles.itemView}>

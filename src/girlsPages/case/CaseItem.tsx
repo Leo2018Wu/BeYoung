@@ -23,6 +23,7 @@ const Login = () => {
                 height: 16,
                 marginRight: 3,
               }}
+              alt="dairy"
             />
             <Text style={styles.optSize}>71k</Text>
           </View>
@@ -34,6 +35,7 @@ const Login = () => {
                 height: 16,
                 marginRight: 3,
               }}
+              alt="dairy"
             />
             <Text style={styles.optSize}>71k</Text>
           </View>
@@ -45,6 +47,7 @@ const Login = () => {
                 height: 16,
                 marginRight: 3,
               }}
+              alt="dairy"
             />
             <Text style={styles.optSize}>71k</Text>
           </View>
