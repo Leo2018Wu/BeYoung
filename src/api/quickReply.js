@@ -5,16 +5,14 @@
  *  msg: 展示返回message 默认不展示
  */
 
-// 获取礼物列表
-export const fetchGift = {
-  url: 'cgi/core/gift/fetchGift',
-  options: {
-    options: false,
-  },
+// 添加快捷回复
+export const addQuickReply = {
+  url: 'cgi/core/user/addQuickReply',
+  options: {},
 };
 
-// 查询用户送礼
-export const queryGiftGiving = {
-  url: 'cgi/core/dynamic/queryGiftGiving',
+// 获取我的快捷回复
+export const fetchQuickReply = {
+  url: 'cgi/core/user/fetchQuickReply',
   options: {},
 };

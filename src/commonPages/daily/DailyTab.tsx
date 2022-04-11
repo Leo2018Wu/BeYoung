@@ -7,8 +7,8 @@ import {
   NavigationState,
   SceneRendererProps,
 } from 'react-native-tab-view';
-import Comment from '../../bossPages/daily/Comment';
-import Gift from '../../bossPages/daily/Gift';
+import GirlsComment from '../../girlsPages/home/Dynamic/Comment';
+import GirlsGift from '../../girlsPages/home/Dynamic/Gift';
 
 type Route = {
   key: string;
@@ -18,13 +18,16 @@ type Route = {
 type State = NavigationState<Route>;
 
 export default class CustomTabBarExample extends React.Component<{}, State> {
-  state: State = {
-    index: 0,
-    routes: [
-      {key: 'comment', title: '评论'},
-      {key: 'gift', title: '礼物'},
-    ],
-  };
+  constructor({props}: any) {
+    super(props);
+    this.state = {
+      index: 0,
+      routes: [
+        {key: 'comment', title: '评论'},
+        {key: 'gift', title: '礼物'},
+      ],
+    };
+  }
 
   private handleIndexChange = (index: number) =>
     this.setState({
@@ -91,8 +94,8 @@ export default class CustomTabBarExample extends React.Component<{}, State> {
   );
 
   private renderScene = SceneMap({
-    comment: Comment,
-    gift: Gift,
+    comment: GirlsComment,
+    gift: GirlsGift,
   });
 
   render() {

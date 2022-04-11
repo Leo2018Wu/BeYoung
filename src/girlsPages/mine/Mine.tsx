@@ -13,8 +13,7 @@ import layout from '../common/Layout';
 import UserInfo from './UserInfo';
 import LinkList from './LinkList';
 
-const Mine = (props: any) => {
-  const {navigation} = props;
+const Mine = ({...props}) => {
   return (
     <View>
       <StatusBar backgroundColor="transparent" translucent />
@@ -29,9 +28,10 @@ const Mine = (props: any) => {
           if (routeName === 'logout') {
             AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
             AsyncStorage.setItem('USERINFO', '');
+            AsyncStorage.setItem('chatAccount', '');
             DeviceEventEmitter.emit('LOGIN_EVENT', '');
           } else {
-            navigation.navigate(routeName);
+            props.navigation.navigate(routeName);
           }
         }}
       />

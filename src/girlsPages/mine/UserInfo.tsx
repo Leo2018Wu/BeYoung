@@ -1,10 +1,32 @@
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import IconNew from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
+import useRequest from '../../hooks/useRequest';
+import {fetchMyInfo, fetchMyStatistic} from '../../api/common';
+import {useFocusEffect} from '@react-navigation/native';
+import CFastImage from '../../components/CFastImage';
+import fetchData from '../../util/request';
 
 const Index = () => {
   const navigation = useNavigation();
+  const {result, run} = useRequest(fetchMyInfo.url);
+  const [myStatistic, setMyStatistic] = useState({});
+
+  useFocusEffect(
+    useCallback(() => {
+      run();
+      getMyStatistic();
+    }, []),
+  );
+
+  const getMyStatistic = async () => {
+    const {data, success} = await fetchData(fetchMyStatistic.url, {});
+    if (success) {
+      setMyStatistic(data);
+    }
+  };
+
   return (
     <View style={styles.userView}>
       <Pressable onPress={() => navigation.navigate('UserInfoSetting')}>
@@ -16,19 +38,25 @@ const Index = () => {
               height: 16,
             }}
           />
-          <Text style={{fontSize: 12, color: '#fff', marginLeft: 2}}>101</Text>
+          <Text style={{fontSize: 12, color: '#fff', marginLeft: 2}}>
+            {myStatistic.giftNum || 0}
+          </Text>
         </View>
         <View style={{alignItems: 'center', marginVertical: 20}}>
-          <Image
+          {/* <Image
             source={require('../assets/defaultAva.png')}
             style={{
               width: 85,
               height: 85,
             }}
+          /> */}
+          <CFastImage
+            url={result?.headImg}
+            styles={{width: 85, height: 85, borderRadius: 50}}
           />
           <View style={styles.editView}>
             <Text style={{color: '#fff', fontSize: 14, marginRight: 8}}>
-              啦啦啦
+              {result?.nickName || '请设置昵称'}
             </Text>
             <IconNew name="edit-3" size={14} color="#fff" />
           </View>
@@ -36,17 +64,17 @@ const Index = () => {
       </Pressable>
       <View style={styles.itemView}>
         <View style={styles.item}>
-          <Text style={styles.topText}>123</Text>
+          <Text style={styles.topText}>{myStatistic.likeNum || 0}</Text>
           <Text style={styles.btmText}>点赞</Text>
         </View>
         <View style={styles.line} />
         <View style={styles.item}>
-          <Text style={styles.topText}>2345</Text>
+          <Text style={styles.topText}>{myStatistic.commentNum || 0}</Text>
           <Text style={styles.btmText}>评论</Text>
         </View>
         <View style={styles.line} />
         <View style={styles.item}>
-          <Text style={styles.topText}>123</Text>
+          <Text style={styles.topText}>{myStatistic.dynamicNum || 0}</Text>
           <Text style={styles.btmText}>动态</Text>
         </View>
       </View>

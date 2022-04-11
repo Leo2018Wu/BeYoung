@@ -1,37 +1,118 @@
-import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
-import {View, Text, Input, ScrollView, NativeBaseProvider} from 'native-base';
+import React, {useState, useEffect} from 'react';
+import {Pressable, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Input,
+  ScrollView,
+  NativeBaseProvider,
+  useToast,
+} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
+import {querySysDic} from '../../api/common';
+import {addQuickReply, fetchQuickReply} from '../../api/quickReply';
+import useRequest from '../../hooks/useRequest';
+import fetchData from '../../util/request';
 
 import layout from '../common/Layout';
 
 const Login = () => {
+  const Toast = useToast();
   const [goodsName, setGoodsName] = useState('');
-  const [list, setList] = useState([
-    {id: 0},
-    {id: 1},
-    {id: 2},
-    {id: 3},
-    {id: 3},
-    {id: 4},
-    {id: 4},
-    {id: 4},
-  ]);
+  const [list, setList] = useState([]);
+
+  const {run: runQuerySysDic, result} = useRequest(querySysDic.url, {
+    pCode: 'QUICK_REPLY_SCENE',
+  });
+  // const {run: runAddQuickReply} = useRequest(addQuickReply.url);
+
+  useEffect(() => {
+    runQuerySysDic();
+  }, []);
+
+  useEffect(() => {
+    if (result) {
+      console.log('-快捷-result--', result);
+      let data = [];
+      result.forEach((e, index) => {
+        if (e.code != 'QUICK_REPLY_SCENE') {
+          data.push({
+            code: e.code,
+            name: e.name,
+            content: '',
+          });
+        }
+      });
+      setList(data);
+      getMyQueryReply(data); // 获取我的快捷回复
+    }
+  }, [result]);
+
+  const getMyQueryReply = async temp => {
+    const {data, success} = await fetchData(fetchQuickReply.url, {});
+    console.log('--s-s--', data, temp);
+    if (data) {
+      data.forEach((e, index) => {
+        temp[index].content = e.content;
+      });
+      setList(JSON.parse(JSON.stringify(temp)));
+    }
+  };
+
+  const submit = async () => {
+    let index = list.findIndex(e => {
+      return e.content;
+    });
+    console.log(list, index);
+    if (index != -1) {
+      // const data = runAddQuickReply({list});
+      const quickReplies = [];
+      list.forEach((e, index) => {
+        quickReplies.push({
+          quickReplyScene: e.code,
+          content: e.content,
+        });
+      });
+      const {data, success} = await fetchData(addQuickReply.url, {
+        quickReplies,
+      });
+      if (success) {
+        Toast.show({
+          description: data,
+          duration: 3000,
+          placement: 'top',
+        });
+      }
+    } else {
+      Toast.show({
+        description: '请添加快捷回复',
+        placement: 'top',
+      });
+    }
+  };
 
   return (
     <NativeBaseProvider>
       <ScrollView style={styles.quickContain}>
-        <View style={{paddingBottom: 20}}>
+        <View
+          style={{
+            paddingBottom: 20,
+            height: layout.height - 160,
+            backgroundColor: '#fff',
+          }}>
           {list &&
             list.map((item, index) => {
               return (
                 <View>
-                  <Text style={styles.quickTitle}>花小钱开启聊天场景</Text>
+                  <Text style={styles.quickTitle}>{item.name}</Text>
                   <Input
-                    value={goodsName}
-                    onChangeText={text => setGoodsName(text)}
+                    value={item.content}
+                    onChangeText={text => {
+                      list[index].content = text;
+                      setList(JSON.parse(JSON.stringify(list)));
+                    }}
                     variant="outline"
-                    placeholder="请输入货物名称"
+                    placeholder="添加你的回复..."
                     fontSize={14}
                     borderRadius={10}
                     borderColor={'#C7C4CC'}
@@ -40,16 +121,18 @@ const Login = () => {
               );
             })}
         </View>
+        <View style={styles.btnView}>
+          <Pressable onPress={() => submit()}>
+            <LinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#D988FF', '#8B5CFF']}
+              style={styles.linearGradient}>
+              <Text style={styles.buttonText}>保存</Text>
+            </LinearGradient>
+          </Pressable>
+        </View>
       </ScrollView>
-      <View style={{backgroundColor: '#fff'}}>
-        <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 1, y: 0}}
-          colors={['#D988FF', '#8B5CFF']}
-          style={styles.linearGradient}>
-          <Text style={styles.buttonText}>保存</Text>
-        </LinearGradient>
-      </View>
     </NativeBaseProvider>
   );
 };

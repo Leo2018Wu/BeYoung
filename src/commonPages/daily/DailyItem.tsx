@@ -14,6 +14,7 @@ import {Pressable, useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {BASE_DOWN_URL} from '../../util/config';
 import getStorage from '../../util/Storage';
+import CFastImage from '../../components/CFastImage';
 
 const Index = ({...props}) => {
   console.log('--props--', props);
@@ -40,14 +41,9 @@ const Index = ({...props}) => {
           navigation.navigate('DailyDetail', {item: item});
         }}>
         <HStack alignItems="center">
-          <Image
-            w={12}
-            h={12}
-            borderRadius="full"
-            alt="avatar"
-            source={{
-              uri: 'https://picsum.photos/200/180?random=8',
-            }}
+          <CFastImage
+            url={item.headImg}
+            styles={{width: 50, height: 50, borderRadius: 50}}
           />
           <VStack flex={1} mr={'auto'} ml={2} justifyContent={'space-around'}>
             <Text
@@ -55,7 +51,7 @@ const Index = ({...props}) => {
               style={{
                 color: '#8E8895',
               }}>
-              闫有筠
+              {item.nickName}
             </Text>
             <Text
               fontSize={'xs'}

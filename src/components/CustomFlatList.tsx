@@ -171,6 +171,7 @@ export default class CustomFlatList extends React.Component<any, any> {
     const {queryList, refreshing} = this.state;
     return (
       <FlatList
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={contianerStyle}
         onRefresh={this._onRefresh}
         data={queryList}

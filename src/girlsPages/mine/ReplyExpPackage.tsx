@@ -104,25 +104,7 @@ const Index = (props: any) => {
   };
 
   return (
-    <Box flex={1}>
-      <StatusBar backgroundColor="transparent" translucent />
-      <Box justifyContent="center" style={styles.banner}>
-        <LinearGradient
-          start={{x: 0, y: 0}}
-          end={{x: 0, y: 1}}
-          colors={['#D988FF', '#8B5CFF']}>
-          <Center px={3} h={24} alignItems="center">
-            <Text color={'#fff'} fontSize={'xl'} paddingTop={5}>
-              发帖
-            </Text>
-            <Pressable
-              onPress={() => checkSubmit()}
-              style={{position: 'absolute', right: 10, top: 48}}>
-              <Text color={'#fff'}>发送</Text>
-            </Pressable>
-          </Center>
-        </LinearGradient>
-      </Box>
+    <Box flex={1} bg="white">
       <Modal animationType="fade" transparent visible={loading}>
         <View style={styles.toastViewer}>
           <View style={styles.iconView}>
@@ -131,19 +113,7 @@ const Index = (props: any) => {
           <Text style={styles.toastText}>正在上传...</Text>
         </View>
       </Modal>
-      <Box my={0} px={4} bg="white">
-        <TextInput
-          style={{
-            minHeight: 100,
-            textAlignVertical: 'top',
-            paddingBottom: 20,
-            paddingTop: 0,
-            marginBottom: 20,
-          }}
-          multiline={true}
-          onChangeText={text => setTextAreaValue(text)}
-          value={textAreaValue}
-        />
+      <Box px={4} py={4}>
         <View
           style={{flexDirection: 'row', flexWrap: 'wrap', marginBottom: 30}}>
           {list &&
@@ -194,22 +164,21 @@ const Index = (props: any) => {
           </Pressable>
         </View>
       </Box>
+      {/* <Box> */}
+      <LinearGradient
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 0}}
+        colors={['#D988FF', '#8B5CFF']}
+        style={styles.linearGradient}>
+        <Text style={styles.buttonText}>保存</Text>
+      </LinearGradient>
+      {/* </Box> */}
     </Box>
   );
 };
 export default Index;
 
 const styles = StyleSheet.create({
-  banner: {
-    ...Platform.select({
-      ios: {
-        paddingTop: 28 + 40,
-      },
-      android: {
-        // paddingTop: layout.STATUSBAR_HEIGHT + 0,
-      },
-    }),
-  },
   img_item: {
     width: 60,
     height: 60,
@@ -239,5 +208,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     fontSize: 14,
+  },
+  linearGradient: {
+    position: 'absolute',
+    bottom: 10,
+    width: '90%',
+    marginLeft: '5%',
+    marginVertical: 20,
+    borderRadius: 28,
+  },
+  buttonText: {
+    fontSize: 16,
+    fontFamily: 'Gill Sans',
+    textAlign: 'center',
+    height: 56,
+    lineHeight: 56,
+    color: '#ffffff',
+    backgroundColor: 'transparent',
   },
 });

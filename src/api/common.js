@@ -5,6 +5,12 @@
  *  msg: 展示返回message 默认不展示
  */
 
+// 获取字典信息
+export const querySysDic = {
+  url: 'cgi/core/dic/querySysDic',
+  options: {},
+};
+
 // 获取验证码
 export const sendCode = {
   url: 'cgi/core/login/sendCode',
@@ -32,6 +38,14 @@ export const fetchUserInfo = {
 // 获取我的信息
 export const fetchMyInfo = {
   url: 'cgi/core/user/fetchMyInfo',
+  options: {
+    manual: false,
+  },
+};
+
+// 获取我的统计信息
+export const fetchMyStatistic = {
+  url: 'cgi/core/user/fetchMyStatistic',
   options: {
     manual: false,
   },
