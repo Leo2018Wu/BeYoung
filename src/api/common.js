@@ -42,3 +42,11 @@ export const fetchMyInfo = {
     manual: false,
   },
 };
+
+// 获取聊天账号
+export const fetchChatAccount = {
+  url: 'cgi/core/user/fetchChatAccount',
+  options: {
+    manual: false,
+  },
+};

@@ -3,6 +3,8 @@ import {useState, useEffect, useRef} from 'react';
 import {useToast} from 'native-base';
 import {BASE_URL} from '../util/config';
 import getStorage from '../util/Storage';
+import AsyncStorage from '@react-native-community/async-storage';
+import {DeviceEventEmitter} from 'react-native';
 
 const headers = {
   Accept: 'application/json',
@@ -64,6 +66,12 @@ const useRequest = (
         const responseJSON = await response.json();
         console.log('responseJSON', responseJSON);
         const {success, data, message, type} = responseJSON;
+        if (data === '访问凭据已过期，请重新登陆') {
+          AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
+          AsyncStorage.setItem('USER_INFO', '');
+          DeviceEventEmitter.emit('LOGIN_EVENT', '');
+          return;
+        }
         if (!success) {
           // 请求失败
           return;
@@ -75,6 +83,7 @@ const useRequest = (
           });
         }
         setResult(JSON.parse(JSON.stringify(data)));
+        return data;
       }
     } catch (errMsg) {
       console.error(errMsg);
