@@ -1,10 +1,12 @@
 import * as React from 'react';
 import {
   View,
+  Text,
   useWindowDimensions,
   StatusBar,
   StyleSheet,
   Platform,
+  Pressable,
 } from 'react-native';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 
@@ -40,12 +42,37 @@ export default function TabViewExample() {
   ]);
 
   const renderTabBar = (props: any) => (
-    <TabBar
-      {...props}
-      indicatorStyle={{backgroundColor: '#8B5CFF'}}
-      labelStyle={{color: '#000000', width: 50}}
-      style={{backgroundColor: 'white'}}
-    />
+    <View
+      style={{
+        flexDirection: 'row',
+        paddingHorizontal: 15,
+        height: 30,
+        alignItems: 'center',
+      }}>
+      {routes &&
+        routes.map((item, index1) => (
+          <Pressable
+            onPress={() => setIndex(index1)}
+            style={{marginHorizontal: 15, justifyContent: 'center'}}>
+            <View>
+              <Text style={index == index1 ? styles.texted : styles.text}>
+                {item.title}
+              </Text>
+            </View>
+            {index == index1 ? (
+              <View
+                style={{
+                  borderColor: '#8B5CFF',
+                  borderWidth: 1,
+                  width: 18,
+                  justifyContent: 'center',
+                  alignSelf: 'center',
+                }}
+              />
+            ) : null}
+          </Pressable>
+        ))}
+    </View>
   );
 
   return (
@@ -65,14 +92,23 @@ export default function TabViewExample() {
 
 const styles = StyleSheet.create({
   contain: {
+    backgroundColor: '#fff',
     flex: 1,
     ...Platform.select({
       ios: {
         paddingTop: 28 + 40,
       },
       android: {
-        paddingTop: layout.STATUSBAR_HEIGHT,
+        paddingTop: layout.STATUSBAR_HEIGHT + 20,
       },
     }),
+  },
+  text: {
+    color: '#554C5F',
+    fontSize: 14,
+  },
+  texted: {
+    color: '#554C5F',
+    fontSize: 18,
   },
 });

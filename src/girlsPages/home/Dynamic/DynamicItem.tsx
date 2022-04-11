@@ -8,6 +8,8 @@ import {BASE_DOWN_URL} from '../../../util/config';
 import layout from '../../common/Layout';
 
 const Login = ({...props}) => {
+  console.log('--props--', props);
+
   const navigation = useNavigation();
   const {item} = props;
   const [imgList, setImgList] = useState([]);
@@ -17,18 +19,20 @@ const Login = ({...props}) => {
     if (item.images && JSON.parse(item.images).length) {
       setImgList(JSON.parse(item.images));
     }
-    console.log('-sd-s-d-d-s', imgList);
-    let tempTime = Math.ceil(
-      (new Date().getTime() - new Date(item.createTime).getTime()) / 1000,
-    );
-    if (tempTime < 60) {
-      setTime(tempTime + '秒之前');
-    } else if (tempTime >= 60 && tempTime < 3600) {
-      setTime(Math.ceil(tempTime / 60) + '分钟之前');
-    } else if (tempTime >= 3600 && tempTime < 86400) {
-      setTime(Math.ceil(tempTime / 3600) + '小时之前');
-    } else if (tempTime >= 86400) {
-      setTime(Math.ceil(tempTime / 86400) + '天之前');
+    console.log('-sd-s-d-d-s', item.createTime);
+    if (item.createTime) {
+      let tempTime = Math.ceil(
+        (new Date().getTime() - new Date(item.createTime).getTime()) / 1000,
+      );
+      if (tempTime < 60) {
+        setTime(tempTime + '秒之前');
+      } else if (tempTime >= 60 && tempTime < 3600) {
+        setTime(Math.ceil(tempTime / 60) + '分钟之前');
+      } else if (tempTime >= 3600 && tempTime < 86400) {
+        setTime(Math.ceil(tempTime / 3600) + '小时之前');
+      } else if (tempTime >= 86400) {
+        setTime(Math.ceil(tempTime / 86400) + '天之前');
+      }
     }
   }, []);
 
