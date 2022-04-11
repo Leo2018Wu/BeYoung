@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
+import React, {useEffect, useState} from 'react';
+import {Badge, Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -8,18 +8,25 @@ import CFastImage from '../../components/CFastImage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
 import constant from '../../store/constant';
+import {getChatUsers} from '../../store/action';
 
-const genSessions = (sessions: any) => {
+// 处理会话数据以便渲染使用
+const genSessions = (sessions: any, userMap: any) => {
   const list =
     sessions &&
     sessions.map((item: any, index: any) => {
-      return {key: `${index}`, item: item};
+      return {
+        key: `${index}`,
+        item: item,
+        chatUserInfo: userMap[item.to] || {},
+      };
     });
   return list;
 };
 
 const mapStateToProps = (state: any) => {
   return {
+    chatUserMap: state.nim.userInfosMap,
     listData: state.session.sessionList || [],
     currentSessionId: state.session.currentSessionId,
   };
@@ -32,6 +39,11 @@ function Basic({...props}) {
   const nim = constant.nim;
 
   const insets = useSafeAreaInsets();
+  useEffect(() => {
+    const chatUserIds =
+      props.listData && props.listData.map((item: any) => item.to);
+    props.dispatch(getChatUsers({accountIds: chatUserIds}));
+  }, []);
 
   const stickTopRow = (rowMap: any, key: any, item: any) => {
     nim &&
@@ -54,7 +66,6 @@ function Basic({...props}) {
 
   const deleteRow = (rowMap: any, key: any, item: any) => {
     let {listData, dispatch} = props;
-    console.log('nim', nim);
     if (rowMap[key]) {
       rowMap[key].closeRow();
     }
@@ -62,20 +73,19 @@ function Basic({...props}) {
       nim.deleteLocalSession({
         id: item.id,
         done: (done: any) => {
-          console.log('done', done);
-
           if (!done) {
             //删除会话成功
             const newData = [...listData];
-            const prevIndex = listData.findIndex((ele: any) => ele.key === key);
+            const prevIndex = listData.findIndex((ele: any) => {
+              return ele.id === key;
+            });
+
             newData.splice(prevIndex, 1);
-            console.log('[...newData]', newData);
 
             mapDispatch(
               {type: 'SESSIONSLIST', sessionList: [...newData]},
               dispatch,
             );
-            console.log('sttt', props.listData);
           }
         },
       });
@@ -86,8 +96,6 @@ function Basic({...props}) {
   };
 
   const chat = (session: any) => {
-    console.log('se', session);
-
     mapDispatch(
       {type: 'SESSIONID', currentSessionId: session.id},
       props.dispatch,
@@ -101,8 +109,23 @@ function Basic({...props}) {
       <Pressable onPress={() => chat(item.item)} bg={'white'}>
         <HStack style={{height: 80}} alignItems="center">
           <Box px={4}>
+            {item.item.unread && item.item.unread > 0 ? (
+              <Badge
+                bg="red.600"
+                rounded="full"
+                mb={-4}
+                mr={-2}
+                zIndex={1}
+                variant="solid"
+                alignSelf="flex-end"
+                _text={{
+                  fontSize: 12,
+                }}>
+                {item.item.unread <= 99 ? item.item.unread : '...'}
+              </Badge>
+            ) : null}
             <CFastImage
-              url=""
+              url={item?.chatUserInfo.headImg}
               styles={{
                 borderRadius: 24,
                 width: 48,
@@ -117,7 +140,7 @@ function Basic({...props}) {
             borderBottomWidth={0.5}>
             <VStack py={4} justifyContent={'space-around'}>
               <Text fontSize={'md'} fontWeight="bold">
-                {msgInfo.fromNick || '暂无昵称'}
+                {item?.chatUserInfo.nickName || '暂无昵称'}
               </Text>
               <Text
                 numberOfLines={1}
@@ -135,7 +158,6 @@ function Basic({...props}) {
   };
 
   const renderHiddenItem = (data: any, rowMap: any) => {
-    console.log('data', data, rowMap);
     return (
       <HStack flex={1} bg={'white'}>
         <Pressable
@@ -175,7 +197,7 @@ function Basic({...props}) {
       </LinearGradient>
 
       <SwipeListView
-        data={genSessions(props.listData)}
+        data={genSessions(props.listData, props.chatUserMap)}
         renderItem={renderItem}
         renderHiddenItem={renderHiddenItem}
         rightOpenValue={-150}

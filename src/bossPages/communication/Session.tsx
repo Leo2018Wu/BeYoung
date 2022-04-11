@@ -55,7 +55,13 @@ const Msgs = ({...props}) => {
     }
   };
 
+  const setCurrentSession = () => {
+    //调用此接口会重置该会话消息未读数
+    constObj.nim && constObj.nim.setCurrSession(props.currentSessionId);
+  };
+
   useEffect(() => {
+    setCurrentSession();
     scrollToEnd();
     constObj.nim &&
       constObj.nim.getLocalMsgs({
@@ -74,6 +80,10 @@ const Msgs = ({...props}) => {
       // 退出重置当前会话ID
       props.dispatch({
         type: 'RESET_SESSIONID',
+      });
+      props.dispatch({
+        type: 'SESSION_MSGS',
+        currentSessionMsgs: [],
       });
     };
   }, []);
