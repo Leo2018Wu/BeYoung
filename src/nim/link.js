@@ -23,8 +23,8 @@ const onSysMsgs = sysmsgs => {
 
 const onSession = session => {
   //会话信息
-  const sessionlist = constObj.nim.mergeSessions(
-    store.getState().nim.sessionlist,
+  const sessionList = constObj.nim.mergeSessions(
+    store.getState().session.sessionList,
     session,
   );
   // .sort((a,b)=>{
@@ -32,7 +32,7 @@ const onSession = session => {
   //     const time2 = b.lastMsg ? b.lastMsg.time : b.updateTime;
   //     return time2 - time1;
   // })
-  store.dispatch({type: 'SESSIONSLIST', sessionlist});
+  store.dispatch({type: 'SESSIONSLIST', sessionList});
   console.log('store', store.getState());
 };
 
@@ -43,6 +43,7 @@ const destroyNIM = () =>
         done(error) {
           constObj.nim = null;
           store.dispatch({type: 'RESET'}); //需要去重置store里面的nim对象
+          console.log('destroyNIM', store.getState());
           if (error) {
             reject(error);
           } else {
@@ -56,21 +57,19 @@ const destroyNIM = () =>
   });
 
 export const initNIM = (account, token, callback) => {
-  console.log('ssss', store);
   constObj.nim = NIM.getInstance({
     debug: true,
     appKey: configs.appkey,
+    // account: '13916838994',
+    // token: '1234567890',
     account,
     token,
     db: true, // 使用数据库
-    // syncSessionUnread: true,
+    syncSessionUnread: true,
     // iosPushConfig,
     // androidPushConfig,
     onconnect: () => {
-      console.log('constObj', constObj);
-      console.log('store0', store.getState());
       store.dispatch({type: 'USERID', userID: account});
-      console.log('store1', store.getState());
     },
     onwillreconnect(obj) {
       // 此时说明 SDK 已经断开连接, 请开发者在界面上提示用户连接已断开, 而且正在重新建立连接
@@ -101,18 +100,21 @@ export const initNIM = (account, token, callback) => {
       // 当前聊天消息
       console.log('当前聊天消息', msg);
       // dosmoething
-      // if(nimStore.currentSessionId === msg.sessionId){
-      //   // nimStore.currentSessionMsgs.push(msg);
-      //   nimStore.currentSessionMsgs = nimStore.currentSessionMsgs.concat([msg]);
-      //   // set(nimStore, 'currentSessionMsgs', nimStore.currentSessionMsgs.concat([msg]));
-      //   constObj.nim.sendMsgReceipt({
-      //     msg,
-      //     done:(error) {
-      //       // do something
-      //       console.log('sendMsgReceipt',error)
-      //     }
-      //   })
-      // }
+      const {session, nim} = store.getState();
+      const msgs = session.currentSessionMsgs || [];
+      if (session.currentSessionId === msg.sessionId) {
+        store.dispatch({
+          type: 'SESSION_MSGS',
+          currentSessionMsgs: msgs.concat([msg]),
+        });
+        constObj.nim.sendMsgReceipt({
+          msg,
+          done: error => {
+            // do something
+            console.log('sendMsgReceipt', error);
+          },
+        });
+      }
       // if (global.ISANDROID) {
       //   let showText = '';
       //   if (msg.type === 'text') {
@@ -144,6 +146,8 @@ export const login = (account, token) => {
 export const logout = () => {
   constObj.nim.logout({
     done(error) {
+      constObj.nim = null;
+      // store.dispatch({type: 'RESET'});
       if (error) {
         console.log(error);
       }

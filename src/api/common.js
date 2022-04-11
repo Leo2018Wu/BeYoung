@@ -44,3 +44,11 @@ export const fetchChatAccount = {
     manual: false,
   },
 };
+
+// 获取聊天账号对象信息
+export const fetchAccountUser = {
+  url: 'cgi/core/user/fetchAccountUser',
+  options: {
+    manual: false,
+  },
+};
