@@ -43,6 +43,14 @@ export const fetchMyInfo = {
   },
 };
 
+// 获取我的统计信息
+export const fetchMyStatistic = {
+  url: 'cgi/core/user/fetchMyStatistic',
+  options: {
+    manual: false,
+  },
+};
+
 // 获取聊天账号
 export const fetchChatAccount = {
   url: 'cgi/core/user/fetchChatAccount',
