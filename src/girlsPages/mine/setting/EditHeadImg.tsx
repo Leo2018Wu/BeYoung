@@ -9,7 +9,6 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import CFastImage from '../../../components/CFastImage';
 import {BASE_DOWN_URL} from '../../../util/config';
 import LinearGradient from 'react-native-linear-gradient';
-// import constObj from '../../../store/constant';
 
 import Layout from '../../../components/Layout';
 const Index = ({...props}) => {
@@ -21,14 +20,6 @@ const Index = ({...props}) => {
 
   useEffect(() => {
     console.log('----ss-', headImg);
-    // constObj.nim.sendText({
-    //   scene: 'p2p',
-    //   to: '13916838994',
-    //   text: '长江收到',
-    //   done: done => {
-    //     console.log('done');
-    //   },
-    // });
   }, []);
 
   const edit = async () => {
@@ -54,29 +45,31 @@ const Index = ({...props}) => {
         <Text fontSize={'md'} fontWeight="bold">
           编辑头像
         </Text>
-        <Button
-          onPress={() => edit()}
-          w={16}
-          h={8}
-          style={{
-            backgroundColor: '#9650FF',
-            position: 'absolute',
-            right: 16,
-            top: '25%',
-            transform: [
-              {
-                translateY: 28,
-              },
-            ],
-          }}>
-          <Text
-            fontWeight={'bold'}
-            color={'white'}
-            fontSize="sm"
-            lineHeight={16}>
-            完成
-          </Text>
-        </Button>
+        {showImg ? (
+          <Button
+            onPress={() => edit()}
+            w={16}
+            h={8}
+            style={{
+              backgroundColor: '#9650FF',
+              position: 'absolute',
+              right: 16,
+              top: '25%',
+              transform: [
+                {
+                  translateY: 28,
+                },
+              ],
+            }}>
+            <Text
+              fontWeight={'bold'}
+              color={'white'}
+              fontSize="sm"
+              lineHeight={16}>
+              完成
+            </Text>
+          </Button>
+        ) : null}
       </HStack>
       <ChooseImgModal
         visible={showMdal}
@@ -96,7 +89,7 @@ const Index = ({...props}) => {
             if (!data.source.uri) {
               return null;
             }
-            <CFastImage url={data.source.uri} styles={data.style} />;
+            return <CFastImage url={data.source.uri} styles={data.style} />;
           }}
           saveToLocalByLongPress={false}
           imageUrls={[
