@@ -3,7 +3,7 @@ import {Pressable, StyleSheet, Image} from 'react-native';
 import {View, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 
 const Login = () => {
   const navigation = useNavigation();

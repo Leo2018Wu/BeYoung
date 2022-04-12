@@ -84,7 +84,7 @@ const Msgs = ({...props}) => {
     constObj.nim &&
       constObj.nim.sendText({
         scene: 'p2p',
-        isUnreadable: false,
+        // isUnreadable: false,
         to: props.route.params.chatUserId,
         text: textValue,
         done: (err: any, done: any) => {

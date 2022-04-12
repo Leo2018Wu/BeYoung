@@ -11,9 +11,10 @@ import PhotoSelection from '../../girlsPages/mine/photoSelect/PhotoSelection';
 import Wallet from '../../girlsPages/wallet/Wallet';
 import TransferDetail from '../../girlsPages/wallet/TransferDetail';
 import WithdrawalDetail from '../../girlsPages/wallet/WithdrawalDetail';
-import Preview from '../../girlsPages/common/Preview';
+import Preview from '../../components/Preview';
 import EditUser from '../../girlsPages/mine/setting/EditUser';
-import StudentCard from '../../girlsPages/mine/setting/StudentCard';
+import EditStudentCard from '../../girlsPages/mine/setting/EditStudentCard';
+import EditHeadImg from '../../girlsPages/mine/setting/EditHeadImg';
 import Session from '../../bossPages/communication/Session';
 
 const Stack = createNativeStackNavigator();
@@ -99,7 +100,7 @@ const MyStack = () => {
         name="Preview"
         component={Preview}
         options={{
-          headerTitle: '',
+          title: '',
           headerTransparent: true,
         }}
       />
@@ -112,12 +113,20 @@ const MyStack = () => {
         component={EditUser}
       />
       <Stack.Screen
+        options={{
+          headerShown: false,
+          headerBackVisible: true,
+        }}
+        name="EditHeadImg"
+        component={EditHeadImg}
+      />
+      <Stack.Screen
         options={() => ({
           title: '学生证上传',
           headerStyle: {backgroundColor: '#fff'},
         })}
-        name="StudentCard"
-        component={StudentCard}
+        name="EditStudentCard"
+        component={EditStudentCard}
       />
       <Stack.Screen
         options={{

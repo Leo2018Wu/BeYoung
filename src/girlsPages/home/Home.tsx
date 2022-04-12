@@ -15,7 +15,7 @@ import Gift from './Gift';
 import Like from './Like';
 import Comment from './Comment';
 
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 
 const DynamicRoute = () => <Dynamic />;
 

@@ -9,7 +9,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage';
 import {DeviceEventEmitter} from 'react-native';
 
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 import UserInfo from './UserInfo';
 import LinkList from './LinkList';
 

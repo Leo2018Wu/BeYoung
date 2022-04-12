@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import IconNew from 'react-native-vector-icons/AntDesign';
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 
 const list = [
   {

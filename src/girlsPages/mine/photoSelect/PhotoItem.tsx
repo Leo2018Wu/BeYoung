@@ -4,7 +4,7 @@ import {View, Text, Image} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 
-import layout from '../../common/Layout';
+import layout from '../../../components/Layout';
 
 const Login = () => {
   const navigation = useNavigation();

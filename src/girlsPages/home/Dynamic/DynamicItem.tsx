@@ -6,7 +6,7 @@ import CFastImage from '../../../components/CFastImage';
 import {useNavigation} from '@react-navigation/native';
 import {BASE_DOWN_URL} from '../../../util/config';
 
-import layout from '../../common/Layout';
+import layout from '../../../components/Layout';
 
 const Login = ({...props}) => {
   console.log('--props--', props);

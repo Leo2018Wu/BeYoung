@@ -13,7 +13,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 import WalletItem from './WalletItem';
 
 const Mine = (props: any) => {

@@ -3,8 +3,8 @@
 import React from 'react';
 import {View, Text, Image, ImageBackground, StyleSheet} from 'react-native';
 
-import DashLine from '../common/DashLine';
-import layout from '../common/Layout';
+import DashLine from '../../components/DashLine';
+import layout from '../../components/Layout';
 
 export default function Index(props) {
   return (

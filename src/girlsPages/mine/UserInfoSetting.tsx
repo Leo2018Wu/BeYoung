@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {
   View,
@@ -10,13 +10,14 @@ import {
   Pressable,
   NativeBaseProvider,
 } from 'native-base';
+import AsyncStorage from '@react-native-community/async-storage';
 import IconNew from 'react-native-vector-icons/AntDesign';
 import {useFocusEffect} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
 import {fetchMyInfo} from '../../api/common';
 import CFastImage from '../../components/CFastImage';
 
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 
 const Setting = ({...props}) => {
   const [service, setService] = useState('');
@@ -24,7 +25,6 @@ const Setting = ({...props}) => {
     {id: 0},
     {id: 1},
     {id: 2},
-    {id: 3},
     {id: 3},
     {id: 4},
   ]);
@@ -37,6 +37,12 @@ const Setting = ({...props}) => {
     }, []),
   );
 
+  useEffect(() => {
+    if (result) {
+      AsyncStorage.setItem('USERINFO', JSON.stringify(result));
+    }
+  }, [result]);
+
   const editUser = (type, value) => {
     props.navigation.navigate('EditUser', {
       type: type,
@@ -47,24 +53,50 @@ const Setting = ({...props}) => {
   return (
     <NativeBaseProvider>
       <ScrollView style={styles.userInfoContain}>
-        <View style={styles.itemView}>
+        <Pressable
+          onPress={() =>
+            props.navigation.navigate('EditHeadImg', {
+              headImg: result?.headImg || '',
+            })
+          }
+          style={styles.itemView}>
           <Text style={styles.userInfo_item_text}>头像</Text>
           <CFastImage
             url={result?.headImg}
             styles={{width: 45, height: 45, borderRadius: 50}}
           />
-        </View>
+        </Pressable>
         <Pressable
-          onPress={() => props.navigation.navigate('StudentCard')}
+          onPress={() => props.navigation.navigate('EditStudentCard')}
           style={styles.itemView}>
           <Text>学生证</Text>
-          <Image
-            source={require('../assets/defaultAva.png')}
+          <View
             style={{
-              width: 45,
-              height: 45,
-            }}
-          />
+              justifyContent: 'flex-end',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            {result?.studentCard ? (
+              <CFastImage
+                url={result?.studentCard}
+                styles={{width: 45, height: 45}}
+              />
+            ) : (
+              <Image
+                source={require('../assets/defaultAva.png')}
+                style={{
+                  width: 45,
+                  height: 45,
+                }}
+              />
+            )}
+            <IconNew
+              name="right"
+              size={16}
+              color="#919191"
+              style={{marginLeft: 4}}
+            />
+          </View>
         </Pressable>
         <Pressable
           onPress={() => editUser('昵称', result?.nickName)}

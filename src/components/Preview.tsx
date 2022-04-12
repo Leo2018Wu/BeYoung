@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import FastImage from 'react-native-fast-image';
-import CFastImage from '../../components/CFastImage';
+import CFastImage from './CFastImage';
 import {useNavigation} from '@react-navigation/native';
 
 export default function Index(props) {
