@@ -22,7 +22,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRequest from '../../hooks/useRequest';
 import {fetchAccountUser} from '../../api/common';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
-import {InteractionManager, Keyboard} from 'react-native';
+import {InteractionManager, Keyboard, Platform} from 'react-native';
 
 let _scrollTimer: any;
 const BOTTOM_FIXED_HEIGHT = 92; // 底部遮盖拦高度
@@ -37,6 +37,7 @@ const Msgs = ({...props}) => {
   const scrollRef = useRef(null);
   const insets = useSafeAreaInsets();
   const [textValue, setValue] = useState('');
+  const [keyboradShow, setKeyborad] = useState(false);
   const {result: chatUserInfo} = useRequest(
     fetchAccountUser.url,
     {
@@ -55,7 +56,32 @@ const Msgs = ({...props}) => {
     }
   };
 
+  const setCurrentSession = () => {
+    //调用此接口会重置该会话消息未读数
+    constObj.nim && constObj.nim.setCurrSession(props.currentSessionId);
+  };
+
+  const _keyboardDidShow = () => {
+    setKeyborad(true);
+  };
+
+  const _keyboardDidHide = () => {
+    setKeyborad(false);
+  };
+
   useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', () => {});
+      Keyboard.removeListener('keyboardDidHide', () => {});
+    };
+  }, []);
+
+  useEffect(() => {
+    setCurrentSession();
     scrollToEnd();
     constObj.nim &&
       constObj.nim.getLocalMsgs({
@@ -70,10 +96,16 @@ const Msgs = ({...props}) => {
         },
       });
     return () => {
+      //取消设置当前会话
+      constObj.nim && constObj.nim.resetCurrSession();
       _scrollTimer && clearTimeout(_scrollTimer);
       // 退出重置当前会话ID
       props.dispatch({
         type: 'RESET_SESSIONID',
+      });
+      props.dispatch({
+        type: 'SESSION_MSGS',
+        currentSessionMsgs: [],
       });
     };
   }, []);
@@ -84,10 +116,11 @@ const Msgs = ({...props}) => {
     constObj.nim &&
       constObj.nim.sendText({
         scene: 'p2p',
-        isUnreadable: false,
+        // isUnreadable: false,
         to: props.route.params.chatUserId,
         text: textValue,
         done: (err: any, done: any) => {
+          setValue('');
           props.dispatch({
             type: 'MERGE_SESSION_MSGS',
             msg: done,
@@ -162,7 +195,7 @@ const Msgs = ({...props}) => {
           height: '100%',
           paddingBottom: BOTTOM_FIXED_HEIGHT,
         }}
-        behavior="position">
+        behavior={Platform.OS === 'ios' ? 'position' : 'padding'}>
         <ScrollView
           ref={e => {
             scrollRef.current = e;
@@ -189,11 +222,12 @@ const Msgs = ({...props}) => {
           w={'full'}
           px={4}
           style={{
-            height: BOTTOM_FIXED_HEIGHT,
+            // minHeight: 80,
+            paddingVertical: 10,
             position: 'absolute',
             left: 0,
             bottom: 0,
-            paddingBottom: insets.bottom,
+            paddingBottom: !keyboradShow ? insets.bottom : 10,
             backgroundColor: '#fff',
           }}>
           <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
@@ -206,10 +240,15 @@ const Msgs = ({...props}) => {
             color="#9650FF"
           />
           <Input
+            multiline
+            returnKeyType="send"
+            onSubmitEditing={() => sendMsg()}
             fontSize={'md'}
             variant="filled"
             py={2}
             mx={4}
+            type="text"
+            height="full"
             onChangeText={e => setValue(e)}
             value={textValue}
             maxLength={300}
