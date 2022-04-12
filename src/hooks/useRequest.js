@@ -67,11 +67,11 @@ const useRequest = (
         console.log('responseJSON', responseJSON);
         const {success, data, message, type} = responseJSON;
         if (data === '访问凭据已过期，请重新登陆') {
-          logout();
           AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
           AsyncStorage.setItem('USERINFO', '');
           AsyncStorage.setItem('chatAccount', '');
           DeviceEventEmitter.emit('LOGIN_EVENT', '');
+          logout();
           return;
         }
         if (type !== 'SUCCESS') {
