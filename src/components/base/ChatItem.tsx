@@ -7,7 +7,6 @@ export const ChatLeft = ({msg}: any) => {
   if (msg.type === 'text') {
     return (
       <Box
-        mb={4}
         p={4}
         mr="auto"
         borderRadius={10}
@@ -24,7 +23,6 @@ export const ChatLeft = ({msg}: any) => {
   } else {
     return (
       <Box
-        mb={4}
         p={4}
         mr="auto"
         borderRadius={10}
@@ -51,7 +49,6 @@ export const ChatRight = ({msg}: any) => {
           marginLeft: 'auto',
           borderRadius: 10,
           borderBottomRightRadius: 2,
-          marginBottom: 16,
         }}
         start={{x: 0, y: 0.5}}
         end={{x: 0.9, y: 0.5}}
@@ -72,7 +69,6 @@ export const ChatRight = ({msg}: any) => {
           marginLeft: 'auto',
           borderRadius: 10,
           borderBottomRightRadius: 2,
-          marginBottom: 16,
         }}
         start={{x: 0, y: 0.5}}
         end={{x: 0.9, y: 0.5}}

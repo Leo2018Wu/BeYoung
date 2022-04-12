@@ -18,20 +18,8 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import LinearGradient from 'react-native-linear-gradient';
 import {ImageBackground, StyleSheet, useWindowDimensions} from 'react-native';
 import useRequest from '../../hooks/useRequest';
-import constObj from '../../store/constant';
 
 const Home = ({...props}) => {
-  // setTimeout(() => {
-  //   constObj.nim.sendText({
-  //     scene: 'p2p',
-  //     to: 'yx6919098041437783040',
-  //     text: '长江收到',
-  //     done: done => {
-  //       console.log('done');
-  //     },
-  //   });
-  // }, 5000);
-
   const {width, height} = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const GRADES = ['大一', '大二', '大三'];

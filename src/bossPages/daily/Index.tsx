@@ -19,7 +19,11 @@ const Index = () => {
       </Box>
       <Box my={4} px={4} flex={1}>
         <CustomFlatList
-          renderItem={() => <DailyItem />}
+          renderItem={() => (
+            <Box mb={4}>
+              <DailyItem />
+            </Box>
+          )}
           isPage={true}
           api={{
             url: queryDynamic.url,

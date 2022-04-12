@@ -66,3 +66,11 @@ export const fetchAccountUser = {
     manual: false,
   },
 };
+
+// 获取钱包信息
+export const fetchWalletInfo = {
+  url: 'cgi/core/user/fetchWalletInfo',
+  options: {
+    manual: false,
+  },
+};
