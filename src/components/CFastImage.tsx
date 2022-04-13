@@ -15,7 +15,7 @@ const Index = ({styles, url}: {styles: any; url: string}) => {
       onLoadStart={() => <Spinner size={'sm'} />}
       onError={() => <Image source={DEFAULT_AVATAR} style={styles} alt="img" />}
       source={{
-        uri: BASE_DOWN_URL + url,
+        uri: url.substr(0, 3) !== 'img' ? url : BASE_DOWN_URL + url,
         headers: {Authorization: 'someAuthToken'},
         priority: FastImage.priority.normal,
       }}

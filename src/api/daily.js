@@ -34,3 +34,9 @@ export const queryMyDynamic = {
   url: 'cgi/core/dynamic/queryMyDynamic',
   options: {},
 };
+
+// 获取动态案例
+export const queryDynamicCase = {
+  url: 'cgi/core/dynamic/queryDynamicCase',
+  options: {},
+};

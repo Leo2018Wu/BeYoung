@@ -192,10 +192,11 @@ const Msgs = ({...props}) => {
         </Box>
       </LinearGradient>
       <KeyboardAvoidingView
+        keyboardVerticalOffset={-108}
         contentContainerStyle={{
           height: '100%',
         }}
-        behavior={Platform.OS === 'ios' ? 'position' : 'padding'}>
+        behavior={'position'}>
         <ScrollView
           ref={e => {
             scrollRef.current = e;

@@ -1,19 +1,33 @@
-import React, {useState} from 'react';
-import {Pressable, StyleSheet, ImageBackground} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Pressable, StyleSheet} from 'react-native';
 import {View, Text, Image} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import CFastImage from '../../components/CFastImage';
 
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 
-const Login = () => {
-  const navigation = useNavigation();
+const Login = ({...props}) => {
+  console.log('--s-s-s-1', props.item);
+  const {item} = props;
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    if (item.images) {
+      setImages(JSON.parse(item.images));
+    }
+  }, []);
+
+  // const navigation = useNavigation();
   return (
-    <Pressable>
-      <ImageBackground
-        source={require('../assets/IMG_2729.png')}
-        borderRadius={4}
-        style={styles.banner}
-        resizeMode="cover">
+    <View style={{marginBottom: 8}}>
+      <Pressable style={styles.banner}>
+        <CFastImage
+          url={images[0]}
+          styles={{
+            width: (layout.width - 26) / 2,
+            height: 210,
+          }}
+        />
         <View style={styles.optContain}>
           <View style={styles.optView}>
             <Image
@@ -25,7 +39,7 @@ const Login = () => {
               }}
               alt="dairy"
             />
-            <Text style={styles.optSize}>71k</Text>
+            <Text style={styles.optSize}>{item.likeNum}</Text>
           </View>
           <View style={styles.optView}>
             <Image
@@ -37,7 +51,7 @@ const Login = () => {
               }}
               alt="dairy"
             />
-            <Text style={styles.optSize}>71k</Text>
+            <Text style={styles.optSize}>{item.commentNum}</Text>
           </View>
           <View style={styles.optView}>
             <Image
@@ -49,11 +63,11 @@ const Login = () => {
               }}
               alt="dairy"
             />
-            <Text style={styles.optSize}>71k</Text>
+            <Text style={styles.optSize}>{item.giftNum}</Text>
           </View>
         </View>
-      </ImageBackground>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 };
 
@@ -64,23 +78,26 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     position: 'absolute',
-    bottom: 6,
+    bottom: 10,
     width: '100%',
+    alignItems: 'center',
+    height: 25,
     paddingHorizontal: 10,
+    backgroundColor: 'rgba(0,0,0,0.1)',
   },
   optView: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   optSize: {
-    color: '#C7C4CC',
-    fontSize: 9,
+    color: '#fff',
+    fontSize: 10,
   },
   banner: {
     width: (layout.width - 26) / 2,
     height: 210,
     position: 'relative',
     justifyContent: 'center',
-    marginBottom: 8,
+    borderRadius: 10,
   },
 });

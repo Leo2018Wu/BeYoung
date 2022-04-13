@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, StyleSheet, Image, Pressable, FlatList} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import DashLine from '../common/DashLine';
+import DashLine from '../../components/DashLine';
 
 const Login = () => {
   const navigation = useNavigation();

@@ -14,7 +14,7 @@ import {addQuickReply, fetchQuickReply} from '../../api/quickReply';
 import useRequest from '../../hooks/useRequest';
 import fetchData from '../../util/request';
 
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 
 const Login = () => {
   const Toast = useToast();

@@ -8,28 +8,27 @@ import {
   Pressable,
   TouchableOpacity,
   Platform,
-  DeviceEventEmitter,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import layout from '../../common/Layout';
+import layout from '../../../components/Layout';
 import {upload} from '../../../util/upload';
-import FillModal from '../../common/ChooseImgModal';
+import FillModal from '../../../components/ChooseImgModal';
 import fetchData from '../../../util/request';
 import {updateUserInfo, fetchMyInfo} from '../../../api/common';
 import useRequest from '../../../hooks/useRequest';
 import {BASE_DOWN_URL} from '../../../util/config';
-import IconNew from 'react-native-vector-icons/AntDesign';
+import CFastImage from '../../../components/CFastImage';
 
 export default function name({navigation, route}) {
   const [showFillModal, setShowModal] = useState(false); //学生证选择弹窗显示状态
-  const [studentCard, setStudentCard] = useState();
+  const [studentCard, setStudentCard] = useState(null);
   const {run: runUpdateUserInfo, result} = useRequest(updateUserInfo.url);
   const [flag, setFlag] = useState(true);
 
   useEffect(() => {
+    getMyInfo();
     if (result) {
       console.log('-----s-s--s', result);
-      setFlag(false);
       getMyInfo();
     }
   }, [result]);
@@ -49,6 +48,10 @@ export default function name({navigation, route}) {
   const getMyInfo = async () => {
     const {data, success} = await fetchData('cgi/core/user/fetchMyInfo', {});
     if (success) {
+      if (data.studentCard) {
+        setFlag(false);
+        setStudentCard(data.studentCard);
+      }
       AsyncStorage.setItem('USERINFO', JSON.stringify(data));
     }
   };
@@ -74,11 +77,19 @@ export default function name({navigation, route}) {
         />
         <Pressable
           onPress={() => {
-            setShowModal(true);
+            if (!studentCard) {
+              setShowModal(true);
+            } else {
+              console.log('-s-d-s');
+              navigation.navigate('Preview', {
+                imgUrls: [{url: BASE_DOWN_URL + studentCard}],
+              });
+            }
           }}>
           <Text style={styles.studentText}>上传</Text>
           {studentCard ? (
-            <Image source={{uri: studentCard}} style={styles.list__item_img} />
+            // <Image source={{uri: studentCard}} style={styles.list__item_img} />
+            <CFastImage url={studentCard} styles={styles.list__item_img} />
           ) : (
             <Image
               source={require('../../assets/studentsCode1.png')}

@@ -1,27 +1,21 @@
 import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
-import {View, FlatList} from 'native-base';
+import {View, FlatList, Box} from 'native-base';
 import CaseItem from './CaseItem';
+import CustomFuncFlatList from '../../components/CustomFuncFlatList';
+import {queryDynamicCase} from '../../api/daily';
 
 const Login = () => {
-  const [list, setList] = useState([
-    {id: 0},
-    {id: 1},
-    {id: 2},
-    {id: 3},
-    {id: 4},
-  ]);
   return (
-    <View style={{padding: 8}}>
-      <FlatList
-        contentContainerStyle={styles.main}
-        data={list}
-        onEndReachedThreshold={0.1}
-        showsVerticalScrollIndicator={false}
-        renderItem={({item}) => <CaseItem item={item} />}
-        keyExtractor={item => item.id}
-      />
-    </View>
+    <Box flex={1} bg="white">
+      <Box my={4} px={4} flex={1}>
+        <CustomFuncFlatList
+          renderItem={({item}: any) => <CaseItem item={item} />}
+          url={queryDynamicCase.url}
+          par={{caseScene: 'CASE_SCENE_FAIR'}}
+        />
+      </Box>
+    </Box>
   );
 };
 

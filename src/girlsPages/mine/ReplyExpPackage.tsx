@@ -18,7 +18,7 @@ import {upload} from '../../util/upload';
 import {addDynamic} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
 
-import layout from '../common/Layout';
+import layout from '../../components/Layout';
 
 const Index = (props: any) => {
   const {navigation} = props;
