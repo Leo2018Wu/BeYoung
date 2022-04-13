@@ -1,6 +1,6 @@
 import React from 'react';
 import {Box, HStack, Text, VStack} from 'native-base';
-import CustomFlatList from '../../components/CustomFlatList';
+import CustomFuncFlatList from '../../components/CustomFuncFlatList';
 import CFastImage from '../../components/CFastImage';
 import {queryDynamic} from '../../api/daily';
 
@@ -39,13 +39,10 @@ const Index = () => {
 
   return (
     <Box flex={1}>
-      <CustomFlatList
+      <CustomFuncFlatList
         renderItem={() => <Item />}
-        isPage={true}
-        api={{
-          url: queryDynamic.url,
-          params: {},
-        }}
+        url={queryDynamic.url}
+        par={{}}
       />
     </Box>
   );
