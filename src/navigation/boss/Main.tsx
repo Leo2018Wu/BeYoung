@@ -17,7 +17,6 @@ const MyStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
-        headerBackTitleVisible: false,
       }}>
       <Stack.Screen
         options={{
@@ -51,7 +50,7 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '详情',
+          title: '动态详情',
           headerBackTitle: '动态',
         }}
         name="DailyDetail"
@@ -63,7 +62,7 @@ const MyStack = () => {
             backgroundColor: '#9650FF',
           },
           headerTintColor: '#fff',
-          headerTitle: '设置',
+          title: '设置',
           headerBackTitle: '我的',
         }}
         name="Setting"
@@ -75,7 +74,7 @@ const MyStack = () => {
             backgroundColor: '#9650FF',
           },
           headerTintColor: '#fff',
-          headerTitle: '女生联系方式',
+          title: '女生联系方式',
           headerBackTitle: '我的',
         }}
         name="WeChatNum"
@@ -83,7 +82,7 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '客服',
+          title: '客服',
           headerBackTitle: '我的',
         }}
         name="Service"

@@ -153,12 +153,7 @@ const Msgs = ({...props}) => {
     );
   }
   return (
-    <Box
-      bg={'white'}
-      flex={1}
-      style={{
-        paddingBottom: BOTTOM_FIXED_HEIGHT,
-      }}>
+    <Box bg={'white'} flex={1} style={{paddingBottom: BOTTOM_FIXED_HEIGHT}}>
       <LinearGradient
         style={{
           position: 'relative',
