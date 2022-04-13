@@ -25,7 +25,7 @@ const Index = () => {
 
   const getAccount = async () => {
     try {
-      const chatAccount = await runChatAccount();
+      const {data: chatAccount} = await runChatAccount();
       if (chatAccount.account) {
         // 拿到了聊天账号
         AsyncStorage.setItem('chatAccount', JSON.stringify(chatAccount), () => {

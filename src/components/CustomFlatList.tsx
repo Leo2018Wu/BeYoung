@@ -40,8 +40,6 @@ export default class CustomFlatList extends React.Component<any, any> {
   }
   // 获取列表数据
   _getList = async () => {
-    console.log('this._getList', this.state);
-
     try {
       let isPage = this.props.isPage || this.state.isPage;
       const {api} = this.props;
@@ -50,7 +48,6 @@ export default class CustomFlatList extends React.Component<any, any> {
         // 分页时请求额外带上书分页相关参数
         const {pageNum, pageSize} = this.state;
         req = Object.assign(api.params, {pageNum, pageSize});
-        console.log('req', req);
         const data = await fetchData(api.url, api.params);
         this._dealData(data);
       } else {
@@ -66,7 +63,6 @@ export default class CustomFlatList extends React.Component<any, any> {
   _dealData = async (result: any) => {
     const {data, total} = result;
     const {queryList, pageNum} = this.state;
-    console.log('[][[]][', total, data);
     if (data.length === 0 && queryList.length === 0) {
       this.setState({
         pageStatus: IS_EMPTY,
@@ -75,7 +71,8 @@ export default class CustomFlatList extends React.Component<any, any> {
     }
     let isPage = this.props.isPage || this.state.isPage;
     if (isPage) {
-      const isNextPage = data.length < total; // 是否有下一页
+      const isNextPage = data.length < total - queryList.length; // 是否有下一页
+
       this.setState({
         pagingStatus: isNextPage ? PAGE_IS_NEXTPAGE : PAGE_IS_END,
       });
@@ -105,7 +102,6 @@ export default class CustomFlatList extends React.Component<any, any> {
         pageNum: _this.state.pageNum + 1,
       },
       () => {
-        console.log('_this.state.pageNum', _this.state.pageNum);
         _this._getList();
       },
     );
@@ -129,7 +125,7 @@ export default class CustomFlatList extends React.Component<any, any> {
   renderLoadMore = () => {
     return (
       <Box my={4} alignItems={'center'}>
-        <Text>加载更多</Text>
+        <Spinner size={'sm'} color="primary.100" />
       </Box>
     );
   };
@@ -186,8 +182,6 @@ export default class CustomFlatList extends React.Component<any, any> {
     );
   };
   _onEndReached = () => {
-    console.log('_onEndReached', this.state);
-
     const {pagingStatus} = this.state;
     if (pagingStatus === PAGE_IS_NEXTPAGE) {
       this._loadMore();

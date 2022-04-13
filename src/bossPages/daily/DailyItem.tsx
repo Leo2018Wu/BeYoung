@@ -9,11 +9,12 @@ import {
   Button,
   Stack,
 } from 'native-base';
+import CFastImage from '../../components/CFastImage';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {Pressable, useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const Index = () => {
+const Index = ({item}: {item: any}) => {
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 104) / 3;
@@ -43,13 +44,12 @@ const Index = () => {
           navigation.navigate('DailyDetail');
         }}>
         <HStack alignItems="center">
-          <Image
-            w={12}
-            h={12}
-            borderRadius="full"
-            alt="avatar"
-            source={{
-              uri: 'https://picsum.photos/200/180?random=8',
+          <CFastImage
+            url={item.headImg}
+            styles={{
+              width: 48,
+              height: 48,
+              borderRadius: 24,
             }}
           />
           <VStack flex={1} mr={'auto'} ml={2} justifyContent={'space-around'}>
@@ -58,14 +58,14 @@ const Index = () => {
               style={{
                 color: '#8E8895',
               }}>
-              闫有筠
+              {item.nickName || '青回'}
             </Text>
             <Text
               fontSize={'xs'}
               style={{
                 color: '#C7C4CC',
               }}>
-              2022.10.21 19:03
+              {item.createTime}
             </Text>
           </VStack>
           <Button
@@ -103,7 +103,7 @@ const Index = () => {
               ))}
           </HStack>
           <Text numberOfLines={3} fontSize={'md'} color={'fontColors._72'}>
-            蔡蒙是安徽人，来上海两年多，和许多“漂漂”们一样，他也想落脚上海，在上海能有一套属于自己的房子。蔡蒙是安徽人，来上海两年多，和许多“漂漂”们一样，他也想落脚上海，在上海能有一套属于自己的房子。
+            {item.content}
           </Text>
         </View>
         <Stack
@@ -119,7 +119,7 @@ const Index = () => {
               评分
             </Text>
             <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              24
+              {item.score}
             </Text>
           </HStack>
           <HStack alignItems={'center'}>
@@ -129,19 +129,19 @@ const Index = () => {
               color={false ? '#9650FF' : '#C7C4CC'}
             />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              72
+              {item.likeNum}
             </Text>
           </HStack>
           <HStack alignItems={'center'}>
             <Icon name="message1" size={18} color="#C7C4CC" />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              13
+              {item.commentNum}
             </Text>
           </HStack>
           <HStack alignItems={'center'}>
             <Icon name="gift" size={18} color="#C7C4CC" />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              4
+              {item.giftNum}
             </Text>
           </HStack>
         </Stack>
