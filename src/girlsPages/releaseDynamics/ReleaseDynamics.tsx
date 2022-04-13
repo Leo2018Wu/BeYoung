@@ -122,7 +122,7 @@ const Index = (props: any) => {
             </Text>
             <Text
               onPress={() => {
-                navigation.navigate('RepairHelp');
+                checkSubmit();
               }}
               fontWeight={'bold'}
               color={'#fff'}
