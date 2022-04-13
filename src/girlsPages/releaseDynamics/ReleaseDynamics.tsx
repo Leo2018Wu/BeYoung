@@ -58,12 +58,14 @@ const Index = (props: any) => {
 
   const checkSubmit = () => {
     try {
-      const filterUploadFiles = list.filter(
-        item => item.substr(0, 3) !== 'img',
-      );
-      setLoading(true);
-      if (filterUploadFiles.length > 0) {
-        uploadDynamic(filterUploadFiles);
+      if (list && list.length) {
+        const filterUploadFiles = list.filter(
+          item => item.substr(0, 3) !== 'img',
+        );
+        setLoading(true);
+        if (filterUploadFiles.length > 0) {
+          uploadDynamic(filterUploadFiles);
+        }
       } else {
         runAddDynamic({
           content: textAreaValue,
