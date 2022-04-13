@@ -85,7 +85,7 @@ const useRequest = (
           return;
         }
         setResult(JSON.parse(JSON.stringify(data)));
-        return data;
+        return responseJSON;
       }
     } catch (errMsg) {
       console.error(errMsg);

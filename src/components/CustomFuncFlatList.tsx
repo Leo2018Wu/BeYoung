@@ -1,9 +1,6 @@
 import React, {useState} from 'react';
-import {Box, Text, Center, FlatList} from 'native-base';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import DailyItem from './DailyItem';
-import {queryDynamic} from '../../api/daily';
-import useRequest from '../../hooks/useRequest';
+import {Box, FlatList} from 'native-base';
+import useRequest from '../hooks/useRequest';
 import {useFocusEffect} from '@react-navigation/native';
 
 import {
@@ -13,7 +10,7 @@ import {
   PageLoadAll,
   PageLoading,
   PageLoadMore,
-} from '../../components/base/Pagination';
+} from './base/Pagination';
 const {
   PAGE_IS_LOADING,
   PAGE_IS_NEXTPAGE,
@@ -32,24 +29,36 @@ const mergeList = (sourceList: any, nowList: any) => {
   return nowList;
 };
 
-const Index = () => {
-  const insets = useSafeAreaInsets();
-  const [params, setParams] = useState({
-    pageNum: 1, //分页页码
-    pageSize: 10, //每页大小
-    orders: [
+const Index = ({
+  url,
+  par,
+  renderItem,
+}: {
+  url: string;
+  par: object;
+  renderItem: any;
+}) => {
+  const [params, setParams] = useState(
+    Object.assign(
       {
-        column: 'createTime', //排序字段名称
-        dir: 'desc', //排序方向，asc=顺序、desc=倒序，默认为顺序
-        chinese: false, //是否为中文排序，默认为否
+        pageNum: 1, //分页页码
+        pageSize: 10, //每页大小
+        orders: [
+          {
+            column: 'createTime', //排序字段名称
+            dir: 'desc', //排序方向，asc=顺序、desc=倒序，默认为顺序
+            chinese: false, //是否为中文排序，默认为否
+          },
+        ], //排序参数列表
       },
-    ], //排序参数列表
-  });
+      par,
+    ),
+  );
   const [queryList, setList] = useState([]); // 动态列表
   const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
 
-  const {run: runQueryDynamic} = useRequest(queryDynamic.url);
+  const {run: runGetList} = useRequest(url);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -59,8 +68,7 @@ const Index = () => {
 
   const _getList = async () => {
     try {
-      const data = await runQueryDynamic(params);
-      console.log('data', data);
+      const data = await runGetList(params);
       _dealData(data);
     } catch (error) {
       // 错误信息 比如网络错误
@@ -71,7 +79,6 @@ const Index = () => {
   // 处理页面数据及状态
   const _dealData = (response: any) => {
     const {data, total} = response;
-    console.log('response', response);
     if (total === 0) {
       setPageStatus(IS_EMPTY);
       return;
@@ -119,11 +126,7 @@ const Index = () => {
         onRefresh={() => _onRefresh()}
         data={queryList}
         refreshing={pageStatus === IS_LOADDING}
-        renderItem={({item}) => (
-          <Box mb={4}>
-            <DailyItem item={item} />
-          </Box>
-        )}
+        renderItem={renderItem}
         ListFooterComponent={renderFooter()}
         keyExtractor={(item, index) => `key${index}`}
         onEndReached={() => _onEndReached()}
@@ -134,19 +137,10 @@ const Index = () => {
 
   return (
     <Box flex={1} bg="white">
-      <Box justifyContent="center" style={{paddingTop: insets.top}}>
-        <Center px={3} style={{height: 52}} alignItems="center">
-          <Text color={'fontColors.333'} fontSize={'xl'}>
-            动态
-          </Text>
-        </Center>
-      </Box>
-      <Box my={4} px={4} flex={1}>
-        {pageStatus === IS_EMPTY && <PageEmpty />}
-        {pageStatus === IS_LIST && renderList()}
-        {pageStatus === IS_LOADDING && <PageLoading />}
-        {pageStatus === IS_NET_ERROR && <PageError />}
-      </Box>
+      {pageStatus === IS_EMPTY && <PageEmpty />}
+      {pageStatus === IS_LIST && renderList()}
+      {pageStatus === IS_LOADDING && <PageLoading />}
+      {pageStatus === IS_NET_ERROR && <PageError />}
     </Box>
   );
 };

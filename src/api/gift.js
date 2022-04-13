@@ -18,3 +18,11 @@ export const queryGiftGiving = {
   url: 'cgi/core/dynamic/queryGiftGiving',
   options: {},
 };
+
+// 获取我的礼物
+export const fetchMyGift = {
+  url: 'cgi/core/gift/fetchMyGift',
+  options: {
+    manual: false,
+  },
+};

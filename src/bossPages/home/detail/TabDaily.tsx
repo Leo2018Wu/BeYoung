@@ -1,21 +1,19 @@
-import React from 'react';
-import {
-  HStack,
-  ScrollView,
-  Box,
-  Image,
-  View,
-  VStack,
-  Text,
-  Pressable,
-} from 'native-base';
+import React, {useContext} from 'react';
+import {HStack, Box, Image, View, VStack, Text, Pressable} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Entypo';
+import CFastImage from '../../../components/CFastImage';
+
+import Icon from 'react-native-vector-icons/AntDesign';
 import EvilIcon from 'react-native-vector-icons/EvilIcons';
 import {useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import CustomFuncFlatList from '../../../components/CustomFuncFlatList';
+import {queryDynamic} from '../../../api/daily';
+import MyContext from './Context';
 
 const Index = () => {
+  const userInfo = useContext(MyContext); // 共享的用户信息
+
   const insets = useSafeAreaInsets();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 32) / 3;
@@ -39,12 +37,19 @@ const Index = () => {
     },
   ];
 
-  return (
-    <ScrollView
-      contentContainerStyle={{
-        paddingBottom: insets.bottom + 60,
-      }}>
-      <Pressable onPress={() => navigation.navigate('DailyDetail')}>
+  interface ItemProp {
+    headImg: string;
+    nickName: string;
+    createTime: string;
+    content: string;
+    likeNum: string;
+    liked: boolean;
+  }
+
+  const Item = ({item}: {item: ItemProp}) => {
+    return (
+      <Pressable
+        onPress={() => navigation.navigate('DailyDetail', {item: item})}>
         <Box p={3} borderRadius={4} bg="white">
           {/* 动态用户信息 */}
           <HStack h={10}>
@@ -55,27 +60,25 @@ const Index = () => {
               style={{
                 overflow: 'hidden',
               }}>
-              <Image
-                w={'full'}
-                h={'full'}
-                alt="avatar"
-                source={{
-                  uri: 'https://picsum.photos/200/180?random=8',
+              <CFastImage
+                url={item.headImg}
+                styles={{
+                  flex: 1,
                 }}
               />
             </View>
             <VStack ml={2} justifyContent={'space-around'}>
               <Text fontSize={'md'} color={'fontColors._72'}>
-                闫有筠
+                {item.nickName}
               </Text>
               <Text fontSize={'sm'} color="fontColors.b2">
-                2022.10.21 19:03
+                {item.createTime}
               </Text>
             </VStack>
           </HStack>
           <View pt={2}>
-            <Text fontSize={'md'} color={'fontColors._72'}>
-              蔡蒙是安徽人，来上海两年多，和许多“漂漂”们一样，他也想落脚上海，在上海能有一套属于自己的房子。
+            <Text numberOfLines={3} fontSize={'md'} color={'fontColors._72'}>
+              {item.content}
             </Text>
             <HStack mt={2} flexWrap={'wrap'}>
               {IMGS &&
@@ -103,15 +106,37 @@ const Index = () => {
               </Text>
             </HStack>
             <HStack alignItems={'center'}>
-              <Icon name="thumbs-up" size={18} color="#9650FF" />
-              <Text fontSize={'md'} color="primary.100">
-                24
+              {item.liked ? (
+                <Icon name="heart" size={18} color="#9650FF" />
+              ) : (
+                <Icon name="hearto" size={18} color="#C7C4CC" />
+              )}
+
+              <Text ml={1} fontSize={'md'} color="primary.100">
+                {item.likeNum}
               </Text>
             </HStack>
           </HStack>
         </Box>
       </Pressable>
-    </ScrollView>
+    );
+  };
+
+  return (
+    <Box
+      flex={1}
+      bg="white"
+      style={{
+        paddingBottom: insets.bottom + 60,
+      }}>
+      <CustomFuncFlatList
+        url={queryDynamic.url}
+        par={{
+          userId: userInfo.id,
+        }}
+        renderItem={({item}: {item: ItemProp}) => <Item item={item} />}
+      />
+    </Box>
   );
 };
 export default Index;

@@ -9,11 +9,13 @@ const fetchData = async (url, params) => {
     ACCESS_TOKEN: userInfo && JSON.parse(userInfo).accessToken,
   };
 
+  params = params || {};
   const response = await fetch(BASE_URL + url, {
     method: 'POST',
     headers,
     body: JSON.stringify(params),
   });
+  console.log('fetchDataresponse', response);
 
   if (response.status === 200) {
     const responseJSON = await response.json();

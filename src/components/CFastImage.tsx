@@ -1,4 +1,4 @@
-import {Image} from 'native-base';
+import {Image, Spinner} from 'native-base';
 import React from 'react';
 
 import FastImage from 'react-native-fast-image';
@@ -12,8 +12,10 @@ const Index = ({styles, url}: {styles: any; url: string}) => {
   return (
     <FastImage
       style={styles}
+      onLoadStart={() => <Spinner size={'sm'} />}
+      onError={() => <Image source={DEFAULT_AVATAR} style={styles} alt="img" />}
       source={{
-        uri: url.substr(0, 3) !== 'img' ? url : BASE_DOWN_URL + url,
+        uri: BASE_DOWN_URL + url,
         headers: {Authorization: 'someAuthToken'},
         priority: FastImage.priority.normal,
       }}

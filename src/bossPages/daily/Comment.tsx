@@ -1,7 +1,7 @@
 import React from 'react';
 import {HStack, ScrollView, Box, Stack, Text, VStack, Image} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import Icon from 'react-native-vector-icons/Entypo';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const Index = () => {
   const insets = useSafeAreaInsets();
@@ -48,8 +48,12 @@ const Index = () => {
                 </Text>
               </VStack>
               <HStack alignItems={'center'}>
-                <Icon name="thumbs-up" size={18} color="#D4D4D4" />
-                <Text fontSize={'md'} style={{color: '#D4D4D4'}}>
+                {false ? (
+                  <Icon name="heart" size={18} color="#9650FF" />
+                ) : (
+                  <Icon name="hearto" size={18} color="#C7C4CC" />
+                )}
+                <Text ml={1} fontSize={'md'} style={{color: '#D4D4D4'}}>
                   24
                 </Text>
               </HStack>
