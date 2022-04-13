@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, HStack, Text, Image} from 'native-base';
+import {Box, Button, HStack, Text, Image, Pressable} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {updateUserInfo} from '../../../api/common';
 import {upload} from '../../../util/upload';
@@ -9,6 +9,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import CFastImage from '../../../components/CFastImage';
 import {BASE_DOWN_URL} from '../../../util/config';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Layout from '../../../components/Layout';
 const Index = ({...props}) => {
@@ -42,6 +43,20 @@ const Index = ({...props}) => {
         alignItems={'center'}
         justifyContent={'center'}
         style={{paddingTop: insets.top}}>
+        <Pressable
+          style={{
+            width: 24,
+            height: 24,
+            left: 20,
+            top: 45,
+            position: 'absolute',
+            zIndex: 10,
+          }}
+          onPress={() => {
+            props.navigation.goBack();
+          }}>
+          <Icon name="arrow-back" size={24} color="#000" />
+        </Pressable>
         <Text fontSize={'md'} fontWeight="bold">
           编辑头像
         </Text>
@@ -81,15 +96,23 @@ const Index = ({...props}) => {
       />
       {showImg || headImg ? (
         <ImageViewer
-          style={{
-            width: Layout.width,
-            height: 300,
-          }}
+          style={{width: Layout.width}}
           renderImage={data => {
             if (!data.source.uri) {
               return null;
             }
-            return <CFastImage url={data.source.uri} styles={data.style} />;
+            return (
+              <CFastImage
+                url={data.source.uri}
+                styles={{
+                  width: Layout.width - 60,
+                  height: Layout.height - 300,
+                  marginLeft: 15,
+                  marginTop: 100,
+                  borderRadius: 20,
+                }}
+              />
+            );
           }}
           saveToLocalByLongPress={false}
           imageUrls={[

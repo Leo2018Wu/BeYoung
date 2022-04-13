@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet} from 'react-native';
 import {View, FlatList} from 'native-base';
 import CaseItem from './CaseItem';
+// import {queryDynamicCase} from '../../api/daily';
 
 const Login = () => {
   const [list, setList] = useState([

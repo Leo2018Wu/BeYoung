@@ -8,9 +8,10 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import {Box, Text, Center, Pressable, View} from 'native-base';
+import {Box, Text, Center, Pressable, View, HStack} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
+import IconNew from 'react-native-vector-icons/FontAwesome';
 import CFastImage from '../../components/CFastImage';
 import LinearGradient from 'react-native-linear-gradient';
 import {openPicker} from '../../util/openPicker';
@@ -111,16 +112,30 @@ const Index = (props: any) => {
           start={{x: 0, y: 0}}
           end={{x: 0, y: 1}}
           colors={['#D988FF', '#8B5CFF']}>
-          <Center px={3} h={24} alignItems="center">
-            <Text color={'#fff'} fontSize={'xl'} paddingTop={5}>
-              发帖
+          <HStack
+            h={20}
+            alignItems={'center'}
+            justifyContent={'center'}
+            style={{paddingTop: insets.top}}>
+            <Text fontSize={'md'} fontWeight="bold" color={'#fff'}>
+              发布动态
             </Text>
-            <Pressable
-              onPress={() => checkSubmit()}
-              style={{position: 'absolute', right: 10, top: 48}}>
-              <Text color={'#fff'}>发送</Text>
-            </Pressable>
-          </Center>
+            <Text
+              onPress={() => {
+                navigation.navigate('RepairHelp');
+              }}
+              fontWeight={'bold'}
+              color={'#fff'}
+              fontSize="sm"
+              lineHeight={16}
+              style={{
+                position: 'absolute',
+                top: 50,
+                right: 16,
+              }}>
+              发送
+            </Text>
+          </HStack>
         </LinearGradient>
       </Box>
       <Modal animationType="fade" transparent visible={loading}>
@@ -131,7 +146,7 @@ const Index = (props: any) => {
           <Text style={styles.toastText}>正在上传...</Text>
         </View>
       </Modal>
-      <Box my={0} px={4} bg="white">
+      <Box my={0} px={4} py={4} bg="white">
         <TextInput
           style={{
             minHeight: 100,
@@ -178,7 +193,7 @@ const Index = (props: any) => {
                 </View>
               );
             })}
-          <Pressable
+          {/* <Pressable
             onPress={() => {
               chooseImg();
             }}
@@ -191,8 +206,16 @@ const Index = (props: any) => {
               }}
               resizeMode="cover"
             />
-          </Pressable>
+          </Pressable> */}
         </View>
+        <Pressable
+          onPress={() => {
+            chooseImg();
+          }}
+          style={styles.addImg}>
+          <IconNew name="image" size={20} color="#B2B2B2" />
+          <Text style={{marginLeft: 4, fontSize: 14}}>添加图片</Text>
+        </Pressable>
       </Box>
     </Box>
   );
@@ -239,5 +262,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     fontSize: 14,
+  },
+  addImg: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 });

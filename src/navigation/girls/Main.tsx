@@ -8,6 +8,7 @@ import UserInfoSetting from '../../girlsPages/mine/UserInfoSetting';
 import QuickReply from '../../girlsPages/mine/QuickReply';
 import ReplyExpPackage from '../../girlsPages/mine/ReplyExpPackage';
 import PhotoSelection from '../../girlsPages/mine/photoSelect/PhotoSelection';
+import RepairHelp from '../../girlsPages/mine/photoSelect/RepairHelp';
 import Wallet from '../../girlsPages/wallet/Wallet';
 import TransferDetail from '../../girlsPages/wallet/TransferDetail';
 import WithdrawalDetail from '../../girlsPages/wallet/WithdrawalDetail';
@@ -36,7 +37,7 @@ const MyStack = () => {
         name="DailyDetail"
         component={DailyDetail}
         options={() => ({
-          title: '帖子详情',
+          title: '动态详情',
           headerStyle: {backgroundColor: '#fff'},
         })}
       />
@@ -68,9 +69,17 @@ const MyStack = () => {
         name="PhotoSelection"
         component={PhotoSelection}
         options={() => ({
-          title: '精选照片',
-          headerStyle: {backgroundColor: '#fff'},
+          headerShown: false,
+          headerBackVisible: true,
         })}
+      />
+      <Stack.Screen
+        options={{
+          title: '修图帮助',
+          headerStyle: {backgroundColor: '#fff'},
+        }}
+        name="RepairHelp"
+        component={RepairHelp}
       />
       <Stack.Screen
         name="Wallet"
