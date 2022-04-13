@@ -123,11 +123,11 @@ const Index = ({item}: {item: any}) => {
             </Text>
           </HStack>
           <HStack alignItems={'center'}>
-            <Icon
-              name="hearto"
-              size={18}
-              color={false ? '#9650FF' : '#C7C4CC'}
-            />
+            {item.liked ? (
+              <Icon name="heart" size={18} color="#9650FF" />
+            ) : (
+              <Icon name="hearto" size={18} color="#C7C4CC" />
+            )}
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
               {item.likeNum}
             </Text>

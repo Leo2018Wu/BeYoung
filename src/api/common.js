@@ -8,7 +8,9 @@
 // 获取字典信息
 export const querySysDic = {
   url: 'cgi/core/dic/querySysDic',
-  options: {},
+  options: {
+    manual: false,
+  },
 };
 
 // 获取验证码
@@ -70,6 +72,14 @@ export const fetchAccountUser = {
 // 获取钱包信息
 export const fetchWalletInfo = {
   url: 'cgi/core/user/fetchWalletInfo',
+  options: {
+    manual: false,
+  },
+};
+
+// 获取统计信息
+export const fetchStatistic = {
+  url: 'cgi/core/user/fetchStatistic',
   options: {
     manual: false,
   },

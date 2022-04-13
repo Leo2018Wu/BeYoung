@@ -153,8 +153,7 @@ const Msgs = ({...props}) => {
     );
   }
   return (
-    <Pressable
-      onPress={() => setGiftModal(false)}
+    <Box
       bg={'white'}
       flex={1}
       style={{
@@ -296,7 +295,7 @@ const Msgs = ({...props}) => {
           </HStack>
         </Box>
       </KeyboardAvoidingView>
-    </Pressable>
+    </Box>
   );
 };
 

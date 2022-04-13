@@ -106,34 +106,6 @@ const Index = () => {
               蔡蒙是安徽人，来上海两年多，和许多“漂漂”们一样，他也想落脚上海，在上海能有一套属于自己的房子。蔡蒙是安徽人，来上海两年多，和许多“漂漂”们一样，他也想落脚上海，在上海能有一套属于自己的房子。
             </Text>
           </View>
-          {/* <Stack space={2} pt={2} direction={'row'} alignItems={'center'}>
-          <HStack mr={'auto'} alignItems={'center'}>
-            <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              评分
-            </Text>
-            <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              24
-            </Text>
-          </HStack>
-          <HStack alignItems={'center'}>
-            <Icon name="hearto" size={18} color={false ? '#9650FF' : '#C7C4CC'} />
-            <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              72
-            </Text>
-          </HStack>
-          <HStack alignItems={'center'}>
-            <Icon name="message1" size={18} color="#C7C4CC" />
-            <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              13
-            </Text>
-          </HStack>
-          <HStack alignItems={'center'}>
-            <Icon name="gift" size={18} color="#C7C4CC" />
-            <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              4
-            </Text>
-          </HStack>
-        </Stack> */}
         </Box>
         <Divider h={2.5} bg="bg.f5" />
         <Box flex={1}>

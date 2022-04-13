@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
-import {Alert} from 'react-native';
 // import {useStore} from 'react-redux';
 import {store} from '../store/index';
 import constObj from '../store/constant';
@@ -85,9 +84,7 @@ export const initNIM = (account, token, callback) => {
       // destroyNIM();
       // callback(event);
     },
-    onsyncdone() {
-      Alert.alert('提示', '账号及离线消息同步完成');
-    },
+    onsyncdone() {},
     onmyinfo(info) {
       // 传入名片信息
       store.dispatch({type: 'MYINFO', myInfo: info});

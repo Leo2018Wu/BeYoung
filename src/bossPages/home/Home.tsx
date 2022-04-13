@@ -1,5 +1,5 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   Pressable,
@@ -9,15 +9,43 @@ import {
   Actionsheet,
   FlatList,
   VStack,
-  View,
 } from 'native-base';
+import {useFocusEffect} from '@react-navigation/native';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import CFastImage from '../../components/CFastImage';
 import Icon from 'react-native-vector-icons/Feather';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import LinearGradient from 'react-native-linear-gradient';
-import {ImageBackground, StyleSheet, useWindowDimensions} from 'react-native';
+import {StyleSheet, useWindowDimensions} from 'react-native';
 import useRequest from '../../hooks/useRequest';
+import {queryFemaleUser} from '../../api/user';
+import {
+  pageConstant,
+  PageEmpty,
+  PageError,
+  PageLoadAll,
+  PageLoading,
+  PageLoadMore,
+} from '../../components/base/Pagination';
+import {querySysDic} from '../../api/common';
+const {
+  PAGE_IS_LOADING,
+  PAGE_IS_NEXTPAGE,
+  PAGE_IS_END,
+  IS_EMPTY,
+  IS_LOADDING,
+  IS_NET_ERROR,
+  IS_LIST,
+} = pageConstant;
+
+const mergeList = (sourceList: any, nowList: any) => {
+  if (sourceList) {
+    nowList = sourceList.concat(nowList);
+    return nowList;
+  }
+  return nowList;
+};
 
 const Home = ({...props}) => {
   const {width, height} = useWindowDimensions();
@@ -25,64 +53,119 @@ const Home = ({...props}) => {
   const GRADES = ['大一', '大二', '大三'];
   const [activeGrade, setGrade] = useState(0); // 选中的年纪tab index
   const {isOpen, onOpen, onClose} = useDisclose();
-
-  const DATA = [
-    {
-      id: 0,
-      name: '李妮娜',
-      hobbies: '跑步、看电影',
-      hot: 109,
-      online: true,
-      url: {
-        uri: 'https://picsum.photos/200/180?random=8',
+  const [params, setParams] = useState({
+    pageNum: 1, //分页页码
+    pageSize: 10, //每页大小
+    orders: [
+      {
+        column: 'createTime', //排序字段名称
+        dir: 'desc', //排序方向，asc=顺序、desc=倒序，默认为顺序
+        chinese: false, //是否为中文排序，默认为否
       },
-    },
+    ], //排序参数列表
+  });
+  const [queryList, setList] = useState([]); // 动态列表
+  const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
+  const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
+  const {result: sysDicts} = useRequest(
+    querySysDic.url,
     {
-      id: 1,
-      name: '扎扎',
-      hobbies: '冲浪',
-      hot: 234,
-      online: true,
-      url: {uri: 'https://picsum.photos/200/200?random=1'},
+      pCode: 'GRADE',
     },
-    {
-      id: 2,
-      name: '小兰',
-      hobbies: '唱歌',
-      hot: 99,
-      online: true,
-      url: {uri: 'https://picsum.photos/200/200?random=2'},
-    },
-    // {
-    //   id: 3,
-    //   name: '张张',
-    //   hobbies: '跑步、游泳',
-    //   hot: 19,
-    //   online: false,
-    //   url: {uri: 'https://picsum.photos/200/200?random=3'},
-    // },
-  ];
+    querySysDic.options,
+  );
+  const {run: runFetchFemaleUser} = useRequest(queryFemaleUser.url);
+
+  useEffect(() => {
+    console.log('sysDicts', sysDicts);
+  }, [sysDicts]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      _getList();
+    }, [params]),
+  );
+
+  const _getList = async () => {
+    try {
+      const data = await runFetchFemaleUser(params);
+      _dealData(data);
+    } catch (error) {
+      // 错误信息 比如网络错误
+      setPagingStatus(IS_NET_ERROR);
+    }
+  };
+
+  // 处理页面数据及状态
+  const _dealData = (response: any) => {
+    const {data, total} = response;
+    if (total === 0) {
+      setPageStatus(IS_EMPTY);
+      return;
+    }
+    if (data instanceof Array) {
+      const isNextPage = data.length < total - queryList.length;
+      setPagingStatus(isNextPage ? PAGE_IS_NEXTPAGE : PAGE_IS_END);
+      setPageStatus(IS_LIST);
+      setList(params.pageNum <= 1 ? data : mergeList(queryList, data));
+    }
+  };
+
+  const _onRefresh = async () => {
+    setPageStatus(IS_LOADDING);
+    setParams({...params, pageNum: 1}); //改变param自动刷新数据
+  };
+
+  const _loadMore = async () => {
+    setParams({...params, pageNum: ++params.pageNum});
+  };
+
+  const _onEndReached = () => {
+    if (pagingStatus === PAGE_IS_NEXTPAGE) {
+      _loadMore();
+    }
+  };
+
+  const renderFooter = () => {
+    switch (pagingStatus) {
+      case PAGE_IS_LOADING:
+        return <PageLoading />;
+      case PAGE_IS_NEXTPAGE:
+        return <PageLoadMore />;
+      case PAGE_IS_END:
+        return <PageLoadAll content="-已经到达底部了-" />;
+      default:
+        return null;
+    }
+  };
 
   const goDetail = (item: any) => {
     props.navigation.navigate('HomeDetail', {item});
   };
 
-  const _renderItem = ({item, index}) => {
+  const _renderItem = ({item, index}: {item: any; index: any}) => {
     return (
       <Pressable
         onPress={() => goDetail(item)}
         style={{
-          width: (width - 24) / 2,
           marginTop: 8,
           borderRadius: 8,
           marginRight: index % 2 === 0 ? 8 : 0,
           overflow: 'hidden',
-          height: height / 3,
+          position: 'relative',
         }}>
-        <ImageBackground style={styles.item_bg} source={item.url}>
+        <CFastImage
+          url={item.coverImg}
+          styles={{
+            width: (width - 24) / 2,
+            height: height / 3,
+          }}
+        />
+        <Box style={styles.item_cover}>
           <VStack flex={1} justifyContent={'space-between'}>
             <HStack alignItems={'center'} justifyContent="space-between">
-              {item.online && (
+              {/* 离线和热度Tip */}
+              {/* {item.online && (
                 <HStack
                   px={1.5}
                   borderTopLeftRadius={10}
@@ -91,7 +174,7 @@ const Home = ({...props}) => {
                   borderBottomLeftRadius={2}
                   alignItems={'center'}
                   style={{backgroundColor: '#00000060'}}>
-                  <View w={1} h={1} borderRadius="full" bg={'tip.badge'} />
+                  <Box w={1} h={1} borderRadius="full" bg={'tip.badge'} />
                   <Text ml={1} color={'white'}>
                     在线
                   </Text>
@@ -110,17 +193,39 @@ const Home = ({...props}) => {
                 <Text color={'white'} fontSize="xs" ml={1}>
                   {item.hot}
                 </Text>
-              </HStack>
+              </HStack> */}
             </HStack>
-            <Box pb={1}>
+            <Box
+              style={{
+                backgroundColor: '#00000030',
+                padding: 6,
+              }}
+              pb={1}>
               <Text fontSize={'md'} color={'white'}>
-                {item.name}
+                {item.nickName}
               </Text>
-              <Text color={'white'}>爱好：{item.hobbies}</Text>
+              <Text color={'white'}>爱好：{item.hobbies || '暂未填写'}</Text>
             </Box>
           </VStack>
-        </ImageBackground>
+        </Box>
       </Pressable>
+    );
+  };
+
+  const renderList = () => {
+    return (
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        onRefresh={() => _onRefresh()}
+        data={queryList}
+        numColumns={2}
+        renderItem={_renderItem}
+        refreshing={pageStatus === IS_LOADDING}
+        ListFooterComponent={renderFooter()}
+        onEndReached={() => _onEndReached()}
+        onEndReachedThreshold={0.01}
+        keyExtractor={(item: any) => `key${item.id}`}
+      />
     );
   };
 
@@ -170,12 +275,10 @@ const Home = ({...props}) => {
         </Box>
       </LinearGradient>
       <Box flex={1} px={2} pb={2}>
-        <FlatList
-          key={(item: any) => `key${item.id}`}
-          data={DATA}
-          numColumns={2}
-          renderItem={_renderItem}
-        />
+        {pageStatus === IS_EMPTY && <PageEmpty />}
+        {pageStatus === IS_LIST && renderList()}
+        {pageStatus === IS_LOADDING && <PageLoading />}
+        {pageStatus === IS_NET_ERROR && <PageError />}
       </Box>
     </Box>
   );
@@ -188,9 +291,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF50',
     borderRadius: 100,
   },
-  item_bg: {
+  item_cover: {
     flex: 1,
-    resizeMode: 'cover',
-    padding: 6,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
 });
