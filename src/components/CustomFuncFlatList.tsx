@@ -79,7 +79,7 @@ const Index = ({
   // 处理页面数据及状态
   const _dealData = (response: any) => {
     const {data, total} = response;
-    if (total === 0) {
+    if (parseInt(total, 10) === 0) {
       setPageStatus(IS_EMPTY);
       return;
     }

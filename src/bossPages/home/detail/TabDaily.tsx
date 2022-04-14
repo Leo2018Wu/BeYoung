@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {HStack, Box, Image, View, VStack, Text, Pressable} from 'native-base';
+import {HStack, Box, View, VStack, Text, Pressable} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CFastImage from '../../../components/CFastImage';
 
@@ -11,6 +11,14 @@ import CustomFuncFlatList from '../../../components/CustomFuncFlatList';
 import {queryDynamic} from '../../../api/daily';
 import MyContext from './Context';
 
+const genImages = (imgs: string) => {
+  if (!imgs) {
+    return [];
+  } else {
+    return JSON.parse(imgs);
+  }
+};
+
 const Index = () => {
   const userInfo = useContext(MyContext); // 共享的用户信息
 
@@ -20,23 +28,6 @@ const Index = () => {
   const IMG_ITEM_HEIGHT = 1.2 * IMG_ITEM_WIDTH;
   const navigation = useNavigation();
 
-  const IMGS = [
-    {
-      id: 0,
-      url: {
-        uri: 'https://picsum.photos/200/180?random=8',
-      },
-    },
-    {
-      id: 1,
-      url: {uri: 'https://picsum.photos/200/200?random=1'},
-    },
-    {
-      id: 2,
-      url: {uri: 'https://picsum.photos/200/200?random=2'},
-    },
-  ];
-
   interface ItemProp {
     headImg: string;
     nickName: string;
@@ -44,6 +35,7 @@ const Index = () => {
     content: string;
     likeNum: string;
     liked: boolean;
+    images: string;
   }
 
   const Item = ({item}: {item: ItemProp}) => {
@@ -77,25 +69,27 @@ const Index = () => {
             </VStack>
           </HStack>
           <View pt={2}>
-            <Text numberOfLines={3} fontSize={'md'} color={'fontColors._72'}>
+            <Text
+              mb={2}
+              numberOfLines={3}
+              fontSize={'md'}
+              color={'fontColors._72'}>
               {item.content}
             </Text>
-            <HStack mt={2} flexWrap={'wrap'}>
-              {IMGS &&
-                IMGS.map((item, index) => (
-                  <Image
-                    key={index}
-                    mb={0.5}
-                    alt="dairy"
-                    borderRadius={4}
-                    style={{
-                      marginRight: (index + 1) % 3 === 0 ? 0 : 4,
-                      width: IMG_ITEM_WIDTH,
-                      height: IMG_ITEM_HEIGHT,
-                    }}
-                    source={item.url}
-                  />
-                ))}
+            <HStack flexWrap={'wrap'}>
+              {genImages(item.images).map((ele: string, index: number) => (
+                <CFastImage
+                  key={index}
+                  url={ele}
+                  styles={{
+                    marginRight: (index + 1) % 3 === 0 ? 0 : 4,
+                    width: IMG_ITEM_WIDTH,
+                    height: IMG_ITEM_HEIGHT,
+                    marginBottom: 2,
+                    borderRadius: 16,
+                  }}
+                />
+              ))}
             </HStack>
           </View>
           <HStack pt={2} alignItems={'center'} justifyContent="space-between">
@@ -132,7 +126,7 @@ const Index = () => {
       <CustomFuncFlatList
         url={queryDynamic.url}
         par={{
-          userId: userInfo.id,
+          userId: userInfo?.id,
         }}
         renderItem={({item}: {item: ItemProp}) => <Item item={item} />}
       />

@@ -76,6 +76,10 @@ const Msgs = ({...props}) => {
 
   useEffect(() => {
     scrollToEnd();
+  }, [props.msgs]);
+
+  useEffect(() => {
+    scrollToEnd();
   }, [giftModal, keyboradShow]);
 
   useEffect(() => {
@@ -192,11 +196,11 @@ const Msgs = ({...props}) => {
         </Box>
       </LinearGradient>
       <KeyboardAvoidingView
-        keyboardVerticalOffset={-108}
         contentContainerStyle={{
           height: '100%',
         }}
-        behavior={'position'}>
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -108}
+        behavior={Platform.OS === 'ios' ? 'position' : 'padding'}>
         <ScrollView
           ref={e => {
             scrollRef.current = e;
@@ -222,7 +226,14 @@ const Msgs = ({...props}) => {
                     </Text>
                   )}
 
-                  {item.flow === 'in' && <ChatLeft key={index} msg={item} />}
+                  {item.flow === 'in' && (
+                    <ChatLeft
+                      key={index}
+                      msg={Object.assign(item, {
+                        avatar: chatUserInfo[0]?.headImg,
+                      })}
+                    />
+                  )}
                   {item.flow === 'out' && <ChatRight key={index} msg={item} />}
                 </Box>
               );

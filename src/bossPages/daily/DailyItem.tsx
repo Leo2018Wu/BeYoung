@@ -1,47 +1,42 @@
 import React from 'react';
-import {
-  HStack,
-  Box,
-  Image,
-  View,
-  VStack,
-  Text,
-  Button,
-  Stack,
-} from 'native-base';
+import {HStack, Box, View, VStack, Text, Button, Stack} from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {Pressable, useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
-const Index = ({item}: {item: any}) => {
+const genImages = (imgs: string) => {
+  if (!imgs) {
+    return [];
+  } else {
+    return JSON.parse(imgs);
+  }
+};
+
+interface ItemProp {
+  headImg: string;
+  nickName: '青回';
+  createTime: string;
+  content: string;
+  score: number;
+  liked: boolean;
+  likeNum: number;
+  commentNum: number;
+  giftNum: number;
+  images: string;
+}
+
+const Index = ({item}: {item: ItemProp}) => {
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 104) / 3;
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
 
-  const IMGS = [
-    {
-      id: 0,
-      url: {
-        uri: 'https://picsum.photos/200/180?random=8',
-      },
-    },
-    {
-      id: 1,
-      url: {uri: 'https://picsum.photos/200/200?random=1'},
-    },
-    {
-      id: 2,
-      url: {uri: 'https://picsum.photos/200/200?random=2'},
-    },
-  ];
-
   return (
     <Box bg="white">
       <Pressable
         onPress={() => {
-          navigation.navigate('DailyDetail');
+          navigation.navigate('DailyDetail', {item: item});
         }}>
         <HStack alignItems="center">
           <CFastImage
@@ -86,21 +81,19 @@ const Index = ({item}: {item: any}) => {
           }}
           pt={4}>
           <HStack mb={2} flexWrap={'wrap'}>
-            {IMGS &&
-              IMGS.map((item, index) => (
-                <Image
-                  key={index}
-                  mb={2}
-                  alt="dairy"
-                  borderRadius={10}
-                  style={{
-                    marginRight: (index + 1) % 3 === 0 ? 0 : 8,
-                    width: IMG_ITEM_WIDTH,
-                    height: IMG_ITEM_HEIGHT,
-                  }}
-                  source={item.url}
-                />
-              ))}
+            {genImages(item.images).map((ele: string, index: number) => (
+              <CFastImage
+                key={index}
+                url={ele}
+                styles={{
+                  marginRight: (index + 1) % 3 === 0 ? 0 : 8,
+                  width: IMG_ITEM_WIDTH,
+                  height: IMG_ITEM_HEIGHT,
+                  borderRadius: 40,
+                  marginBottom: 8,
+                }}
+              />
+            ))}
           </HStack>
           <Text numberOfLines={3} fontSize={'md'} color={'fontColors._72'}>
             {item.content}
