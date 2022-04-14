@@ -13,7 +13,13 @@ const Index = () => {
   return (
     <KeyboardAvoidingView
       keyboardVerticalOffset={90}
-      behavior={Platform.OS === 'ios' ? 'position' : 'padding'}>
+      behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+      contentContainerStyle={{
+        width: '100%',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+      }}>
       <HStack
         shadow={2}
         alignItems="center"

@@ -11,12 +11,6 @@ export const queryDynamic = {
   options: {},
 };
 
-// 查询用户评论
-export const queryComment = {
-  url: 'cgi/core/dynamic/queryComment',
-  options: {},
-};
-
 // 发布动态-女生端
 export const addDynamic = {
   url: 'cgi/core/dynamic/addDynamic',
