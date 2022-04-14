@@ -6,11 +6,11 @@ import useRequest from '../../hooks/useRequest';
 import {fetchMyInfo, fetchMyStatistic} from '../../api/common';
 import {useFocusEffect} from '@react-navigation/native';
 import CFastImage from '../../components/CFastImage';
-import fetchData from '../../util/request';
 
 const Index = () => {
   const navigation = useNavigation();
   const {result, run} = useRequest(fetchMyInfo.url);
+  const {run: runFetchMyStatistic} = useRequest(fetchMyStatistic.url, {});
   const [myStatistic, setMyStatistic] = useState({});
 
   useFocusEffect(
@@ -21,7 +21,7 @@ const Index = () => {
   );
 
   const getMyStatistic = async () => {
-    const {data, success} = await fetchData(fetchMyStatistic.url, {});
+    const {data, success} = await runFetchMyStatistic();
     if (success) {
       setMyStatistic(data);
     }
