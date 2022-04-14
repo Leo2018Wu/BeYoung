@@ -35,7 +35,6 @@ const mapDispatch = (state: any, action: any) => {
   action(state);
 };
 function Basic({...props}) {
-  console.log('props', props);
   const nim = constant.nim;
 
   const insets = useSafeAreaInsets();
@@ -77,11 +76,9 @@ function Basic({...props}) {
             //删除会话成功
             const newData = [...listData];
             const prevIndex = listData.findIndex((ele: any) => {
-              return ele.id === key;
+              return ele.id === item.id;
             });
-
             newData.splice(prevIndex, 1);
-
             mapDispatch(
               {type: 'SESSIONSLIST', sessionList: [...newData]},
               dispatch,
