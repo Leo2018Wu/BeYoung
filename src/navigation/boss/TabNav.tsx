@@ -20,6 +20,25 @@ const MyTabs = () => {
   const INSET_BOTTOM = insets.bottom; // 安全区域额底部高度
   const TABBAR_HEIGHT = 48; // 底部tab高度
 
+  const list = [
+    {
+      icon: require('../../images/tabs/tab1.png'),
+      icon_active: require('../../images/tabs/tab1_active.png'),
+    },
+    {
+      icon: require('../../images/tabs/tab2.png'),
+      icon_active: require('../../images/tabs/tab2_active.png'),
+    },
+    {
+      icon: require('../../images/tabs/tab3.png'),
+      icon_active: require('../../images/tabs/tab3_active.png'),
+    },
+    {
+      icon: require('../../images/tabs/tab4.png'),
+      icon_active: require('../../images/tabs/tab4_active.png'),
+    },
+  ];
+
   const MyTabBar = (props: any) => {
     const {state, descriptors, navigation} = props;
 
@@ -57,9 +76,16 @@ const MyTabs = () => {
               flex={1}
               key={route.key}
               onPress={onPress}
-              // bg={isFocused ? 'primary.100' : '#fff'}
               pb={INSET_BOTTOM / 2}>
               <Center h="full">
+                <Image
+                  alt="tab_icon"
+                  source={
+                    isFocused ? list[index].icon_active : list[index].icon
+                  }
+                  w={6}
+                  h={6}
+                />
                 <Text style={{color: isFocused ? '#9650FF' : '#999'}}>
                   {label}
                 </Text>

@@ -95,10 +95,10 @@ export const initNIM = (account, token, callback) => {
     },
     onmsg(msg) {
       // 当前聊天消息
-      console.log('当前聊天消息', msg);
+      console.log('当前聊天消息', msg, store.getState());
       // dosmoething
-      const {session, nim} = store.getState();
-      const msgs = session.currentSessionMsgs || [];
+      const {session, nim, msg: storeMsg} = store.getState();
+      const msgs = storeMsg.currentSessionMsgs;
       if (session.currentSessionId === msg.sessionId) {
         store.dispatch({
           type: 'SESSION_MSGS',

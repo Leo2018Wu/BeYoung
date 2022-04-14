@@ -8,6 +8,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case 'MY_USERINFO':
+      const {myUserInfo} = action;
+      return Object.assign({...state}, {myUserInfo});
     case 'MY_GIFTS':
       const {gifts} = action;
       return Object.assign({...state}, {myGifts: gifts});

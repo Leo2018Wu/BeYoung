@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {StatusBar} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {DeviceEventEmitter} from 'react-native';
+import {useDispatch} from 'react-redux';
 import {fetchChatAccount} from '../api/common';
 import useRequest from '../hooks/useRequest';
 import {login, logout} from '../nim/link';
@@ -13,6 +14,7 @@ import StackLogin from './Login';
 import Splash from './Splash';
 
 const Index = () => {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true); // 加载页面
   const [isLogin, setIsLogin] = useState(''); // 判断是否登录和登录的性别
   const {run: runChatAccount} = useRequest(fetchChatAccount.url);
@@ -38,6 +40,11 @@ const Index = () => {
   };
 
   useEffect(() => {
+    getStorage(['USERINFO']).then(userInfo => {
+      if (userInfo) {
+        dispatch({type: 'MY_USERINFO', myUserInfo: userInfo});
+      }
+    });
     getStorage(['LOGIN_NAVIGAITON_NAME']).then(res => {
       setLoading(false);
       if (res) {
