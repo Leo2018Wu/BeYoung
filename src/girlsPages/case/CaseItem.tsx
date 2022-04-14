@@ -3,11 +3,11 @@ import {Pressable, StyleSheet} from 'react-native';
 import {View, Text, Image} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import CFastImage from '../../components/CFastImage';
+import {BASE_DOWN_URL} from '../../util/config';
 
 import layout from '../../components/Layout';
 
 const Login = ({...props}) => {
-  console.log('--s-s-s-1', props.item);
   const {item} = props;
   const [images, setImages] = useState([]);
 
@@ -17,10 +17,16 @@ const Login = ({...props}) => {
     }
   }, []);
 
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
   return (
     <View style={{marginBottom: 8}}>
-      <Pressable style={styles.banner}>
+      <Pressable
+        onPress={() => {
+          navigation.navigate('Preview', {
+            imgUrls: [{url: BASE_DOWN_URL + images[0]}],
+          });
+        }}
+        style={styles.banner}>
         <CFastImage
           url={images[0]}
           styles={{

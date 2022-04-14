@@ -7,14 +7,9 @@ import {
   VStack,
   Text,
   Button,
-  Stack,
   Divider,
   ScrollView,
-  Input,
 } from 'native-base';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useWindowDimensions} from 'react-native';
 import Tab from './DailyTab';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -26,7 +21,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 const Index = ({...props}) => {
   const {item} = props.route.params;
   console.log('-1-props-1-', props, item.id);
-  AsyncStorage.setItem('DynamicId', item.id); // 存储动态id
   const insets = useSafeAreaInsets();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 60) / 3;
@@ -35,6 +29,7 @@ const Index = ({...props}) => {
   const [isBoss, setIsBoss] = useState('MALE_LOGIN');
 
   useEffect(async () => {
+    AsyncStorage.setItem('DynamicId', item.id); // 存储动态id
     const boss = await getStorage(['LOGIN_NAVIGAITON_NAME']);
     setIsBoss(boss);
     if (item.images && JSON.parse(item.images).length) {
@@ -103,74 +98,12 @@ const Index = ({...props}) => {
               {item.content}
             </Text>
           </View>
-          {/* <Stack space={2} pt={2} direction={'row'} alignItems={'center'}>
-          <HStack mr={'auto'} alignItems={'center'}>
-            <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              评分
-            </Text>
-            <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              24
-            </Text>
-          </HStack>
-          <HStack alignItems={'center'}>
-            <Icon name="hearto" size={18} color={false ? '#9650FF' : '#C7C4CC'} />
-            <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              72
-            </Text>
-          </HStack>
-          <HStack alignItems={'center'}>
-            <Icon name="message1" size={18} color="#C7C4CC" />
-            <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              13
-            </Text>
-          </HStack>
-          <HStack alignItems={'center'}>
-            <Icon name="gift" size={18} color="#C7C4CC" />
-            <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              4
-            </Text>
-          </HStack>
-        </Stack> */}
         </Box>
         <Divider h={2.5} bg="bg.f5" />
         <Box flex={1}>
           <Tab />
         </Box>
       </ScrollView>
-      {/* <HStack
-        shadow={2}
-        alignItems="center"
-        w={'full'}
-        px={4}
-        py={4}
-        style={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          paddingBottom: insets.bottom,
-          backgroundColor: '#fff',
-        }}>
-        <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
-        <Input
-          fontSize={'md'}
-          variant="filled"
-          py={2}
-          mx={4}
-          maxLength={300}
-          placeholder="输入你的消息..."
-          placeholderTextColor={'tip.placeholder'}
-          flex={1}
-        />
-        <Ionicons
-          style={{
-            marginRight: 16,
-          }}
-          name="gift"
-          size={26}
-          color="#9650FF"
-        />
-        <FontAwesome name="send" size={24} color="#9650FF" />
-      </HStack> */}
     </Box>
   );
 };

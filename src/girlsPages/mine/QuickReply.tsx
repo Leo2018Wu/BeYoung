@@ -12,7 +12,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import {querySysDic} from '../../api/common';
 import {addQuickReply, fetchQuickReply} from '../../api/quickReply';
 import useRequest from '../../hooks/useRequest';
-import fetchData from '../../util/request';
 
 import layout from '../../components/Layout';
 
@@ -24,7 +23,8 @@ const Login = () => {
   const {run: runQuerySysDic, result} = useRequest(querySysDic.url, {
     pCode: 'QUICK_REPLY_SCENE',
   });
-  // const {run: runAddQuickReply} = useRequest(addQuickReply.url);
+  const {run: runAddQuickReply} = useRequest(addQuickReply.url);
+  const {run: runFetchQuickReply} = useRequest(fetchQuickReply.url);
 
   useEffect(() => {
     runQuerySysDic();
@@ -49,8 +49,7 @@ const Login = () => {
   }, [result]);
 
   const getMyQueryReply = async temp => {
-    const {data, success} = await fetchData(fetchQuickReply.url, {});
-    console.log('--s-s--', data, temp);
+    const {data, success} = await runFetchQuickReply();
     if (data) {
       data.forEach((e, index) => {
         temp[index].content = e.content;
@@ -65,7 +64,6 @@ const Login = () => {
     });
     console.log(list, index);
     if (index != -1) {
-      // const data = runAddQuickReply({list});
       const quickReplies = [];
       list.forEach((e, index) => {
         quickReplies.push({
@@ -73,7 +71,7 @@ const Login = () => {
           content: e.content,
         });
       });
-      const {data, success} = await fetchData(addQuickReply.url, {
+      const {data, success} = await runAddQuickReply({
         quickReplies,
       });
       if (success) {

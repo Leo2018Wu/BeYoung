@@ -13,7 +13,6 @@ import AsyncStorage from '@react-native-community/async-storage';
 import layout from '../../../components/Layout';
 import {upload} from '../../../util/upload';
 import FillModal from '../../../components/ChooseImgModal';
-import fetchData from '../../../util/request';
 import {updateUserInfo, fetchMyInfo} from '../../../api/common';
 import useRequest from '../../../hooks/useRequest';
 import {BASE_DOWN_URL} from '../../../util/config';
@@ -23,6 +22,7 @@ export default function name({navigation, route}) {
   const [showFillModal, setShowModal] = useState(false); //学生证选择弹窗显示状态
   const [studentCard, setStudentCard] = useState(null);
   const {run: runUpdateUserInfo, result} = useRequest(updateUserInfo.url);
+  const {run: runFetchMyInfo} = useRequest(fetchMyInfo.url);
   const [flag, setFlag] = useState(true);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function name({navigation, route}) {
   };
 
   const getMyInfo = async () => {
-    const {data, success} = await fetchData('cgi/core/user/fetchMyInfo', {});
+    const {data, success} = await runFetchMyInfo();
     if (success) {
       if (data.studentCard) {
         setFlag(false);
