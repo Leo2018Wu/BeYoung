@@ -199,8 +199,8 @@ const Msgs = ({...props}) => {
         contentContainerStyle={{
           height: '100%',
         }}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : -108}
-        behavior={Platform.OS === 'ios' ? 'position' : 'padding'}>
+        behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+        style={{height: '100%'}}>
         <ScrollView
           ref={e => {
             scrollRef.current = e;
@@ -275,7 +275,6 @@ const Msgs = ({...props}) => {
               enablesReturnKeyAutomatically={true}
               returnKeyType="send"
               onSubmitEditing={() => {
-                console.log(inputRef);
                 sendMsg();
                 inputRef.current.focus();
               }}

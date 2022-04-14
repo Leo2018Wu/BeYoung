@@ -5,21 +5,15 @@
  *  msg: 展示返回message 默认不展示
  */
 
-// 获取验证码
-export const sendCode = {
-  url: 'cgi/core/login/sendCode',
-  options: {},
-};
-
-// 校验验证码
-export const verifyCode = {
-  url: 'cgi/core/login/verifyCode',
-  options: {},
-};
-
 // 查询动态
 export const queryDynamic = {
   url: 'cgi/core/dynamic/queryDynamic',
+  options: {},
+};
+
+// 查询用户评论
+export const queryComment = {
+  url: 'cgi/core/dynamic/queryComment',
   options: {},
 };
 
