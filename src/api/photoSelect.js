@@ -6,6 +6,7 @@
  */
 
 // 获取修图教程
+// 获取精选示例
 export const fetchCase = {
   url: 'cgi/core/user/fetchCase',
   options: {},

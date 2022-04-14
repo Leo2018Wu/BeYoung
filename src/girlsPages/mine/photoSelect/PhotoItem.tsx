@@ -6,7 +6,10 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import layout from '../../../components/Layout';
 
-const Login = () => {
+const Login = ({...props}) => {
+  console.log('--opsp', props);
+  const {item} = props;
+
   const navigation = useNavigation();
   return (
     <Pressable>
@@ -17,7 +20,7 @@ const Login = () => {
         resizeMode="cover">
         <View style={styles.topView}>
           <Text fontSize={'xs'} color={'#fff'} style={{textAlign: 'center'}}>
-            教学楼
+            {item.name}
           </Text>
         </View>
         <View style={styles.bottomView}>

@@ -1,21 +1,40 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {View, FlatList, HStack, Pressable, Button, Text} from 'native-base';
 import PhotoItem from './PhotoItem';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import useRequest from '../../../hooks/useRequest';
+import {fetchCase} from '../../../api/photoSelect';
+import {querySysDic} from '../../../api/common';
 
 const Login = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
-  const [list, setList] = useState([
-    {id: 0},
-    {id: 1},
-    {id: 2},
-    {id: 3},
-    {id: 4},
-  ]);
+  const [list, setList] = useState([]);
+
+  const {result: sysDicts} = useRequest(
+    querySysDic.url,
+    {
+      pCode: 'SCENE',
+    },
+    querySysDic.options,
+  );
+
+  useEffect(() => {
+    if (sysDicts) {
+      console.log('--sysDicts--', sysDicts);
+      let data = [];
+      sysDicts.forEach(element => {
+        if (element.code != 'SCENE') {
+          data.push(element);
+        }
+      });
+      setList(data);
+    }
+  }, [sysDicts]);
+
   return (
     <View style={{padding: 15}}>
       <HStack
@@ -76,5 +95,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingBottom: '30%',
   },
 });
