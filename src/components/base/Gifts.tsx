@@ -1,5 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Box, Button, Center, HStack, Pressable, Text} from 'native-base';
+import React, {useEffect, useState} from 'react';
+import {Box, Button, Center, HStack, Image, Pressable, Text} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {getMyGifts, getMyWallet} from '../../store/action';
@@ -7,6 +7,7 @@ import {connect} from 'react-redux';
 import useRequest from '../../hooks/useRequest';
 import {fetchGift} from '../../api/gift';
 import {useWindowDimensions} from 'react-native';
+import {BASE_DOWN_URL} from '../../util/config';
 import CFastImage from '../CFastImage';
 
 const mapStateToProps = (state: any) => {
@@ -70,13 +71,20 @@ const Index = ({...props}) => {
                 height: GIFT_ITEM_WiIDTH,
               }}>
               <Center flex={1}>
-                <CFastImage
+                <Image
+                  source={{uri: `${BASE_DOWN_URL + item.img}`}}
+                  style={{
+                    height: GIFT_ITEM_WiIDTH / 2,
+                    width: GIFT_ITEM_WiIDTH / 2,
+                  }}
+                />
+                {/* <CFastImage
                   url={item.img}
                   styles={{
                     height: GIFT_ITEM_WiIDTH / 2,
                     width: GIFT_ITEM_WiIDTH / 2,
                   }}
-                />
+                /> */}
               </Center>
               {myGifts[item.id]?.num ? (
                 <Text

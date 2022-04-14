@@ -11,12 +11,12 @@ const Index = () => {
   const IMG_ITEM_WIDTH = (width - 32) / 3;
   const IMG_ITEM_HEIGHT = 1.2 * IMG_ITEM_WIDTH;
 
-  const {result: giftList} = useRequest(
-    queryGiftGiving.url,
-    {},
-    queryGiftGiving.options,
-  );
-  console.log('giftList', giftList);
+  // const {result: giftList} = useRequest(
+  //   queryGiftGiving.url,
+  //   {},
+  //   queryGiftGiving.options,
+  // );
+  // console.log('giftList', giftList);
 
   const IMGS = [
     {

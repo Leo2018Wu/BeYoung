@@ -42,7 +42,7 @@ const Index = () => {
   useEffect(() => {
     getStorage(['USERINFO']).then(userInfo => {
       if (userInfo) {
-        dispatch({type: 'MY_USERINFO', myUserInfo: userInfo});
+        dispatch({type: 'MY_USERINFO', myUserInfo: JSON.parse(userInfo)});
       }
     });
     getStorage(['LOGIN_NAVIGAITON_NAME']).then(res => {

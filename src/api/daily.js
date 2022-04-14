@@ -40,3 +40,11 @@ export const queryDynamicCase = {
   url: 'cgi/core/dynamic/queryDynamicCase',
   options: {},
 };
+
+// 查询动态评论
+export const queryComment = {
+  url: 'cgi/core/dynamic/queryComment',
+  options: {
+    manual: false,
+  },
+};
