@@ -82,16 +82,16 @@ const Msgs = ({...props}) => {
     scrollToEnd();
   }, [giftModal, keyboradShow]);
 
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+  // useEffect(() => {
+  //   Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+  //   Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
 
-    // cleanup function
-    return () => {
-      Keyboard.removeListener('keyboardDidShow', () => {});
-      Keyboard.removeListener('keyboardDidHide', () => {});
-    };
-  }, []);
+  //   // cleanup function
+  //   return () => {
+  //     Keyboard.removeListener('keyboardDidShow', () => {});
+  //     Keyboard.removeListener('keyboardDidHide', () => {});
+  //   };
+  // }, []);
 
   useEffect(() => {
     setCurrentSession();

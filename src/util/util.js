@@ -129,4 +129,17 @@ util.formatTime = timestamp => {
   return new Date(timestamp).Format('yy-MM-dd hh:mm:ss');
 };
 
+//节流函数
+util.throttle = (fn, space) => {
+  let task = null;
+  return function () {
+    if (!task) {
+      task = setTimeout(function () {
+        task = null;
+        fn.apply(this, arguments);
+      }, space);
+    }
+  };
+};
+
 export default util;
