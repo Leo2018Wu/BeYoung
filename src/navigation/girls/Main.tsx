@@ -131,7 +131,7 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={() => ({
-          title: '学生证上传',
+          title: '编辑学生证',
           headerStyle: {backgroundColor: '#fff'},
         })}
         name="EditStudentCard"

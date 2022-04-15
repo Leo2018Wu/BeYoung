@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Animated, StyleSheet} from 'react-native';
+import {Animated, StyleSheet, DeviceEventEmitter} from 'react-native';
 import {Box, HStack, Text, Pressable} from 'native-base';
 import {
   TabView,
@@ -18,16 +18,13 @@ type Route = {
 type State = NavigationState<Route>;
 
 export default class CustomTabBarExample extends React.Component<{}, State> {
-  constructor({props}: any) {
-    super(props);
-    this.state = {
-      index: 0,
-      routes: [
-        {key: 'comment', title: '评论'},
-        {key: 'gift', title: '礼物'},
-      ],
-    };
-  }
+  state: State = {
+    index: 0,
+    routes: [
+      {key: 'comment', title: '评论'},
+      {key: 'gift', title: '礼物'},
+    ],
+  };
 
   private handleIndexChange = (index: number) =>
     this.setState({
@@ -85,7 +82,10 @@ export default class CustomTabBarExample extends React.Component<{}, State> {
           <Pressable
             flex={1}
             key={route.key}
-            onPress={() => props.jumpTo(route.key)}>
+            onPress={() => {
+              props.jumpTo(route.key);
+              DeviceEventEmitter.emit('REPLY_FLAG', false);
+            }}>
             {this.renderItem(props)({route, index})}
           </Pressable>
         );

@@ -10,35 +10,33 @@ import {
   Divider,
   ScrollView,
 } from 'native-base';
-import {useWindowDimensions} from 'react-native';
+import {useWindowDimensions, DeviceEventEmitter} from 'react-native';
 import Tab from './DailyTab';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import getStorage from '../../util/Storage';
 import {BASE_DOWN_URL} from '../../util/config';
 import CFastImage from '../../components/CFastImage';
-import AsyncStorage from '@react-native-community/async-storage';
+import DailyDetailContext from './context.js';
+import ChatBox from '../../components/base/ChatBox';
 
 const Index = ({...props}) => {
   const {item} = props.route.params;
   console.log('-1-props-1-', props, item.id);
-  const insets = useSafeAreaInsets();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 60) / 3;
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
   const [imgList, setImgList] = useState([]);
-  const [isBoss, setIsBoss] = useState('MALE_LOGIN');
+  const [replyFlag, setReplyFlag] = useState(false);
 
-  useEffect(async () => {
-    AsyncStorage.setItem('DynamicId', item.id); // 存储动态id
-    const boss = await getStorage(['LOGIN_NAVIGAITON_NAME']);
-    setIsBoss(boss);
+  useEffect(() => {
     if (item.images && JSON.parse(item.images).length) {
       setImgList(JSON.parse(item.images));
     }
+    DeviceEventEmitter.addListener('REPLY_FLAG', res => {
+      setReplyFlag(res);
+    });
   }, []);
 
   return (
-    <Box flex={1}>
+    <DailyDetailContext.Provider value={item}>
       <ScrollView contentContainerStyle={{flex: 1}} py={4} bg="white">
         <Box px={5} pb={4}>
           <HStack alignItems="center">
@@ -62,19 +60,6 @@ const Index = ({...props}) => {
                 {item.createTime}
               </Text>
             </VStack>
-            {isBoss == 'MALE_LOGIN' ? (
-              <Button
-                disabled
-                py={1}
-                borderRadius={'full'}
-                borderColor="#9650FF"
-                borderWidth={0.5}
-                bg={'transparent'}>
-                <Text fontSize={'xs'} color={'primary.100'}>
-                  关注
-                </Text>
-              </Button>
-            ) : null}
           </HStack>
           <View pt={4}>
             <HStack mb={2} flexWrap={'wrap'}>
@@ -104,7 +89,8 @@ const Index = ({...props}) => {
           <Tab />
         </Box>
       </ScrollView>
-    </Box>
+      {replyFlag ? <ChatBox /> : null}
+    </DailyDetailContext.Provider>
   );
 };
 export default Index;
