@@ -26,6 +26,11 @@ interface ItemProp {
   images: string;
 }
 
+const isEqual = (pre: any, next: any) => {
+  // 优化无关渲染
+  return JSON.stringify(pre.item) === JSON.stringify(next.item);
+};
+
 const Index = ({item}: {item: ItemProp}) => {
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
@@ -142,4 +147,4 @@ const Index = ({item}: {item: ItemProp}) => {
     </Box>
   );
 };
-export default Index;
+export default React.memo(Index, isEqual);
