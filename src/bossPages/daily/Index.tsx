@@ -14,6 +14,7 @@ import {
   PageLoading,
   PageLoadMore,
 } from '../../components/base/Pagination';
+import LinearGradient from 'react-native-linear-gradient';
 const {
   PAGE_IS_LOADING,
   PAGE_IS_NEXTPAGE,
@@ -134,13 +135,18 @@ const Index = () => {
 
   return (
     <Box flex={1} bg="white">
-      <Box justifyContent="center" style={{paddingTop: insets.top}}>
-        <Center px={3} style={{height: 52}} alignItems="center">
-          <Text color={'fontColors.333'} fontSize={'xl'}>
-            动态
-          </Text>
-        </Center>
-      </Box>
+      <LinearGradient
+        start={{x: 0, y: 0.5}}
+        end={{x: 1, y: 0.5}}
+        colors={['#B83AF3', '#6950FB']}>
+        <Box justifyContent="center" style={{paddingTop: insets.top}}>
+          <Center style={{height: 52}}>
+            <Text color={'white'} fontSize="lg" fontWeight={'bold'}>
+              动态
+            </Text>
+          </Center>
+        </Box>
+      </LinearGradient>
       <Box my={4} px={4} flex={1}>
         {pageStatus === IS_EMPTY && <PageEmpty />}
         {pageStatus === IS_LIST && renderList()}
