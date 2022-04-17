@@ -24,7 +24,6 @@ const Login = () => {
 
   useEffect(() => {
     if (sysDicts) {
-      console.log('--sysDicts--', sysDicts);
       let data = [];
       sysDicts.forEach(element => {
         if (element.code != 'SCENE') {

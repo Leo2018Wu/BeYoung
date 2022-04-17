@@ -1,18 +1,45 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Pressable, StyleSheet, ImageBackground} from 'react-native';
-import {View, Text, Image} from 'native-base';
+import {View, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import {fetchCase} from '../../../api/photoSelect';
+import useRequest from '../../../hooks/useRequest';
+import CFastImage from '../../../components/CFastImage';
 
 import layout from '../../../components/Layout';
 
 const Login = ({...props}) => {
-  console.log('--opsp', props);
   const {item} = props;
+  // const {run: runFetchCase, result} = useRequest(fetchCase.url);
+  // const [caseList, setCaseList] = useState([]);
+
+  // useEffect(() => {
+  //   runFetchCase({scene: item.code});
+  // }, []);
+
+  // useEffect(() => {
+  //   if (result && result.length) {
+  //     if (result[0].imgs) {
+  //       console.log('---result---', JSON.parse(result[0].imgs));
+  //       setCaseList(JSON.parse(result[0].imgs));
+  //       console.log('----caseList---', caseList);
+  //     }
+  //   }
+  // }, [result]);
 
   const navigation = useNavigation();
   return (
     <Pressable>
+      {/* <View>
+        <CFastImage
+          url={caseList[0] || ''}
+          styles={{
+            width: (layout.width - 26) / 2,
+            height: 210,
+          }}
+        />
+      </View> */}
       <ImageBackground
         source={require('../../assets/IMG_2728.png')}
         borderRadius={15}
