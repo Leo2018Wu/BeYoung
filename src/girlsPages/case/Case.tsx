@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-import {View, Box, Pressable, Text} from 'native-base';
+import {View, Box, Pressable, Text, HStack} from 'native-base';
 import CaseItem from './CaseItem';
 import CustomFuncFlatList from '../../components/CustomFuncFlatList';
 import {queryDynamicCase} from '../../api/daily';
@@ -78,6 +78,8 @@ const Login = () => {
       <Box my={4} px={4} flex={1}>
         <CustomFuncFlatList
           key={keyData}
+          horizontal={false}
+          numColumns={2}
           renderItem={({item}: any) => <CaseItem item={item} />}
           url={queryDynamicCase.url}
           par={caseScene}

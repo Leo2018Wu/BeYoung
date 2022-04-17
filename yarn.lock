@@ -4053,6 +4053,11 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   resolved "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
+events@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmmirror.com/events/-/events-1.0.1.tgz#386f6471cbb609e7925e7bfe7468634b9e069ac2"
+  integrity sha512-Ee2RsyA5p9FyGVnVvbb1j7VKg+ezi6IOcgis2crSNo1V7S/M0eUnMABobd/fRhm6L3p/jGhPJzDFQDRpYw3O+g==
+
 exec-sh@^0.3.2:
   version "0.3.6"
   resolved "https://registry.npmjs.org/exec-sh/-/exec-sh-0.3.6.tgz"
@@ -7210,6 +7215,13 @@ react-native-vector-icons@^9.1.0:
   dependencies:
     prop-types "^15.7.2"
     yargs "^16.1.1"
+
+react-native-wechat-lib@^1.1.26:
+  version "1.1.26"
+  resolved "https://registry.npmmirror.com/react-native-wechat-lib/-/react-native-wechat-lib-1.1.26.tgz#60be6ba92399a38c9df5ca0fc4c1353b089f7210"
+  integrity sha512-icTFl4PIAdVqmVkEAgfpaGSukafzd1M4cEszwncwRrLEaCYI5hllDK/sgnFU5tj6535LwKwxC+30PC8poyObrw==
+  dependencies:
+    events "1.0.1"
 
 react-native@0.64.1:
   version "0.64.1"

@@ -19,7 +19,7 @@ const Login = ({...props}) => {
 
   const navigation = useNavigation();
   return (
-    <View style={{marginBottom: 8}}>
+    <View>
       <Pressable
         onPress={() => {
           navigation.navigate('Preview', {
@@ -30,8 +30,9 @@ const Login = ({...props}) => {
         <CFastImage
           url={images[0]}
           styles={{
-            width: (layout.width - 26) / 2,
+            width: '100%',
             height: 210,
+            borderRadius: 10,
           }}
         />
         <View style={styles.optContain}>
@@ -84,12 +85,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     position: 'absolute',
-    bottom: 10,
+    bottom: 0,
     width: '100%',
     alignItems: 'center',
     height: 25,
     paddingHorizontal: 10,
     backgroundColor: 'rgba(0,0,0,0.1)',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   optView: {
     flexDirection: 'row',
@@ -100,10 +103,10 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   banner: {
-    width: (layout.width - 26) / 2,
-    height: 210,
+    width: (layout.width - 50) / 2,
     position: 'relative',
-    justifyContent: 'center',
     borderRadius: 10,
+    marginHorizontal: 5,
+    marginBottom: 8,
   },
 });

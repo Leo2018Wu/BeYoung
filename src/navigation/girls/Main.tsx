@@ -8,6 +8,7 @@ import UserInfoSetting from '../../girlsPages/mine/UserInfoSetting';
 import QuickReply from '../../girlsPages/mine/QuickReply';
 import ReplyExpPackage from '../../girlsPages/mine/ReplyExpPackage';
 import PhotoSelection from '../../girlsPages/mine/photoSelect/PhotoSelection';
+import PhotoUpload from '../../girlsPages/mine/photoSelect/PhotoUpload';
 import RepairHelp from '../../girlsPages/mine/photoSelect/RepairHelp';
 import Wallet from '../../girlsPages/wallet/Wallet';
 import TransferDetail from '../../girlsPages/wallet/TransferDetail';
@@ -80,6 +81,14 @@ const MyStack = () => {
         }}
         name="RepairHelp"
         component={RepairHelp}
+      />
+      <Stack.Screen
+        name="PhotoUpload"
+        component={PhotoUpload}
+        options={() => ({
+          title: '添加照片',
+          headerStyle: {backgroundColor: '#fff'},
+        })}
       />
       <Stack.Screen
         name="Wallet"

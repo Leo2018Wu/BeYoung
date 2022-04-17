@@ -11,6 +11,8 @@ import layout from '../../../components/Layout';
 
 const Login = ({...props}) => {
   const {item} = props;
+  console.log(item);
+
   // const {run: runFetchCase, result} = useRequest(fetchCase.url);
   // const [caseList, setCaseList] = useState([]);
 
@@ -21,25 +23,24 @@ const Login = ({...props}) => {
   // useEffect(() => {
   //   if (result && result.length) {
   //     if (result[0].imgs) {
-  //       console.log('---result---', JSON.parse(result[0].imgs));
-  //       setCaseList(JSON.parse(result[0].imgs));
-  //       console.log('----caseList---', caseList);
+  //       const data = JSON.parse(result[0].imgs);
+  //       console.log('---result---', data[0]);
   //     }
   //   }
   // }, [result]);
 
   const navigation = useNavigation();
   return (
-    <Pressable>
-      {/* <View>
-        <CFastImage
+    <Pressable onPress={() => navigation.navigate('PhotoUpload', {item: item})}>
+      <View>
+        {/* <CFastImage
           url={caseList[0] || ''}
           styles={{
             width: (layout.width - 26) / 2,
             height: 210,
           }}
-        />
-      </View> */}
+        /> */}
+      </View>
       <ImageBackground
         source={require('../../assets/IMG_2728.png')}
         borderRadius={15}
@@ -96,7 +97,6 @@ const styles = StyleSheet.create({
     width: 158,
     height: 158,
     position: 'relative',
-    justifyContent: 'center',
     marginBottom: 8,
   },
   linearGradient: {

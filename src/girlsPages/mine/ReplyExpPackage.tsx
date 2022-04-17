@@ -1,14 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  Image,
-  Modal,
-  StatusBar,
-  Platform,
-  ActivityIndicator,
-} from 'react-native';
-import {Box, Text, Center, Pressable, View} from 'native-base';
+import {StyleSheet, Image, Modal, ActivityIndicator} from 'react-native';
+import {Box, Text, Pressable, View} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../components/CFastImage';
@@ -18,11 +10,8 @@ import {upload} from '../../util/upload';
 import {addDynamic} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
 
-import layout from '../../components/Layout';
-
 const Index = (props: any) => {
   const {navigation} = props;
-  const insets = useSafeAreaInsets();
   const [textAreaValue, setTextAreaValue] = useState('');
   const [list, setList] = useState([]);
   const {run: runAddDynamic, result} = useRequest(addDynamic.url);

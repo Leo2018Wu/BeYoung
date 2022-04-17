@@ -33,10 +33,14 @@ const Index = ({
   url,
   par,
   renderItem,
+  horizontal,
+  numColumns,
 }: {
   url: string;
   par: object;
   renderItem: any;
+  horizontal: boolean;
+  numColumns: number;
 }) => {
   const [params, setParams] = useState(
     Object.assign(
@@ -122,6 +126,8 @@ const Index = ({
   const renderList = () => {
     return (
       <FlatList
+        horizontal={horizontal}
+        numColumns={numColumns}
         showsVerticalScrollIndicator={false}
         onRefresh={() => _onRefresh()}
         data={queryList}

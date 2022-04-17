@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRequest from '../../../hooks/useRequest';
-import {fetchCase} from '../../../api/photoSelect';
 import {querySysDic} from '../../../api/common';
 
 const Login = () => {
