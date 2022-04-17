@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  HStack,
-  Box,
-  View,
-  VStack,
-  Text,
-  Divider,
-  ScrollView,
-} from 'native-base';
+import {HStack, Box, View, VStack, Text, Divider} from 'native-base';
 import {useWindowDimensions} from 'react-native';
 import Tab from './DailyTab';
 import CFastImage from '../../components/CFastImage';
@@ -23,7 +15,6 @@ const genImages = (imgs: string) => {
 };
 
 const Index = ({...props}) => {
-  console.log('prs', props);
   const {item} = props.route.params;
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 60) / 3;
@@ -31,13 +22,7 @@ const Index = ({...props}) => {
 
   return (
     <DailyDetailContext.Provider value={item}>
-      <ScrollView
-        scrollEnabled={false}
-        contentContainerStyle={{
-          flex: 1,
-        }}
-        pt={4}
-        bg="white">
+      <Box flex={1} pt={4} bg="white">
         <Box px={5} pb={4}>
           <HStack alignItems="center">
             <CFastImage
@@ -101,7 +86,7 @@ const Index = ({...props}) => {
         <Box flex={1}>
           <Tab />
         </Box>
-      </ScrollView>
+      </Box>
       <ChatBox />
     </DailyDetailContext.Provider>
   );

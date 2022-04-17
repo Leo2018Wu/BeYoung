@@ -9,6 +9,7 @@ import EditUser from '../../bossPages/setting/EditUser';
 import Service from '../../bossPages/customService/Index';
 import WeChatNum from '../../bossPages/weChatNum/Index';
 import Session from '../../bossPages/communication/Session';
+import Wallet from '../../bossPages/wallet/Wallet';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,13 @@ const MyStack = () => {
         }}
         name="Session"
         component={Session}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Wallet"
+        component={Wallet}
       />
       <Stack.Screen
         options={{

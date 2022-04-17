@@ -38,7 +38,7 @@ const link_group2_list = [
   {
     name: '钱包',
     icon: require('../../images/mine_link_icon4.png'),
-    pageName: '',
+    pageName: 'Wallet',
   },
   {
     name: '联系客服',

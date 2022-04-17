@@ -26,9 +26,13 @@ interface ItemProps {
   userId: string;
 }
 
-const Item = ({item}: {item: ItemProps}) => {
-  const userInfo = useSelector(state => state.user.myUserInfo);
+const areEqual = (pre: any, next: any) => {
+  // 优化无关渲染
+  return JSON.stringify(pre.item) === JSON.stringify(next.item);
+};
 
+const Item = React.memo(({item}: {item: ItemProps}) => {
+  const userInfo = useSelector(state => state.user.myUserInfo);
   if (item.delFlag) {
     return null;
   }
@@ -89,7 +93,7 @@ const Item = ({item}: {item: ItemProps}) => {
       </Text>
     </Box>
   );
-};
+}, areEqual);
 
 const Index = () => {
   const insets = useSafeAreaInsets();

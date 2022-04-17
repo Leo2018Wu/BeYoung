@@ -4,43 +4,51 @@ import CustomFuncFlatList from '../../components/CustomFuncFlatList';
 import CFastImage from '../../components/CFastImage';
 import {queryDynamic} from '../../api/daily';
 
-const Index = () => {
-  const Item = () => {
-    return (
-      <HStack mb={4} bg={'white'} px={4} py={2} alignItems="center">
-        <CFastImage
-          url=""
-          styles={{
-            width: 50,
-            height: 50,
-            borderRadius: 25,
-          }}
-        />
-        <Text fontWeight={'bold'} ml={2} fontSize="md">
-          张大大
-        </Text>
-        <VStack ml={'auto'}>
-          <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
-            微信号：
-            <Text selectable color={'primary.100'} fontWeight={'bold'}>
-              11111
-            </Text>
-          </Text>
-          <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
-            手机号：
-            <Text selectable color={'primary.100'} fontWeight={'bold'}>
-              11111
-            </Text>
-          </Text>
-        </VStack>
-      </HStack>
-    );
-  };
+interface ItemProp {
+  nickName: string;
+}
 
+const isEqual = (pre: any, next: any) => {
+  // 优化无关渲染
+  return JSON.stringify(pre.item) === JSON.stringify(next.item);
+};
+
+const Item = React.memo(({item}: {item: ItemProp}) => {
+  return (
+    <HStack mb={4} bg={'white'} px={4} py={2} alignItems="center">
+      <CFastImage
+        url=""
+        styles={{
+          width: 50,
+          height: 50,
+          borderRadius: 25,
+        }}
+      />
+      <Text fontWeight={'bold'} ml={2} fontSize="md">
+        {item.nickName}
+      </Text>
+      <VStack ml={'auto'}>
+        <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
+          微信号：
+          <Text selectable color={'primary.100'} fontWeight={'bold'}>
+            11111
+          </Text>
+        </Text>
+        <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
+          手机号：
+          <Text selectable color={'primary.100'} fontWeight={'bold'}>
+            11111
+          </Text>
+        </Text>
+      </VStack>
+    </HStack>
+  );
+}, isEqual);
+const Index = () => {
   return (
     <Box flex={1}>
       <CustomFuncFlatList
-        renderItem={() => <Item />}
+        renderItem={({item}: {item: ItemProp}) => <Item item={item} />}
         url={queryDynamic.url}
         par={{}}
       />
