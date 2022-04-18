@@ -1,17 +1,19 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-import {View, FlatList, HStack, Pressable, Button, Text} from 'native-base';
+import {View, FlatList, HStack, Pressable, Text} from 'native-base';
 import PhotoItem from './PhotoItem';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRequest from '../../../hooks/useRequest';
 import {querySysDic} from '../../../api/common';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Login = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const [list, setList] = useState([]);
+  const [keyData, setKeyData] = useState(0);
 
   const {result: sysDicts} = useRequest(
     querySysDic.url,
@@ -32,6 +34,12 @@ const Login = () => {
       setList(data);
     }
   }, [sysDicts]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setKeyData(Math.random());
+    }, []),
+  );
 
   return (
     <View style={{padding: 15}}>
@@ -74,6 +82,7 @@ const Login = () => {
         </Text>
       </HStack>
       <FlatList
+        key={keyData}
         contentContainerStyle={styles.main}
         data={list}
         onEndReachedThreshold={0.1}

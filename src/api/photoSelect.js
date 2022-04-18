@@ -11,3 +11,21 @@ export const fetchCase = {
   url: 'cgi/core/user/fetchCase',
   options: {},
 };
+
+// 获取我的媒体信息
+export const fetchMyMedia = {
+  url: 'cgi/core/user/fetchMyMedia',
+  options: {},
+};
+
+// 添加媒体信息
+export const fetchAddMedia = {
+  url: 'cgi/core/user/addMedia',
+  options: {},
+};
+
+// 删除媒体信息
+export const fetchDelMedia = {
+  url: 'cgi/core/user/delMedia',
+  options: {},
+};

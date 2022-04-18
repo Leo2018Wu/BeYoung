@@ -6,7 +6,11 @@ import CFastImage from '../../../components/CFastImage';
 import {openPicker} from '../../../util/openPicker';
 import {upload} from '../../../util/upload';
 import {addDynamic} from '../../../api/daily';
-import {fetchCase} from '../../../api/photoSelect';
+import {
+  fetchCase,
+  fetchAddMedia,
+  fetchDelMedia,
+} from '../../../api/photoSelect';
 import useRequest from '../../../hooks/useRequest';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
@@ -16,26 +20,20 @@ import Layout from '../../../components/Layout';
 
 const Index = ({...props}) => {
   const navigation = useNavigation();
-  const {item} = props.route.params;
-  console.log('--item--', item);
-  const [textAreaValue, setTextAreaValue] = useState('');
+  const {item, caseImgList} = props.route.params;
+  console.log('--item--', item, caseImgList);
   const [list, setList] = useState([]);
-  const {run: runAddDynamic} = useRequest(addDynamic.url);
   const [loading, setLoading] = useState(false);
+  const {run: runAddMedia} = useRequest(fetchAddMedia.url);
   const {run: runFetchCase, result} = useRequest(fetchCase.url);
+  const {run: runFetchDelMedia} = useRequest(fetchDelMedia.url); // 删除媒体信息
   const [caseList, setCaseList] = useState([]);
-
-  // useEffect(() => {
-  //   console.log('result', result);
-  //   if (result) {
-  //     setLoading(false);
-  //     setTextAreaValue('');
-  //     // navigation.navigate('Home');
-  //   }
-  // }, [result]);
 
   useEffect(() => {
     runFetchCase({scene: item.code});
+    if (caseImgList.length) {
+      setList(caseImgList);
+    }
   }, []);
 
   useEffect(() => {
@@ -56,40 +54,55 @@ const Index = ({...props}) => {
       if (currentLength > 9) {
         images.length = 9 - list.length;
       }
-      images.forEach((item): any => {
-        list.push(item.path);
+      let arr = [];
+      images.forEach((item1): any => {
+        let par = {
+          mediaType: 'MEDIA_TYPE_IMAGE',
+          name: '',
+          scene: item.code,
+          url: item1.path,
+        };
+        arr.push(par);
       });
-      setList(JSON.parse(JSON.stringify(list)));
-      console.log('--list--', list);
+      setList(JSON.parse(JSON.stringify(list.concat(arr))));
+      checkSubmit(list.concat(arr));
     } catch (err) {
       console.log('--err--', err);
     }
   };
 
-  const checkSubmit = () => {
+  const checkSubmit = imgList => {
     try {
-      const filterUploadFiles = list.filter(
-        item => item.substr(0, 3) !== 'img',
+      const filterUploadFiles = imgList.filter(
+        item1 => item1.url.substr(0, 3) !== 'img',
       );
       setLoading(true);
       if (filterUploadFiles.length > 0) {
-        uploadDynamic(filterUploadFiles);
+        uploadDynamic(filterUploadFiles, imgList);
       } else {
-        runAddDynamic({
-          content: textAreaValue,
-        });
+        // runAddMedia({
+        //   content: textAreaValue,
+        // });
       }
     } catch (err) {}
   };
 
-  const uploadDynamic = files => {
-    multiUpload(files).then(res => {
-      const filterFiles = list.filter(item => item.substr(0, 3) === 'img');
-      let arr = filterFiles.concat(res);
-      runAddDynamic({
-        content: textAreaValue,
-        images: arr,
+  const uploadDynamic = async (files, imgList) => {
+    multiUpload(files).then(async res => {
+      console.log('---res---', res);
+      // const filterFiles = imgList.filter(
+      //   item1 => item1.url.substr(0, 3) === 'img',
+      // );
+      // let arr = filterFiles.concat(res);
+      // console.log('----a---a--', arr);
+      const {data, success} = await runAddMedia({
+        userId: null,
+        medias: res,
       });
+      console.log('---d-a--a--a', data);
+      if (success) {
+        setLoading(false);
+      }
     });
   };
 
@@ -99,10 +112,16 @@ const Index = ({...props}) => {
     }
     return new Promise((reslove, reject) => {
       let arr = [];
-      files.forEach((item, index) => {
-        upload(item)
+      files.forEach((item1, index) => {
+        upload(item1.url)
           .then(res => {
-            arr.push(res);
+            let par = {
+              mediaType: 'MEDIA_TYPE_IMAGE',
+              name: '',
+              scene: item.code,
+              url: res,
+            };
+            arr.push(par);
             if (arr.length == files.length) {
               reslove(arr);
             }
@@ -111,6 +130,14 @@ const Index = ({...props}) => {
             reject(new Errow('上传失败'));
           });
       });
+    });
+  };
+
+  const delMedia = async mediaId => {
+    let mediaIds = [];
+    mediaIds.push(mediaId);
+    await runFetchDelMedia({
+      mediaIds: mediaIds,
     });
   };
 
@@ -133,16 +160,16 @@ const Index = ({...props}) => {
               alignItems: 'center',
             }}>
             <Text style={styles.title}>我的{item.name}照片</Text>
-            <Button>上传</Button>
+            <Button onPress={() => checkSubmit()}>上传</Button>
           </View>
           <View
             style={{flexDirection: 'row', flexWrap: 'wrap', marginBottom: 30}}>
             {list &&
-              list.map((item, index) => {
+              list.map((item1, index) => {
                 return (
                   <View style={{flexDirection: 'row'}}>
                     <CFastImage
-                      url={item}
+                      url={item1.url}
                       styles={{
                         width: 60,
                         height: 60,
@@ -158,11 +185,11 @@ const Index = ({...props}) => {
                         top: 0,
                       }}
                       onPress={() => {
-                        if (index != 0) {
-                          setList(list.splice(index, 1));
-                        } else {
-                          setList([]);
-                        }
+                        setList(
+                          JSON.parse(JSON.stringify(list.splice(index, 1))),
+                        );
+                        console.log('--', item1);
+                        delMedia(item1.id);
                       }}>
                       <Icon name="closecircle" size={14} color="#B2B2B2" />
                     </Pressable>
@@ -191,16 +218,17 @@ const Index = ({...props}) => {
                 style={{
                   justifyContent: 'center',
                   flex: 1,
+                  marginTop: 10,
                 }}>
                 {caseList &&
-                  caseList.map((item, index) => (
+                  caseList.map((item1, index) => (
                     <FastImage
                       style={{
                         width: Layout.width - 30,
                         height: 400,
                       }}
                       source={{
-                        uri: BASE_DOWN_URL + item,
+                        uri: BASE_DOWN_URL + item1,
                         headers: {Authorization: 'someAuthToken'},
                         priority: FastImage.priority.normal,
                       }}
