@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Center, HStack, Image, Pressable, Text} from 'native-base';
+import {Box, Button, Center, HStack, Pressable, Text} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {getMyGifts, getMyWallet} from '../../store/action';
@@ -20,7 +20,7 @@ const mapStateToProps = (state: any) => {
 const Index = ({...props}) => {
   const {width} = useWindowDimensions();
   const [activeItem, setActive] = useState('');
-  const GIFT_ITEM_WiIDTH = width / 4;
+  const GIFT_ITEM_WiIDTH = (width - 16) / 4;
   const {myWallet, myGifts} = props;
 
   const {result: giftSkuList} = useRequest(
@@ -28,10 +28,6 @@ const Index = ({...props}) => {
     {},
     fetchGift.options,
   );
-
-  useEffect(() => {
-    console.log('giftSkuList', giftSkuList);
-  }, [giftSkuList]);
 
   useEffect(() => {
     props.dispatch(getMyGifts());
@@ -54,59 +50,73 @@ const Index = ({...props}) => {
           </Text>
         </HStack>
       </HStack>
-      <HStack flexWrap={'wrap'}>
+      <HStack minHeight={24} flexWrap={'wrap'}>
         {giftSkuList &&
           giftSkuList.map((item: any) => (
             <Pressable
               key={item.id}
-              borderWidth={activeItem === item.id ? 0 : 0.25}
               onPress={() => setActive(item.id)}
-              borderColor="black"
-              justifyContent={'space-around'}
               alignItems="center"
               style={{
-                backgroundColor:
-                  activeItem === item.id ? '#9013FE50' : 'transparent',
+                borderRadius: 10,
                 width: GIFT_ITEM_WiIDTH,
-                height: GIFT_ITEM_WiIDTH,
+                height: 1.3 * GIFT_ITEM_WiIDTH,
               }}>
-              <Center flex={1}>
-                <Image
-                  source={{uri: `${BASE_DOWN_URL + item.img}`}}
-                  style={{
-                    height: GIFT_ITEM_WiIDTH / 2,
-                    width: GIFT_ITEM_WiIDTH / 2,
-                  }}
-                />
-                {/* <CFastImage
-                  url={item.img}
-                  styles={{
-                    height: GIFT_ITEM_WiIDTH / 2,
-                    width: GIFT_ITEM_WiIDTH / 2,
-                  }}
-                /> */}
-              </Center>
-              {myGifts[item.id]?.num ? (
-                <Text
-                  mb={2}
-                  alignSelf={'center'}
-                  ml={2}
-                  fontSize={'xs'}
-                  color="white">
-                  剩余{myGifts[item.id]?.num}次
-                </Text>
-              ) : (
-                <HStack pb={2} alignItems={'center'}>
-                  <Icon name="diamond" color={'#9650FF'} size={12} />
-                  <Text ml={2} fontSize={'xs'} color="white">
-                    {item.coinNum}
+              <Box
+                flex={1}
+                py={2}
+                justifyContent={'space-around'}
+                w="full"
+                borderTopRadius={8}
+                borderBottomWidth={0}
+                style={{
+                  borderWidth: activeItem === item.id ? 0.5 : 0,
+                }}
+                borderColor="white">
+                <Center flex={1}>
+                  <CFastImage
+                    url={`${BASE_DOWN_URL + item.img}`}
+                    styles={{
+                      width: GIFT_ITEM_WiIDTH / 2.5,
+                      height: GIFT_ITEM_WiIDTH / 2.5,
+                    }}
+                  />
+                </Center>
+                {myGifts[item.id]?.num ? (
+                  <Text
+                    mb={2}
+                    alignSelf={'center'}
+                    ml={2}
+                    fontSize={'xs'}
+                    color="white">
+                    剩余{myGifts[item.id]?.num}次
                   </Text>
-                </HStack>
+                ) : (
+                  <HStack
+                    justifyContent={'center'}
+                    pb={2}
+                    alignItems={'center'}>
+                    <Icon name="diamond" color={'#9650FF'} size={12} />
+                    <Text ml={2} fontSize={'xs'} color="white">
+                      {item.coinNum}
+                    </Text>
+                  </HStack>
+                )}
+              </Box>
+              {activeItem === item.id && (
+                <Pressable
+                  borderBottomRadius={8}
+                  alignItems={'center'}
+                  py={1}
+                  w={'full'}
+                  bg="red.600">
+                  <Text color={'white'}>赠送</Text>
+                </Pressable>
               )}
             </Pressable>
           ))}
       </HStack>
-      <Button
+      {/* <Button
         ml={'auto'}
         mr={4}
         mt={5}
@@ -119,7 +129,7 @@ const Index = ({...props}) => {
         <Text fontSize={'md'} color="white">
           购买
         </Text>
-      </Button>
+      </Button> */}
     </Box>
   );
 };

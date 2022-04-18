@@ -37,7 +37,7 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
     return null;
   }
   return (
-    <Box>
+    <Box mb={4}>
       <HStack mb={2} alignItems="center">
         <CFastImage
           url={item.headImg}

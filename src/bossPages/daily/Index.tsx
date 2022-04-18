@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Box, Text, Center} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import DailyItem from './DailyItem';
@@ -29,11 +29,18 @@ const Index = () => {
         <CustomFuncFlatList
           url={queryDynamic.url}
           par={{}}
-          renderItem={({item}: {item: any}) => (
-            <Box mb={4}>
-              <DailyItem item={item} />
-            </Box>
-          )}
+          // refresh={}
+          renderItem={({item, index}: {item: any; index: number}) => {
+            const refreshItem = data => {
+              console.log('refreshItem', data);
+              // item = data;
+            };
+            return (
+              <Box mb={4}>
+                <DailyItem refresh={refreshItem} item={item} />
+              </Box>
+            );
+          }}
         />
       </Box>
     </Box>

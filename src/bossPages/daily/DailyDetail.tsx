@@ -5,6 +5,8 @@ import Tab from './DailyTab';
 import CFastImage from '../../components/CFastImage';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
+import useRequest from '../../hooks/useRequest';
+import {commentDynamic} from '../../api/daily';
 
 const genImages = (imgs: string) => {
   if (!imgs) {
@@ -17,8 +19,18 @@ const genImages = (imgs: string) => {
 const Index = ({...props}) => {
   const {item} = props.route.params;
   const {width} = useWindowDimensions();
+  const {run: runCommentDymaic} = useRequest(commentDynamic.url);
   const IMG_ITEM_WIDTH = (width - 60) / 3;
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
+
+  const comment = (data: Object, dynamicId: string) => {
+    if (data.type === 'text') {
+      runCommentDymaic({
+        dynamicId,
+        content: data.value,
+      });
+    }
+  };
 
   return (
     <DailyDetailContext.Provider value={item}>
@@ -87,7 +99,11 @@ const Index = ({...props}) => {
           <Tab />
         </Box>
       </Box>
-      <ChatBox />
+      <ChatBox
+        pressCb={(data: Object) => {
+          comment(data, item.id);
+        }}
+      />
     </DailyDetailContext.Provider>
   );
 };

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   Box,
   Divider,
@@ -12,10 +12,9 @@ import {
 } from 'native-base';
 import Svg, {Circle, Defs, LinearGradient, Stop} from 'react-native-svg';
 import Icon from 'react-native-vector-icons/EvilIcons';
+import CFastImage from '../../components/CFastImage';
 import {StyleSheet, useWindowDimensions} from 'react-native';
-import useRequest from '../../hooks/useRequest';
-import {fetchMyInfo} from '../../api/common';
-import {useFocusEffect} from '@react-navigation/native';
+import {connect} from 'react-redux';
 
 const link_group1_list = [
   {
@@ -26,13 +25,13 @@ const link_group1_list = [
   {
     name: '我的礼物',
     icon: require('../../images/mine_link_icon2.png'),
-    pageName: '',
+    pageName: 'MineGifts',
   },
-  {
-    name: '帮助教程',
-    icon: require('../../images/mine_link_icon3.png'),
-    pageName: '',
-  },
+  // {
+  //   name: '帮助教程',
+  //   icon: require('../../images/mine_link_icon3.png'),
+  //   pageName: '',
+  // },
 ];
 const link_group2_list = [
   {
@@ -56,21 +55,20 @@ const link_group2_list = [
   },
 ];
 
+const mapStateToProps = (state: any) => {
+  return {
+    userInfo: state.user.myUserInfo,
+  };
+};
+
 const Home = ({...props}) => {
   const {width} = useWindowDimensions();
-  const {result: userInfo, run} = useRequest(fetchMyInfo.url);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      run();
-    }, []),
-  );
 
   const jumpPage = (routeName: String) => {
-    console.log('routeName', routeName);
-
     props.navigation.navigate(routeName);
   };
+
+  const userInfo = props.userInfo;
 
   return (
     <ScrollView
@@ -97,17 +95,8 @@ const Home = ({...props}) => {
         w={'full'}
         style={{position: 'absolute', top: 140, zIndex: 1}}
         px={4}>
-        <Box
-          mx={3}
-          style={{
-            zIndex: 2,
-          }}>
-          <Image
-            source={require('../../images/default_avatar.jpg')}
-            alt="avatar"
-            borderRadius={100}
-            style={styles.avatar}
-          />
+        <Box mx={3} style={styles.avatar}>
+          <CFastImage url={userInfo.headImg} styles={{flex: 1}} />
         </Box>
         <Box
           alignItems={'center'}
@@ -189,16 +178,18 @@ const Home = ({...props}) => {
   );
 };
 
-export default Home;
+export default connect(mapStateToProps)(Home);
 
 const styles = StyleSheet.create({
   avatar: {
     width: 96,
     height: 96,
+    borderRadius: 48,
+    overflow: 'hidden',
     position: 'absolute',
     left: '50%',
     top: -48,
-    zIndex: 2,
+    zIndex: 9,
     transform: [
       {
         translateX: -48,

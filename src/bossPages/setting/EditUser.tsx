@@ -3,9 +3,12 @@ import {Box, Button, HStack, Input, Text} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {updateUserInfo} from '../../api/common';
 import useRequest from '../../hooks/useRequest';
+import {getMyInfo} from '../../store/action/index.js';
+import {useDispatch} from 'react-redux';
 
 const Index = ({...props}) => {
   const params = props.route.params;
+  const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const [editType, setType] = useState('');
   const [inputValue, setValue] = useState(params.value);
@@ -21,8 +24,11 @@ const Index = ({...props}) => {
   }, [inputValue]);
 
   const edit = async () => {
-    await run({nickName: inputValue});
-    props.navigation.goBack();
+    const {success} = await run({nickName: inputValue});
+    if (success) {
+      dispatch(getMyInfo());
+      props.navigation.goBack();
+    }
   };
 
   return (
@@ -60,7 +66,7 @@ const Index = ({...props}) => {
       {editType === 'nickName' && (
         <HStack px={4} alignItems={'center'} h={16}>
           <Text fontWeight={'bold'} fontSize={'md'}>
-            编辑昵称：
+            昵称：
           </Text>
           <Input
             clearButtonMode="while-editing"

@@ -1,5 +1,5 @@
 import React from 'react';
-import {HStack, ScrollView, Box, Image, View, VStack, Text} from 'native-base';
+import {HStack, Box, Image, View, VStack, Text} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useWindowDimensions} from 'react-native';
 import useRequest from '../../hooks/useRequest';
@@ -36,8 +36,8 @@ const Index = () => {
   ];
 
   return (
-    <ScrollView
-      contentContainerStyle={{
+    <Box
+      style={{
         paddingBottom: insets.bottom,
       }}>
       <Box p={3} borderRadius={4} bg="white">
@@ -88,7 +88,7 @@ const Index = () => {
           </HStack>
         </View>
       </Box>
-    </ScrollView>
+    </Box>
   );
 };
 export default Index;

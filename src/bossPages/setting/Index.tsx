@@ -1,20 +1,18 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 import {Box, Button, Divider, HStack, Text} from 'native-base';
-import useRequest from '../../hooks/useRequest';
-import {fetchMyInfo} from '../../api/common';
 import CFastImage from '../../components/CFastImage';
 import AsyncStorage from '@react-native-community/async-storage';
 import {DeviceEventEmitter, Pressable} from 'react-native';
-import {useFocusEffect} from '@react-navigation/native';
+import {connect} from 'react-redux';
+
+const mapStateToProps = (state: any) => {
+  return {
+    userInfo: state.user.myUserInfo,
+  };
+};
 
 const Index = ({...props}) => {
-  const {result, run} = useRequest(fetchMyInfo.url);
-
-  useFocusEffect(
-    useCallback(() => {
-      run();
-    }, []),
-  );
+  const {userInfo} = props;
 
   const logOut = () => {
     AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
@@ -26,7 +24,7 @@ const Index = ({...props}) => {
   const editUser = () => {
     props.navigation.navigate('EditUser', {
       type: 'nickName',
-      value: result?.nickName,
+      value: userInfo?.nickName,
     });
   };
 
@@ -42,7 +40,7 @@ const Index = ({...props}) => {
           头像
         </Text>
         <CFastImage
-          url={result?.headImg}
+          url={userInfo?.headImg}
           styles={{width: 44, height: 44, borderRadius: 22}}
         />
       </HStack>
@@ -61,7 +59,7 @@ const Index = ({...props}) => {
             昵称
           </Text>
           <Text fontSize={'md'} style={{color: '#A6A6A6'}}>
-            {result?.nickName || '请设置自己的昵称'}
+            {userInfo?.nickName || '请设置自己的昵称'}
           </Text>
         </HStack>
       </Pressable>
@@ -78,7 +76,7 @@ const Index = ({...props}) => {
           手机号
         </Text>
         <Text fontSize={'md'} style={{color: '#A6A6A6'}}>
-          {result?.phone}
+          {userInfo?.phone}
         </Text>
       </HStack>
       <Button
@@ -95,4 +93,4 @@ const Index = ({...props}) => {
   );
 };
 
-export default Index;
+export default connect(mapStateToProps)(Index);
