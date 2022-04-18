@@ -31,7 +31,7 @@ const Bar = ({title = '充值项目'}) => {
   );
 };
 
-const Index = () => {
+const Index = ({...props}) => {
   const {width} = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const ITEM_WIDTH = (width - 32 - 8) / 2;
@@ -75,6 +75,10 @@ const Index = () => {
     } catch (error) {}
   };
 
+  const goDetail = () => {
+    props.navigation.navigate('TransferDetail');
+  };
+
   return (
     <Box flex={1}>
       <Box
@@ -85,7 +89,10 @@ const Index = () => {
           <Text fontSize="lg" fontWeight={'bold'}>
             钱包
           </Text>
-          <Pressable justifyContent={'center'} style={styles.header_right}>
+          <Pressable
+            onPress={() => goDetail()}
+            justifyContent={'center'}
+            style={styles.header_right}>
             <Text fontWeight={'bold'} fontSize={'md'}>
               交易明细
             </Text>

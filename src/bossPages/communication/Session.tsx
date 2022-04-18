@@ -9,6 +9,8 @@ import {
   Spinner,
   Input,
   KeyboardAvoidingView,
+  Actionsheet,
+  useDisclose,
 } from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
@@ -42,7 +44,7 @@ const Msgs = ({...props}) => {
   const insets = useSafeAreaInsets();
   const [textValue, setValue] = useState(''); // 输入框内容
   const [keyboradShow, setKeyborad] = useState(false); // 键盘拉起状态
-  const [giftModal, setGiftModal] = useState(false); // 礼物弹窗
+  const {isOpen, onOpen, onClose} = useDisclose();
   const {result: chatUserInfo} = useRequest(
     fetchAccountUser.url,
     {
@@ -80,7 +82,7 @@ const Msgs = ({...props}) => {
 
   useEffect(() => {
     scrollToEnd();
-  }, [giftModal, keyboradShow]);
+  }, [keyboradShow]);
 
   // useEffect(() => {
   //   Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
@@ -195,6 +197,15 @@ const Msgs = ({...props}) => {
           </HStack>
         </Box>
       </LinearGradient>
+      <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content
+          style={{
+            backgroundColor: '#1f2937',
+            borderRadius: 40,
+          }}>
+          <Gifts />
+        </Actionsheet.Content>
+      </Actionsheet>
       <KeyboardAvoidingView
         contentContainerStyle={{
           height: '100%',
@@ -242,24 +253,13 @@ const Msgs = ({...props}) => {
         <Box
           w={'full'}
           shadow={2}
-          borderRadius={giftModal ? 10 : 0}
           style={{
             paddingBottom: !keyboradShow ? insets.bottom : 10,
             backgroundColor: '#fff',
           }}>
-          {giftModal && (
-            <Box
-              w={'full'}
-              borderTopRadius={10}
-              style={{
-                backgroundColor: '#00000060',
-              }}>
-              <Gifts />
-            </Box>
-          )}
           <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
             <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
-            <Pressable onPress={() => setGiftModal(!giftModal)}>
+            <Pressable onPress={() => onOpen()}>
               <Ionicons
                 style={{
                   marginLeft: 16,

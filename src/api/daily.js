@@ -36,3 +36,9 @@ export const queryComment = {
     manual: false,
   },
 };
+
+// 评论动态
+export const commentDynamic = {
+  url: 'cgi/core/dynamic/commentDynamic',
+  options: {},
+};

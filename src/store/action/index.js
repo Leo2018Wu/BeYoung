@@ -1,4 +1,4 @@
-import {fetchAccountUser, fetchWalletInfo} from '../../api/common';
+import {fetchAccountUser, fetchMyInfo, fetchWalletInfo} from '../../api/common';
 import {fetchMyGift} from '../../api/gift';
 import fetchData from '../../util/request';
 
@@ -36,6 +36,16 @@ export const getMyWallet = () => async dispatch => {
   try {
     const {data} = await fetchData(fetchWalletInfo.url);
     dispatch({type: 'MY_WALLET', myWallet: data || []});
+  } catch (error) {
+    console.log('eee', error);
+  }
+};
+
+//分发我的用户信息
+export const getMyInfo = () => async dispatch => {
+  try {
+    const {data} = await fetchData(fetchMyInfo.url);
+    dispatch({type: 'MY_USERINFO', myUserInfo: data || {}});
   } catch (error) {
     console.log('eee', error);
   }

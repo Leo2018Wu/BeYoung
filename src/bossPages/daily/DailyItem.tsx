@@ -1,8 +1,17 @@
 import React from 'react';
-import {HStack, Box, View, VStack, Text, Button, Stack} from 'native-base';
+import {
+  HStack,
+  Box,
+  View,
+  VStack,
+  Text,
+  Button,
+  Stack,
+  Pressable,
+} from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {Pressable, useWindowDimensions} from 'react-native';
+import {useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 const genImages = (imgs: string) => {
@@ -28,10 +37,19 @@ interface ItemProp {
 
 const isEqual = (pre: any, next: any) => {
   // 优化无关渲染
-  return JSON.stringify(pre.item) === JSON.stringify(next.item);
+  // JSON.stringify(pre.item) === JSON.stringify(next.item);
+  return (
+    pre.item.score === next.item.score &&
+    pre.item.liked === next.item.liked &&
+    pre.item.likeNum === next.item.likeNum &&
+    pre.item.commentNum === next.item.commentNum &&
+    pre.item.giftNum === next.item.giftNum
+  );
 };
 
-const Index = ({item}: {item: ItemProp}) => {
+const Index = ({item, refresh}: {item: ItemProp; refresh: Function}) => {
+  console.log(32323, item);
+
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 104) / 3;
@@ -120,7 +138,13 @@ const Index = ({item}: {item: ItemProp}) => {
               {item.score}
             </Text>
           </HStack>
-          <HStack alignItems={'center'}>
+          <Pressable
+            onPress={() => {
+              item.liked = !item.liked;
+              refresh(item);
+            }}
+            flexDirection={'row'}
+            alignItems={'center'}>
             {item.liked ? (
               <Icon name="heart" size={18} color="#9650FF" />
             ) : (
@@ -129,7 +153,7 @@ const Index = ({item}: {item: ItemProp}) => {
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
               {item.likeNum}
             </Text>
-          </HStack>
+          </Pressable>
           <HStack alignItems={'center'}>
             <Icon name="message1" size={18} color="#C7C4CC" />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>

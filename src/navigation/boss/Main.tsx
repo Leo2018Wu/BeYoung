@@ -10,6 +10,8 @@ import Service from '../../bossPages/customService/Index';
 import WeChatNum from '../../bossPages/weChatNum/Index';
 import Session from '../../bossPages/communication/Session';
 import Wallet from '../../bossPages/wallet/Wallet';
+import TransferDetail from '../../bossPages/wallet/TransferDetail';
+import MineGifts from '../../bossPages/mine/MineGifts';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +65,22 @@ const MyStack = () => {
         }}
         name="DailyDetail"
         component={DailyDetail}
+      />
+      <Stack.Screen
+        options={{
+          title: '交易明细',
+          headerBackTitle: '钱包',
+        }}
+        name="TransferDetail"
+        component={TransferDetail}
+      />
+      <Stack.Screen
+        options={{
+          title: '我的礼物',
+          headerBackTitle: '我的',
+        }}
+        name="MineGifts"
+        component={MineGifts}
       />
       <Stack.Screen
         options={{

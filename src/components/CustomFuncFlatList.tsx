@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState} from 'react';
 import {Box, FlatList} from 'native-base';
 import useRequest from '../hooks/useRequest';
@@ -128,6 +129,7 @@ const Index = ({
       <FlatList
         horizontal={horizontal}
         numColumns={numColumns}
+        removeClippedSubviews={true}
         showsVerticalScrollIndicator={false}
         onRefresh={() => _onRefresh()}
         data={queryList}
@@ -142,7 +144,7 @@ const Index = ({
   };
 
   return (
-    <Box flex={1} bg="white">
+    <Box flex={1}>
       {pageStatus === IS_EMPTY && <PageEmpty />}
       {pageStatus === IS_LIST && renderList()}
       {pageStatus === IS_LOADDING && <PageLoading />}
