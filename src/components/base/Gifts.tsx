@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, Center, HStack, Pressable, Text} from 'native-base';
+import {Box, Center, HStack, Pressable, Text} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {getMyGifts, getMyWallet} from '../../store/action';
@@ -19,7 +19,7 @@ const mapStateToProps = (state: any) => {
 
 const Index = ({...props}) => {
   const {width} = useWindowDimensions();
-  const [activeItem, setActive] = useState('');
+  const [activeItemId, setActiveId] = useState('');
   const GIFT_ITEM_WiIDTH = (width - 16) / 4;
   const {myWallet, myGifts} = props;
 
@@ -33,6 +33,10 @@ const Index = ({...props}) => {
     props.dispatch(getMyGifts());
     props.dispatch(getMyWallet());
   }, []);
+
+  const present = (item: object) => {
+    props.clickItem(item);
+  };
 
   return (
     <Box pb={4} w={'full'}>
@@ -55,7 +59,7 @@ const Index = ({...props}) => {
           giftSkuList.map((item: any) => (
             <Pressable
               key={item.id}
-              onPress={() => setActive(item.id)}
+              onPress={() => setActiveId(item.id)}
               alignItems="center"
               style={{
                 borderRadius: 10,
@@ -70,7 +74,7 @@ const Index = ({...props}) => {
                 borderTopRadius={8}
                 borderBottomWidth={0}
                 style={{
-                  borderWidth: activeItem === item.id ? 0.5 : 0,
+                  borderWidth: activeItemId === item.id ? 0.5 : 0,
                 }}
                 borderColor="white">
                 <Center flex={1}>
@@ -103,8 +107,9 @@ const Index = ({...props}) => {
                   </HStack>
                 )}
               </Box>
-              {activeItem === item.id && (
+              {activeItemId === item.id && (
                 <Pressable
+                  onPress={() => present(item)}
                   borderBottomRadius={8}
                   alignItems={'center'}
                   py={1}
@@ -116,20 +121,6 @@ const Index = ({...props}) => {
             </Pressable>
           ))}
       </HStack>
-      {/* <Button
-        ml={'auto'}
-        mr={4}
-        mt={5}
-        style={{
-          backgroundColor: '#9650FF',
-          borderRadius: 50,
-          paddingVertical: 10,
-          width: 90,
-        }}>
-        <Text fontSize={'md'} color="white">
-          购买
-        </Text>
-      </Button> */}
     </Box>
   );
 };

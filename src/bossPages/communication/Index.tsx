@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Badge, Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -8,6 +8,7 @@ import CFastImage from '../../components/CFastImage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
 import constant from '../../store/constant';
+import util from '../../util/util';
 import {getChatUsers} from '../../store/action';
 
 // 处理会话数据以便渲染使用
@@ -139,14 +140,26 @@ function Basic({...props}) {
               <Text fontSize={'md'} fontWeight="bold">
                 {item?.chatUserInfo.nickName || '暂无昵称'}
               </Text>
-              <Text
-                numberOfLines={1}
-                fontSize={'md'}
-                style={{
-                  color: '#C1C0C9',
-                }}>
-                {msgInfo.text || '您收到一条消息'}
-              </Text>
+              {msgInfo.type === 'text' && (
+                <Text
+                  numberOfLines={1}
+                  fontSize={'md'}
+                  style={{
+                    color: '#C1C0C9',
+                  }}>
+                  {msgInfo.text}
+                </Text>
+              )}
+              {msgInfo.type === 'custom' && (
+                <Text
+                  numberOfLines={1}
+                  fontSize={'md'}
+                  style={{
+                    color: '#C1C0C9',
+                  }}>
+                  {util.parseCustomMsg(msgInfo)}
+                </Text>
+              )}
             </VStack>
           </HStack>
         </HStack>

@@ -3,6 +3,7 @@ import {Text, Box, HStack} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import CFastImage from '../CFastImage';
 import {useSelector} from 'react-redux';
+import {BASE_DOWN_URL} from '../../util/config';
 
 export const ChatLeft = ({msg}: any) => {
   const avatar = (
@@ -33,6 +34,22 @@ export const ChatLeft = ({msg}: any) => {
           }}>
           <Text fontSize={'sm'}>{msg.text}</Text>
         </Box>
+      </HStack>
+    );
+  } else if (msg.type === 'custom') {
+    const content = JSON.parse(msg.content);
+    return (
+      <HStack mr={'auto'}>
+        <Box borderRadius={4} overflow="hidden">
+          <CFastImage
+            url={`${BASE_DOWN_URL + content.giftKey}`}
+            styles={{
+              width: 100,
+              height: 100,
+            }}
+          />
+        </Box>
+        {avatar}
       </HStack>
     );
   } else {
@@ -90,6 +107,22 @@ export const ChatRight = ({msg}: any) => {
             </Text>
           </Box>
         </LinearGradient>
+        {avatar}
+      </HStack>
+    );
+  } else if (msg.type === 'custom') {
+    const content = JSON.parse(msg.content);
+    return (
+      <HStack ml={'auto'}>
+        <Box borderRadius={4} overflow="hidden">
+          <CFastImage
+            url={`${BASE_DOWN_URL + content.giftKey}`}
+            styles={{
+              width: 100,
+              height: 100,
+            }}
+          />
+        </Box>
         {avatar}
       </HStack>
     );
