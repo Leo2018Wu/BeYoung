@@ -26,3 +26,9 @@ export const fetchMyGift = {
     manual: false,
   },
 };
+
+// 赠送礼物
+export const giveGift = {
+  url: 'cgi/core/gift/giveGift',
+  options: {},
+};

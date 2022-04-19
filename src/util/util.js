@@ -1,3 +1,5 @@
+/* eslint-disable no-extend-native */
+/* eslint-disable eqeqeq */
 const util = {};
 
 Date.prototype.Format = function (fmt) {
@@ -51,6 +53,20 @@ util.getAge = birthday => {
     age[1] += 12;
   }
   return age[0];
+};
+
+util.parseCustomMsg = msg => {
+  if (msg.type === 'custom') {
+    try {
+      const cnt = JSON.parse(msg.content);
+      switch (cnt.type) {
+        case 1:
+          return '[礼物]';
+      }
+    } catch (e) {}
+    return '[自定义消息]';
+  }
+  return '';
 };
 
 util.getBirthday = cardNum => {
@@ -126,7 +142,7 @@ util.formatTime = timestamp => {
     return null;
   }
   // 补全为13位
-  return new Date(timestamp).Format('yy-MM-dd hh:mm:ss');
+  return new Date(timestamp).Format('yy-MM-dd hh:mm');
 };
 
 //节流函数

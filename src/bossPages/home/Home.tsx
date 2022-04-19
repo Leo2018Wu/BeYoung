@@ -47,15 +47,20 @@ const mergeList = (sourceList: any, nowList: any) => {
   return nowList;
 };
 
+interface GradeProps {
+  id: string;
+  name: string;
+  code: string;
+}
+
 const Home = ({...props}) => {
   const {width, height} = useWindowDimensions();
   const insets = useSafeAreaInsets();
-  const GRADES = ['大一', '大二', '大三'];
-  const [activeGrade, setGrade] = useState(0); // 选中的年纪tab index
   const {isOpen, onOpen, onClose} = useDisclose();
   const [params, setParams] = useState({
     pageNum: 1, //分页页码
     pageSize: 10, //每页大小
+    grade: '', //年级 即为选中的tab
     orders: [
       {
         column: 'createTime', //排序字段名称
@@ -64,10 +69,11 @@ const Home = ({...props}) => {
       },
     ], //排序参数列表
   });
+  const [grades, setGrades] = useState([]); // 渲染的年纪列表
   const [queryList, setList] = useState([]); // 动态列表
   const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
-  const {result: sysDicts} = useRequest(
+  const {result: gradeDicts} = useRequest(
     querySysDic.url,
     {
       pCode: 'GRADE',
@@ -77,8 +83,12 @@ const Home = ({...props}) => {
   const {run: runFetchFemaleUser} = useRequest(queryFemaleUser.url);
 
   useEffect(() => {
-    console.log('sysDicts', sysDicts);
-  }, [sysDicts]);
+    if (gradeDicts) {
+      const renderGrades = gradeDicts.slice(1, 4);
+      setParams({...params, grade: renderGrades[0].code});
+      setGrades(renderGrades);
+    }
+  }, [gradeDicts]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -244,23 +254,24 @@ const Home = ({...props}) => {
         colors={['#B83AF3', '#6950FB']}>
         <Box justifyContent="center" style={{paddingTop: insets.top}}>
           <HStack px={3} style={{height: 52}} alignItems="center">
-            {GRADES.map((item, index) => (
-              <Pressable
-                onPress={() => setGrade(index)}
-                style={activeGrade === index ? styles.gradeBg : {}}
-                alignItems={'center'}
-                ml={2}
-                key={item}
-                px={3}
-                py={0.5}>
-                <Text
-                  color={'white'}
-                  opacity={activeGrade === index ? 1 : 0.5}
-                  fontSize={activeGrade === index ? 'lg' : 'md'}>
-                  {item}
-                </Text>
-              </Pressable>
-            ))}
+            {grades &&
+              grades.map((item: GradeProps) => (
+                <Pressable
+                  onPress={() => setParams({...params, grade: item.code})}
+                  style={params.grade === item.code ? styles.gradeBg : {}}
+                  alignItems={'center'}
+                  ml={2}
+                  key={item.id}
+                  px={3}
+                  py={0.5}>
+                  <Text
+                    color={'white'}
+                    opacity={params.grade === item.code ? 1 : 0.5}
+                    fontSize={params.grade === item.code ? 'lg' : 'md'}>
+                    {item.name}
+                  </Text>
+                </Pressable>
+              ))}
             <Pressable
               flexDirection={'row'}
               onPress={() => onOpen()}

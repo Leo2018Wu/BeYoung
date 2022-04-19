@@ -86,7 +86,7 @@ const Index = ({item, refresh}: {item: ItemProp; refresh: Function}) => {
               {item.createTime}
             </Text>
           </VStack>
-          <Button
+          {/* <Button
             disabled
             py={1}
             borderRadius={'full'}
@@ -96,7 +96,7 @@ const Index = ({item, refresh}: {item: ItemProp; refresh: Function}) => {
             <Text fontSize={'xs'} color={'primary.100'}>
               关注
             </Text>
-          </Button>
+          </Button> */}
         </HStack>
         <View
           style={{
@@ -112,7 +112,7 @@ const Index = ({item, refresh}: {item: ItemProp; refresh: Function}) => {
                   marginRight: (index + 1) % 3 === 0 ? 0 : 8,
                   width: IMG_ITEM_WIDTH,
                   height: IMG_ITEM_HEIGHT,
-                  borderRadius: 40,
+                  borderRadius: 8,
                   marginBottom: 8,
                 }}
               />

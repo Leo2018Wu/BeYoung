@@ -18,7 +18,6 @@ import util from '../../../util/util';
 import useRequest from '../../../hooks/useRequest';
 import {fetchChatAccount, fetchStatistic} from '../../../api/common';
 import CFastImage from '../../../components/CFastImage';
-import {queryMedia} from '../../../api/user';
 import {useDispatch} from 'react-redux';
 import MyContext from './Context';
 
@@ -32,15 +31,6 @@ const Index = ({...props}) => {
     fetchStatistic.url,
     {userId: userInfo.id},
     fetchStatistic.options,
-  );
-  const {result: mediaInfo} = useRequest(
-    queryMedia.url,
-    {
-      userId: userInfo.id, //用户ID
-      mediaType: 'MEDIA_TYPE_IMAGE', //媒体类型
-      // "scene": "SCENE_DORMITORY", //场景
-    },
-    queryMedia.options,
   );
 
   const goChat = async () => {

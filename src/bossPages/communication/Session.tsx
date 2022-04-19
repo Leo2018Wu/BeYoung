@@ -14,7 +14,6 @@ import {
 } from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
-import constObj from '../../store/constant';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -25,9 +24,31 @@ import useRequest from '../../hooks/useRequest';
 import {fetchAccountUser} from '../../api/common';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
-
 import util from '../../util/util';
 import Gifts from '../../components/base/Gifts';
+import {giveGift} from '../../api/gift';
+import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
+import {setCurrSession, resetCurrSession} from '../../store/action/session';
+
+const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
+  let groupMsg: {time: any; msgList: any[]}[] = [];
+  let lastGm: {time: any; msgList: any} | null = null;
+  msgList.forEach(msg => {
+    if (lastGm == null) {
+      lastGm = {time: msg[timeKey], msgList: [msg]};
+      groupMsg.push(lastGm);
+    } else {
+      if (msg[timeKey] - lastGm.time <= interval) {
+        lastGm.msgList.push(msg);
+      } else {
+        lastGm = {time: msg[timeKey], msgList: [msg]};
+        groupMsg.push(lastGm);
+      }
+    }
+  });
+
+  return groupMsg;
+};
 
 let _scrollTimer: any;
 const BOTTOM_FIXED_HEIGHT = 92; // 底部遮盖拦高度
@@ -39,8 +60,8 @@ const mapStateToProps = (state: any) => {
 };
 
 const Msgs = ({...props}) => {
-  const scrollRef = useRef(null);
-  const inputRef = useRef(null);
+  const scrollRef = useRef({});
+  const inputRef = useRef({});
   const insets = useSafeAreaInsets();
   const [textValue, setValue] = useState(''); // 输入框内容
   const [keyboradShow, setKeyborad] = useState(false); // 键盘拉起状态
@@ -52,12 +73,15 @@ const Msgs = ({...props}) => {
     },
     fetchAccountUser.options,
   );
+
+  const {run: runGiveGift} = useRequest(giveGift.url);
+
   const scrollToEnd = () => {
     if (scrollRef.current) {
       clearTimeout(_scrollTimer);
       _scrollTimer = setTimeout(() => {
         InteractionManager.runAfterInteractions(() => {
-          scrollRef.current.scrollToEnd();
+          scrollRef.current?.scrollToEnd && scrollRef.current.scrollToEnd();
         });
       }, 500);
     }
@@ -65,11 +89,36 @@ const Msgs = ({...props}) => {
 
   const setCurrentSession = () => {
     //调用此接口会重置该会话消息未读数
-    constObj.nim && constObj.nim.setCurrSession(props.currentSessionId);
+    props.dispatch(setCurrSession({sessionId: props.currentSessionId}));
   };
 
   const _keyboardDidShow = () => {
     setKeyborad(true);
+  };
+
+  const presentGift = async (item: object) => {
+    try {
+      const {success} = await runGiveGift({
+        giftId: item.id,
+        num: 1,
+        receiveUserId: chatUserInfo[0]?.userId,
+      });
+      if (success) {
+        const content = {
+          type: 1,
+          giftKey: item.img,
+        };
+        props.dispatch(
+          sendCustomMsg({
+            to: props.route.params.chatUserId,
+            content,
+          }),
+        );
+        scrollToEnd();
+      }
+    } catch (error) {
+      console.log('presentGift', error);
+    }
   };
 
   const _keyboardDidHide = () => {
@@ -84,34 +133,23 @@ const Msgs = ({...props}) => {
     scrollToEnd();
   }, [keyboradShow]);
 
-  // useEffect(() => {
-  //   Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
-  //   Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
 
-  //   // cleanup function
-  //   return () => {
-  //     Keyboard.removeListener('keyboardDidShow', () => {});
-  //     Keyboard.removeListener('keyboardDidHide', () => {});
-  //   };
-  // }, []);
+    // cleanup function
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', () => {});
+      Keyboard.removeListener('keyboardDidHide', () => {});
+    };
+  }, []);
 
   useEffect(() => {
     setCurrentSession();
-    constObj.nim &&
-      constObj.nim.getLocalMsgs({
-        sessionId: props.currentSessionId,
-        limit: 100,
-        done(err: any, obj: any) {
-          console.log(err, obj);
-          props.dispatch({
-            type: 'SESSION_MSGS',
-            currentSessionMsgs: obj.msgs || [],
-          });
-        },
-      });
+    props.dispatch(getLocalMsgs({sessionId: props.currentSessionId}));
     return () => {
       //取消设置当前会话
-      constObj.nim && constObj.nim.resetCurrSession();
+      props.dispatch(resetCurrSession());
       _scrollTimer && clearTimeout(_scrollTimer);
       // 退出重置当前会话ID
       props.dispatch({
@@ -125,29 +163,11 @@ const Msgs = ({...props}) => {
   }, []);
 
   const sendMsg = () => {
+    props.dispatch(
+      sendText({to: props.route.params.chatUserId, text: textValue}),
+    );
     setValue('');
-    constObj.nim &&
-      constObj.nim.sendText({
-        scene: 'p2p',
-        // isUnreadable: false,
-        to: props.route.params.chatUserId,
-        text: textValue,
-        done: (err: any, done: any) => {
-          setValue('');
-          props.dispatch({
-            type: 'MERGE_SESSION_MSGS',
-            msg: done,
-          });
-          scrollToEnd();
-          console.log('done', err, done);
-          if (err) {
-            console.log('sendFail', err);
-          }
-          // if (!err) {
-          //   setValue('');
-          // }
-        },
-      });
+    scrollToEnd();
   };
 
   const {msgs} = props;
@@ -203,7 +223,12 @@ const Msgs = ({...props}) => {
             backgroundColor: '#1f2937',
             borderRadius: 40,
           }}>
-          <Gifts />
+          <Gifts
+            clickItem={(item: object) => {
+              onClose();
+              presentGift(item);
+            }}
+          />
         </Actionsheet.Content>
       </Actionsheet>
       <KeyboardAvoidingView
@@ -213,7 +238,7 @@ const Msgs = ({...props}) => {
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         style={{height: '100%'}}>
         <ScrollView
-          ref={e => {
+          ref={(e: object) => {
             scrollRef.current = e;
             scrollToEnd();
           }}
@@ -221,10 +246,10 @@ const Msgs = ({...props}) => {
           px={2}
           mb={5}
           flex={1}>
-          {msgs &&
-            msgs.map((item: any, index: any) => {
+          {genMsgs(msgs) &&
+            genMsgs(msgs).map((item: any, index: any) => {
               return (
-                <Box key={index} mb={4}>
+                <Box key={index}>
                   {util.formatTime(item.time) && (
                     <Text
                       alignSelf={'center'}
@@ -236,16 +261,18 @@ const Msgs = ({...props}) => {
                       {util.formatTime(item.time)}
                     </Text>
                   )}
-
-                  {item.flow === 'in' && (
-                    <ChatLeft
-                      key={index}
-                      msg={Object.assign(item, {
-                        avatar: chatUserInfo[0]?.headImg,
-                      })}
-                    />
-                  )}
-                  {item.flow === 'out' && <ChatRight key={index} msg={item} />}
+                  {item.msgList.map((ele: any, idx: number) => (
+                    <Box key={idx} mb={4}>
+                      {ele.flow === 'in' && (
+                        <ChatLeft
+                          msg={Object.assign(ele, {
+                            avatar: chatUserInfo[0]?.headImg,
+                          })}
+                        />
+                      )}
+                      {ele.flow === 'out' && <ChatRight msg={ele} />}
+                    </Box>
+                  ))}
                 </Box>
               );
             })}
@@ -270,7 +297,7 @@ const Msgs = ({...props}) => {
               />
             </Pressable>
             <Input
-              ref={e => (inputRef.current = e)}
+              ref={(e: object) => (inputRef.current = e)}
               multiline
               enablesReturnKeyAutomatically={true}
               returnKeyType="send"
