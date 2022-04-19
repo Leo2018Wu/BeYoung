@@ -248,9 +248,6 @@ const Setting = ({...props}) => {
             <IconNew name="right" size={16} color="#919191" />
           </View>
         </View>
-        <View style={styles.btnView}>
-          <Text style={styles.btnTextView}>提交</Text>
-        </View>
       </ScrollView>
     </NativeBaseProvider>
   );

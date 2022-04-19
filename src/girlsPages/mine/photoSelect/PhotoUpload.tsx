@@ -21,7 +21,6 @@ import Layout from '../../../components/Layout';
 const Index = ({...props}) => {
   const navigation = useNavigation();
   const {item, caseImgList} = props.route.params;
-  console.log('--item--', item, caseImgList);
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const {run: runAddMedia} = useRequest(fetchAddMedia.url);
@@ -160,7 +159,6 @@ const Index = ({...props}) => {
               alignItems: 'center',
             }}>
             <Text style={styles.title}>我的{item.name}照片</Text>
-            <Button onPress={() => checkSubmit()}>上传</Button>
           </View>
           <View
             style={{flexDirection: 'row', flexWrap: 'wrap', marginBottom: 30}}>
@@ -185,10 +183,9 @@ const Index = ({...props}) => {
                         top: 0,
                       }}
                       onPress={() => {
-                        setList(
-                          JSON.parse(JSON.stringify(list.splice(index, 1))),
-                        );
-                        console.log('--', item1);
+                        const newData = [...list];
+                        newData.splice(index, 1);
+                        setList(JSON.parse(JSON.stringify(newData)));
                         delMedia(item1.id);
                       }}>
                       <Icon name="closecircle" size={14} color="#B2B2B2" />

@@ -12,13 +12,16 @@ import LinearGradient from 'react-native-linear-gradient';
 import {querySysDic} from '../../api/common';
 import {addQuickReply, fetchQuickReply} from '../../api/quickReply';
 import useRequest from '../../hooks/useRequest';
+import {useNavigation} from '@react-navigation/native';
 
 import layout from '../../components/Layout';
 
 const Login = () => {
+  const navigation = useNavigation();
   const Toast = useToast();
   const [goodsName, setGoodsName] = useState('');
   const [list, setList] = useState([]);
+  const [btnFlag, setBtnFlag] = useState(true);
 
   const {run: runQuerySysDic, result} = useRequest(querySysDic.url, {
     pCode: 'QUICK_REPLY_SCENE',
@@ -59,10 +62,10 @@ const Login = () => {
   };
 
   const submit = async () => {
+    setBtnFlag(true);
     let index = list.findIndex(e => {
       return e.content;
     });
-    console.log(list, index);
     if (index != -1) {
       const quickReplies = [];
       list.forEach((e, index) => {
@@ -75,11 +78,7 @@ const Login = () => {
         quickReplies,
       });
       if (success) {
-        Toast.show({
-          description: data,
-          duration: 3000,
-          placement: 'top',
-        });
+        navigation.goBack();
       }
     } else {
       Toast.show({
@@ -108,6 +107,7 @@ const Login = () => {
                     onChangeText={text => {
                       list[index].content = text;
                       setList(JSON.parse(JSON.stringify(list)));
+                      setBtnFlag(false);
                     }}
                     variant="outline"
                     placeholder="添加你的回复..."
@@ -120,7 +120,7 @@ const Login = () => {
             })}
         </View>
         <View style={styles.btnView}>
-          <Pressable onPress={() => submit()}>
+          <Pressable onPress={() => submit()} disabled={btnFlag}>
             <LinearGradient
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
