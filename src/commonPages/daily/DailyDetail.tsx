@@ -16,6 +16,8 @@ import {BASE_DOWN_URL} from '../../util/config';
 import CFastImage from '../../components/CFastImage';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
+import useRequest from '../../hooks/useRequest';
+import {commentDynamic} from '../../api/daily';
 
 const Index = ({...props}) => {
   const {item} = props.route.params;
@@ -25,6 +27,7 @@ const Index = ({...props}) => {
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
   const [imgList, setImgList] = useState([]);
   const [replyFlag, setReplyFlag] = useState(false);
+  const {run: runCommentDymaic} = useRequest(commentDynamic.url);
 
   useEffect(() => {
     if (item.images && JSON.parse(item.images).length) {
@@ -34,6 +37,16 @@ const Index = ({...props}) => {
       setReplyFlag(res);
     });
   }, []);
+
+  const comment = (data: Object, dynamicId: string, replyId: string) => {
+    if (data.type === 'text') {
+      runCommentDymaic({
+        dynamicId,
+        replyId,
+        content: data.value,
+      });
+    }
+  };
 
   return (
     <DailyDetailContext.Provider value={item}>
@@ -89,7 +102,13 @@ const Index = ({...props}) => {
           <Tab />
         </Box>
       </ScrollView>
-      {replyFlag ? <ChatBox /> : null}
+      {replyFlag ? (
+        <ChatBox
+          pressCb={(data: Object) => {
+            comment(data, item.id, replyFlag.id);
+          }}
+        />
+      ) : null}
     </DailyDetailContext.Provider>
   );
 };

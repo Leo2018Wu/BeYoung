@@ -21,12 +21,10 @@ const Login = ({...props}) => {
       mediaType: 'MEDIA_TYPE_IMAGE', //媒体类型
       scene: item.code, //场景
     });
-    // runFetchCase({scene: item.code});
   }, []);
 
   useEffect(() => {
     if (result) {
-      console.log('---re---', result);
       if (!result.length) {
         getFetchCase();
       } else {
@@ -39,13 +37,11 @@ const Login = ({...props}) => {
 
   const getFetchCase = async () => {
     const {data} = await runFetchCase({scene: item.code});
-    console.log('---data---', data);
     if (data.length) {
       if (!data[0].delFlag) {
         const temp = JSON.parse(data[0].imgs)[0];
         setCaseImg(JSON.parse(JSON.stringify(temp)));
         setFlag(true);
-        console.log('--------', flag, caseImg, temp);
       }
     }
   };

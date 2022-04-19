@@ -5,21 +5,18 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../../components/CFastImage';
 import {openPicker} from '../../../util/openPicker';
 import {upload} from '../../../util/upload';
-import {addDynamic} from '../../../api/daily';
 import {
   fetchCase,
   fetchAddMedia,
   fetchDelMedia,
 } from '../../../api/photoSelect';
 import useRequest from '../../../hooks/useRequest';
-import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import {BASE_DOWN_URL} from '../../../util/config';
 
 import Layout from '../../../components/Layout';
 
 const Index = ({...props}) => {
-  const navigation = useNavigation();
   const {item, caseImgList} = props.route.params;
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -63,8 +60,8 @@ const Index = ({...props}) => {
         };
         arr.push(par);
       });
-      setList(JSON.parse(JSON.stringify(list.concat(arr))));
       checkSubmit(list.concat(arr));
+      setList(JSON.parse(JSON.stringify(list.concat(arr))));
     } catch (err) {
       console.log('--err--', err);
     }
@@ -77,28 +74,18 @@ const Index = ({...props}) => {
       );
       setLoading(true);
       if (filterUploadFiles.length > 0) {
-        uploadDynamic(filterUploadFiles, imgList);
-      } else {
-        // runAddMedia({
-        //   content: textAreaValue,
-        // });
+        uploadPhoto(filterUploadFiles, imgList);
       }
     } catch (err) {}
   };
 
-  const uploadDynamic = async (files, imgList) => {
+  const uploadPhoto = async (files, imgList) => {
     multiUpload(files).then(async res => {
       console.log('---res---', res);
-      // const filterFiles = imgList.filter(
-      //   item1 => item1.url.substr(0, 3) === 'img',
-      // );
-      // let arr = filterFiles.concat(res);
-      // console.log('----a---a--', arr);
       const {data, success} = await runAddMedia({
         userId: null,
         medias: res,
       });
-      console.log('---d-a--a--a', data);
       if (success) {
         setLoading(false);
       }

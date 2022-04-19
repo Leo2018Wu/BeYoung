@@ -27,30 +27,36 @@ const Item = ({item}: {item: ItemProps}) => {
 
   const setReply = () => {
     console.log('-回复-');
-    DeviceEventEmitter.emit('REPLY_FLAG', true);
+    DeviceEventEmitter.emit('REPLY_FLAG', item);
   };
 
   return (
-    <Box>
-      <HStack mb={2} alignItems="center">
-        <CFastImage
-          url={item.headImg}
-          styles={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-          }}
-        />
-        <VStack flex={1} mr={'auto'} ml={2} justifyContent={'space-between'}>
-          <HStack>
-            <Text
-              fontSize={'md'}
-              style={{
-                color: '#8E8895',
-              }}>
-              {item.nickName || '青回'}
-            </Text>
-            {item.userId === userInfo.id && (
+    <>
+      {!item.replyId ? (
+        <Box mb={6}>
+          <HStack mb={2} alignItems="center">
+            <CFastImage
+              url={item.headImg}
+              styles={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+              }}
+            />
+            <VStack
+              flex={1}
+              mr={'auto'}
+              ml={2}
+              justifyContent={'space-between'}>
+              <HStack>
+                <Text
+                  fontSize={'md'}
+                  style={{
+                    color: '#8E8895',
+                  }}>
+                  {item.nickName || '青回'}
+                </Text>
+                {/* {item.userId === userInfo.id && (
               <Box
                 borderRadius={3}
                 px={1.5}
@@ -61,17 +67,17 @@ const Item = ({item}: {item: ItemProps}) => {
                   自己
                 </Text>
               </Box>
-            )}
-          </HStack>
-          <Text
-            fontSize={'xs'}
-            style={{
-              color: '#C7C4CC',
-            }}>
-            {item.createTime}
-          </Text>
-        </VStack>
-        {/* <HStack alignItems={'center'}>
+            )} */}
+              </HStack>
+              <Text
+                fontSize={'xs'}
+                style={{
+                  color: '#C7C4CC',
+                }}>
+                {item.createTime}
+              </Text>
+            </VStack>
+            {/* <HStack alignItems={'center'}>
           {false ? (
             <Icon name="heart" size={18} color="#9650FF" />
           ) : (
@@ -81,18 +87,23 @@ const Item = ({item}: {item: ItemProps}) => {
             24
           </Text>
         </HStack> */}
-      </HStack>
-      <Text fontSize={'md'} color={'fontColors.333'} style={{marginLeft: 48}}>
-        {item.content}
-      </Text>
-      <Pressable
-        onPress={() => setReply()}
-        style={{marginLeft: 56, width: 30, marginTop: 10}}>
-        <Text fontSize={'sm'} style={{color: '#8B5CFF'}}>
-          回复
-        </Text>
-      </Pressable>
-    </Box>
+          </HStack>
+          <Text
+            fontSize={'md'}
+            color={'fontColors.333'}
+            style={{marginLeft: 48}}>
+            {item.content}
+          </Text>
+          <Pressable
+            onPress={() => setReply(item)}
+            style={{marginLeft: 56, width: 30, marginTop: 10}}>
+            <Text fontSize={'sm'} style={{color: '#8B5CFF'}}>
+              回复
+            </Text>
+          </Pressable>
+        </Box>
+      ) : null}
+    </>
   );
 };
 

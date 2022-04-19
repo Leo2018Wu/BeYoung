@@ -1,29 +1,35 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Image, Modal, ActivityIndicator} from 'react-native';
 import {Box, Text, Pressable, View} from 'native-base';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../components/CFastImage';
-import LinearGradient from 'react-native-linear-gradient';
 import {openPicker} from '../../util/openPicker';
 import {upload} from '../../util/upload';
-import {addDynamic} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
+import {
+  fetchMyMedia,
+  fetchAddMedia,
+  fetchDelMedia,
+} from '../../api/photoSelect';
 
-const Index = (props: any) => {
-  const {navigation} = props;
-  const [textAreaValue, setTextAreaValue] = useState('');
+const Index = () => {
   const [list, setList] = useState([]);
-  const {run: runAddDynamic, result} = useRequest(addDynamic.url);
   const [loading, setLoading] = useState(false);
+  const {run: runAddMedia} = useRequest(fetchAddMedia.url);
+  const {run: runFetchMyMedia, result} = useRequest(fetchMyMedia.url); // 获取我的媒体信息
+  const {run: runFetchDelMedia} = useRequest(fetchDelMedia.url); // 删除媒体信息
 
   useEffect(() => {
-    console.log('result', result);
+    runFetchMyMedia({
+      mediaType: 'MEDIA_TYPE_EMOGI', //媒体类型
+    });
+  }, []);
+
+  useEffect(() => {
     if (result) {
-      setLoading(false);
-      setTextAreaValue('');
-      setList([]);
-      navigation.navigate('Home');
+      if (result.length) {
+        setList(result);
+      }
     }
   }, [result]);
 
@@ -34,40 +40,44 @@ const Index = (props: any) => {
       if (currentLength > 9) {
         images.length = 9 - list.length;
       }
-      images.forEach((item): any => {
-        list.push(item.path);
+      let arr = [];
+      images.forEach((item1): any => {
+        let par = {
+          mediaType: 'MEDIA_TYPE_EMOGI',
+          name: '',
+          scene: null,
+          url: item1.path,
+        };
+        arr.push(par);
       });
-      setList(JSON.parse(JSON.stringify(list)));
-      console.log('--list--', list);
+      checkSubmit(list.concat(arr));
+      setList(JSON.parse(JSON.stringify(list.concat(arr))));
     } catch (err) {
       console.log('--err--', err);
     }
   };
 
-  const checkSubmit = () => {
+  const checkSubmit = imgList => {
     try {
-      const filterUploadFiles = list.filter(
-        item => item.substr(0, 3) !== 'img',
+      const filterUploadFiles = imgList.filter(
+        item1 => item1.url.substr(0, 3) !== 'img',
       );
       setLoading(true);
       if (filterUploadFiles.length > 0) {
-        uploadDynamic(filterUploadFiles);
-      } else {
-        runAddDynamic({
-          content: textAreaValue,
-        });
+        uploadPackage(filterUploadFiles, imgList);
       }
     } catch (err) {}
   };
 
-  const uploadDynamic = files => {
-    multiUpload(files).then(res => {
-      const filterFiles = list.filter(item => item.substr(0, 3) === 'img');
-      let arr = filterFiles.concat(res);
-      runAddDynamic({
-        content: textAreaValue,
-        images: arr,
+  const uploadPackage = files => {
+    multiUpload(files).then(async res => {
+      const {data, success} = await runAddMedia({
+        userId: null,
+        medias: res,
       });
+      if (success) {
+        setLoading(false);
+      }
     });
   };
 
@@ -77,10 +87,16 @@ const Index = (props: any) => {
     }
     return new Promise((reslove, reject) => {
       let arr = [];
-      files.forEach((item, index) => {
-        upload(item)
+      files.forEach((item1, index) => {
+        upload(item1.url)
           .then(res => {
-            arr.push(res);
+            let par = {
+              mediaType: 'MEDIA_TYPE_EMOGI',
+              name: '',
+              scene: null,
+              url: res,
+            };
+            arr.push(par);
             if (arr.length == files.length) {
               reslove(arr);
             }
@@ -89,6 +105,14 @@ const Index = (props: any) => {
             reject(new Errow('上传失败'));
           });
       });
+    });
+  };
+
+  const delMedia = async mediaId => {
+    let mediaIds = [];
+    mediaIds.push(mediaId);
+    await runFetchDelMedia({
+      mediaIds: mediaIds,
     });
   };
 
@@ -110,7 +134,7 @@ const Index = (props: any) => {
               return (
                 <View style={{flexDirection: 'row'}}>
                   <CFastImage
-                    url={item}
+                    url={item.url}
                     styles={{
                       width: 60,
                       height: 60,
@@ -126,11 +150,10 @@ const Index = (props: any) => {
                       top: 0,
                     }}
                     onPress={() => {
-                      if (index != 0) {
-                        setList(list.splice(index, 1));
-                      } else {
-                        setList([]);
-                      }
+                      const newData = [...list];
+                      newData.splice(index, 1);
+                      setList(JSON.parse(JSON.stringify(newData)));
+                      delMedia(item.id);
                     }}>
                     <Icon name="closecircle" size={14} color="#B2B2B2" />
                   </Pressable>
@@ -153,15 +176,6 @@ const Index = (props: any) => {
           </Pressable>
         </View>
       </Box>
-      {/* <Box> */}
-      <LinearGradient
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={['#D988FF', '#8B5CFF']}
-        style={styles.linearGradient}>
-        <Text style={styles.buttonText}>保存</Text>
-      </LinearGradient>
-      {/* </Box> */}
     </Box>
   );
 };
@@ -197,22 +211,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#fff',
     fontSize: 14,
-  },
-  linearGradient: {
-    position: 'absolute',
-    bottom: 10,
-    width: '90%',
-    marginLeft: '5%',
-    marginVertical: 20,
-    borderRadius: 28,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontFamily: 'Gill Sans',
-    textAlign: 'center',
-    height: 56,
-    lineHeight: 56,
-    color: '#ffffff',
-    backgroundColor: 'transparent',
   },
 });
