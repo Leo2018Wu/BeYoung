@@ -29,6 +29,7 @@ import Gifts from '../../components/base/Gifts';
 import {giveGift} from '../../api/gift';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
+import getStorage from '../../util/Storage';
 
 const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
   let groupMsg: {time: any; msgList: any[]}[] = [];
@@ -73,6 +74,7 @@ const Msgs = ({...props}) => {
     },
     fetchAccountUser.options,
   );
+  const [isBoss, setIsBoss] = useState('MALE_LOGIN');
 
   const {run: runGiveGift} = useRequest(giveGift.url);
 
@@ -120,6 +122,11 @@ const Msgs = ({...props}) => {
       console.log('presentGift', error);
     }
   };
+
+  useEffect(async () => {
+    const boss = await getStorage(['LOGIN_NAVIGAITON_NAME']);
+    setIsBoss(boss);
+  }, []);
 
   const _keyboardDidHide = () => {
     setKeyborad(false);
@@ -286,16 +293,18 @@ const Msgs = ({...props}) => {
           }}>
           <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
             <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
-            <Pressable onPress={() => onOpen()}>
-              <Ionicons
-                style={{
-                  marginLeft: 16,
-                }}
-                name="gift"
-                size={26}
-                color="#9650FF"
-              />
-            </Pressable>
+            {isBoss == 'MALE_LOGIN' ? (
+              <Pressable onPress={() => onOpen()}>
+                <Ionicons
+                  style={{
+                    marginLeft: 16,
+                  }}
+                  name="gift"
+                  size={26}
+                  color="#9650FF"
+                />
+              </Pressable>
+            ) : null}
             <Input
               ref={(e: object) => (inputRef.current = e)}
               multiline
