@@ -54,7 +54,8 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          headerShown: false,
+          title: '钱包',
+          headerBackTitle: '我的',
         }}
         name="Wallet"
         component={Wallet}
