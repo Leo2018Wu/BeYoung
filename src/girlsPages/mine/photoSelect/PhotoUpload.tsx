@@ -11,7 +11,6 @@ import {
   fetchDelMedia,
 } from '../../../api/photoSelect';
 import useRequest from '../../../hooks/useRequest';
-import FastImage from 'react-native-fast-image';
 import {BASE_DOWN_URL} from '../../../util/config';
 
 import Layout from '../../../components/Layout';
@@ -206,17 +205,12 @@ const Index = ({...props}) => {
                 }}>
                 {caseList &&
                   caseList.map((item1, index) => (
-                    <FastImage
-                      style={{
+                    <CFastImage
+                      url={`${BASE_DOWN_URL + item1}`}
+                      styles={{
                         width: Layout.width - 30,
                         height: 400,
                       }}
-                      source={{
-                        uri: BASE_DOWN_URL + item1,
-                        headers: {Authorization: 'someAuthToken'},
-                        priority: FastImage.priority.normal,
-                      }}
-                      resizeMode={FastImage.resizeMode.contain}
                     />
                   ))}
               </View>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'native-base';
 import useRequest from '../../../hooks/useRequest';
 import {fetchCase} from '../../../api/photoSelect';
-import FastImage from 'react-native-fast-image';
+import CFastImage from '../../../components/CFastImage';
 import {BASE_DOWN_URL} from '../../../util/config';
 import Layout from '../../../components/Layout';
 
@@ -28,17 +28,12 @@ const Login = () => {
       {list
         ? list &&
           list.map((item, index) => (
-            <FastImage
-              style={{
+            <CFastImage
+              url={`${BASE_DOWN_URL + item}`}
+              styles={{
                 width: Layout.width,
                 height: Layout.height - 110,
               }}
-              source={{
-                uri: BASE_DOWN_URL + item,
-                headers: {Authorization: 'someAuthToken'},
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.contain}
             />
           ))
         : null}

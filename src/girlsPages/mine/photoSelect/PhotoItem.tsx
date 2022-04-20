@@ -5,8 +5,8 @@ import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {fetchCase, fetchMyMedia} from '../../../api/photoSelect';
 import useRequest from '../../../hooks/useRequest';
-import FastImage from 'react-native-fast-image';
 import {BASE_DOWN_URL} from '../../../util/config';
+import CFastImage from '../../../components/CFastImage';
 
 const Login = ({...props}) => {
   const {item} = props;
@@ -58,18 +58,13 @@ const Login = ({...props}) => {
             })
           }>
           <View style={styles.banner}>
-            <FastImage
-              style={{
+            <CFastImage
+              url={`${BASE_DOWN_URL + caseImg}`}
+              styles={{
                 width: 158,
                 height: 158,
                 borderRadius: 15,
               }}
-              source={{
-                uri: BASE_DOWN_URL + caseImg,
-                headers: {Authorization: 'someAuthToken'},
-                priority: FastImage.priority.normal,
-              }}
-              resizeMode={FastImage.resizeMode.contain}
             />
             <View style={styles.topView}>
               <Text

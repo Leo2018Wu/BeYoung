@@ -36,13 +36,13 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
     DeviceEventEmitter.emit('REPLY_FLAG', data);
   };
 
-  const getUserName = async itemId => {
-    console.log('--itemId---', itemId);
-    // const {data} = await runFetchUserInfo({
-    //   userId: itemId,
-    // });
-    return itemId;
-  };
+  // const getUserName = async itemId => {
+  //   console.log('--itemId---', itemId);
+  //   const {data} = await runFetchUserInfo({
+  //     userId: itemId,
+  //   });
+  //   return data.nickName;
+  // };
 
   return (
     <Box mb={6}>
