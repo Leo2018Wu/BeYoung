@@ -29,15 +29,10 @@ const Index = () => {
         <CustomFuncFlatList
           url={queryDynamic.url}
           par={{}}
-          // refresh={}
           renderItem={({item, index}: {item: any; index: number}) => {
-            const refreshItem = data => {
-              console.log('refreshItem', data);
-              // item = data;
-            };
             return (
-              <Box mb={4}>
-                <DailyItem refresh={refreshItem} item={item} />
+              <Box key={index} mb={4}>
+                <DailyItem item={item} />
               </Box>
             );
           }}

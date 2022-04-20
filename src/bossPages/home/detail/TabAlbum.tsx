@@ -1,5 +1,5 @@
-import React, {useContext, useEffect} from 'react';
-import {HStack, ScrollView, Box} from 'native-base';
+import React, {useContext} from 'react';
+import {HStack, ScrollView, Pressable} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useWindowDimensions} from 'react-native';
 import {queryMedia} from '../../../api/user';
@@ -7,8 +7,11 @@ import MyContext from './Context';
 import useRequest from '../../../hooks/useRequest';
 import CFastImage from '../../../components/CFastImage';
 import {PageEmpty} from '../../../components/base/Pagination';
+import {useNavigation} from '@react-navigation/native';
+import {BASE_DOWN_URL} from '../../../util/config';
 
 const Index = () => {
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 20) / 3;
@@ -28,6 +31,19 @@ const Index = () => {
     return <PageEmpty content="暂无照片" />;
   }
 
+  const preview = (index: number) => {
+    const imgUrls =
+      mediaInfo &&
+      mediaInfo.map((item: any) => {
+        const temp = {url: `${BASE_DOWN_URL + item.url}`};
+        return temp;
+      });
+    navigation.navigate('Preview', {
+      index,
+      imgUrls,
+    });
+  };
+
   return (
     <ScrollView
       contentContainerStyle={{
@@ -36,7 +52,8 @@ const Index = () => {
       <HStack flexWrap={'wrap'} px={2} flex={1}>
         {mediaInfo &&
           mediaInfo.map((item: any, index: number) => (
-            <Box
+            <Pressable
+              onPress={() => preview(index)}
               borderRadius={3}
               bg={'primary.100'}
               key={item.id}
@@ -54,7 +71,7 @@ const Index = () => {
                   width: IMG_ITEM_WIDTH,
                 }}
               />
-            </Box>
+            </Pressable>
           ))}
       </HStack>
     </ScrollView>

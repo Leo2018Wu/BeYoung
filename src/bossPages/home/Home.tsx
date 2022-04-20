@@ -9,6 +9,7 @@ import {
   Actionsheet,
   FlatList,
   VStack,
+  ScrollView,
 } from 'native-base';
 import {useFocusEffect} from '@react-navigation/native';
 
@@ -84,7 +85,7 @@ const Home = ({...props}) => {
 
   useEffect(() => {
     if (gradeDicts) {
-      const renderGrades = gradeDicts.slice(1, 4);
+      const renderGrades = gradeDicts.filter(item => item.pCode !== item.code);
       setParams({...params, grade: renderGrades[0].code});
       setGrades(renderGrades);
     }
@@ -253,7 +254,16 @@ const Home = ({...props}) => {
         end={{x: 1, y: 0.5}}
         colors={['#B83AF3', '#6950FB']}>
         <Box justifyContent="center" style={{paddingTop: insets.top}}>
-          <HStack px={3} style={{height: 52}} alignItems="center">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            flexDirection={'row'}
+            w="full"
+            contentContainerStyle={{
+              height: 52,
+              alignItems: 'center',
+              paddingHorizontal: 12,
+            }}>
             {grades &&
               grades.map((item: GradeProps) => (
                 <Pressable
@@ -272,7 +282,7 @@ const Home = ({...props}) => {
                   </Text>
                 </Pressable>
               ))}
-            <Pressable
+            {/* <Pressable
               flexDirection={'row'}
               onPress={() => onOpen()}
               ml={'auto'}
@@ -281,8 +291,8 @@ const Home = ({...props}) => {
                 全部
               </Text>
               <Icon name={'chevron-down'} size={20} color="#fff" />
-            </Pressable>
-          </HStack>
+            </Pressable> */}
+          </ScrollView>
         </Box>
       </LinearGradient>
       <Box flex={1} px={2} pb={2}>
