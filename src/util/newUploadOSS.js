@@ -21,23 +21,27 @@ const uuid = () => {
     .toUpperCase();
 };
 
-export const upload = (path, type = 'img', second) => {
-  console.log('path', path);
-  let suffix;
-  if (type === 'img') {
-    suffix = 'img' + uuid() + path.replace(/.+\./, '.').toLowerCase();
-  } else if (type === 'audio') {
-    suffix = `voice&voiceduration=${second}&${uuid()}${path
-      .replace(/.+\./, '.')
-      .toLowerCase()}`;
-  }
-  return new Promise((reslove, reject) => {
-    AliyunOSS.asyncUpload(bucketname, suffix, path).then(res => {
-      console.log('uploadSuccess', res);
-      reslove(suffix);
+export const upload = async (options = {}) => {
+  try {
+    const {path = '', type = 'img', second = ''} = options;
+    let suffix;
+    if (type === 'img') {
+      suffix = 'img' + uuid() + path.replace(/.+\./, '.').toLowerCase();
+    } else if (type === 'audio') {
+      suffix = `voice&voiceduration=${second}&${uuid()}${path
+        .replace(/.+\./, '.')
+        .toLowerCase()}`;
+    }
+    return new Promise((reslove, reject) => {
+      AliyunOSS.asyncUpload(bucketname, suffix, path)
+        .then(res => {
+          reslove(suffix);
+        })
+        .catch(err => {
+          reject(err);
+        });
     });
-  }).catch(err => {
-    reject(err);
-    console.log('uploadFail', err);
-  });
+  } catch (error) {
+    console.error(error);
+  }
 };
