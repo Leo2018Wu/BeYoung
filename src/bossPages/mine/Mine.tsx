@@ -91,13 +91,13 @@ const Home = ({...props}) => {
           fill="url(#g3)"
         />
       </Svg>
+      <Box mx={3} style={styles.avatar}>
+        <CFastImage url={userInfo.headImg} styles={{flex: 1}} />
+      </Box>
       <Box
         w={'full'}
         style={{position: 'absolute', top: 140, zIndex: 1}}
         px={4}>
-        <Box mx={3} style={styles.avatar}>
-          <CFastImage url={userInfo.headImg} styles={{flex: 1}} />
-        </Box>
         <Box
           alignItems={'center'}
           pt={12}
@@ -105,11 +105,8 @@ const Home = ({...props}) => {
           shadow={1}
           borderRadius={4}
           bg="white">
-          <Text fontWeight={'bold'} mt={2} fontSize={'2xl'}>
+          <Text fontWeight={'bold'} mb={4} mt={2} fontSize={'2xl'}>
             {userInfo?.nickName || '暂无昵称'}
-          </Text>
-          <Text color={'fontColors.gray'} fontSize={'md'}>
-            ID: {userInfo?.id}
           </Text>
           <Divider my={4} />
           <HStack justifyContent={'space-around'}>
@@ -188,13 +185,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     position: 'absolute',
     left: '50%',
-    top: -48,
+    marginLeft: -48,
+    top: 80,
     zIndex: 9,
-    transform: [
-      {
-        translateX: -48,
-      },
-    ],
   },
   link_icon: {
     width: 22,
