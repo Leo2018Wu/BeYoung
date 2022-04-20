@@ -12,6 +12,7 @@ import Session from '../../bossPages/communication/Session';
 import Wallet from '../../bossPages/wallet/Wallet';
 import TransferDetail from '../../bossPages/wallet/TransferDetail';
 import MineGifts from '../../bossPages/mine/MineGifts';
+import Preview from '../../commonPages/PreviewImgs';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,10 +54,18 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          headerShown: false,
+          title: '钱包',
+          headerBackTitle: '我的',
         }}
         name="Wallet"
         component={Wallet}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Preview"
+        component={Preview}
       />
       <Stack.Screen
         options={{

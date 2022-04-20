@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  HStack,
-  ScrollView,
-  Box,
-  Stack,
-  Text,
-  VStack,
-  Image,
-  Badge,
-} from 'native-base';
+import {HStack, Box, Text, VStack} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../components/CFastImage';
@@ -77,7 +68,8 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
             {item.createTime}
           </Text>
         </VStack>
-        <HStack alignItems={'center'}>
+        {/* 暂时不支持点赞评论 */}
+        {/* <HStack alignItems={'center'}>
           {false ? (
             <Icon name="heart" size={18} color="#9650FF" />
           ) : (
@@ -86,7 +78,7 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
           <Text ml={1} fontSize={'md'} style={{color: '#D4D4D4'}}>
             24
           </Text>
-        </HStack>
+        </HStack> */}
       </HStack>
       <Text fontSize={'md'} color={'fontColors.333'} style={{marginLeft: 48}}>
         {item.content}

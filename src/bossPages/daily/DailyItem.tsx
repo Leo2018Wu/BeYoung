@@ -13,6 +13,7 @@ import CFastImage from '../../components/CFastImage';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {BASE_DOWN_URL} from '../../util/config';
 
 const genImages = (imgs: string) => {
   if (!imgs) {
@@ -47,13 +48,19 @@ const isEqual = (pre: any, next: any) => {
   );
 };
 
-const Index = ({item, refresh}: {item: ItemProp; refresh: Function}) => {
-  console.log(32323, item);
-
+const Index = ({item}: {item: ItemProp}) => {
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 104) / 3;
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
+
+  const preview = (index: number) => {
+    const imgUrls = genImages(item.images).map((img: string) => {
+      const temp = {url: `${BASE_DOWN_URL + img}`};
+      return temp;
+    });
+    navigation.navigate('Preview', {index, imgUrls});
+  };
 
   return (
     <Box bg="white">
@@ -105,17 +112,18 @@ const Index = ({item, refresh}: {item: ItemProp; refresh: Function}) => {
           pt={4}>
           <HStack mb={2} flexWrap={'wrap'}>
             {genImages(item.images).map((ele: string, index: number) => (
-              <CFastImage
-                key={index}
-                url={ele}
-                styles={{
-                  marginRight: (index + 1) % 3 === 0 ? 0 : 8,
-                  width: IMG_ITEM_WIDTH,
-                  height: IMG_ITEM_HEIGHT,
-                  borderRadius: 8,
-                  marginBottom: 8,
-                }}
-              />
+              <Pressable onPress={() => preview(index)} key={index}>
+                <CFastImage
+                  url={ele}
+                  styles={{
+                    marginRight: (index + 1) % 3 === 0 ? 0 : 8,
+                    width: IMG_ITEM_WIDTH,
+                    height: IMG_ITEM_HEIGHT,
+                    borderRadius: 8,
+                    marginBottom: 8,
+                  }}
+                />
+              </Pressable>
             ))}
           </HStack>
           <Text numberOfLines={3} fontSize={'md'} color={'fontColors._72'}>
@@ -138,13 +146,7 @@ const Index = ({item, refresh}: {item: ItemProp; refresh: Function}) => {
               {item.score}
             </Text>
           </HStack>
-          <Pressable
-            onPress={() => {
-              item.liked = !item.liked;
-              refresh(item);
-            }}
-            flexDirection={'row'}
-            alignItems={'center'}>
+          <Pressable flexDirection={'row'} alignItems={'center'}>
             {item.liked ? (
               <Icon name="heart" size={18} color="#9650FF" />
             ) : (

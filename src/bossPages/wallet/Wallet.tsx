@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Center, Text, Box, HStack, Pressable, Button} from 'native-base';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import React, {useLayoutEffect, useState} from 'react';
+import {Text, Box, HStack, Pressable, Button} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {
@@ -33,7 +32,6 @@ const Bar = ({title = '充值项目'}) => {
 
 const Index = ({...props}) => {
   const {width} = useWindowDimensions();
-  const insets = useSafeAreaInsets();
   const ITEM_WIDTH = (width - 32 - 8) / 2;
   const [activeItem, setItem] = useState(''); // 选中的充值项目id
   const {result: chargeList} = useRequest(
@@ -43,8 +41,21 @@ const Index = ({...props}) => {
     },
     fetchRechargeItems.options,
   );
-
   const {run: runChargeWx} = useRequest(rechargeApplyWX.url);
+
+  useLayoutEffect(() => {
+    props.navigation.setOptions({
+      headerRight: () => {
+        return (
+          <Pressable onPress={() => goDetail()}>
+            <Text fontWeight={'bold'} fontSize={'md'}>
+              交易明细
+            </Text>
+          </Pressable>
+        );
+      },
+    });
+  }, []);
 
   const charge = async () => {
     try {
@@ -81,24 +92,6 @@ const Index = ({...props}) => {
 
   return (
     <Box flex={1}>
-      <Box
-        bg={'white'}
-        justifyContent="center"
-        style={{paddingTop: insets.top}}>
-        <Center w={'full'} style={{height: 52}}>
-          <Text fontSize="lg" fontWeight={'bold'}>
-            钱包
-          </Text>
-          <Pressable
-            onPress={() => goDetail()}
-            justifyContent={'center'}
-            style={styles.header_right}>
-            <Text fontWeight={'bold'} fontSize={'md'}>
-              交易明细
-            </Text>
-          </Pressable>
-        </Center>
-      </Box>
       <Box style={styles.top_section}>
         <ImageBackground
           style={styles.top_inner}
@@ -168,12 +161,6 @@ const Index = ({...props}) => {
 export default Index;
 
 const styles = StyleSheet.create({
-  header_right: {
-    height: '100%',
-    position: 'absolute',
-    right: 16,
-    top: 0,
-  },
   top_section: {
     minHeight: 136,
     paddingHorizontal: 16,

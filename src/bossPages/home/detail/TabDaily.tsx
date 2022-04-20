@@ -36,7 +36,7 @@ const isEqual = (pre: any, next: any) => {
 const Item = React.memo(({item}: {item: ItemProp}) => {
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 32) / 3;
-  const IMG_ITEM_HEIGHT = 1.2 * IMG_ITEM_WIDTH;
+  const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
   const navigation = useNavigation();
   return (
     <Pressable onPress={() => navigation.navigate('DailyDetail', {item: item})}>
