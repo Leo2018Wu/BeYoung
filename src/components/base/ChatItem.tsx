@@ -40,6 +40,7 @@ export const ChatLeft = ({msg}: any) => {
     const content = JSON.parse(msg.content);
     return (
       <HStack mr={'auto'}>
+        {avatar}
         <Box borderRadius={4} overflow="hidden">
           <CFastImage
             url={`${BASE_DOWN_URL + content.giftKey}`}
@@ -49,7 +50,6 @@ export const ChatLeft = ({msg}: any) => {
             }}
           />
         </Box>
-        {avatar}
       </HStack>
     );
   } else {
