@@ -41,10 +41,8 @@ const LoginStack = () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '',
+          title: '选择性别',
           headerShadowVisible: false,
-          headerBackVisible: true,
-          headerTransparent: true,
         }}
         name="ChooseSex"
         component={ChooseSex}
