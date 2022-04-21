@@ -39,7 +39,7 @@ const Index = ({pressCb}: {pressCb: Function}) => {
         px={4}
         py={4}
         style={{
-          paddingBottom: insets.bottom,
+          paddingBottom: insets.bottom + 10,
           backgroundColor: '#fff',
         }}>
         <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
@@ -69,12 +69,14 @@ const Index = ({pressCb}: {pressCb: Function}) => {
         {isBoss === 'MALE_LOGIN' && (
           <Ionicons name="gift" size={26} color="#9650FF" />
         )}
-        {/* <FontAwesome
-          onPress={() => sendMsg()}
-          name="send"
-          size={24}
-          color="#9650FF"
-        /> */}
+        {textValue ? (
+          <FontAwesome
+            onPress={() => sendMsg()}
+            name="send"
+            size={24}
+            color="#9650FF"
+          />
+        ) : null}
       </HStack>
     </KeyboardAvoidingView>
   );
