@@ -4,7 +4,7 @@ import React from 'react';
 import FastImage from 'react-native-fast-image';
 import {BASE_DOWN_URL} from '../util/config';
 
-const DEFAULT_AVATAR = require('../images/default_avatar.jpg');
+const DEFAULT_AVATAR = require('../images/default_avatar.png');
 const Index = ({styles, url}: {styles: any; url: string}) => {
   if (!url) {
     return <Image source={DEFAULT_AVATAR} style={styles} alt="img" />;
