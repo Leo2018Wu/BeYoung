@@ -4,7 +4,7 @@ import {Box, Text, Pressable, View} from 'native-base';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../components/CFastImage';
 import {openPicker} from '../../util/openPicker';
-import {upload} from '../../util/upload';
+import {upload} from '../../util/newUploadOSS';
 import useRequest from '../../hooks/useRequest';
 import {
   fetchMyMedia,
@@ -88,7 +88,7 @@ const Index = () => {
     return new Promise((reslove, reject) => {
       let arr = [];
       files.forEach((item1, index) => {
-        upload(item1.url)
+        upload({path: item1.url})
           .then(res => {
             let par = {
               mediaType: 'MEDIA_TYPE_EMOGI',

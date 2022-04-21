@@ -132,7 +132,6 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          headerShown: false,
           headerBackVisible: true,
         }}
         name="EditHeadImg"

@@ -1,166 +1,116 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Button, HStack, Text, Image, Pressable} from 'native-base';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Actionsheet, Box, Pressable, StatusBar, useDisclose} from 'native-base';
 import {updateUserInfo} from '../../../api/common';
-import {upload} from '../../../util/upload';
 import useRequest from '../../../hooks/useRequest';
-import ChooseImgModal from '../../../components/ChooseImgModal';
-import ImageViewer from 'react-native-image-zoom-viewer';
 import CFastImage from '../../../components/CFastImage';
-import {BASE_DOWN_URL} from '../../../util/config';
-import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Feather';
+import {getMyInfo} from '../../../store/action/index';
+import {useDispatch} from 'react-redux';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {useWindowDimensions} from 'react-native';
+import {openPicker, openCamera} from '../../../util/cameraPhoto';
+import {upload} from '../../../util/newUploadOSS';
 
-import Layout from '../../../components/Layout';
 const Index = ({...props}) => {
-  const {headImg} = props.route.params;
-  const [showMdal, setShowModal] = useState(false);
-  const [showImg, setShowImg] = useState('');
+  const params = props.route.params;
   const insets = useSafeAreaInsets();
-  const {run: runUpdateUserInfo} = useRequest(updateUserInfo.url);
+  const {width} = useWindowDimensions();
+  const dispatch = useDispatch();
+  const {run} = useRequest(updateUserInfo.url);
+  const [selectImg, setImg] = useState(''); // 选中的图片地址
+  const {isOpen, onOpen, onClose} = useDisclose();
+
+  const HeaderRight = () => {
+    return (
+      <Pressable
+        onPress={() => onOpen()}
+        w={12}
+        h={8}
+        borderRadius={4}
+        justifyContent="center"
+        alignItems={'center'}>
+        <Icon name="more-horizontal" size={24} color="#b2b2b2" />
+      </Pressable>
+    );
+  };
 
   useEffect(() => {
-    console.log('----ss-', headImg);
+    props.navigation.setOptions({
+      title: '编辑头像',
+      headerStyle: {backgroundColor: '#000000'},
+      headerTintColor: '#b2b2b2',
+      headerRight: () => <HeaderRight />,
+    });
   }, []);
 
-  const edit = async () => {
-    // props.navigation.goBack();
-    upload(showImg)
-      .then(res => {
-        runUpdateUserInfo({
-          headImg: res,
-        });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  const edit = async (imgKey = '') => {
+    const {success} = await run({headImg: imgKey});
+    if (success) {
+      dispatch(getMyInfo());
+    }
+  };
+
+  const choosePhoto = async () => {
+    try {
+      const {path} = await openPicker();
+      onClose();
+      const imgKey = await upload({path});
+      edit(imgKey);
+      setImg(path);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const cameraPhoto = async () => {
+    try {
+      const {path} = await openCamera();
+      onClose();
+      const imgKey = await upload({path});
+      edit(imgKey);
+      setImg(path);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <Box flex={1}>
-      <HStack
-        h={20}
-        alignItems={'center'}
-        justifyContent={'center'}
-        style={{paddingTop: insets.top}}>
-        <Pressable
+    <Box bg={'black'} flex={1}>
+      <StatusBar barStyle={'light-content'} />
+      <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content>
+          <Actionsheet.Item
+            onPress={() => cameraPhoto()}
+            justifyContent={'center'}>
+            拍照
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            onPress={() => choosePhoto()}
+            justifyContent={'center'}>
+            从相册选择
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+        <Actionsheet.Footer
+          mt={2}
+          borderRadius={0}
           style={{
-            width: 24,
-            height: 24,
-            left: 20,
-            top: 45,
-            position: 'absolute',
-            zIndex: 10,
-          }}
-          onPress={() => {
-            props.navigation.goBack();
+            paddingBottom: insets.bottom,
           }}>
-          <Icon name="arrow-back" size={24} color="#000" />
-        </Pressable>
-        <Text fontSize={'md'} fontWeight="bold">
-          编辑头像
-        </Text>
-        {showImg ? (
-          <Button
-            onPress={() => edit()}
-            w={16}
-            h={8}
-            style={{
-              backgroundColor: '#9650FF',
-              position: 'absolute',
-              right: 16,
-              top: '25%',
-              transform: [
-                {
-                  translateY: 28,
-                },
-              ],
-            }}>
-            <Text
-              fontWeight={'bold'}
-              color={'white'}
-              fontSize="sm"
-              lineHeight={16}>
-              完成
-            </Text>
-          </Button>
-        ) : null}
-      </HStack>
-      <ChooseImgModal
-        visible={showMdal}
-        hideModal={() => setShowModal(false)}
-        imgCb={value => {
-          console.log('value', value);
-          setShowImg(value);
-        }}
-      />
-      {showImg || headImg ? (
-        <ImageViewer
-          style={{width: Layout.width}}
-          renderImage={data => {
-            if (!data.source.uri) {
-              return null;
-            }
-            return (
-              <CFastImage
-                url={data.source.uri}
-                styles={{
-                  width: Layout.width - 60,
-                  height: Layout.height - 300,
-                  marginLeft: 15,
-                  marginTop: 100,
-                  borderRadius: 20,
-                }}
-              />
-            );
+          <Actionsheet.Item onPress={() => onClose()} justifyContent={'center'}>
+            取消
+          </Actionsheet.Item>
+        </Actionsheet.Footer>
+      </Actionsheet>
+      <Box flex={1} pt={'30%'}>
+        <CFastImage
+          url={selectImg || params.value}
+          styles={{
+            width,
+            height: width,
           }}
-          saveToLocalByLongPress={false}
-          imageUrls={[
-            {
-              url: showImg ? showImg : BASE_DOWN_URL + headImg,
-            },
-          ]}
         />
-      ) : (
-        <Image
-          source={require('../../../images/default_avatar.jpg')}
-          style={{
-            width: Layout.width - 60,
-            height: Layout.height - 200,
-            margin: 30,
-            borderRadius: 20,
-          }}
-          alt="img"
-        />
-      )}
-      <LinearGradient
-        start={{x: 0, y: 0}}
-        end={{x: 1, y: 0}}
-        colors={['#D988FF', '#8B5CFF']}
-        style={{
-          width: Layout.width - 60,
-          marginLeft: 30,
-          marginBottom: '5%',
-          position: 'absolute',
-          bottom: 0,
-          justifyContent: 'center',
-          alignItems: 'center',
-          borderRadius: 28,
-          height: 50,
-        }}>
-        <Text
-          onPress={() => setShowModal(true)}
-          style={{
-            width: '100%',
-            color: '#fff',
-            fontSize: 18,
-            textAlign: 'center',
-          }}>
-          更换
-        </Text>
-      </LinearGradient>
+      </Box>
     </Box>
   );
 };
-
 export default Index;

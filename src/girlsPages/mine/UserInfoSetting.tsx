@@ -56,7 +56,7 @@ const Setting = ({...props}) => {
         <Pressable
           onPress={() =>
             props.navigation.navigate('EditHeadImg', {
-              headImg: result?.headImg || '',
+              value: result?.headImg,
             })
           }
           style={styles.itemView}>

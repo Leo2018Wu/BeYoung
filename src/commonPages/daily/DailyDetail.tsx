@@ -10,7 +10,7 @@ import {
   Divider,
   ScrollView,
 } from 'native-base';
-import {useWindowDimensions, DeviceEventEmitter} from 'react-native';
+import {useWindowDimensions, DeviceEventEmitter, Pressable} from 'react-native';
 import Tab from './DailyTab';
 import {BASE_DOWN_URL} from '../../util/config';
 import CFastImage from '../../components/CFastImage';
@@ -48,6 +48,14 @@ const Index = ({...props}) => {
     }
   };
 
+  const preview = (index: number) => {
+    const imgUrls = imgList.map((img: string) => {
+      const temp = {url: `${BASE_DOWN_URL + img}`};
+      return temp;
+    });
+    props.navigation.navigate('Preview', {index, imgUrls});
+  };
+
   return (
     <DailyDetailContext.Provider value={item}>
       <ScrollView contentContainerStyle={{flex: 1}} py={4} bg="white">
@@ -78,18 +86,20 @@ const Index = ({...props}) => {
             <HStack mb={2} flexWrap={'wrap'}>
               {imgList &&
                 imgList.map((item, index) => (
-                  <Image
-                    key={index}
-                    mb={2}
-                    alt="dairy"
-                    borderRadius={10}
-                    style={{
-                      marginRight: (index + 1) % 3 === 0 ? 0 : 8,
-                      width: IMG_ITEM_WIDTH,
-                      height: IMG_ITEM_HEIGHT,
-                    }}
-                    source={{uri: BASE_DOWN_URL + item}}
-                  />
+                  <Pressable onPress={() => preview(index)}>
+                    <Image
+                      key={index}
+                      mb={2}
+                      alt="dairy"
+                      borderRadius={10}
+                      style={{
+                        marginRight: (index + 1) % 3 === 0 ? 0 : 8,
+                        width: IMG_ITEM_WIDTH,
+                        height: IMG_ITEM_HEIGHT,
+                      }}
+                      source={{uri: BASE_DOWN_URL + item}}
+                    />
+                  </Pressable>
                 ))}
             </HStack>
             <Text fontSize={'md'} color={'fontColors._72'}>
