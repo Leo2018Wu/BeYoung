@@ -38,11 +38,10 @@ const MyStack = () => {
         component={HomeDetail}
       />
       <Stack.Screen
-        options={{
-          headerShown: false,
-          headerBackVisible: true,
-        }}
         name="EditUser"
+        options={{
+          headerShadowVisible: false,
+        }}
         component={EditUser}
       />
       <Stack.Screen

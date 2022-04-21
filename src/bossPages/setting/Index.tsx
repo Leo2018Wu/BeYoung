@@ -21,33 +21,37 @@ const Index = ({...props}) => {
     DeviceEventEmitter.emit('LOGIN_EVENT', '');
   };
 
-  const editUser = () => {
+  const editUser = ({type = 'nickName', value = ''}) => {
     props.navigation.navigate('EditUser', {
-      type: 'nickName',
-      value: userInfo?.nickName,
+      type,
+      value,
     });
   };
 
   return (
     <Box flex={1} bg="bg.f5">
-      <HStack
-        py={1}
-        px={4}
-        bg={'white'}
-        justifyContent={'space-between'}
-        alignItems="center">
-        <Text fontWeight={'bold'} fontSize={'md'} color={'fontColors.333'}>
-          头像
-        </Text>
-        <CFastImage
-          url={userInfo?.headImg}
-          styles={{width: 44, height: 44, borderRadius: 22}}
-        />
-      </HStack>
+      <Pressable
+        onPress={() => editUser({type: 'headImg', value: userInfo?.headImg})}>
+        <HStack
+          py={1}
+          px={4}
+          bg={'white'}
+          justifyContent={'space-between'}
+          alignItems="center">
+          <Text fontWeight={'bold'} fontSize={'md'} color={'fontColors.333'}>
+            头像
+          </Text>
+          <CFastImage
+            url={userInfo?.headImg}
+            styles={{width: 44, height: 44, borderRadius: 22}}
+          />
+        </HStack>
+      </Pressable>
       <Box px={2}>
         <Divider h={0.25} />
       </Box>
-      <Pressable onPress={() => editUser()}>
+      <Pressable
+        onPress={() => editUser({type: 'nickName', value: userInfo?.nickName})}>
         <HStack
           py={1}
           px={4}
