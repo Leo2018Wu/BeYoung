@@ -32,16 +32,16 @@ const mergeList = (sourceList: any, nowList: any) => {
 
 const Index = ({
   url,
-  par,
+  par = {},
   renderItem,
-  horizontal,
-  numColumns,
+  horizontal = false,
+  numColumns = 1,
 }: {
   url: string;
-  par: object;
+  par?: object;
   renderItem: any;
-  horizontal: boolean;
-  numColumns: number;
+  horizontal?: boolean;
+  numColumns?: number;
 }) => {
   const [params, setParams] = useState(
     Object.assign(

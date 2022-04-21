@@ -38,7 +38,12 @@ const Login = ({navigation}: any) => {
       <HStack mt={3} alignItems="center">
         <CRadio onPress={(e: any) => setActive(e)} focus={active} />
         <Text ml={2} fontSize={'xs'} color="#8E8895">
-          注册表示同意<Text color={'primary.100'}>《用户协议》</Text>
+          注册表示同意
+          <Text
+            onPress={() => navigation.navigate('UserProtocol')}
+            color={'primary.100'}>
+            《用户协议》
+          </Text>
         </Text>
       </HStack>
       <Button

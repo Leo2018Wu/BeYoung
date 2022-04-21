@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Login from '../commonPages/login/Login';
 import VerifyCode from '../commonPages/login/VerifyCode';
 import ChooseSex from '../commonPages/login/ChooseSex';
+import UserProtocol from '../commonPages/UserProtocol';
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +21,13 @@ const LoginStack = () => {
         }}
         name="Login"
         component={Login}
+      />
+      <Stack.Screen
+        options={{
+          title: '用户协议',
+        }}
+        name="UserProtocol"
+        component={UserProtocol}
       />
       <Stack.Screen
         options={{
