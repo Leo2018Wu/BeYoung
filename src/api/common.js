@@ -13,6 +13,30 @@ export const querySysDic = {
   },
 };
 
+// 获取隐私协议
+export const fetchPrivateProtocol = {
+  url: 'cgi/core/user/fetchPrivateProtocol',
+  options: {
+    manual: false,
+  },
+};
+
+// 获取用户协议（男生）
+export const fetchUserProtocolMale = {
+  url: 'cgi/core/user/fetchUserProtocol/maleUser',
+  options: {
+    manual: false,
+  },
+};
+
+// 获取用户协议（女生）
+export const fetchUserProtocolFeMale = {
+  url: 'cgi/core/user/fetchUserProtocol/femaleUser',
+  options: {
+    manual: false,
+  },
+};
+
 // 获取验证码
 export const sendCode = {
   url: 'cgi/core/login/sendCode',

@@ -1,12 +1,25 @@
 import React from 'react';
-import {HStack, Box, View, VStack, Text, Divider, Pressable} from 'native-base';
+import {
+  HStack,
+  Box,
+  View,
+  VStack,
+  Text,
+  Divider,
+  Pressable,
+  Actionsheet,
+  useDisclose,
+  useToast,
+} from 'native-base';
 import {useWindowDimensions} from 'react-native';
 import Tab from './DailyTab';
 import CFastImage from '../../components/CFastImage';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
+import Gifts from '../../components/base/Gifts';
 import useRequest from '../../hooks/useRequest';
 import {commentDynamic} from '../../api/daily';
+import {giveGift} from '../../api/gift';
 import {BASE_DOWN_URL} from '../../util/config';
 
 interface commentProp {
@@ -23,9 +36,12 @@ const genImages = (imgs: string) => {
 };
 
 const Index = ({...props}) => {
+  const toast = useToast();
   const {item} = props.route.params;
   const {width} = useWindowDimensions();
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
+  const {run: runGiveGift} = useRequest(giveGift.url);
+  const {isOpen, onOpen, onClose} = useDisclose();
   const IMG_ITEM_WIDTH = (width - 60) / 3;
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
 
@@ -46,8 +62,45 @@ const Index = ({...props}) => {
     props.navigation.navigate('Preview', {index, imgUrls});
   };
 
+  const presentGift = async (
+    giftItem: object,
+    receiveUserId: string,
+    userDynamicId: string,
+  ) => {
+    try {
+      await runGiveGift({
+        giftId: giftItem?.id,
+        num: 1,
+        receiveUserId,
+        userDynamicId,
+      });
+      onClose();
+      toast.show({
+        title: '赠送礼物成功',
+        placement: 'top',
+        duration: 2000,
+      });
+    } catch (error) {
+      console.log('presentGift', error);
+    }
+  };
+
   return (
     <DailyDetailContext.Provider value={item}>
+      <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content
+          style={{
+            backgroundColor: '#1f2937',
+            borderRadius: 40,
+          }}>
+          <Gifts
+            clickItem={(giftItem: object) => {
+              onClose();
+              presentGift(giftItem, item.userId, item.id);
+            }}
+          />
+        </Actionsheet.Content>
+      </Actionsheet>
       <Box flex={1} pt={4} bg="white">
         <Box px={5} pb={4}>
           <HStack alignItems="center">
@@ -116,7 +169,11 @@ const Index = ({...props}) => {
       </Box>
       <ChatBox
         pressCb={(data: commentProp) => {
-          comment(data, item.id);
+          if (data.type === 'text') {
+            comment(data, item.id);
+          } else {
+            onOpen();
+          }
         }}
       />
     </DailyDetailContext.Provider>
