@@ -6,8 +6,6 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../../components/CFastImage';
 import CustomFuncFlatList from '../../../components/CustomFuncFlatList';
 import {queryComment} from '../../../api/daily';
-import {fetchUserInfo} from '../../../api/common';
-import useRequest from '../../../hooks/useRequest';
 import DailyDetailContext from '../../../commonPages/daily/context';
 import {useSelector} from 'react-redux';
 interface ItemProps {
@@ -25,9 +23,7 @@ const areEqual = (pre: any, next: any) => {
 };
 
 const Item = React.memo(({item}: {item: ItemProps}) => {
-  console.log('---回复item---', item);
   const userInfo = useSelector(state => state.user.myUserInfo);
-  // const {run: runFetchUserInfo} = useRequest(fetchUserInfo.url);
   if (item.delFlag) {
     return null;
   }
@@ -36,13 +32,34 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
     DeviceEventEmitter.emit('REPLY_FLAG', data);
   };
 
-  // const getUserName = async itemId => {
-  //   console.log('--itemId---', itemId);
-  //   const {data} = await runFetchUserInfo({
-  //     userId: itemId,
-  //   });
-  //   return data.nickName;
-  // };
+  const getUserName = replyId => {
+    let index = item.replies.findIndex(e => {
+      return e.id == replyId;
+    });
+    if (index != -1) {
+      return (
+        <>
+          <Text
+            fontSize={'md'}
+            style={{
+              color: '#000',
+              marginHorizontal: 4,
+            }}>
+            回复
+          </Text>
+          <Text
+            fontSize={'md'}
+            style={{
+              color: '#8E8895',
+              marginHorizontal: 4,
+            }}>
+            {item.replies[index].nickName}
+          </Text>
+        </>
+      );
+    }
+    return null;
+  };
 
   return (
     <Box mb={6}>
@@ -116,22 +133,7 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
                           </Text>
                         </Box>
                       )}
-                      {/* <Text
-                        fontSize={'md'}
-                        style={{
-                          color: '#000',
-                          marginHorizontal: 4,
-                        }}>
-                        回复
-                      </Text>
-                      <Text
-                        fontSize={'md'}
-                        style={{
-                          color: '#8E8895',
-                          marginHorizontal: 4,
-                        }}>
-                        {getUserName(item1.userId)}
-                      </Text> */}
+                      {getUserName(item1.replyId)}
                     </HStack>
                     <Text
                       fontSize={'xs'}
@@ -174,6 +176,14 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
 
 const Index = () => {
   const insets = useSafeAreaInsets();
+  const [keyData, setKeyData] = useState(0);
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('REPLY_REFRESH', res => {
+      setKeyData(res);
+      DeviceEventEmitter.emit('REPLY_FLAG', false);
+    });
+  }, []);
 
   return (
     <Box flex={1}>
@@ -192,6 +202,7 @@ const Index = () => {
           {value => {
             return (
               <CustomFuncFlatList
+                key={keyData}
                 url={queryComment.url}
                 par={{
                   dynamicId: value?.id,

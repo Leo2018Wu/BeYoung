@@ -38,7 +38,7 @@ const Index = ({pressCb}: {pressCb: Function}) => {
         px={4}
         py={4}
         style={{
-          paddingBottom: insets.bottom,
+          paddingBottom: insets.bottom + 10,
           backgroundColor: '#fff',
         }}>
         <FontAwesome5 name="smile" size={28} color="#C1C0C9" />

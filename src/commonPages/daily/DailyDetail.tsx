@@ -45,6 +45,7 @@ const Index = ({...props}) => {
         replyId,
         content: data.value,
       });
+      DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());
     }
   };
 
