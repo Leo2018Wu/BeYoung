@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import layout from '../../../components/Layout';
-import {upload} from '../../../util/upload';
+import {upload} from '../../../util/newUploadOSS';
 import FillModal from '../../../components/ChooseImgModal';
 import {updateUserInfo, fetchMyInfo} from '../../../api/common';
 import useRequest from '../../../hooks/useRequest';
@@ -34,7 +34,7 @@ export default function name({navigation, route}) {
   }, [result]);
 
   const loginForm = () => {
-    upload(studentCard)
+    upload({path: studentCard})
       .then(res => {
         runUpdateUserInfo({
           studentCard: res,

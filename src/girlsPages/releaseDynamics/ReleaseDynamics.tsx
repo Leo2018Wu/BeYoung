@@ -15,7 +15,7 @@ import IconNew from 'react-native-vector-icons/FontAwesome';
 import CFastImage from '../../components/CFastImage';
 import LinearGradient from 'react-native-linear-gradient';
 import {openPicker} from '../../util/openPicker';
-import {upload} from '../../util/upload';
+import {upload} from '../../util/newUploadOSS';
 import {addDynamic} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
 
@@ -92,7 +92,7 @@ const Index = (props: any) => {
     return new Promise((reslove, reject) => {
       let arr = [];
       files.forEach((item, index) => {
-        upload(item)
+        upload({path: item})
           .then(res => {
             arr.push(res);
             if (arr.length == files.length) {

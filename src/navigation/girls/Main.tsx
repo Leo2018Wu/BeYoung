@@ -17,7 +17,7 @@ import Preview from '../../components/Preview';
 import EditUser from '../../girlsPages/mine/setting/EditUser';
 import EditStudentCard from '../../girlsPages/mine/setting/EditStudentCard';
 import EditHeadImg from '../../girlsPages/mine/setting/EditHeadImg';
-import Session from '../../bossPages/communication/Session';
+import Session from '../../girlsPages/communication/Session';
 
 const Stack = createNativeStackNavigator();
 
@@ -132,7 +132,6 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          headerShown: false,
           headerBackVisible: true,
         }}
         name="EditHeadImg"
