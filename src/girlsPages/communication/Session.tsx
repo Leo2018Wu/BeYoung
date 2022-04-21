@@ -29,7 +29,6 @@ import Gifts from '../../components/base/Gifts';
 import {giveGift} from '../../api/gift';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
-import getStorage from '../../util/Storage';
 
 const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
   let groupMsg: {time: any; msgList: any[]}[] = [];
@@ -55,6 +54,7 @@ let _scrollTimer: any;
 const BOTTOM_FIXED_HEIGHT = 92; // 底部遮盖拦高度
 const mapStateToProps = (state: any) => {
   return {
+    myUserInfo: state.user.myUserInfo,
     msgs: state.msg.currentSessionMsgs || [],
     currentSessionId: state.session.currentSessionId,
   };
@@ -74,7 +74,6 @@ const Msgs = ({...props}) => {
     },
     fetchAccountUser.options,
   );
-  const [isBoss, setIsBoss] = useState('MALE_LOGIN');
 
   const {run: runGiveGift} = useRequest(giveGift.url);
 
@@ -122,11 +121,6 @@ const Msgs = ({...props}) => {
       console.log('presentGift', error);
     }
   };
-
-  useEffect(async () => {
-    const boss = await getStorage(['LOGIN_NAVIGAITON_NAME']);
-    setIsBoss(boss);
-  }, []);
 
   const _keyboardDidHide = () => {
     setKeyborad(false);
@@ -293,7 +287,7 @@ const Msgs = ({...props}) => {
           }}>
           <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
             <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
-            {isBoss == 'MALE_LOGIN' ? (
+            {props.myUserInfo.gender === 'GENDER_MALE' ? (
               <Pressable onPress={() => onOpen()}>
                 <Ionicons
                   style={{

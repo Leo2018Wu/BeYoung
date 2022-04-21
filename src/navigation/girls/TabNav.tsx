@@ -5,7 +5,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 import HomeScreen from '../../girlsPages/home/Home';
 import CaseScreen from '../../girlsPages/case/Case';
-import CommunicateScreen from '../../bossPages/communication/Index';
+import CommunicateScreen from '../../girlsPages/communication/Index';
 import MineScreen from '../../girlsPages/mine/Mine';
 import ReleaseDynamics from '../../girlsPages/releaseDynamics/ReleaseDynamics';
 
