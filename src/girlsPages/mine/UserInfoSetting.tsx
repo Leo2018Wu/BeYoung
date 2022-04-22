@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useReducer} from 'react';
 import {StyleSheet} from 'react-native';
 import {
   View,
@@ -15,33 +15,57 @@ import IconNew from 'react-native-vector-icons/AntDesign';
 import {useFocusEffect} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
 import {fetchMyInfo} from '../../api/common';
+import {fetchMyLabels} from '../../api/label';
 import CFastImage from '../../components/CFastImage';
+import {querySysDic, updateUserInfo} from '../../api/common';
 
 import layout from '../../components/Layout';
 
 const Setting = ({...props}) => {
   const [service, setService] = useState('');
-  const [list, setList] = useState([
-    {id: 0},
-    {id: 1},
-    {id: 2},
-    {id: 3},
-    {id: 4},
-  ]);
+  const [labelList, setLabelList] = useState([]);
+  const [grades, setGrades] = useState([]); // 渲染的年纪列表
+  const {run: runUpdate} = useRequest(updateUserInfo.url);
 
+  const {result: gradeDicts} = useRequest(
+    querySysDic.url,
+    {
+      pCode: 'GRADE',
+    },
+    querySysDic.options,
+  );
   const {result, run} = useRequest(fetchMyInfo.url);
+  const {run: runFetchMyLabels} = useRequest(fetchMyLabels.url);
 
   useFocusEffect(
     useCallback(() => {
       run();
+      getMyLabels();
     }, []),
   );
 
   useEffect(() => {
+    if (gradeDicts) {
+      console.log('--renderGrades--', gradeDicts);
+
+      const renderGrades = gradeDicts.filter(item => item.pCode !== item.code);
+      setGrades(renderGrades);
+    }
+  }, [gradeDicts]);
+
+  useEffect(() => {
     if (result) {
       AsyncStorage.setItem('USERINFO', JSON.stringify(result));
+      console.log('-------', result);
+
+      setService(result.grade);
     }
   }, [result]);
+
+  const getMyLabels = async () => {
+    const {data} = await runFetchMyLabels({});
+    setLabelList(data);
+  };
 
   const editUser = (type, value) => {
     props.navigation.navigate('EditUser', {
@@ -88,6 +112,7 @@ const Setting = ({...props}) => {
                   width: 45,
                   height: 45,
                 }}
+                alt="dairy"
               />
             )}
             <IconNew
@@ -201,53 +226,52 @@ const Setting = ({...props}) => {
             borderRadius={4}
             borderWidth={0}
             textAlign={'right'}
-            accessibilityLabel="大一"
-            placeholder="大一"
+            accessibilityLabel="请选择"
+            placeholder="请选择"
             _selectedItem={{
               endIcon: <CheckIcon size="5" />,
             }}
-            onValueChange={itemValue => setService(itemValue)}>
-            <Select.Item label="大一" value="ux" />
-            <Select.Item label="大二" value="web" />
-            <Select.Item label="大三" value="cross" />
+            onValueChange={itemValue => {
+              setService(itemValue);
+              runUpdate({grade: itemValue});
+            }}>
+            {grades &&
+              grades.map((item, index) => {
+                return (
+                  <Select.Item
+                    key={item.code}
+                    label={item.name}
+                    value={item.code}
+                  />
+                );
+              })}
           </Select>
         </View>
-        <View style={styles.itemView}>
-          <Text>个性标签</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#919191', marginRight: 4}}>修改</Text>
-            <IconNew name="right" size={16} color="#919191" />
+        <Pressable
+          onPress={() => props.navigation.navigate('Label', {labelList})}>
+          <View style={styles.itemView}>
+            <Text>个性标签</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: '#919191', marginRight: 4}}>修改</Text>
+              <IconNew name="right" size={16} color="#919191" />
+            </View>
           </View>
-        </View>
-        <View style={styles.labelContain}>
-          {list &&
-            list.map((item, index) => {
-              return (
-                <View style={styles.labelView}>
-                  <Text style={styles.labelText}>话题王者</Text>
-                </View>
-              );
-            })}
-        </View>
-        <View style={styles.itemView}>
-          <Text>爱好</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#919191', marginRight: 4}}>
-              No surprise原则
-            </Text>
-            <IconNew name="right" size={16} color="#919191" />
+          <View style={styles.labelContain}>
+            {labelList &&
+              labelList.map((item, index) => {
+                return (
+                  <View key={index} style={styles.labelView}>
+                    <Text style={styles.labelText}>{item.labelName}</Text>
+                  </View>
+                );
+              })}
           </View>
-        </View>
+        </Pressable>
       </ScrollView>
     </NativeBaseProvider>
   );
@@ -274,6 +298,7 @@ const styles = StyleSheet.create({
   labelContain: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    paddingBottom: '30%',
   },
   labelView: {
     borderColor: '#8861FF',

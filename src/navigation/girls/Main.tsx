@@ -18,6 +18,7 @@ import EditUser from '../../girlsPages/mine/setting/EditUser';
 import EditStudentCard from '../../girlsPages/mine/setting/EditStudentCard';
 import EditHeadImg from '../../girlsPages/mine/setting/EditHeadImg';
 import Session from '../../girlsPages/communication/Session';
+import Label from '../../girlsPages/mine/Label';
 
 const Stack = createNativeStackNavigator();
 
@@ -151,6 +152,14 @@ const MyStack = () => {
         }}
         name="Session"
         component={Session}
+      />
+      <Stack.Screen
+        name="Label"
+        component={Label}
+        options={() => ({
+          headerShown: false,
+          headerBackVisible: true,
+        })}
       />
     </Stack.Navigator>
   );
