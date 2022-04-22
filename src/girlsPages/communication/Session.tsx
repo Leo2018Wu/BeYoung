@@ -25,9 +25,8 @@ import {fetchAccountUser} from '../../api/common';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
-import Gifts from '../../components/base/Gifts';
 import ReplyEmoj from '../../components/base/ReplyEmoj';
-import {giveGift} from '../../api/gift';
+import {fetchMyMedia} from '../../api/photoSelect';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
 
@@ -76,7 +75,7 @@ const Msgs = ({...props}) => {
     fetchAccountUser.options,
   );
 
-  const {run: runGiveGift} = useRequest(giveGift.url);
+  const {run: runFetchMyMedia} = useRequest(fetchMyMedia.url);
 
   const scrollToEnd = () => {
     if (scrollRef.current) {
@@ -98,17 +97,15 @@ const Msgs = ({...props}) => {
     setKeyborad(true);
   };
 
-  const presentGift = async (item: object) => {
+  const replyEmojFunc = async (item: object) => {
     try {
-      const {success} = await runGiveGift({
-        giftId: item.id,
-        num: 1,
-        receiveUserId: chatUserInfo[0]?.userId,
+      const {data, success} = await runFetchMyMedia({
+        mediaType: 'MEDIA_TYPE_EMOGI', //媒体类型
       });
       if (success) {
         const content = {
-          type: 1,
-          giftKey: item.img,
+          type: 2,
+          giftKey: item.url,
         };
         props.dispatch(
           sendCustomMsg({
@@ -119,7 +116,7 @@ const Msgs = ({...props}) => {
         scrollToEnd();
       }
     } catch (error) {
-      console.log('presentGift', error);
+      console.log('replyEmoj', error);
     }
   };
 
@@ -225,10 +222,12 @@ const Msgs = ({...props}) => {
             backgroundColor: '#1f2937',
             borderRadius: 40,
           }}>
-          <Gifts
+          <ReplyEmoj
             clickItem={(item: object) => {
+              replyEmojFunc(item);
+            }}
+            closeItem={() => {
               onClose();
-              presentGift(item);
             }}
           />
         </Actionsheet.Content>

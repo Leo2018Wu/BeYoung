@@ -139,9 +139,9 @@ const Index = () => {
                   <CFastImage
                     url={item.url}
                     styles={{
-                      width: 60,
-                      height: 60,
-                      margin: 8,
+                      width: 70,
+                      height: 70,
+                      margin: 4,
                     }}
                   />
                   <Pressable

@@ -62,6 +62,8 @@ util.parseCustomMsg = msg => {
       switch (cnt.type) {
         case 1:
           return '[礼物]';
+        case 2:
+          return '[表情]';
       }
     } catch (e) {}
     return '[自定义消息]';

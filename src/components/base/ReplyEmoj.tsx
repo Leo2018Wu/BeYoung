@@ -1,128 +1,99 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Center, HStack, Pressable, Text} from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import {getMyGifts, getMyWallet} from '../../store/action';
 import {connect} from 'react-redux';
 import useRequest from '../../hooks/useRequest';
-import {fetchGift} from '../../api/gift';
+import {fetchMyMedia} from '../../api/photoSelect';
 import {useWindowDimensions} from 'react-native';
 import {BASE_DOWN_URL} from '../../util/config';
 import CFastImage from '../CFastImage';
-
-const mapStateToProps = (state: any) => {
-  return {
-    myGifts: state.user.myGifts,
-    myWallet: state.user.myWallet,
-  };
-};
+import {useNavigation} from '@react-navigation/native';
 
 const Index = ({...props}) => {
-  const {width} = useWindowDimensions();
-  const [activeItemId, setActiveId] = useState('');
-  const GIFT_ITEM_WiIDTH = (width - 16) / 4;
-  const {myWallet, myGifts} = props;
+  const navigation = useNavigation();
 
-  const {result: giftSkuList} = useRequest(
-    fetchGift.url,
-    {},
-    fetchGift.options,
-  );
+  const {width} = useWindowDimensions();
+  const GIFT_ITEM_WiIDTH = (width - 16) / 4;
+  const [myMedia, setMyMedia] = useState([]);
+
+  const {run: runFetchMyMedia, result} = useRequest(fetchMyMedia.url);
 
   useEffect(() => {
-    props.dispatch(getMyGifts());
-    props.dispatch(getMyWallet());
+    runFetchMyMedia({
+      mediaType: 'MEDIA_TYPE_EMOGI', //媒体类型
+    });
   }, []);
+
+  useEffect(() => {
+    if (result) {
+      setMyMedia(result);
+    }
+  }, [result]);
 
   const present = (item: object) => {
     props.clickItem(item);
   };
 
+  const closeItem = () => {
+    props.closeItem();
+  };
+
   return (
-    <Box pb={4} w={'full'}>
-      <HStack px={4} py={4} justifyContent="space-between">
-        <HStack>
-          <AntDesign name="gift" size={20} color="white" />
-          <Text ml={1} fontSize={'md'} color="white">
-            礼物
-          </Text>
-        </HStack>
-        <HStack>
-          <Icon name="diamond" color={'#9650FF'} size={20} />
-          <Text ml={2} fontSize={'md'} color="white">
-            {myWallet.coinBalance}
-          </Text>
-        </HStack>
-      </HStack>
-      <HStack minHeight={24} flexWrap={'wrap'}>
-        {giftSkuList &&
-          giftSkuList.map((item: any) => (
+    <Box pb={0} w={'full'}>
+      <HStack minHeight={20} flexWrap={'wrap'}>
+        {myMedia.length ? (
+          myMedia.map((item: any) => (
             <Pressable
               key={item.id}
-              onPress={() => setActiveId(item.id)}
+              onPress={() => {
+                present(item);
+              }}
               alignItems="center"
               style={{
-                borderRadius: 10,
                 width: GIFT_ITEM_WiIDTH,
-                height: 1.3 * GIFT_ITEM_WiIDTH,
+                height: GIFT_ITEM_WiIDTH,
               }}>
-              <Box
-                flex={1}
-                py={2}
-                justifyContent={'space-around'}
-                w="full"
-                borderTopRadius={8}
-                borderBottomWidth={0}
-                style={{
-                  borderWidth: activeItemId === item.id ? 0.5 : 0,
-                }}
-                borderColor="white">
+              <Box flex={1} py={0} justifyContent={'space-around'} w="full">
                 <Center flex={1}>
                   <CFastImage
-                    url={`${BASE_DOWN_URL + item.img}`}
+                    url={`${BASE_DOWN_URL + item.url}`}
                     styles={{
-                      width: GIFT_ITEM_WiIDTH / 2.5,
-                      height: GIFT_ITEM_WiIDTH / 2.5,
+                      width: GIFT_ITEM_WiIDTH / 1.5,
+                      height: GIFT_ITEM_WiIDTH / 1.5,
                     }}
                   />
                 </Center>
-                {myGifts[item.id]?.num ? (
-                  <Text
-                    mb={2}
-                    alignSelf={'center'}
-                    ml={2}
-                    fontSize={'xs'}
-                    color="white">
-                    剩余{myGifts[item.id]?.num}次
-                  </Text>
-                ) : (
-                  <HStack
-                    justifyContent={'center'}
-                    pb={2}
-                    alignItems={'center'}>
-                    <Icon name="diamond" color={'#9650FF'} size={12} />
-                    <Text ml={2} fontSize={'xs'} color="white">
-                      {item.coinNum}
-                    </Text>
-                  </HStack>
-                )}
               </Box>
-              {activeItemId === item.id && (
-                <Pressable
-                  onPress={() => present(item)}
-                  borderBottomRadius={8}
-                  alignItems={'center'}
-                  py={1}
-                  w={'full'}
-                  bg="red.600">
-                  <Text color={'white'}>赠送</Text>
-                </Pressable>
-              )}
             </Pressable>
-          ))}
+          ))
+        ) : (
+          <Box
+            pb={4}
+            w={'full'}
+            h={'full'}
+            flex={1}
+            style={{
+              alignItems: 'center',
+              paddingTop: '5%',
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}>
+            <Text fontSize={'md'} color={'#fff'}>
+              暂无自定义表情，请先
+            </Text>
+            <Text
+              onPress={() => {
+                closeItem();
+                navigation.navigate('ReplyExpPackage');
+              }}
+              fontSize={'md'}
+              color={'#8B5CFF'}>
+              添加
+            </Text>
+          </Box>
+        )}
       </HStack>
     </Box>
   );
 };
 
-export default connect(mapStateToProps)(Index);
+export default connect()(Index);
