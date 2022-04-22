@@ -6,7 +6,6 @@ import {
   HStack,
   Image,
   Pressable,
-  ScrollView,
   Text,
   VStack,
 } from 'native-base';
@@ -77,10 +76,7 @@ const Home = ({...props}) => {
   );
 
   return (
-    <ScrollView
-      contentContainerStyle={{flex: 1}}
-      flex={1}
-      showsVerticalScrollIndicator={false}>
+    <Box flex={1}>
       <Svg>
         <Defs>
           <LinearGradient id="g3" x1={0.5} y1={0.3} x2={0.5} y2={1}>
@@ -180,7 +176,7 @@ const Home = ({...props}) => {
           ))}
         </Box>
       </Box>
-    </ScrollView>
+    </Box>
   );
 };
 

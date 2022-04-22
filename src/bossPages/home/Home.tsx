@@ -150,14 +150,14 @@ const Home = ({...props}) => {
     }
   };
 
-  const goDetail = (item: any) => {
-    props.navigation.navigate('HomeDetail', {item});
+  const goDetail = (userId: string) => {
+    props.navigation.navigate('HomeDetail', {userId});
   };
 
   const _renderItem = ({item, index}: {item: any; index: any}) => {
     return (
       <Pressable
-        onPress={() => goDetail(item)}
+        onPress={() => goDetail(item.id)}
         style={{
           marginTop: 8,
           borderRadius: 8,

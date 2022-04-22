@@ -1,4 +1,9 @@
-import {fetchAccountUser, fetchMyInfo, fetchWalletInfo} from '../../api/common';
+import {
+  fetchAccountUser,
+  fetchMyInfo,
+  fetchWalletInfo,
+  querySysDic,
+} from '../../api/common';
 import {fetchMyGift} from '../../api/gift';
 import fetchData from '../../util/request';
 
@@ -46,6 +51,16 @@ export const getMyInfo = () => async dispatch => {
   try {
     const {data} = await fetchData(fetchMyInfo.url);
     dispatch({type: 'MY_USERINFO', myUserInfo: data || {}});
+  } catch (error) {
+    console.log('eee', error);
+  }
+};
+
+//分发系统字典信息
+export const getAllDicts = () => async dispatch => {
+  try {
+    const {data} = await fetchData(querySysDic.url);
+    dispatch({type: 'SYS_DICTS', sysDicts: data || []});
   } catch (error) {
     console.log('eee', error);
   }

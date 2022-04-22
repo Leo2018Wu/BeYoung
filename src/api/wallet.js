@@ -18,3 +18,9 @@ export const rechargeApplyWX = {
   url: 'cgi/core/recharge/rechargeApply',
   options: {},
 };
+
+// 充值记录
+export const fetchRechargeRecord = {
+  url: 'cgi/core/recharge/fetchRechargeRecord',
+  options: {},
+};

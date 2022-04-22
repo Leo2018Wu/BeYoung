@@ -104,14 +104,19 @@ const Index = ({...props}) => {
       <Box flex={1} pt={4} bg="white">
         <Box px={5} pb={4}>
           <HStack alignItems="center">
-            <CFastImage
-              url={item.headImg}
-              styles={{
-                width: 48,
-                height: 48,
-                borderRadius: 24,
-              }}
-            />
+            <Pressable
+              onPress={() =>
+                props.navigation.navigate('HomeDetail', {userId: item.userId})
+              }>
+              <CFastImage
+                url={item.headImg}
+                styles={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 24,
+                }}
+              />
+            </Pressable>
             <VStack flex={1} mr={'auto'} ml={2} justifyContent={'space-around'}>
               <Text
                 fontSize={'lg'}

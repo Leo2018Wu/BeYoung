@@ -4,6 +4,7 @@ const initialState = {
   myUserInfo: {},
   myGifts: {}, // 格式{id:{}}
   myWallet: {},
+  sysDicts: [], // 所有字典信息
 };
 
 export default (state = initialState, action) => {
@@ -17,6 +18,9 @@ export default (state = initialState, action) => {
     case 'MY_WALLET':
       const {myWallet} = action;
       return Object.assign({...state}, {myWallet});
+    case 'SYS_DICTS':
+      const {sysDicts} = action;
+      return Object.assign({...state}, {sysDicts});
     default:
       return state;
   }

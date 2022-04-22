@@ -50,7 +50,6 @@ const Index = () => {
       <CustomFuncFlatList
         renderItem={({item}: {item: ItemProp}) => <Item item={item} />}
         url={queryDynamic.url}
-        par={{}}
       />
     </Box>
   );

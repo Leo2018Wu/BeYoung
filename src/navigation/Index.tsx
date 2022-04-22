@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {fetchChatAccount} from '../api/common';
 import useRequest from '../hooks/useRequest';
 import {login, logout} from '../nim/link';
-import {getMyInfo} from '../store/action';
+import {getMyInfo, getAllDicts} from '../store/action';
 import constObj from '../store/constant';
 import getStorage from '../util/Storage';
 import StackBossMain from './boss/Main';
@@ -42,6 +42,7 @@ const Index = () => {
 
   useEffect(() => {
     dispatch(getMyInfo());
+    dispatch(getAllDicts());
     getStorage(['LOGIN_NAVIGAITON_NAME']).then(res => {
       setLoading(false);
       if (res) {
@@ -56,6 +57,7 @@ const Index = () => {
         }
       } else {
         dispatch(getMyInfo());
+        dispatch(getAllDicts());
         getAccount();
       }
       setIsLogin(res);
