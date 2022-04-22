@@ -26,6 +26,7 @@ import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
 import Gifts from '../../components/base/Gifts';
+import ReplyEmoj from '../../components/base/ReplyEmoj';
 import {giveGift} from '../../api/gift';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
@@ -286,7 +287,12 @@ const Msgs = ({...props}) => {
             backgroundColor: '#fff',
           }}>
           <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
-            <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
+            <FontAwesome5
+              onPress={() => onOpen()}
+              name="smile"
+              size={28}
+              color="#C1C0C9"
+            />
             {props.myUserInfo.gender === 'GENDER_MALE' ? (
               <Pressable onPress={() => onOpen()}>
                 <Ionicons
