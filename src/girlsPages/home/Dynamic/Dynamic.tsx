@@ -21,7 +21,6 @@ const Login = () => {
           key={keyData}
           renderItem={({item}: any) => <DailyItem item={item} />}
           url={queryMyDynamic.url}
-          par={{}}
         />
       </Box>
     </Box>

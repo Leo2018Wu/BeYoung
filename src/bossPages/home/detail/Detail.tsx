@@ -16,34 +16,50 @@ import {StyleSheet, useWindowDimensions} from 'react-native';
 import Tab from './Tab';
 import util from '../../../util/util';
 import useRequest from '../../../hooks/useRequest';
-import {fetchChatAccount, fetchStatistic} from '../../../api/common';
+import {
+  fetchChatAccount,
+  fetchStatistic,
+  fetchUserInfo,
+} from '../../../api/common';
 import CFastImage from '../../../components/CFastImage';
 import {useDispatch} from 'react-redux';
 import MyContext from './Context';
+import {PageLoading} from '../../../components/base/Pagination';
 
 const Index = ({...props}) => {
-  const userInfo = props.route.params.item;
+  const userId = props.route.params.userId;
   const dispatch = useDispatch();
   const {height, width} = useWindowDimensions();
 
   const {run: runGetChatUser} = useRequest(fetchChatAccount.url);
+  const {result: userInfo} = useRequest(
+    fetchUserInfo.url,
+    {
+      userId,
+    },
+    fetchUserInfo.options,
+  );
   const {result: numInfo} = useRequest(
     fetchStatistic.url,
-    {userId: userInfo.id},
+    {userId},
     fetchStatistic.options,
   );
 
   const goChat = async () => {
-    const {data} = await runGetChatUser({userId: userInfo.id});
+    const {data} = await runGetChatUser({userId});
     dispatch({type: 'SESSIONID', currentSessionId: `p2p-${data.account}`});
     props.navigation.navigate('Session', {chatUserId: data.account});
   };
+
+  if (!userInfo) {
+    return <PageLoading />;
+  }
 
   return (
     <MyContext.Provider value={userInfo}>
       <View flex={1}>
         <CFastImage
-          url={userInfo.coverImg}
+          url={userInfo.headImg}
           styles={{
             width: '100%',
             height: height / 3,

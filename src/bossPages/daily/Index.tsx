@@ -28,7 +28,6 @@ const Index = () => {
       <Box my={4} px={4} flex={1}>
         <CustomFuncFlatList
           url={queryDynamic.url}
-          par={{}}
           renderItem={({item, index}: {item: any; index: number}) => {
             return (
               <Box key={index} mb={4}>
