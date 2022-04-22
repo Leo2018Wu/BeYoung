@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import constant from '../../store/constant';
 import util from '../../util/util';
 import {getChatUsers} from '../../store/action';
+import EmptySession from '../../components/base/EmptySession';
 
 // 处理会话数据以便渲染使用
 const genSessions = (sessions: any, userMap: any) => {
@@ -205,17 +206,20 @@ function Basic({...props}) {
           </Center>
         </Box>
       </LinearGradient>
-
-      <SwipeListView
-        data={genSessions(props.listData, props.chatUserMap)}
-        renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
-        rightOpenValue={-150}
-        previewRowKey={'0'}
-        previewOpenValue={-40}
-        previewOpenDelay={3000}
-        onRowDidOpen={onRowDidOpen}
-      />
+      {props.listData.length <= 0 ? (
+        <EmptySession />
+      ) : (
+        <SwipeListView
+          data={genSessions(props.listData, props.chatUserMap)}
+          renderItem={renderItem}
+          renderHiddenItem={renderHiddenItem}
+          rightOpenValue={-150}
+          previewRowKey={'0'}
+          previewOpenValue={-40}
+          previewOpenDelay={3000}
+          onRowDidOpen={onRowDidOpen}
+        />
+      )}
     </View>
   );
 }

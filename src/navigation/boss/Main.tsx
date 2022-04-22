@@ -108,7 +108,7 @@ const MyStack = () => {
             backgroundColor: '#9650FF',
           },
           headerTintColor: '#fff',
-          title: '女生联系方式',
+          title: '女生微信',
           headerBackTitle: '我的',
         }}
         name="WeChatNum"
