@@ -3,6 +3,7 @@ import {StyleSheet, Image, Modal, ActivityIndicator} from 'react-native';
 import {Box, Text, Pressable, View, Button, ScrollView} from 'native-base';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../../components/CFastImage';
+import FastImage from 'react-native-fast-image';
 import {openPicker} from '../../../util/openPicker';
 import {upload} from '../../../util/newUploadOSS';
 import {
@@ -214,12 +215,16 @@ const Index = ({...props}) => {
                 }}>
                 {caseList &&
                   caseList.map((item1, index) => (
-                    <CFastImage
-                      url={`${BASE_DOWN_URL + item1}`}
-                      styles={{
-                        width: Layout.width - 30,
-                        height: 400,
+                    <FastImage
+                      style={{
+                        height: 450,
                       }}
+                      source={{
+                        uri: `${BASE_DOWN_URL + item1}`,
+                        headers: {Authorization: 'someAuthToken'},
+                        priority: FastImage.priority.normal,
+                      }}
+                      resizeMode={FastImage.resizeMode.contain}
                     />
                   ))}
               </View>
