@@ -76,6 +76,9 @@ const Index = () => {
         medias: res,
       });
       if (success) {
+        runFetchMyMedia({
+          mediaType: 'MEDIA_TYPE_EMOGI', //媒体类型
+        });
         setLoading(false);
       }
     });

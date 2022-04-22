@@ -112,6 +112,7 @@ const Setting = ({...props}) => {
                   width: 45,
                   height: 45,
                 }}
+                alt="dairy"
               />
             )}
             <IconNew
@@ -232,7 +233,7 @@ const Setting = ({...props}) => {
             }}
             onValueChange={itemValue => {
               setService(itemValue);
-              runUpdate({gender: itemValue});
+              runUpdate({grade: itemValue});
             }}>
             {grades &&
               grades.map((item, index) => {
@@ -264,7 +265,7 @@ const Setting = ({...props}) => {
             {labelList &&
               labelList.map((item, index) => {
                 return (
-                  <View style={styles.labelView}>
+                  <View key={index} style={styles.labelView}>
                     <Text style={styles.labelText}>{item.labelName}</Text>
                   </View>
                 );

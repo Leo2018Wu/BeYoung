@@ -9,6 +9,7 @@ import {
   fetchCase,
   fetchAddMedia,
   fetchDelMedia,
+  fetchMyMedia,
 } from '../../../api/photoSelect';
 import useRequest from '../../../hooks/useRequest';
 import {BASE_DOWN_URL} from '../../../util/config';
@@ -17,30 +18,38 @@ import Layout from '../../../components/Layout';
 
 const Index = ({...props}) => {
   const {item, caseImgList} = props.route.params;
-  const [list, setList] = useState([]);
+  const [list, setList] = useState([]); // 照片列表
   const [loading, setLoading] = useState(false);
   const {run: runAddMedia} = useRequest(fetchAddMedia.url);
   const {run: runFetchCase, result} = useRequest(fetchCase.url);
   const {run: runFetchDelMedia} = useRequest(fetchDelMedia.url); // 删除媒体信息
-  const [caseList, setCaseList] = useState([]);
+  const [caseList, setCaseList] = useState([]); // 案例列表
+  const {run: runFetchMyMedia} = useRequest(fetchMyMedia.url); // 获取我的媒体信息
 
   useEffect(() => {
     runFetchCase({scene: item.code});
     if (caseImgList.length) {
       setList(caseImgList);
     }
+    getMyMedia();
   }, []);
 
   useEffect(() => {
     if (result) {
-      console.log('result', result);
       if (result.length && result[0].imgs) {
         const temp = JSON.parse(result[0].imgs);
         setCaseList(JSON.parse(JSON.stringify(temp)));
-        console.log('---result---', caseList);
       }
     }
   }, [result]);
+
+  const getMyMedia = async () => {
+    const {data} = await runFetchMyMedia({
+      mediaType: 'MEDIA_TYPE_IMAGE',
+      scene: item.code,
+    });
+    setList(data);
+  };
 
   const chooseImg = async () => {
     try {
@@ -80,12 +89,12 @@ const Index = ({...props}) => {
 
   const uploadPhoto = async (files, imgList) => {
     multiUpload(files).then(async res => {
-      console.log('---res---', res);
       const {data, success} = await runAddMedia({
         userId: null,
         medias: res,
       });
       if (success) {
+        getMyMedia();
         setLoading(false);
       }
     });
