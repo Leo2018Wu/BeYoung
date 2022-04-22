@@ -24,6 +24,7 @@ const useRequest = (
   body = {},
   options = {
     manual: true,
+    showMsg: true,
   },
 ) => {
   const Toast = useToast();
@@ -74,10 +75,11 @@ const useRequest = (
           logout();
           return;
         }
-        if (type !== 'SUCCESS') {
+        if (type !== 'SUCCESS' && options.showMsg) {
           Toast.show({
             description: message,
             placement: 'top',
+            duration: 1500,
           });
         }
         if (!success) {

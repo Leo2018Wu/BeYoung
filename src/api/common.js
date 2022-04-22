@@ -52,7 +52,9 @@ export const verifyCode = {
 // 更新用户信息
 export const updateUserInfo = {
   url: 'cgi/core/user/updateUserInfo',
-  options: {},
+  options: {
+    showMsg: false,
+  },
 };
 
 // 获取用户信息
