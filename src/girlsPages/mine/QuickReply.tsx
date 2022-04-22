@@ -84,6 +84,7 @@ const Login = () => {
       Toast.show({
         description: '请添加快捷回复',
         placement: 'top',
+        duration: 1500,
       });
     }
   };
