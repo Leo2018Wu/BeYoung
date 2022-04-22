@@ -70,9 +70,9 @@ const Index = ({...props}) => {
 
   useEffect(() => {
     props.navigation.setOptions({
-      headerRight: () => <HeaderRight />,
+      headerRight: () => <HeaderRight value={inputValue} />,
     });
-  }, [changeStatus]);
+  }, [changeStatus, inputValue]);
 
   useLayoutEffect(() => {
     if (params.type === 'nickName') {
@@ -139,12 +139,15 @@ const Index = ({...props}) => {
             昵称：
           </Text>
           <Input
-            returnKeyType="done"
+            returnKeyType="send"
             enablesReturnKeyAutomatically={true}
             clearButtonMode="while-editing"
             onChangeText={e => setValue(e)}
             flex={1}
             fontSize={'md'}
+            onEndEditing={e => {
+              console.log(3, e);
+            }}
             onSubmitEditing={() => {
               edit();
             }}
