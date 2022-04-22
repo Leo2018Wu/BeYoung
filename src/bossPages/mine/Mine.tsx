@@ -15,6 +15,8 @@ import Icon from 'react-native-vector-icons/EvilIcons';
 import CFastImage from '../../components/CFastImage';
 import {StyleSheet, useWindowDimensions} from 'react-native';
 import {connect} from 'react-redux';
+import {fetchStatistic} from '../../api/common';
+import useRequest from '../../hooks/useRequest';
 
 const link_group1_list = [
   {
@@ -63,12 +65,16 @@ const mapStateToProps = (state: any) => {
 
 const Home = ({...props}) => {
   const {width} = useWindowDimensions();
+  const userInfo = props.userInfo;
 
   const jumpPage = (routeName: String) => {
     props.navigation.navigate(routeName);
   };
-
-  const userInfo = props.userInfo;
+  const {result: numInfo} = useRequest(
+    fetchStatistic.url,
+    {userId: userInfo.id},
+    fetchStatistic.options,
+  );
 
   return (
     <ScrollView
@@ -91,9 +97,12 @@ const Home = ({...props}) => {
           fill="url(#g3)"
         />
       </Svg>
-      <Box mx={3} style={styles.avatar}>
+      <Pressable
+        onPress={() => props.navigation.navigate('Setting')}
+        mx={3}
+        style={styles.avatar}>
         <CFastImage url={userInfo.headImg} styles={{flex: 1}} />
-      </Box>
+      </Pressable>
       <Box
         w={'full'}
         style={{position: 'absolute', top: 140, zIndex: 1}}
@@ -114,20 +123,20 @@ const Home = ({...props}) => {
               <Text color={'fontColors.gray'} fontSize="xs">
                 点赞
               </Text>
-              <Text fontSize={'xl'}>218</Text>
+              <Text fontSize={'xl'}>{numInfo?.likeNum}</Text>
             </VStack>
             <VStack flex={1} alignItems={'center'}>
               <Text color={'fontColors.gray'} fontSize="xs">
                 评论
               </Text>
-              <Text fontSize={'xl'}>218</Text>
+              <Text fontSize={'xl'}>{numInfo?.commentNum}</Text>
             </VStack>
-            <VStack flex={1} alignItems={'center'}>
+            {/* <VStack flex={1} alignItems={'center'}>
               <Text color={'fontColors.gray'} fontSize="xs">
                 关注
               </Text>
               <Text fontSize={'xl'}>218</Text>
-            </VStack>
+            </VStack> */}
           </HStack>
         </Box>
         <Box mt={5} shadow={1} borderRadius={4} bg="white">

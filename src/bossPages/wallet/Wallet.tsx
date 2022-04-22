@@ -1,4 +1,4 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useEffect, useLayoutEffect, useState} from 'react';
 import {Text, Box, HStack, Pressable, Button} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -12,6 +12,8 @@ import useRequest from '../../hooks/useRequest';
 import {fetchRechargeItems, rechargeApplyWX} from '../../api/wallet';
 import * as wechat from 'react-native-wechat-lib';
 import util from '../../util/util';
+import {connect} from 'react-redux';
+import {getMyWallet} from '../../store/action';
 
 interface ItemProps {
   id: string;
@@ -30,7 +32,14 @@ const Bar = ({title = '充值项目'}) => {
   );
 };
 
+const mapStateToProps = (state: any) => {
+  return {
+    walletInfo: state.user.myWallet,
+  };
+};
+
 const Index = ({...props}) => {
+  const {walletInfo} = props;
   const {width} = useWindowDimensions();
   const ITEM_WIDTH = (width - 32 - 8) / 2;
   const [activeItem, setItem] = useState(''); // 选中的充值项目id
@@ -42,6 +51,10 @@ const Index = ({...props}) => {
     fetchRechargeItems.options,
   );
   const {run: runChargeWx} = useRequest(rechargeApplyWX.url);
+
+  useEffect(() => {
+    props.dispatch(getMyWallet());
+  }, []);
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -99,7 +112,7 @@ const Index = ({...props}) => {
           source={require('../../images/charge_bg.png')}>
           {/* <HStack> */}
           <Text fontSize={'2xl'} color="white">
-            青贝：120
+            青贝：{walletInfo.coinBalance}
           </Text>
           {/* </HStack> */}
         </ImageBackground>
@@ -158,7 +171,7 @@ const Index = ({...props}) => {
   );
 };
 
-export default Index;
+export default connect(mapStateToProps)(Index);
 
 const styles = StyleSheet.create({
   top_section: {
