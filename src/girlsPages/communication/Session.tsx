@@ -16,9 +16,10 @@ import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import IconNew from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRequest from '../../hooks/useRequest';
 import {fetchAccountUser} from '../../api/common';
@@ -26,7 +27,7 @@ import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
 import ReplyEmoj from '../../components/base/ReplyEmoj';
-import {fetchMyMedia} from '../../api/photoSelect';
+import QuickReply from '../../components/base/QuickReply';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
 
@@ -67,6 +68,7 @@ const Msgs = ({...props}) => {
   const [textValue, setValue] = useState(''); // 输入框内容
   const [keyboradShow, setKeyborad] = useState(false); // 键盘拉起状态
   const {isOpen, onOpen, onClose} = useDisclose();
+  const [quickFlag, setQuickFlag] = useState(false); //判断表情回复或快捷回复
   const {result: chatUserInfo} = useRequest(
     fetchAccountUser.url,
     {
@@ -74,8 +76,6 @@ const Msgs = ({...props}) => {
     },
     fetchAccountUser.options,
   );
-
-  const {run: runFetchMyMedia} = useRequest(fetchMyMedia.url);
 
   const scrollToEnd = () => {
     if (scrollRef.current) {
@@ -97,27 +97,33 @@ const Msgs = ({...props}) => {
     setKeyborad(true);
   };
 
+  // 自定义表情回复
   const replyEmojFunc = async (item: object) => {
     try {
-      const {data, success} = await runFetchMyMedia({
-        mediaType: 'MEDIA_TYPE_EMOGI', //媒体类型
-      });
-      if (success) {
-        const content = {
-          type: 2,
-          giftKey: item.url,
-        };
-        props.dispatch(
-          sendCustomMsg({
-            to: props.route.params.chatUserId,
-            content,
-          }),
-        );
-        scrollToEnd();
-      }
+      const content = {
+        type: 2,
+        giftKey: item.url,
+      };
+      props.dispatch(
+        sendCustomMsg({
+          to: props.route.params.chatUserId,
+          content,
+        }),
+      );
+      scrollToEnd();
+      onClose();
     } catch (error) {
       console.log('replyEmoj', error);
     }
+  };
+
+  // 快捷回复
+  const quickReplyFunc = async (item: object) => {
+    props.dispatch(
+      sendText({to: props.route.params.chatUserId, text: item.content}),
+    );
+    scrollToEnd();
+    onClose();
   };
 
   const _keyboardDidHide = () => {
@@ -217,20 +223,37 @@ const Msgs = ({...props}) => {
         </Box>
       </LinearGradient>
       <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
-        <Actionsheet.Content
-          style={{
-            backgroundColor: '#1f2937',
-            borderRadius: 40,
-          }}>
-          <ReplyEmoj
-            clickItem={(item: object) => {
-              replyEmojFunc(item);
-            }}
-            closeItem={() => {
-              onClose();
-            }}
-          />
-        </Actionsheet.Content>
+        {quickFlag ? (
+          <Actionsheet.Content
+            style={{
+              backgroundColor: '#1f2937',
+              borderRadius: 40,
+            }}>
+            <ReplyEmoj
+              clickItem={(item: object) => {
+                replyEmojFunc(item);
+              }}
+              closeItem={() => {
+                onClose();
+              }}
+            />
+          </Actionsheet.Content>
+        ) : (
+          <Actionsheet.Content
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 40,
+            }}>
+            <QuickReply
+              clickItem={(item: object) => {
+                quickReplyFunc(item);
+              }}
+              closeItem={() => {
+                onClose();
+              }}
+            />
+          </Actionsheet.Content>
+        )}
       </Actionsheet>
       <KeyboardAvoidingView
         contentContainerStyle={{
@@ -287,23 +310,28 @@ const Msgs = ({...props}) => {
           }}>
           <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
             <FontAwesome5
-              onPress={() => onOpen()}
+              onPress={() => {
+                setQuickFlag(true);
+                onOpen();
+              }}
               name="smile"
               size={28}
               color="#C1C0C9"
             />
-            {props.myUserInfo.gender === 'GENDER_MALE' ? (
-              <Pressable onPress={() => onOpen()}>
-                <Ionicons
-                  style={{
-                    marginLeft: 16,
-                  }}
-                  name="gift"
-                  size={26}
-                  color="#9650FF"
-                />
-              </Pressable>
-            ) : null}
+            <Pressable
+              onPress={() => {
+                setQuickFlag(false);
+                onOpen();
+              }}>
+              <IconNew
+                style={{
+                  marginLeft: 16,
+                }}
+                name="quickreply"
+                size={26}
+                color="#9650FF"
+              />
+            </Pressable>
             <Input
               ref={(e: object) => (inputRef.current = e)}
               multiline
