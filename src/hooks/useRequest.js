@@ -24,7 +24,7 @@ const useRequest = (
   body = {},
   options = {
     manual: true,
-    showMsg: true,
+    showMsg: false,
   },
 ) => {
   const Toast = useToast();
@@ -87,6 +87,11 @@ const useRequest = (
         }
         if (!success) {
           // 请求失败
+          Toast.show({
+            description: message,
+            placement: 'top',
+            duration: 2500,
+          });
           return;
         }
         setResult(JSON.parse(JSON.stringify(data)));

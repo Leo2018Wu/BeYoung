@@ -40,7 +40,9 @@ export const fetchUserProtocolFeMale = {
 // 获取验证码
 export const sendCode = {
   url: 'cgi/core/login/sendCode',
-  options: {},
+  options: {
+    showMsg: true,
+  },
 };
 
 // 校验验证码

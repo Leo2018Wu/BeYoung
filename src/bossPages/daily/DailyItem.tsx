@@ -24,6 +24,7 @@ const genImages = (imgs: string) => {
 };
 
 interface ItemProp {
+  userId: string;
   headImg: string;
   nickName: '青回';
   createTime: string;
@@ -48,7 +49,7 @@ const isEqual = (pre: any, next: any) => {
   );
 };
 
-const Index = ({item}: {item: ItemProp}) => {
+const Index = ({item, returnFunc}: {item: ItemProp; returnFunc: Function}) => {
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 104) / 3;
@@ -151,7 +152,10 @@ const Index = ({item}: {item: ItemProp}) => {
               {item.score}
             </Text>
           </HStack>
-          <Pressable flexDirection={'row'} alignItems={'center'}>
+          <Pressable
+            onPress={() => returnFunc(item)}
+            flexDirection={'row'}
+            alignItems={'center'}>
             {item.liked ? (
               <Icon name="heart" size={18} color="#9650FF" />
             ) : (

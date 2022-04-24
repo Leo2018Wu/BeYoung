@@ -10,9 +10,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 const SEND_CODE_DURATION = 60 * 1000; // 发送验证码倒计时秒数
 const Index = ({...props}) => {
   const {route} = props;
-  const {run: runSendCode} = useRequest(sendCode.url, {
-    phone: route.params.phone,
-  });
+  const {run: runSendCode} = useRequest(
+    sendCode.url,
+    {
+      phone: route.params.phone,
+    },
+    sendCode.options,
+  );
   const {run: runVerifyCode, result} = useRequest(verifyCode.url);
   const {count, reset} = useCountdown(SEND_CODE_DURATION);
 
