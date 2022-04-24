@@ -21,15 +21,11 @@ export const fetchMyMedia = {
 // 添加媒体信息
 export const fetchAddMedia = {
   url: 'cgi/core/user/addMedia',
-  options: {
-    showMsg: false,
-  },
+  options: {},
 };
 
 // 删除媒体信息
 export const fetchDelMedia = {
   url: 'cgi/core/user/delMedia',
-  options: {
-    showMsg: false,
-  },
+  options: {},
 };

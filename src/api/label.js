@@ -14,9 +14,7 @@ export const fetchLabels = {
 // 贴标签
 export const attachLabels = {
   url: 'cgi/core/label/attachLabels',
-  options: {
-    showMsg: false,
-  },
+  options: {},
 };
 
 // 获取我的标签

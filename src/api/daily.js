@@ -14,9 +14,7 @@ export const queryDynamic = {
 // 发布动态-女生端
 export const addDynamic = {
   url: 'cgi/core/dynamic/addDynamic',
-  options: {
-    showMsg: false,
-  },
+  options: {},
 };
 
 // 查询我的动态-女生端

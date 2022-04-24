@@ -66,11 +66,8 @@ const useRequest = (
         setLoading(false);
         const responseJSON = await response.json();
         console.log('responseJSON', responseJSON);
-        const {success, data, message, type} = responseJSON;
-        if (
-          data === '访问凭据已过期，请重新登陆' ||
-          data === '访问凭据为空，您缺少访问权限'
-        ) {
+        const {code, success, data, message, type} = responseJSON;
+        if (code === 400100) {
           AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
           AsyncStorage.setItem('USERINFO', '');
           AsyncStorage.setItem('chatAccount', '');
