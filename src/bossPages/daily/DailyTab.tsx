@@ -98,6 +98,7 @@ export default class CustomTabBarExample extends React.Component<{}, State> {
   render() {
     return (
       <TabView
+        lazy
         navigationState={this.state}
         renderScene={this.renderScene}
         renderTabBar={this.renderTabBar}

@@ -42,3 +42,9 @@ export const commentDynamic = {
   url: 'cgi/core/dynamic/commentDynamic',
   options: {},
 };
+
+// 点赞动态
+export const likeDynamic = {
+  url: 'cgi/core/dynamic/likeDynamic',
+  options: {},
+};
