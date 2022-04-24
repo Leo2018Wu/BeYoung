@@ -11,6 +11,7 @@ import {
   NativeBaseProvider,
 } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
+import {DeviceEventEmitter} from 'react-native';
 import IconNew from 'react-native-vector-icons/AntDesign';
 import {useFocusEffect} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
@@ -74,204 +75,224 @@ const Setting = ({...props}) => {
     });
   };
 
+  const logout = () => {
+    AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
+    AsyncStorage.setItem('USERINFO', '');
+    AsyncStorage.setItem('chatAccount', '');
+    DeviceEventEmitter.emit('LOGIN_EVENT', '');
+  };
+
   return (
     <NativeBaseProvider>
       <ScrollView style={styles.userInfoContain}>
-        <Pressable
-          onPress={() =>
-            props.navigation.navigate('EditHeadImg', {
-              value: result?.headImg,
-            })
-          }
-          style={styles.itemView}>
-          <Text style={styles.userInfo_item_text}>头像</Text>
-          <CFastImage
-            url={result?.headImg}
-            styles={{width: 45, height: 45, borderRadius: 50}}
-          />
-        </Pressable>
-        <Pressable
-          onPress={() => props.navigation.navigate('EditStudentCard')}
-          style={styles.itemView}>
-          <Text>学生证</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            {result?.studentCard ? (
-              <CFastImage
-                url={result?.studentCard}
-                styles={{width: 45, height: 45}}
-              />
-            ) : (
-              <Image
-                source={require('../assets/defaultAva.png')}
-                style={{
-                  width: 45,
-                  height: 45,
-                }}
-                alt="dairy"
-              />
-            )}
-            <IconNew
-              name="right"
-              size={16}
-              color="#919191"
-              style={{marginLeft: 4}}
+        <View style={{paddingBottom: '30%'}}>
+          <Pressable
+            onPress={() =>
+              props.navigation.navigate('EditHeadImg', {
+                value: result?.headImg,
+              })
+            }
+            style={styles.itemView}>
+            <Text style={styles.userInfo_item_text}>头像</Text>
+            <CFastImage
+              url={result?.headImg}
+              styles={{width: 45, height: 45, borderRadius: 50}}
             />
-          </View>
-        </Pressable>
-        <Pressable
-          onPress={() => editUser('昵称', result?.nickName)}
-          style={styles.itemView}>
-          <Text>昵称</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#919191', marginRight: 4}}>
-              {result?.nickName || '请设置昵称'}
-            </Text>
-            <IconNew name="right" size={16} color="#919191" />
-          </View>
-        </Pressable>
-        <Pressable
-          onPress={() => editUser('姓名', result?.name)}
-          style={styles.itemView}>
-          <Text>姓名</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#919191', marginRight: 4}}>
-              {result?.name || '请设置姓名'}
-            </Text>
-            <IconNew name="right" size={16} color="#919191" />
-          </View>
-        </Pressable>
-        <Pressable
-          onPress={() => editUser('身份证号', result?.cardNum)}
-          style={styles.itemView}>
-          <Text>身份证号</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#919191', marginRight: 4}}>
-              {result?.cardNum || '请设置身份证号'}
-            </Text>
-            <IconNew name="right" size={16} color="#919191" />
-          </View>
-        </Pressable>
-        <View style={styles.itemView}>
-          <Text>手机号</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#919191', marginRight: 4}}>
-              {result?.phone}
-            </Text>
-            {/* <IconNew name="right" size={16} color="#919191" /> */}
-          </View>
-        </View>
-        <Pressable
-          onPress={() => editUser('微信号', result?.weChat)}
-          style={styles.itemView}>
-          <Text>微信号</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#919191', marginRight: 4}}>
-              {result?.weChat || '请设置微信号'}
-            </Text>
-            <IconNew name="right" size={16} color="#919191" />
-          </View>
-        </Pressable>
-        <Pressable
-          onPress={() => editUser('QQ号', result?.qq)}
-          style={styles.itemView}>
-          <Text>QQ号</Text>
-          <View
-            style={{
-              justifyContent: 'flex-end',
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Text style={{color: '#919191', marginRight: 4}}>
-              {result?.qq || '请设置QQ号'}
-            </Text>
-            <IconNew name="right" size={16} color="#919191" />
-          </View>
-        </Pressable>
-        <View style={styles.itemView}>
-          <Text>年纪</Text>
-          <Select
-            selectedValue={service}
-            width={40}
-            height={35}
-            borderRadius={4}
-            borderWidth={0}
-            textAlign={'right'}
-            accessibilityLabel="请选择"
-            placeholder="请选择"
-            _selectedItem={{
-              endIcon: <CheckIcon size="5" />,
-            }}
-            onValueChange={itemValue => {
-              setService(itemValue);
-              runUpdate({grade: itemValue});
-            }}>
-            {grades &&
-              grades.map((item, index) => {
-                return (
-                  <Select.Item
-                    key={item.code}
-                    label={item.name}
-                    value={item.code}
-                  />
-                );
-              })}
-          </Select>
-        </View>
-        <Pressable
-          onPress={() => props.navigation.navigate('Label', {labelList})}>
-          <View style={styles.itemView}>
-            <Text>个性标签</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => props.navigation.navigate('EditStudentCard')}
+            style={styles.itemView}>
+            <Text>学生证</Text>
             <View
               style={{
                 justifyContent: 'flex-end',
                 flexDirection: 'row',
                 alignItems: 'center',
               }}>
-              <Text style={{color: '#919191', marginRight: 4}}>修改</Text>
+              {result?.studentCard ? (
+                <CFastImage
+                  url={result?.studentCard}
+                  styles={{width: 45, height: 45}}
+                />
+              ) : (
+                <Image
+                  source={require('../assets/defaultAva.png')}
+                  style={{
+                    width: 45,
+                    height: 45,
+                  }}
+                  alt="dairy"
+                />
+              )}
+              <IconNew
+                name="right"
+                size={16}
+                color="#919191"
+                style={{marginLeft: 4}}
+              />
+            </View>
+          </Pressable>
+          <Pressable
+            onPress={() => editUser('昵称', result?.nickName)}
+            style={styles.itemView}>
+            <Text>昵称</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: '#919191', marginRight: 4}}>
+                {result?.nickName || '请设置昵称'}
+              </Text>
               <IconNew name="right" size={16} color="#919191" />
             </View>
+          </Pressable>
+          <Pressable
+            onPress={() => editUser('姓名', result?.name)}
+            style={styles.itemView}>
+            <Text>姓名</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: '#919191', marginRight: 4}}>
+                {result?.name || '请设置姓名'}
+              </Text>
+              <IconNew name="right" size={16} color="#919191" />
+            </View>
+          </Pressable>
+          <Pressable
+            onPress={() => editUser('身份证号', result?.cardNum)}
+            style={styles.itemView}>
+            <Text>身份证号</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: '#919191', marginRight: 4}}>
+                {result?.cardNum || '请设置身份证号'}
+              </Text>
+              <IconNew name="right" size={16} color="#919191" />
+            </View>
+          </Pressable>
+          <View style={styles.itemView}>
+            <Text>手机号</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: '#919191', marginRight: 4}}>
+                {result?.phone}
+              </Text>
+              {/* <IconNew name="right" size={16} color="#919191" /> */}
+            </View>
           </View>
-          <View style={styles.labelContain}>
-            {labelList &&
-              labelList.map((item, index) => {
-                return (
-                  <View key={index} style={styles.labelView}>
-                    <Text style={styles.labelText}>{item.labelName}</Text>
-                  </View>
-                );
-              })}
+          <Pressable
+            onPress={() => editUser('微信号', result?.weChat)}
+            style={styles.itemView}>
+            <Text>微信号</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: '#919191', marginRight: 4}}>
+                {result?.weChat || '请设置微信号'}
+              </Text>
+              <IconNew name="right" size={16} color="#919191" />
+            </View>
+          </Pressable>
+          <Pressable
+            onPress={() => editUser('QQ号', result?.qq)}
+            style={styles.itemView}>
+            <Text>QQ号</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <Text style={{color: '#919191', marginRight: 4}}>
+                {result?.qq || '请设置QQ号'}
+              </Text>
+              <IconNew name="right" size={16} color="#919191" />
+            </View>
+          </Pressable>
+          <View style={styles.itemView}>
+            <Text>年纪</Text>
+            <Select
+              selectedValue={service}
+              width={40}
+              height={35}
+              borderRadius={4}
+              borderWidth={0}
+              textAlign={'right'}
+              accessibilityLabel="请选择"
+              placeholder="请选择"
+              _selectedItem={{
+                endIcon: <CheckIcon size="5" />,
+              }}
+              onValueChange={itemValue => {
+                setService(itemValue);
+                runUpdate({grade: itemValue});
+              }}>
+              {grades &&
+                grades.map((item, index) => {
+                  return (
+                    <Select.Item
+                      key={item.code}
+                      label={item.name}
+                      value={item.code}
+                    />
+                  );
+                })}
+            </Select>
           </View>
-        </Pressable>
+          <Pressable
+            onPress={() => props.navigation.navigate('Label', {labelList})}>
+            <View style={styles.itemView}>
+              <Text>个性标签</Text>
+              <View
+                style={{
+                  justifyContent: 'flex-end',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                <Text style={{color: '#919191', marginRight: 4}}>修改</Text>
+                <IconNew name="right" size={16} color="#919191" />
+              </View>
+            </View>
+            <View style={styles.labelContain}>
+              {labelList &&
+                labelList.map((item, index) => {
+                  return (
+                    <View key={index} style={styles.labelView}>
+                      <Text style={styles.labelText}>{item.labelName}</Text>
+                    </View>
+                  );
+                })}
+            </View>
+          </Pressable>
+          <Pressable onPress={() => logout()} style={styles.itemView}>
+            <Text>退出登录</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <IconNew name="right" size={16} color="#919191" />
+            </View>
+          </Pressable>
+        </View>
       </ScrollView>
     </NativeBaseProvider>
   );
@@ -298,7 +319,7 @@ const styles = StyleSheet.create({
   labelContain: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    paddingBottom: '30%',
+    paddingBottom: '5%',
   },
   labelView: {
     borderColor: '#8861FF',

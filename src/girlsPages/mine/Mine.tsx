@@ -6,8 +6,6 @@ import {
   ImageBackground,
   Platform,
 } from 'react-native';
-import AsyncStorage from '@react-native-community/async-storage';
-import {DeviceEventEmitter} from 'react-native';
 
 import layout from '../../components/Layout';
 import UserInfo from './UserInfo';
@@ -25,14 +23,7 @@ const Mine = ({...props}) => {
       </ImageBackground>
       <LinkList
         onPress={(routeName: any) => {
-          if (routeName === 'logout') {
-            AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
-            AsyncStorage.setItem('USERINFO', '');
-            AsyncStorage.setItem('chatAccount', '');
-            DeviceEventEmitter.emit('LOGIN_EVENT', '');
-          } else {
-            props.navigation.navigate(routeName);
-          }
+          props.navigation.navigate(routeName);
         }}
       />
     </View>

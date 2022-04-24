@@ -29,11 +29,11 @@ const list = [
   //   iconUrl: require('../assets/Promote.png'),
   //   name: '帮助教程',
   // },
-  {
-    routeName: 'logout',
-    iconUrl: require('../assets/logout.png'),
-    name: '退出登录',
-  },
+  // {
+  //   routeName: 'logout',
+  //   iconUrl: require('../assets/logout.png'),
+  //   name: '退出登录',
+  // },
 ];
 type IProps = {
   onPress: Function;
