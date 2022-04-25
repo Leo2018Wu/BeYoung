@@ -1,85 +1,90 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {
-  HStack,
   Box,
-  View,
-  VStack,
-  Text,
   Divider,
-  Pressable,
   Actionsheet,
   useDisclose,
   useToast,
+  AlertDialog,
+  Button,
 } from 'native-base';
-import {useWindowDimensions} from 'react-native';
 import Tab from './DailyTab';
-import CFastImage from '../../components/CFastImage';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
 import Gifts from '../../components/base/Gifts';
 import useRequest from '../../hooks/useRequest';
-import {commentDynamic} from '../../api/daily';
+import {commentDynamic, likeDynamic} from '../../api/daily';
 import {giveGift} from '../../api/gift';
-import {BASE_DOWN_URL} from '../../util/config';
+import DailyItem from './DailyItem';
 
 interface commentProp {
   type: string;
   value: string;
 }
 
-const genImages = (imgs: string) => {
-  if (!imgs) {
-    return [];
-  } else {
-    return JSON.parse(imgs);
-  }
-};
-
 const Index = ({...props}) => {
   const toast = useToast();
   const {item} = props.route.params;
-  const {width} = useWindowDimensions();
+  const [dynamicInfo, setDynamic] = useState(item || {});
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
+  const {run: runLikeDynamic} = useRequest(likeDynamic.url);
   const {run: runGiveGift} = useRequest(giveGift.url);
   const {isOpen, onOpen, onClose} = useDisclose();
-  const IMG_ITEM_WIDTH = (width - 60) / 3;
-  const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
+  const [dialogVisible, setIsDialogShow] = useState(false);
 
-  const comment = (data: commentProp, dynamicId: string) => {
-    if (data.type === 'text') {
-      runCommentDymaic({
+  const cancelRef = useRef(null);
+
+  //评论动态
+  const commentDy = async (comment: commentProp, dynamicId: string) => {
+    if (comment.type === 'text') {
+      const {data, success} = await runCommentDymaic({
         dynamicId,
-        content: data.value,
+        content: comment.value,
       });
+      if (success) {
+        setDynamic(data);
+      }
     }
   };
 
-  const preview = (index: number) => {
-    const imgUrls = genImages(item.images).map((img: string) => {
-      const temp = {url: `${BASE_DOWN_URL + img}`};
-      return temp;
+  // 动态点赞回调函数
+  const itemClick = async ({id, liked}: {id: string; liked: boolean}) => {
+    const {success, data} = await runLikeDynamic({
+      dynamicId: id,
+      cancel: liked,
     });
-    props.navigation.navigate('Preview', {index, imgUrls});
+    if (success) {
+      setDynamic(data);
+    }
   };
 
+  // 赠送礼物
   const presentGift = async (
     giftItem: object,
     receiveUserId: string,
     userDynamicId: string,
   ) => {
     try {
-      await runGiveGift({
+      const {data, success, code} = await runGiveGift({
         giftId: giftItem?.id,
         num: 1,
         receiveUserId,
         userDynamicId,
       });
-      onClose();
-      toast.show({
-        title: '赠送礼物成功',
-        placement: 'top',
-        duration: 2000,
-      });
+      if (code === 50001) {
+        setIsDialogShow(true);
+        // 余额不足情况
+        return;
+      }
+      if (success) {
+        setDynamic(data);
+        onClose();
+        toast.show({
+          title: '赠送礼物成功',
+          placement: 'top',
+          duration: 2000,
+        });
+      }
     } catch (error) {
       console.log('presentGift', error);
     }
@@ -87,6 +92,31 @@ const Index = ({...props}) => {
 
   return (
     <DailyDetailContext.Provider value={item}>
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={dialogVisible}
+        onClose={() => setIsDialogShow(false)}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>提示</AlertDialog.Header>
+          <AlertDialog.Body
+            justifyContent={'center'}
+            alignItems={'center'}
+            minHeight={98}>
+            您的余额不足，需要去充值吗？
+          </AlertDialog.Body>
+          <AlertDialog.Footer justifyContent={'center'}>
+            <Button
+              colorScheme="blue"
+              onPress={() => {
+                setIsDialogShow(false);
+                props.navigation.navigate('Wallet');
+              }}>
+              去充值
+            </Button>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
       <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content
           style={{
@@ -96,76 +126,14 @@ const Index = ({...props}) => {
           <Gifts
             clickItem={(giftItem: object) => {
               onClose();
-              presentGift(giftItem, item.userId, item.id);
+              presentGift(giftItem, dynamicInfo.userId, dynamicInfo.id);
             }}
           />
         </Actionsheet.Content>
       </Actionsheet>
       <Box flex={1} pt={4} bg="white">
         <Box px={5} pb={4}>
-          <HStack alignItems="center">
-            <Pressable
-              onPress={() =>
-                props.navigation.navigate('HomeDetail', {userId: item.userId})
-              }>
-              <CFastImage
-                url={item.headImg}
-                styles={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 24,
-                }}
-              />
-            </Pressable>
-            <VStack flex={1} mr={'auto'} ml={2} justifyContent={'space-around'}>
-              <Text
-                fontSize={'lg'}
-                style={{
-                  color: '#8E8895',
-                }}>
-                {item.nickName}
-              </Text>
-              <Text
-                fontSize={'xs'}
-                style={{
-                  color: '#C7C4CC',
-                }}>
-                {item.createTime}
-              </Text>
-            </VStack>
-            {/* <Button
-              disabled
-              py={1}
-              borderRadius={'full'}
-              borderColor="#9650FF"
-              borderWidth={0.5}
-              bg={'transparent'}>
-              <Text fontSize={'xs'} color={'primary.100'}>
-                关注
-              </Text>
-            </Button> */}
-          </HStack>
-          <View pt={4}>
-            <HStack mb={2} flexWrap={'wrap'}>
-              {genImages(item.images).map((ele: string, index: number) => (
-                <Pressable key={index} onPress={() => preview(index)}>
-                  <CFastImage
-                    url={ele}
-                    styles={{
-                      marginRight: (index + 1) % 3 === 0 ? 0 : 8,
-                      width: IMG_ITEM_WIDTH,
-                      height: IMG_ITEM_HEIGHT,
-                      borderRadius: 8,
-                      marginBottom: 8,
-                    }}
-                  />
-                </Pressable>
-              ))}
-            </HStack>
-            <Text fontSize={'md'} color={'fontColors._72'}>
-              {item.content}
-            </Text>
-          </View>
+          <DailyItem returnFunc={itemClick} item={dynamicInfo} />
         </Box>
         <Divider h={2.5} bg="bg.f5" />
         <Box flex={1}>
@@ -175,7 +143,7 @@ const Index = ({...props}) => {
       <ChatBox
         pressCb={(data: commentProp) => {
           if (data.type === 'text') {
-            comment(data, item.id);
+            commentDy(data, dynamicInfo.id);
           } else {
             onOpen();
           }

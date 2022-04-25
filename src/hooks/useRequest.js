@@ -66,8 +66,12 @@ const useRequest = (
         setLoading(false);
         const responseJSON = await response.json();
         console.log('responseJSON', responseJSON);
-        const {code, success, data, message, type} = responseJSON;
-        if (code === 400100) {
+        const {success, data, message, type, code} = responseJSON;
+        if (
+          data === '访问凭据已过期，请重新登陆' ||
+          data === '访问凭据为空，您缺少访问权限' ||
+          code === 400100
+        ) {
           AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
           AsyncStorage.setItem('USERINFO', '');
           AsyncStorage.setItem('chatAccount', '');
@@ -82,17 +86,17 @@ const useRequest = (
             duration: 1500,
           });
         }
-        if (!success) {
-          // 请求失败
-          Toast.show({
-            description: message,
-            placement: 'top',
-            duration: 2500,
-          });
-          return;
-        }
+        // if (!success) {
+        //   // 请求失败
+        //   Toast.show({
+        //     description: message,
+        //     placement: 'top',
+        //     duration: 2500,
+        //   });
+        //   return;
+        // }
         setResult(JSON.parse(JSON.stringify(data)));
-        return responseJSON;
+        return {...responseJSON};
       }
     } catch (errMsg) {
       console.error(errMsg);
