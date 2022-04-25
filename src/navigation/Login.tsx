@@ -31,7 +31,7 @@ const LoginStack = () => {
       />
       <Stack.Screen
         options={{
-          headerTitle: '',
+          title: '验证码',
           headerShadowVisible: false,
           headerBackVisible: true,
           headerTransparent: true,

@@ -17,7 +17,6 @@ import {fetchLabels, attachLabels} from '../../api/label';
 import Layout from '../../components/Layout';
 
 const Login = ({...props}) => {
-  console.log('--props---2---', props);
   const {navigation, route} = props;
   const insets = useSafeAreaInsets();
   const [tabIndex, setTabIndex] = useState(0);
@@ -40,7 +39,6 @@ const Login = ({...props}) => {
 
   useEffect(() => {
     if (result) {
-      console.log('-result-label-', result);
       setTabsList(result);
       getSubLabels(result[0].subLabels, route.params.labelList, subLabelIndex);
     }
@@ -48,7 +46,6 @@ const Login = ({...props}) => {
 
   // 获取标签栏下面的具体标签
   const getSubLabels = (data, data1, index) => {
-    console.log('-------data------', data, data1, index);
     let labelsList = [];
     let j = 0;
     for (let i = index * countIndex; i < data.length; i++) {
@@ -73,7 +70,6 @@ const Login = ({...props}) => {
       }
     }
     setTabsLabelList(JSON.parse(JSON.stringify(labelsList)));
-    console.log('--labelsList--', labelsList);
   };
 
   // 删除标签
@@ -117,7 +113,10 @@ const Login = ({...props}) => {
         }
       });
     }
-    await runAttachLabels({labelIds: labelIds});
+    const {success} = await runAttachLabels({labelIds: labelIds});
+    if (success) {
+      navigation.goBack();
+    }
   };
 
   const returnLabelList =
