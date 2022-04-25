@@ -5,6 +5,11 @@ import {
   Image,
   View,
   VStack,
+  // {
+  //   routeName: 'logout',
+  //   iconUrl: require('../assets/logout.png'),
+  //   name: '退出登录',
+  // },
   Text,
   Button,
   Stack,
@@ -17,7 +22,6 @@ import getStorage from '../../util/Storage';
 import CFastImage from '../../components/CFastImage';
 
 const Index = ({...props}) => {
-  console.log('--props--', props);
   const navigation = useNavigation();
   const {item} = props;
   const [imgList, setImgList] = useState([]);
@@ -111,10 +115,10 @@ const Index = ({...props}) => {
           alignItems={'center'}>
           <HStack mr={'auto'} alignItems={'center'}>
             <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              评分
+              {/* 评分 */}
             </Text>
             <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              {item.score}
+              {/* {item.score} */}
             </Text>
           </HStack>
           <HStack alignItems={'center'}>

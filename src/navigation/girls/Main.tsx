@@ -15,10 +15,12 @@ import TransferDetail from '../../girlsPages/wallet/TransferDetail';
 import WithdrawalDetail from '../../girlsPages/wallet/WithdrawalDetail';
 import Preview from '../../components/Preview';
 import EditUser from '../../girlsPages/mine/setting/EditUser';
+import EditName from '../../girlsPages/mine/setting/EditName';
 import EditStudentCard from '../../girlsPages/mine/setting/EditStudentCard';
 import EditHeadImg from '../../girlsPages/mine/setting/EditHeadImg';
 import Session from '../../girlsPages/communication/Session';
 import Label from '../../girlsPages/mine/Label';
+import Service from '../../bossPages/customService/Index';
 
 const Stack = createNativeStackNavigator();
 
@@ -133,6 +135,14 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
+          headerShown: false,
+          headerBackVisible: true,
+        }}
+        name="EditName"
+        component={EditName}
+      />
+      <Stack.Screen
+        options={{
           headerBackVisible: true,
         }}
         name="EditHeadImg"
@@ -160,6 +170,14 @@ const MyStack = () => {
           headerShown: false,
           headerBackVisible: true,
         })}
+      />
+      <Stack.Screen
+        options={{
+          title: '客服',
+          headerBackTitle: '我的',
+        }}
+        name="Service"
+        component={Service}
       />
     </Stack.Navigator>
   );

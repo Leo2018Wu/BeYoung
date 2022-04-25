@@ -24,15 +24,15 @@ const list = [
     iconUrl: require('../assets/wallet.png'),
     name: '钱包',
   },
+  {
+    routeName: 'Service',
+    iconUrl: require('../assets/Promote.png'),
+    name: '联系客服',
+  },
   // {
   //   routeName: 'Promote',
   //   iconUrl: require('../assets/Promote.png'),
   //   name: '帮助教程',
-  // },
-  // {
-  //   routeName: 'logout',
-  //   iconUrl: require('../assets/logout.png'),
-  //   name: '退出登录',
   // },
 ];
 type IProps = {

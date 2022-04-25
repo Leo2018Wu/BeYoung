@@ -21,7 +21,7 @@ const Login = () => {
   const Toast = useToast();
   const [goodsName, setGoodsName] = useState('');
   const [list, setList] = useState([]);
-  const [btnFlag, setBtnFlag] = useState(true);
+  const [btnFlag, setBtnFlag] = useState(false);
 
   const {run: runQuerySysDic, result} = useRequest(querySysDic.url, {
     pCode: 'QUICK_REPLY_SCENE',
@@ -61,8 +61,21 @@ const Login = () => {
     }
   };
 
+  const change = (text, index) => {
+    list[index].content = text;
+    setList(JSON.parse(JSON.stringify(list)));
+    let index1 = list.findIndex(e => {
+      return !e.content;
+    });
+    if (index1 !== -1) {
+      setBtnFlag(false);
+    } else {
+      setBtnFlag(true);
+    }
+  };
+
   const submit = async () => {
-    setBtnFlag(true);
+    setBtnFlag(false);
     let index = list.findIndex(e => {
       return e.content;
     });
@@ -105,11 +118,7 @@ const Login = () => {
                   <Text style={styles.quickTitle}>{item.name}</Text>
                   <Input
                     value={item.content}
-                    onChangeText={text => {
-                      list[index].content = text;
-                      setList(JSON.parse(JSON.stringify(list)));
-                      setBtnFlag(false);
-                    }}
+                    onChangeText={text => change(text, index)}
                     variant="outline"
                     placeholder="添加你的回复..."
                     fontSize={14}
@@ -121,15 +130,17 @@ const Login = () => {
             })}
         </View>
         <View style={styles.btnView}>
-          <Pressable onPress={() => submit()} disabled={btnFlag}>
-            <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              colors={['#D988FF', '#8B5CFF']}
-              style={styles.linearGradient}>
-              <Text style={styles.buttonText}>保存</Text>
-            </LinearGradient>
-          </Pressable>
+          {btnFlag ? (
+            <Pressable onPress={() => submit()}>
+              <LinearGradient
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                colors={['#D988FF', '#8B5CFF']}
+                style={styles.linearGradient}>
+                <Text style={styles.buttonText}>保存</Text>
+              </LinearGradient>
+            </Pressable>
+          ) : null}
         </View>
       </ScrollView>
     </NativeBaseProvider>
