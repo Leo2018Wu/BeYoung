@@ -29,6 +29,12 @@ export const queryDynamicCase = {
   options: {},
 };
 
+// 获取动态案例(新)
+export const queryCase = {
+  url: 'cgi/core/case/queryCase',
+  options: {},
+};
+
 // 查询动态评论
 export const queryComment = {
   url: 'cgi/core/dynamic/queryComment',

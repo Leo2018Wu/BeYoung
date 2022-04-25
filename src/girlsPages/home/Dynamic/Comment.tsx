@@ -195,9 +195,9 @@ const Index = () => {
             // paddingBottom: insets.bottom + 64,
           }
         }>
-        <Text mb={2} fontSize={'md'}>
+        {/* <Text mb={2} fontSize={'md'}>
           最新评论
-        </Text>
+        </Text> */}
         <DailyDetailContext.Consumer>
           {value => {
             return (
