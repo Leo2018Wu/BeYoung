@@ -11,6 +11,8 @@ import {
   KeyboardAvoidingView,
   Actionsheet,
   useDisclose,
+  AlertDialog,
+  Button,
 } from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
@@ -67,6 +69,9 @@ const Msgs = ({...props}) => {
   const [textValue, setValue] = useState(''); // 输入框内容
   const [keyboradShow, setKeyborad] = useState(false); // 键盘拉起状态
   const {isOpen, onOpen, onClose} = useDisclose();
+  const [dialogVisible, setIsDialogShow] = useState(false);
+
+  const cancelRef = useRef(null);
   const {result: chatUserInfo} = useRequest(
     fetchAccountUser.url,
     {
@@ -99,11 +104,16 @@ const Msgs = ({...props}) => {
 
   const presentGift = async (item: object) => {
     try {
-      const {success} = await runGiveGift({
+      const {success, code} = await runGiveGift({
         giftId: item.id,
         num: 1,
         receiveUserId: chatUserInfo[0]?.userId,
       });
+      if (code === 50001) {
+        // 余额不足情况
+        setIsDialogShow(true);
+        return;
+      }
       if (success) {
         const content = {
           type: 1,
@@ -181,6 +191,31 @@ const Msgs = ({...props}) => {
   }
   return (
     <Box bg={'white'} flex={1} style={{paddingBottom: BOTTOM_FIXED_HEIGHT}}>
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={dialogVisible}
+        onClose={() => setIsDialogShow(false)}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>提示</AlertDialog.Header>
+          <AlertDialog.Body
+            justifyContent={'center'}
+            alignItems={'center'}
+            minHeight={98}>
+            您的余额不足，需要去充值吗？
+          </AlertDialog.Body>
+          <AlertDialog.Footer justifyContent={'center'}>
+            <Button
+              colorScheme="blue"
+              onPress={() => {
+                setIsDialogShow(false);
+                props.navigation.navigate('Wallet');
+              }}>
+              去充值
+            </Button>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
       <LinearGradient
         style={{
           position: 'relative',

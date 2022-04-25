@@ -26,14 +26,14 @@ const genImages = (imgs: string) => {
 interface ItemProp {
   userId: string;
   headImg: string;
-  nickName: '青回';
+  nickName: string;
   createTime: string;
   content: string;
   score: number;
   liked: boolean;
-  likeNum: number;
-  commentNum: number;
-  giftNum: number;
+  likeNum: string | number;
+  commentNum: string | number;
+  giftNum: string | number;
   images: string;
 }
 
@@ -49,7 +49,7 @@ const isEqual = (pre: any, next: any) => {
   );
 };
 
-const Index = ({item, returnFunc}: {item: ItemProp; returnFunc: Function}) => {
+const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 104) / 3;
@@ -153,7 +153,7 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc: Function}) => {
             </Text>
           </HStack>
           <Pressable
-            onPress={() => returnFunc(item)}
+            onPress={() => returnFunc && returnFunc(item)}
             flexDirection={'row'}
             alignItems={'center'}>
             {item.liked ? (

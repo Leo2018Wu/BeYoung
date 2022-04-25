@@ -18,3 +18,11 @@ export const queryMedia = {
     manual: false,
   },
 };
+
+// 查询用户关系
+export const fetchRelation = {
+  url: 'cgi/core/user/fetchRelation',
+  options: {
+    manual: false,
+  },
+};

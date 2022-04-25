@@ -97,13 +97,19 @@ const Index = () => {
         style={{
           paddingBottom: insets.bottom + 64,
         }}>
-        <Text mb={2} fontSize={'md'}>
+        {/* <Text mb={2} fontSize={'md'}>
           最新评论
-        </Text>
+        </Text> */}
         <DailyDetailContext.Consumer>
           {value => {
             return (
               <CustomFuncFlatList
+                ref={e => {
+                  // setTimeout(() => {
+                  //   console.log(2312321, e);
+                  //   e.props.onRefresh();
+                  // }, 10 * 1000);
+                }}
                 url={queryComment.url}
                 par={{
                   dynamicId: value?.id,
