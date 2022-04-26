@@ -26,3 +26,11 @@ export const fetchRelation = {
     manual: false,
   },
 };
+
+// 查询已解锁到女生微信号
+export const queryUnlockWeChat = {
+  url: 'cgi/core/user/queryUnlockWeChat',
+  options: {
+    manual: false,
+  },
+};

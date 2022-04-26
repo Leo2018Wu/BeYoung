@@ -11,9 +11,12 @@ import constant from '../../store/constant';
 import util from '../../util/util';
 import {getChatUsers} from '../../store/action';
 import EmptySession from '../../components/base/EmptySession';
+import {useFocusEffect} from '@react-navigation/native';
 
 // 处理会话数据以便渲染使用
 const genSessions = (sessions: any, userMap: any) => {
+  console.log('userMap', userMap);
+
   const list =
     sessions &&
     sessions.map((item: any, index: any) => {
@@ -40,11 +43,13 @@ function Basic({...props}) {
   const nim = constant.nim;
 
   const insets = useSafeAreaInsets();
-  useEffect(() => {
-    const chatUserIds =
-      props.listData && props.listData.map((item: any) => item.to);
-    props.dispatch(getChatUsers({accountIds: chatUserIds}));
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      const chatUserIds =
+        props.listData && props.listData.map((item: any) => item.to);
+      props.dispatch(getChatUsers({accountIds: chatUserIds}));
+    }, []),
+  );
 
   const stickTopRow = (rowMap: any, key: any, item: any) => {
     nim &&
