@@ -35,8 +35,9 @@ const Index = ({pressCb}: {pressCb: Function}) => {
         shadow={2}
         alignItems="center"
         w={'full'}
-        h={16}
+        // h={16}
         px={4}
+        py={2}
         style={{
           paddingBottom: insets.bottom + 10,
           backgroundColor: '#fff',

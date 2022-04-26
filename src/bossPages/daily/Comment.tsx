@@ -94,6 +94,7 @@ const Index = () => {
   useEffect(() => {
     DeviceEventEmitter.addListener('REPLY_REFRESH', res => {
       setKeyData(res);
+      DeviceEventEmitter.removeAllListeners('REPLY_REFRESH');
     });
   }, []);
 
