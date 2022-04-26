@@ -23,7 +23,6 @@ interface commentProp {
 }
 
 const Index = ({...props}) => {
-  const toast = useToast();
   const {item} = props.route.params;
   const [dynamicInfo, setDynamic] = useState(item || {});
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
@@ -79,11 +78,6 @@ const Index = ({...props}) => {
       if (success) {
         setDynamic(data);
         onClose();
-        toast.show({
-          title: '赠送礼物成功',
-          placement: 'top',
-          duration: 2000,
-        });
       }
     } catch (error) {
       console.log('presentGift', error);
