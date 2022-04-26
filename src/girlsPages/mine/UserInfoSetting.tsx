@@ -9,6 +9,9 @@ import {
   ScrollView,
   Pressable,
   NativeBaseProvider,
+  Actionsheet,
+  useDisclose,
+  Box,
 } from 'native-base';
 import AsyncStorage from '@react-native-community/async-storage';
 import {DeviceEventEmitter} from 'react-native';
@@ -27,6 +30,7 @@ const Setting = ({...props}) => {
   const [labelList, setLabelList] = useState([]);
   const [grades, setGrades] = useState([]); // 渲染的年纪列表
   const {run: runUpdate} = useRequest(updateUserInfo.url);
+  const {isOpen, onOpen, onClose} = useDisclose();
 
   const {result: gradeDicts} = useRequest(
     querySysDic.url,
@@ -75,6 +79,12 @@ const Setting = ({...props}) => {
     });
   };
 
+  const editInfo = value => {
+    props.navigation.navigate('EditName', {
+      value: value,
+    });
+  };
+
   const logout = () => {
     AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
     AsyncStorage.setItem('USERINFO', '');
@@ -85,6 +95,44 @@ const Setting = ({...props}) => {
   return (
     <NativeBaseProvider>
       <ScrollView style={styles.userInfoContain}>
+        <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+          <Actionsheet.Content
+            style={{
+              backgroundColor: '#fff',
+              borderRadius: 40,
+            }}>
+            <Pressable
+              onPress={() => {
+                logout();
+              }}
+              px={6}
+              w="full"
+              h={10}
+              mb={2}
+              alignItems="center">
+              <Box flex={1} py={0} justifyContent={'center'} w="full">
+                <Text color={'#E04955'} textAlign={'center'}>
+                  退出登录
+                </Text>
+              </Box>
+            </Pressable>
+            <Box w="full" h={1} backgroundColor={'gray.200'} />
+            <Pressable
+              onPress={() => {
+                onClose();
+              }}
+              px={6}
+              w="full"
+              h={10}
+              alignItems="center">
+              <Box flex={1} py={0} justifyContent={'center'} w="full">
+                <Text color={'#999'} textAlign={'center'}>
+                  取消
+                </Text>
+              </Box>
+            </Pressable>
+          </Actionsheet.Content>
+        </Actionsheet>
         <View style={{paddingBottom: '30%'}}>
           <Pressable
             onPress={() =>
@@ -148,9 +196,7 @@ const Setting = ({...props}) => {
               <IconNew name="right" size={16} color="#919191" />
             </View>
           </Pressable>
-          <Pressable
-            onPress={() => editUser('姓名', result?.name)}
-            style={styles.itemView}>
+          <Pressable onPress={() => editInfo(result)} style={styles.itemView}>
             <Text>姓名</Text>
             <View
               style={{
@@ -164,9 +210,7 @@ const Setting = ({...props}) => {
               <IconNew name="right" size={16} color="#919191" />
             </View>
           </Pressable>
-          <Pressable
-            onPress={() => editUser('身份证号', result?.cardNum)}
-            style={styles.itemView}>
+          <Pressable onPress={() => editInfo(result)} style={styles.itemView}>
             <Text>身份证号</Text>
             <View
               style={{
@@ -180,7 +224,7 @@ const Setting = ({...props}) => {
               <IconNew name="right" size={16} color="#919191" />
             </View>
           </Pressable>
-          <View style={styles.itemView}>
+          <Pressable onPress={() => editInfo(result)} style={styles.itemView}>
             <Text>手机号</Text>
             <View
               style={{
@@ -191,9 +235,9 @@ const Setting = ({...props}) => {
               <Text style={{color: '#919191', marginRight: 4}}>
                 {result?.phone}
               </Text>
-              {/* <IconNew name="right" size={16} color="#919191" /> */}
+              <IconNew name="right" size={16} color="#919191" />
             </View>
-          </View>
+          </Pressable>
           <Pressable
             onPress={() => editUser('微信号', result?.weChat)}
             style={styles.itemView}>
@@ -281,7 +325,7 @@ const Setting = ({...props}) => {
                 })}
             </View>
           </Pressable>
-          <Pressable onPress={() => logout()} style={styles.itemView}>
+          <Pressable onPress={() => onOpen()} style={styles.itemView}>
             <Text>退出登录</Text>
             <View
               style={{

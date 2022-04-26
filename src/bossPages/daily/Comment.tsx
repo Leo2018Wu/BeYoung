@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {DeviceEventEmitter} from 'react-native';
 import {HStack, Box, Text, VStack} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -89,14 +90,23 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
 
 const Index = () => {
   const insets = useSafeAreaInsets();
+  const [keyData, setKeyData] = useState(0);
+  useEffect(() => {
+    DeviceEventEmitter.addListener('REPLY_REFRESH', res => {
+      setKeyData(res);
+    });
+  }, []);
+
   return (
     <Box flex={1}>
       <Box
         px={3}
         flex={1}
-        style={{
-          paddingBottom: insets.bottom + 64,
-        }}>
+        style={
+          {
+            // paddingBottom: insets.bottom + 64,
+          }
+        }>
         {/* <Text mb={2} fontSize={'md'}>
           最新评论
         </Text> */}
@@ -104,6 +114,7 @@ const Index = () => {
           {value => {
             return (
               <CustomFuncFlatList
+                key={keyData}
                 ref={e => {
                   // setTimeout(() => {
                   //   console.log(2312321, e);

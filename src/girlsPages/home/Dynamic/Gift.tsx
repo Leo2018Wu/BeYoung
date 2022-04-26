@@ -29,7 +29,7 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
     <Box mb={6}>
       <HStack mb={2} alignItems="center">
         <CFastImage
-          url={`${BASE_DOWN_URL + item.giveHeadImg}`}
+          url={item.giveHeadImg}
           styles={{
             width: 40,
             height: 40,

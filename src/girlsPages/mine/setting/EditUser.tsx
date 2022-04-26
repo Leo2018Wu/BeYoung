@@ -25,12 +25,6 @@ const Index = ({...props}) => {
       case '昵称':
         await run({nickName: inputValue});
         break;
-      case '姓名':
-        await run({name: inputValue});
-        break;
-      case '身份证号':
-        await run({cardNum: inputValue});
-        break;
       case '微信号':
         await run({weChat: inputValue});
         break;
@@ -82,7 +76,7 @@ const Index = ({...props}) => {
       {editType === '昵称' && (
         <HStack px={4} alignItems={'center'} h={16}>
           <Text fontWeight={'bold'} fontSize={'md'}>
-            编辑昵称：
+            昵称：
           </Text>
           <Input
             clearButtonMode="while-editing"
@@ -94,45 +88,15 @@ const Index = ({...props}) => {
           />
         </HStack>
       )}
-      {editType === '姓名' && (
+      {editType === '微信号' && (
         <HStack px={4} alignItems={'center'} h={16}>
           <Text fontWeight={'bold'} fontSize={'md'}>
-            编辑姓名：
-          </Text>
-          <Input
-            clearButtonMode="while-editing"
-            onChangeText={e => setValue(e)}
-            flex={1}
-            fontSize={'md'}
-            value={inputValue}
-            placeholder="请输入姓名"
-          />
-        </HStack>
-      )}
-      {editType === '身份证号' && (
-        <HStack px={4} alignItems={'center'} h={16}>
-          <Text fontWeight={'bold'} fontSize={'md'}>
-            编辑身份证号：
+            微信号：
           </Text>
           <Input
             clearButtonMode="while-editing"
             onChangeText={e => setValue(e)}
             keyboardType="phone-pad"
-            flex={1}
-            fontSize={'md'}
-            value={inputValue}
-            placeholder="请输入身份证号"
-          />
-        </HStack>
-      )}
-      {editType === '微信号' && (
-        <HStack px={4} alignItems={'center'} h={16}>
-          <Text fontWeight={'bold'} fontSize={'md'}>
-            编辑微信号：
-          </Text>
-          <Input
-            clearButtonMode="while-editing"
-            onChangeText={e => setValue(e)}
             flex={1}
             fontSize={'md'}
             value={inputValue}
@@ -143,7 +107,7 @@ const Index = ({...props}) => {
       {editType === 'QQ号' && (
         <HStack px={4} alignItems={'center'} h={16}>
           <Text fontWeight={'bold'} fontSize={'md'}>
-            编辑QQ号：
+            QQ号：
           </Text>
           <Input
             clearButtonMode="while-editing"

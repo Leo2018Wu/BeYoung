@@ -8,13 +8,23 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import {Box, Text, Center, Pressable, View, HStack} from 'native-base';
+import {
+  Box,
+  Text,
+  Center,
+  Pressable,
+  View,
+  HStack,
+  Actionsheet,
+  useDisclose,
+} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconNew from 'react-native-vector-icons/FontAwesome';
 import CFastImage from '../../components/CFastImage';
 import LinearGradient from 'react-native-linear-gradient';
 import {openPicker} from '../../util/openPicker';
+import {openCamera} from '../../util/cameraPhoto';
 import {upload} from '../../util/newUploadOSS';
 import {addDynamic} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
@@ -28,9 +38,9 @@ const Index = (props: any) => {
   const [list, setList] = useState([]);
   const {run: runAddDynamic, result} = useRequest(addDynamic.url);
   const [loading, setLoading] = useState(false);
+  const {isOpen, onOpen, onClose} = useDisclose();
 
   useEffect(() => {
-    console.log('result', result);
     if (result) {
       setLoading(false);
       setTextAreaValue('');
@@ -50,7 +60,7 @@ const Index = (props: any) => {
         list.push(item.path);
       });
       setList(JSON.parse(JSON.stringify(list)));
-      console.log('--list--', list);
+      onClose();
     } catch (err) {
       console.log('--err--', err);
     }
@@ -106,9 +116,44 @@ const Index = (props: any) => {
     });
   };
 
+  const cameraPhoto = async () => {
+    try {
+      const {path} = await openCamera();
+      list.push(path);
+      setList(JSON.parse(JSON.stringify(list)));
+      onClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Box flex={1}>
       <StatusBar backgroundColor="transparent" translucent />
+      <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content>
+          <Actionsheet.Item
+            onPress={() => cameraPhoto()}
+            justifyContent={'center'}>
+            拍照
+          </Actionsheet.Item>
+          <Actionsheet.Item
+            onPress={() => chooseImg()}
+            justifyContent={'center'}>
+            从相册选择
+          </Actionsheet.Item>
+        </Actionsheet.Content>
+        <Actionsheet.Footer
+          mt={2}
+          borderRadius={0}
+          style={{
+            paddingBottom: insets.bottom,
+          }}>
+          <Actionsheet.Item onPress={() => onClose()} justifyContent={'center'}>
+            取消
+          </Actionsheet.Item>
+        </Actionsheet.Footer>
+      </Actionsheet>
       <Box justifyContent="center" style={styles.banner}>
         <LinearGradient
           start={{x: 0, y: 0}}
@@ -160,6 +205,7 @@ const Index = (props: any) => {
           multiline={true}
           onChangeText={text => setTextAreaValue(text)}
           value={textAreaValue}
+          placeholder="记录生活，分享给懂你的人"
         />
         <View
           style={{flexDirection: 'row', flexWrap: 'wrap', marginBottom: 30}}>
@@ -184,11 +230,9 @@ const Index = (props: any) => {
                       top: 0,
                     }}
                     onPress={() => {
-                      if (index != 0) {
-                        setList(list.splice(index, 1));
-                      } else {
-                        setList([]);
-                      }
+                      const newData = [...list];
+                      newData.splice(index, 1);
+                      setList(JSON.parse(JSON.stringify(newData)));
                     }}>
                     <Icon name="closecircle" size={14} color="#B2B2B2" />
                   </Pressable>
@@ -212,11 +256,12 @@ const Index = (props: any) => {
         </View>
         <Pressable
           onPress={() => {
-            chooseImg();
+            // chooseImg();
+            onOpen();
           }}
           style={styles.addImg}>
           <IconNew name="image" size={20} color="#B2B2B2" />
-          <Text style={{marginLeft: 4, fontSize: 14}}>添加图片</Text>
+          <Text style={{marginLeft: 4, fontSize: 14}}>拍照/添加图片</Text>
         </Pressable>
       </Box>
     </Box>

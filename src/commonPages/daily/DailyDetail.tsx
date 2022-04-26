@@ -7,6 +7,7 @@ import {
   VStack,
   Text,
   Button,
+  Stack,
   Divider,
   ScrollView,
 } from 'native-base';
@@ -18,6 +19,7 @@ import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
 import useRequest from '../../hooks/useRequest';
 import {commentDynamic} from '../../api/daily';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const Index = ({...props}) => {
   const {item} = props.route.params;
@@ -38,14 +40,16 @@ const Index = ({...props}) => {
     });
   }, []);
 
-  const comment = (data: Object, dynamicId: string, replyId: string) => {
+  const comment = async (data: Object, dynamicId: string, replyId: string) => {
     if (data.type === 'text') {
-      runCommentDymaic({
+      const {success} = await runCommentDymaic({
         dynamicId,
         replyId,
         content: data.value,
       });
-      DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());
+      if (success) {
+        DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());
+      }
     }
   };
 
@@ -83,7 +87,7 @@ const Index = ({...props}) => {
               </Text>
             </VStack>
           </HStack>
-          <View pt={4}>
+          <View pt={4} pb={4}>
             <HStack mb={2} flexWrap={'wrap'}>
               {imgList &&
                 imgList.map((item, index) => (
@@ -107,6 +111,38 @@ const Index = ({...props}) => {
               {item.content}
             </Text>
           </View>
+          <Stack space={2} pt={2} direction={'row'} alignItems={'center'}>
+            <HStack alignItems={'center'}>
+              <Icon
+                name="hearto"
+                size={18}
+                color={false ? '#9650FF' : '#C7C4CC'}
+              />
+              <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
+                {item.likeNum}
+              </Text>
+            </HStack>
+            <HStack alignItems={'center'}>
+              <Icon
+                name="message1"
+                size={18}
+                color={false ? '#9650FF' : '#C7C4CC'}
+              />
+              <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
+                {item.commentNum}
+              </Text>
+            </HStack>
+            <HStack alignItems={'center'}>
+              <Icon
+                name="gift"
+                size={18}
+                color={false ? '#9650FF' : '#C7C4CC'}
+              />
+              <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
+                {item.giftNum}
+              </Text>
+            </HStack>
+          </Stack>
         </Box>
         <Divider h={2.5} bg="bg.f5" />
         <Box flex={1}>

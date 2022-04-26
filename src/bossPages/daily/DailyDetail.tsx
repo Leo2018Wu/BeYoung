@@ -8,6 +8,7 @@ import {
   AlertDialog,
   Button,
 } from 'native-base';
+import {DeviceEventEmitter} from 'react-native';
 import Tab from './DailyTab';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
@@ -42,6 +43,7 @@ const Index = ({...props}) => {
       });
       if (success) {
         setDynamic(data);
+        DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());
       }
     }
   };
@@ -77,6 +79,7 @@ const Index = ({...props}) => {
       }
       if (success) {
         setDynamic(data);
+        DeviceEventEmitter.emit('PRESENT_GIFT', Math.random());
         onClose();
       }
     } catch (error) {

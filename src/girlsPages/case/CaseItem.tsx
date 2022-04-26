@@ -9,33 +9,36 @@ import layout from '../../components/Layout';
 
 const Login = ({...props}) => {
   const {item} = props;
+  const navigation = useNavigation();
+
   const [images, setImages] = useState([]);
 
   useEffect(() => {
-    if (item.images) {
-      setImages(JSON.parse(item.images));
+    if (item.imgs) {
+      setImages(JSON.parse(item.imgs));
     }
   }, []);
 
-  const navigation = useNavigation();
+  const preview = (index = 0) => {
+    const imgUrls = images.map((img: string) => {
+      const temp = {url: `${BASE_DOWN_URL + img}`};
+      return temp;
+    });
+    navigation.navigate('Preview', {index, imgUrls});
+  };
+
   return (
     <View>
-      <Pressable
-        onPress={() => {
-          navigation.navigate('Preview', {
-            imgUrls: [{url: BASE_DOWN_URL + images[0]}],
-          });
-        }}
-        style={styles.banner}>
+      <Pressable onPress={() => preview()} style={styles.banner}>
         <CFastImage
-          url={images[0]}
+          url={`${BASE_DOWN_URL + images[0]}`}
           styles={{
             width: '100%',
             height: 210,
             borderRadius: 10,
           }}
         />
-        <View style={styles.optContain}>
+        {/* <View style={styles.optContain}>
           <View style={styles.optView}>
             <Image
               source={require('../assets/follow.png')}
@@ -72,7 +75,7 @@ const Login = ({...props}) => {
             />
             <Text style={styles.optSize}>{item.giftNum}</Text>
           </View>
-        </View>
+        </View> */}
       </Pressable>
     </View>
   );

@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {View, Box, Pressable, Text, HStack} from 'native-base';
 import CaseItem from './CaseItem';
 import CustomFuncFlatList from '../../components/CustomFuncFlatList';
-import {queryDynamicCase} from '../../api/daily';
+import {queryCase} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
 import {querySysDic} from '../../api/common';
 
@@ -81,7 +81,7 @@ const Login = () => {
           horizontal={false}
           numColumns={2}
           renderItem={({item}: any) => <CaseItem item={item} />}
-          url={queryDynamicCase.url}
+          url={queryCase.url}
           par={caseScene}
         />
       </Box>

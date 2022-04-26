@@ -35,8 +35,8 @@ const Index = ({pressCb}: {pressCb: Function}) => {
         shadow={2}
         alignItems="center"
         w={'full'}
+        h={16}
         px={4}
-        py={4}
         style={{
           paddingBottom: insets.bottom + 10,
           backgroundColor: '#fff',
@@ -55,13 +55,12 @@ const Index = ({pressCb}: {pressCb: Function}) => {
             sendMsg();
           }}
           blurOnSubmit
-          fontSize={'md'}
+          fontSize={'sm'}
           variant="filled"
-          py={2}
           mx={4}
           type="text"
           textAlignVertical="top"
-          height="full"
+          h={8}
           onChangeText={e => setValue(e)}
           value={textValue}
           maxLength={300}
