@@ -17,7 +17,17 @@ const mapStateToProps = (state: any) => {
   };
 };
 
+//过滤礼物
+const filterGifts = (data: [], type: boolean | undefined) => {
+  if (!type) {
+    return data;
+  }
+  return data.filter(item => item.canChat);
+};
+
 const Index = ({...props}) => {
+  console.log('props', props);
+
   const {width} = useWindowDimensions();
   const [activeItemId, setActiveId] = useState('');
   const GIFT_ITEM_WiIDTH = (width - 16) / 4;
@@ -56,7 +66,7 @@ const Index = ({...props}) => {
       </HStack>
       <HStack minHeight={24} flexWrap={'wrap'}>
         {giftSkuList &&
-          giftSkuList.map((item: any) => (
+          filterGifts(giftSkuList, props.isOpenChat).map((item: any) => (
             <Pressable
               key={item.id}
               onPress={() => setActiveId(item.id)}
