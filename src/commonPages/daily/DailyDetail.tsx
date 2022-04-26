@@ -40,14 +40,16 @@ const Index = ({...props}) => {
     });
   }, []);
 
-  const comment = (data: Object, dynamicId: string, replyId: string) => {
+  const comment = async (data: Object, dynamicId: string, replyId: string) => {
     if (data.type === 'text') {
-      runCommentDymaic({
+      const {success} = await runCommentDymaic({
         dynamicId,
         replyId,
         content: data.value,
       });
-      DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());
+      if (success) {
+        DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());
+      }
     }
   };
 

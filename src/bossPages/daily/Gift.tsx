@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {DeviceEventEmitter} from 'react-native';
 import {HStack, Box, Image, View, VStack, Text, Center} from 'native-base';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../components/CFastImage';
@@ -76,18 +77,28 @@ const Item = React.memo(({item}: {item: any}) => {
 
 const Index = () => {
   const insets = useSafeAreaInsets();
+  const [keyData, setKeyData] = useState(0);
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('PRESENT_GIFT', res => {
+      setKeyData(res);
+    });
+  }, []);
 
   return (
     <Box
       flex={1}
       px={3}
-      style={{
-        paddingBottom: insets.bottom + 64,
-      }}>
+      style={
+        {
+          // paddingBottom: insets.bottom + 64,
+        }
+      }>
       <DailyDetailContext.Consumer>
         {value => {
           return (
             <CustomFuncFlatList
+              key={keyData}
               url={queryGiftGiving.url}
               par={{
                 dynamicId: value?.id,
