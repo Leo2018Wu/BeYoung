@@ -11,12 +11,11 @@ import constant from '../../store/constant';
 import util from '../../util/util';
 import {getChatUsers} from '../../store/action';
 import EmptySession from '../../components/base/EmptySession';
+import Intimacy from '../../components/base/Intimacy';
 import {useFocusEffect} from '@react-navigation/native';
 
 // 处理会话数据以便渲染使用
 const genSessions = (sessions: any, userMap: any) => {
-  console.log('userMap', userMap);
-
   const list =
     sessions &&
     sessions.map((item: any, index: any) => {
@@ -26,6 +25,8 @@ const genSessions = (sessions: any, userMap: any) => {
         chatUserInfo: userMap[item.to] || {},
       };
     });
+  console.log('list', list);
+
   return list;
 };
 
@@ -111,8 +112,8 @@ function Basic({...props}) {
     const msgInfo = item.item.lastMsg || {};
     return (
       <Pressable onPress={() => chat(item.item)} bg={'white'}>
-        <HStack style={{height: 80}} alignItems="center">
-          <Box px={4}>
+        <HStack px={4} style={{height: 80}} alignItems="center">
+          <Box pr={4}>
             {item.item.unread && item.item.unread > 0 ? (
               <Badge
                 bg="red.600"
@@ -168,6 +169,7 @@ function Basic({...props}) {
               )}
             </VStack>
           </HStack>
+          <Intimacy num={item?.chatUserInfo.intimacy} />
         </HStack>
       </Pressable>
     );
