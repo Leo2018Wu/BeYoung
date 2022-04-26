@@ -144,6 +144,7 @@ const Index = ({...props}) => {
             borderRadius: 40,
           }}>
           <Gifts
+            isOpenChat={true}
             clickItem={(item: object) => {
               onClose();
               presentGift(item);
