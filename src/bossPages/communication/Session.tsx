@@ -321,7 +321,7 @@ const Msgs = ({...props}) => {
             backgroundColor: '#fff',
           }}>
           <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
-            <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
+            <FontAwesome5 name="smile" size={28} color="#000" />
             {props.myUserInfo.gender === 'GENDER_MALE' ? (
               <Pressable onPress={() => onOpen()}>
                 <Ionicons

@@ -316,7 +316,7 @@ const Msgs = ({...props}) => {
               }}
               name="smile"
               size={28}
-              color="#C1C0C9"
+              color="#000"
             />
             <Pressable
               onPress={() => {
