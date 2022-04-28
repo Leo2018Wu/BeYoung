@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {DeviceEventEmitter} from 'react-native';
+import {DeviceEventEmitter, Image} from 'react-native';
 import {HStack, Box, Text, VStack} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -8,6 +8,7 @@ import CustomFuncFlatList from '../../components/CustomFuncFlatList';
 import {queryComment} from '../../api/daily';
 import DailyDetailContext from './context';
 import {useSelector} from 'react-redux';
+import emojiObj from '../../res/emoji';
 
 interface ItemProps {
   content: string;
@@ -17,6 +18,48 @@ interface ItemProps {
   createTime: string;
   userId: string;
 }
+
+const GenContent = ({...props}) => {
+  const {emoji} = emojiObj.emojiList;
+  let {showText} = props;
+  const showTextArray = [];
+  if (/\[[^\]]+\]/.test(showText)) {
+    const emojiItems = showText.match(/\[[^\]]+\]/g);
+    emojiItems.forEach((item: string) => {
+      const wordIndex = showText.indexOf(item);
+      if (wordIndex > 0) {
+        showTextArray.push(showText.substr(0, wordIndex));
+        showText = showText.substr(wordIndex);
+      }
+      showTextArray.push(item);
+      showText = showText.substr(item.length);
+    });
+  }
+  if (showText.length > 0) {
+    showTextArray.push(showText);
+  }
+  return (
+    <HStack my={3} mx={4} alignItems={'center'}>
+      {showTextArray.map((item, index) => {
+        const id = `${item}${index}`;
+        if (emoji[item]) {
+          return (
+            <Image
+              key={id}
+              source={emoji[item].img}
+              style={{width: 5 * 5, height: 5 * 5}}
+            />
+          );
+        }
+        return (
+          <Text key={id} fontSize={'sm'}>
+            {item}
+          </Text>
+        );
+      })}
+    </HStack>
+  );
+};
 
 const areEqual = (pre: any, next: any) => {
   // 优化无关渲染
@@ -81,9 +124,11 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
           </Text>
         </HStack> */}
       </HStack>
-      <Text fontSize={'md'} color={'fontColors.333'} style={{marginLeft: 48}}>
+      <GenContent showText={item.content} />
+      {/* <Text fontSize={'md'} color={'fontColors.333'} style={{marginLeft: 48}}>
         {item.content}
-      </Text>
+
+      </Text> */}
     </Box>
   );
 }, areEqual);

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, HStack, Text, VStack} from 'native-base';
+import {Box, HStack, Pressable, Text, VStack} from 'native-base';
 import CustomFuncFlatList from '../../components/CustomFuncFlatList';
 import CFastImage from '../../components/CFastImage';
 import {queryUnlockWeChat} from '../../api/user';
@@ -9,6 +9,7 @@ interface ItemProp {
   relateNickName: string;
   relateHeadImg: string;
   updateTime: string;
+  userId: string;
 }
 
 const isEqual = (pre: any, next: any) => {
@@ -16,27 +17,38 @@ const isEqual = (pre: any, next: any) => {
   return JSON.stringify(pre.item) === JSON.stringify(next.item);
 };
 
-const Item = React.memo(({item}: {item: ItemProp}) => {
+const Item = React.memo(({item, navigation}: {item: ItemProp}) => {
   return (
     <HStack mb={4} bg={'white'} px={4} py={2} alignItems="center">
-      <CFastImage
-        url={item.relateHeadImg}
-        styles={{
-          width: 50,
-          height: 50,
-          borderRadius: 25,
-        }}
-      />
+      <Pressable
+        onPress={() =>
+          navigation.navigate('HomeDetail', {userId: item.relateUserId})
+        }>
+        <CFastImage
+          url={item.relateHeadImg}
+          styles={{
+            width: 50,
+            height: 50,
+            borderRadius: 25,
+          }}
+        />
+      </Pressable>
       <Text fontWeight={'bold'} ml={2} fontSize="md">
         {item.relateNickName}
       </Text>
       <VStack ml={'auto'}>
-        <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
-          微信号：
-          <Text selectable color={'primary.100'} fontWeight={'bold'}>
+        <HStack>
+          <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
+            微信号：
+          </Text>
+          <Text
+            selectable
+            fontSize={'md'}
+            color={'primary.100'}
+            fontWeight={'bold'}>
             {item.relateWeChat || '该用户还未填写微信号'}
           </Text>
-        </Text>
+        </HStack>
         {/* <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
           手机号：
           <Text selectable color={'primary.100'} fontWeight={'bold'}>
@@ -47,11 +59,13 @@ const Item = React.memo(({item}: {item: ItemProp}) => {
     </HStack>
   );
 }, isEqual);
-const Index = () => {
+const Index = ({...props}) => {
   return (
     <Box flex={1}>
       <CustomFuncFlatList
-        renderItem={({item}: {item: ItemProp}) => <Item item={item} />}
+        renderItem={({item}: {item: ItemProp}) => (
+          <Item navigation={props.navigation} item={item} />
+        )}
         url={queryUnlockWeChat.url}
       />
     </Box>

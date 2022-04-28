@@ -4,7 +4,6 @@ import {
   Divider,
   Actionsheet,
   useDisclose,
-  useToast,
   AlertDialog,
   Button,
 } from 'native-base';
@@ -17,6 +16,7 @@ import useRequest from '../../hooks/useRequest';
 import {commentDynamic, likeDynamic} from '../../api/daily';
 import {giveGift} from '../../api/gift';
 import DailyItem from './DailyItem';
+import ChatEmoji from '../../components/base/ChatEmoji';
 
 interface commentProp {
   type: string;
@@ -146,6 +146,13 @@ const Index = ({...props}) => {
           }
         }}
       />
+      {/* <Box style={{height: 336}}>
+        <ChatEmoji
+          onSelectEmoji={(key: string) => {
+            // setValue(`${textValue + key}`);
+          }}
+        />
+      </Box> */}
     </DailyDetailContext.Provider>
   );
 };

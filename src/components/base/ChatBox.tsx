@@ -1,18 +1,38 @@
-import React, {useState} from 'react';
-import {KeyboardAvoidingView, Platform} from 'react-native';
-import {Pressable, HStack, Input} from 'native-base';
+import React, {useEffect, useRef, useState} from 'react';
+import {KeyboardAvoidingView, Platform, Keyboard} from 'react-native';
+import {Pressable, HStack, Input, Box} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useSelector} from 'react-redux';
+import ChatEmoji from './ChatEmoji';
 
 const Index = ({pressCb}: {pressCb: Function}) => {
-  const insets = useSafeAreaInsets();
+  const inputRef = useRef({});
+
   const [textValue, setValue] = useState(''); // 输入框内容
+  const [isEmojiShow, setEmojiShow] = useState(false);
   const userInfo = useSelector(state => state.user.myUserInfo);
 
+  const _keyboardDidShow = () => {
+    setEmojiShow(false);
+  };
+
+  const _keyboardDidHide = () => {};
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
+
+    // cleanup function
+    return () => {
+      Keyboard.removeListener('keyboardDidShow', () => {});
+      Keyboard.removeListener('keyboardDidHide', () => {});
+    };
+  }, []);
+
   const sendMsg = (type = 'text') => {
+    setEmojiShow(false);
     if (type === 'text') {
       pressCb({type: 'text', value: textValue});
       setValue('');
@@ -39,10 +59,24 @@ const Index = ({pressCb}: {pressCb: Function}) => {
         px={4}
         py={2}
         style={{
-          paddingBottom: insets.bottom + 10,
+          paddingBottom: 20,
           backgroundColor: '#fff',
         }}>
-        <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
+        <Pressable
+          onPress={() => {
+            if (isEmojiShow) {
+              inputRef.current.focus();
+            } else {
+              inputRef.current.blur();
+            }
+            setEmojiShow(!isEmojiShow);
+          }}>
+          {!isEmojiShow ? (
+            <FontAwesome5 name="smile" size={28} color="#000000" />
+          ) : (
+            <FontAwesome name="keyboard-o" size={24} color="#000000" />
+          )}
+        </Pressable>
         {userInfo.gender === 'GENDER_MALE' && (
           <Pressable onPress={() => sendMsg('gift')} ml={4}>
             <Ionicons name="gift" size={26} color="#9650FF" />
@@ -50,6 +84,7 @@ const Index = ({pressCb}: {pressCb: Function}) => {
         )}
         <Input
           multiline
+          ref={(e: object) => (inputRef.current = e)}
           enablesReturnKeyAutomatically={true}
           returnKeyType="send"
           onSubmitEditing={() => {
@@ -78,6 +113,15 @@ const Index = ({pressCb}: {pressCb: Function}) => {
           />
         ) : null}
       </HStack>
+      {isEmojiShow && (
+        <Box style={{height: 336}}>
+          <ChatEmoji
+            onSelectEmoji={(key: string) => {
+              setValue(`${textValue + key}`);
+            }}
+          />
+        </Box>
+      )}
     </KeyboardAvoidingView>
   );
 };
