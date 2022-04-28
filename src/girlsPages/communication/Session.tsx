@@ -16,8 +16,8 @@ import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconNew from 'react-native-vector-icons/MaterialIcons';
+import Octicons from 'react-native-vector-icons/Octicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -26,6 +26,7 @@ import {fetchAccountUser} from '../../api/common';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
+import ChatEmoji from '../../components/base/ChatEmoji';
 import ReplyEmoj from '../../components/base/ReplyEmoj';
 import QuickReply from '../../components/base/QuickReply';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
@@ -69,6 +70,7 @@ const Msgs = ({...props}) => {
   const [keyboradShow, setKeyborad] = useState(false); // 键盘拉起状态
   const {isOpen, onOpen, onClose} = useDisclose();
   const [quickFlag, setQuickFlag] = useState(false); //判断表情回复或快捷回复
+  const [isEmojiShow, setIsEmojiShow] = useState(false);
   const {result: chatUserInfo} = useRequest(
     fetchAccountUser.url,
     {
@@ -95,6 +97,11 @@ const Msgs = ({...props}) => {
 
   const _keyboardDidShow = () => {
     setKeyborad(true);
+    setIsEmojiShow(false);
+  };
+
+  const _keyboardDidHide = () => {
+    setKeyborad(false);
   };
 
   // 自定义表情回复
@@ -126,17 +133,13 @@ const Msgs = ({...props}) => {
     onClose();
   };
 
-  const _keyboardDidHide = () => {
-    setKeyborad(false);
-  };
-
   useEffect(() => {
     scrollToEnd();
   }, [props.msgs]);
 
   useEffect(() => {
     scrollToEnd();
-  }, [keyboradShow]);
+  }, [keyboradShow, isEmojiShow]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
@@ -309,14 +312,32 @@ const Msgs = ({...props}) => {
             backgroundColor: '#fff',
           }}>
           <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
-            <FontAwesome5
+            <Pressable
+              onPress={() => {
+                if (isEmojiShow) {
+                  inputRef.current.focus();
+                } else {
+                  inputRef.current.blur();
+                }
+                setIsEmojiShow(!isEmojiShow);
+              }}>
+              {!isEmojiShow ? (
+                <FontAwesome5 name="smile" size={28} color="#000000" />
+              ) : (
+                <FontAwesome name="keyboard-o" size={24} color="#000000" />
+              )}
+            </Pressable>
+            <Octicons
               onPress={() => {
                 setQuickFlag(true);
                 onOpen();
               }}
-              name="smile"
-              size={28}
-              color="#000"
+              style={{
+                marginLeft: 16,
+              }}
+              name="package"
+              color={'#000'}
+              size={26}
             />
             <Pressable
               onPress={() => {
@@ -362,6 +383,22 @@ const Msgs = ({...props}) => {
               </Pressable>
             ) : null}
           </HStack>
+          {isEmojiShow && (
+            <Box
+              style={{
+                backgroundColor: '#F5F5F5',
+                //  解决外部没有高度时scrollView不能滑动bug
+                height: isEmojiShow ? 336 : 0,
+                paddingBottom: isEmojiShow ? insets.bottom : 10,
+              }}
+              justifyContent={'center'}>
+              <ChatEmoji
+                onSelectEmoji={(key: string) => {
+                  setValue(`${textValue + key}`);
+                }}
+              />
+            </Box>
+          )}
         </Box>
       </KeyboardAvoidingView>
     </Box>
