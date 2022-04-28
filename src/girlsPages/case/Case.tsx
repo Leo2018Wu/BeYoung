@@ -9,7 +9,7 @@ import {querySysDic} from '../../api/common';
 
 const Login = () => {
   const [caseList, setCaseList] = useState([]);
-  const [caseScene, setCaseScene] = useState({});
+  const [caseScene, setCaseScene] = useState({caseScene: ''});
   const [activeCase, setCase] = useState(0);
   const [keyData, setKeyData] = useState(0);
   const {result: sysDicts} = useRequest(
@@ -34,12 +34,10 @@ const Login = () => {
 
   useEffect(() => {
     if (sysDicts && caseList) {
-      setCaseScene(
-        JSON.parse(JSON.stringify({caseScene: caseList[activeCase].code})),
-      );
+      setCaseScene({...caseScene, caseScene: caseList[activeCase].code});
       setKeyData(Math.random());
     }
-  }, [activeCase]);
+  }, [activeCase, caseList]);
 
   return (
     <Box flex={1} bg="white">

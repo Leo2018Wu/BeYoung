@@ -9,6 +9,7 @@ import layout from '../../components/Layout';
 
 const Login = ({...props}) => {
   const {item} = props;
+
   const navigation = useNavigation();
 
   const [images, setImages] = useState([]);

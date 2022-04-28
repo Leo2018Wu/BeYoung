@@ -29,8 +29,10 @@ const Index = () => {
 
   return (
     <View style={styles.userView}>
-      <Pressable onPress={() => navigation.navigate('UserInfoSetting')}>
-        <View style={styles.contain}>
+      <View>
+        <Pressable
+          onPress={() => navigation.navigate('MineGifts')}
+          style={styles.contain}>
           <Image
             source={require('../assets/gift.png')}
             style={{
@@ -41,8 +43,10 @@ const Index = () => {
           <Text style={{fontSize: 12, color: '#fff', marginLeft: 2}}>
             {myStatistic.giftNum || 0}
           </Text>
-        </View>
-        <View style={{alignItems: 'center', marginVertical: 20}}>
+        </Pressable>
+        <Pressable
+          onPress={() => navigation.navigate('UserInfoSetting')}
+          style={{alignItems: 'center', marginVertical: 20}}>
           {/* <Image
             source={require('../assets/defaultAva.png')}
             style={{
@@ -60,8 +64,8 @@ const Index = () => {
             </Text>
             <IconNew name="edit-3" size={14} color="#fff" />
           </View>
-        </View>
-      </Pressable>
+        </Pressable>
+      </View>
       <View style={styles.itemView}>
         <View style={styles.item}>
           <Text style={styles.topText}>{myStatistic.likeNum || 0}</Text>

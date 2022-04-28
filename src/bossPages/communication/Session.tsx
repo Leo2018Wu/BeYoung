@@ -342,7 +342,7 @@ const Msgs = ({...props}) => {
                 setIsEmojiShow(!isEmojiShow);
               }}>
               {!isEmojiShow ? (
-                <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
+                <FontAwesome5 name="smile" size={28} color="#000000" />
               ) : (
                 <FontAwesome name="keyboard-o" size={24} color="#C1C0C9" />
               )}

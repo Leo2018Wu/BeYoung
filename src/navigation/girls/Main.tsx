@@ -21,6 +21,7 @@ import EditHeadImg from '../../girlsPages/mine/setting/EditHeadImg';
 import Session from '../../girlsPages/communication/Session';
 import Label from '../../girlsPages/mine/Label';
 import Service from '../../bossPages/customService/Index';
+import MineGifts from '../../girlsPages/mine/MineGifts';
 
 const Stack = createNativeStackNavigator();
 
@@ -178,6 +179,14 @@ const MyStack = () => {
         }}
         name="Service"
         component={Service}
+      />
+      <Stack.Screen
+        options={{
+          title: '我的礼物',
+          headerBackTitle: '我的',
+        }}
+        name="MineGifts"
+        component={MineGifts}
       />
     </Stack.Navigator>
   );

@@ -26,9 +26,10 @@ export const getMyGifts = () => async dispatch => {
   try {
     const {data} = await fetchData(fetchMyGift.url);
     if (data instanceof Array && data.length > 0) {
+      console.log('---data---', data);
       const map = data.reduce((t, v) => {
-        const {id, ...rest} = v;
-        t[id] = rest;
+        const {giftId, ...rest} = v;
+        t[giftId] = rest;
         return t;
       }, {});
       dispatch({type: 'MY_GIFTS', gifts: map});
