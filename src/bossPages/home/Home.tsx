@@ -11,7 +11,6 @@ import {
   VStack,
   ScrollView,
 } from 'native-base';
-import {useFocusEffect} from '@react-navigation/native';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import CFastImage from '../../components/CFastImage';
@@ -91,11 +90,9 @@ const Home = ({...props}) => {
     }
   }, [gradeDicts]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      _getList();
-    }, [params]),
-  );
+  useEffect(() => {
+    _getList();
+  }, [params]);
 
   const _getList = async () => {
     try {
@@ -256,7 +253,7 @@ const Home = ({...props}) => {
         <Box justifyContent="center" style={{paddingTop: insets.top}}>
           <ScrollView
             horizontal
-            showsHorizontalScrollIndicator={false}
+            showsHorizontalScrollIndicator={true}
             flexDirection={'row'}
             w="full"
             contentContainerStyle={{

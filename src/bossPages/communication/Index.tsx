@@ -169,7 +169,9 @@ function Basic({...props}) {
               )}
             </VStack>
           </HStack>
-          <Intimacy num={item?.chatUserInfo.intimacy} />
+          {item?.chatUserInfo.intimacy ? (
+            <Intimacy num={item?.chatUserInfo.intimacy} />
+          ) : null}
         </HStack>
       </Pressable>
     );

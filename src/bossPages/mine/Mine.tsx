@@ -101,7 +101,7 @@ const Home = ({...props}) => {
       </Pressable>
       <Box
         w={'full'}
-        style={{position: 'absolute', top: 140, zIndex: 1}}
+        style={{position: 'absolute', top: 160, zIndex: 1}}
         px={4}>
         <Box
           alignItems={'center'}
@@ -113,8 +113,8 @@ const Home = ({...props}) => {
           <Text fontWeight={'bold'} mb={4} mt={2} fontSize={'2xl'}>
             {userInfo?.nickName || '暂无昵称'}
           </Text>
-          <Divider my={4} />
-          <HStack justifyContent={'space-around'}>
+          {/* <Divider my={4} /> */}
+          {/* <HStack justifyContent={'space-around'}>
             <VStack flex={1} alignItems={'center'}>
               <Text color={'fontColors.gray'} fontSize="xs">
                 点赞
@@ -127,13 +127,13 @@ const Home = ({...props}) => {
               </Text>
               <Text fontSize={'xl'}>{numInfo?.commentNum}</Text>
             </VStack>
-            {/* <VStack flex={1} alignItems={'center'}>
+            <VStack flex={1} alignItems={'center'}>
               <Text color={'fontColors.gray'} fontSize="xs">
                 关注
               </Text>
               <Text fontSize={'xl'}>218</Text>
-            </VStack> */}
-          </HStack>
+            </VStack>
+          </HStack> */}
         </Box>
         <Box mt={5} shadow={1} borderRadius={4} bg="white">
           {link_group1_list.map((item, index) => (
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: '50%',
     marginLeft: -48,
-    top: 80,
+    top: 100,
     zIndex: 9,
   },
   link_icon: {

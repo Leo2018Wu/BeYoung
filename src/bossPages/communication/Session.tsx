@@ -28,6 +28,7 @@ import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
 import Gifts from '../../components/base/Gifts';
+import ChatEmoji from '../../components/base/ChatEmoji';
 import {giveGift} from '../../api/gift';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
@@ -70,6 +71,7 @@ const Msgs = ({...props}) => {
   const [keyboradShow, setKeyborad] = useState(false); // 键盘拉起状态
   const {isOpen, onOpen, onClose} = useDisclose();
   const [dialogVisible, setIsDialogShow] = useState(false);
+  const [isEmojiShow, setIsEmojiShow] = useState(false);
 
   const cancelRef = useRef(null);
   const {result: chatUserInfo} = useRequest(
@@ -96,10 +98,6 @@ const Msgs = ({...props}) => {
   const setCurrentSession = () => {
     //调用此接口会重置该会话消息未读数
     props.dispatch(setCurrSession({sessionId: props.currentSessionId}));
-  };
-
-  const _keyboardDidShow = () => {
-    setKeyborad(true);
   };
 
   const presentGift = async (item: object) => {
@@ -131,6 +129,10 @@ const Msgs = ({...props}) => {
       console.log('presentGift', error);
     }
   };
+  const _keyboardDidShow = () => {
+    setKeyborad(true);
+    setIsEmojiShow(false);
+  };
 
   const _keyboardDidHide = () => {
     setKeyborad(false);
@@ -142,7 +144,7 @@ const Msgs = ({...props}) => {
 
   useEffect(() => {
     scrollToEnd();
-  }, [keyboradShow]);
+  }, [keyboradShow, isEmojiShow]);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', _keyboardDidShow);
@@ -240,7 +242,15 @@ const Msgs = ({...props}) => {
             <Text color={'white'} fontSize="lg" fontWeight={'bold'}>
               {chatUserInfo[0]?.nickName || '暂无昵称'}
             </Text>
-            <Box h={'full'} justifyContent="center" w={10}>
+            <Pressable
+              onPress={() =>
+                props.navigation.navigate('HomeDetail', {
+                  userId: chatUserInfo[0]?.userId,
+                })
+              }
+              h={'full'}
+              justifyContent="center"
+              w={10}>
               <CFastImage
                 url={chatUserInfo[0]?.headImg || ''}
                 styles={{
@@ -249,7 +259,7 @@ const Msgs = ({...props}) => {
                   borderRadius: 14,
                 }}
               />
-            </Box>
+            </Pressable>
           </HStack>
         </Box>
       </LinearGradient>
@@ -317,13 +327,32 @@ const Msgs = ({...props}) => {
           w={'full'}
           shadow={2}
           style={{
-            paddingBottom: !keyboradShow ? insets.bottom : 10,
+            // paddingBottom: !keyboradShow ? insets.bottom : 10,
+            paddingBottom: 10,
             backgroundColor: '#fff',
           }}>
           <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
-            <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
+            <Pressable
+              onPress={() => {
+                if (isEmojiShow) {
+                  inputRef.current.focus();
+                } else {
+                  inputRef.current.blur();
+                }
+                setIsEmojiShow(!isEmojiShow);
+              }}>
+              {!isEmojiShow ? (
+                <FontAwesome5 name="smile" size={28} color="#C1C0C9" />
+              ) : (
+                <FontAwesome name="keyboard-o" size={24} color="#C1C0C9" />
+              )}
+            </Pressable>
             {props.myUserInfo.gender === 'GENDER_MALE' ? (
-              <Pressable onPress={() => onOpen()}>
+              <Pressable
+                onPress={() => {
+                  onOpen();
+                  Keyboard.dismiss();
+                }}>
                 <Ionicons
                   style={{
                     marginLeft: 16,
@@ -341,7 +370,7 @@ const Msgs = ({...props}) => {
               returnKeyType="send"
               onSubmitEditing={() => {
                 sendMsg();
-                inputRef.current.focus();
+                // inputRef.current.focus();
               }}
               blurOnSubmit
               fontSize={'md'}
@@ -364,6 +393,22 @@ const Msgs = ({...props}) => {
               </Pressable>
             ) : null}
           </HStack>
+          {isEmojiShow && (
+            <Box
+              style={{
+                backgroundColor: '#F5F5F5',
+                //  解决外部没有高度时scrollView不能滑动bug
+                height: isEmojiShow ? 336 : 0,
+                paddingBottom: isEmojiShow ? insets.bottom : 10,
+              }}
+              justifyContent={'center'}>
+              <ChatEmoji
+                onSelectEmoji={(key: string) => {
+                  setValue(`${textValue + key}`);
+                }}
+              />
+            </Box>
+          )}
         </Box>
       </KeyboardAvoidingView>
     </Box>
