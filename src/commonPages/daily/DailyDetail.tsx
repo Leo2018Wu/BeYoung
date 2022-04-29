@@ -37,7 +37,7 @@ const Index = ({...props}) => {
     }
     DeviceEventEmitter.addListener('REPLY_FLAG', res => {
       setReplyFlag(res);
-      DeviceEventEmitter.removeAllListeners('REPLY_FLAG');
+      DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
     });
   }, []);
 

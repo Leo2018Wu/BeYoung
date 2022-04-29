@@ -82,7 +82,7 @@ const Index = () => {
   useEffect(() => {
     DeviceEventEmitter.addListener('PRESENT_GIFT', res => {
       setKeyData(res);
-      DeviceEventEmitter.removeAllListeners('PRESENT_GIFT');
+      DeviceEventEmitter.removeListener('PRESENT_GIFT', () => {});
       // DeviceEventEmitter.removeListener('PRESENT_GIFT');
     });
   }, []);
