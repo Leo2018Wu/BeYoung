@@ -328,10 +328,10 @@ const Msgs = ({...props}) => {
           shadow={2}
           style={{
             // paddingBottom: !keyboradShow ? insets.bottom : 10,
-            paddingBottom: 10,
+            // paddingBottom: 10,
             backgroundColor: '#fff',
           }}>
-          <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
+          <HStack bg={'#F1F0F3'} py={2.5} alignItems="center" w={'full'} px={4}>
             <Pressable
               onPress={() => {
                 if (isEmojiShow) {
@@ -373,13 +373,13 @@ const Msgs = ({...props}) => {
                 // inputRef.current.focus();
               }}
               blurOnSubmit
-              fontSize={'md'}
+              fontSize={'sm'}
               variant="filled"
-              py={2}
               mx={4}
+              h={8}
               type="text"
               textAlignVertical="top"
-              height="full"
+              backgroundColor={'#fff'}
               onChangeText={e => setValue(e)}
               value={textValue}
               maxLength={300}

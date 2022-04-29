@@ -308,10 +308,10 @@ const Msgs = ({...props}) => {
           w={'full'}
           shadow={2}
           style={{
-            paddingBottom: !keyboradShow ? insets.bottom : 10,
+            // paddingBottom: !keyboradShow ? insets.bottom : 10,
             backgroundColor: '#fff',
           }}>
-          <HStack bg={'white'} py={2.5} alignItems="center" w={'full'} px={4}>
+          <HStack bg={'#F1F0F3'} py={2.5} alignItems="center" w={'full'} px={4}>
             <Pressable
               onPress={() => {
                 if (isEmojiShow) {
@@ -322,9 +322,9 @@ const Msgs = ({...props}) => {
                 setIsEmojiShow(!isEmojiShow);
               }}>
               {!isEmojiShow ? (
-                <FontAwesome5 name="smile" size={28} color="#000000" />
+                <FontAwesome5 name="smile" size={22} color="#000000" />
               ) : (
-                <FontAwesome name="keyboard-o" size={24} color="#000000" />
+                <FontAwesome name="keyboard-o" size={22} color="#000000" />
               )}
             </Pressable>
             <Octicons
@@ -333,11 +333,11 @@ const Msgs = ({...props}) => {
                 onOpen();
               }}
               style={{
-                marginLeft: 16,
+                marginLeft: 12,
               }}
               name="package"
-              color={'#000'}
-              size={26}
+              color={'#9650FF'}
+              size={22}
             />
             <Pressable
               onPress={() => {
@@ -346,10 +346,10 @@ const Msgs = ({...props}) => {
               }}>
               <IconNew
                 style={{
-                  marginLeft: 16,
+                  marginLeft: 12,
                 }}
                 name="quickreply"
-                size={26}
+                size={22}
                 color="#9650FF"
               />
             </Pressable>
@@ -363,13 +363,13 @@ const Msgs = ({...props}) => {
                 inputRef.current.focus();
               }}
               blurOnSubmit
-              fontSize={'md'}
+              fontSize={'sm'}
               variant="filled"
-              py={2}
               mx={4}
+              h={8}
               type="text"
               textAlignVertical="top"
-              height="full"
+              backgroundColor={'#fff'}
               onChangeText={e => setValue(e)}
               value={textValue}
               maxLength={300}
