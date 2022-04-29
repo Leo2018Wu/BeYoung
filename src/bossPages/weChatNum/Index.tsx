@@ -1,6 +1,16 @@
 import React from 'react';
-import {Box, HStack, Pressable, Text, VStack} from 'native-base';
+import {
+  Box,
+  HStack,
+  Pressable,
+  Text,
+  useClipboard,
+  useToast,
+  VStack,
+} from 'native-base';
 import CustomFuncFlatList from '../../components/CustomFuncFlatList';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 import CFastImage from '../../components/CFastImage';
 import {queryUnlockWeChat} from '../../api/user';
 
@@ -18,6 +28,12 @@ const isEqual = (pre: any, next: any) => {
 };
 
 const Item = React.memo(({item, navigation}: {item: ItemProp}) => {
+  const {onCopy} = useClipboard();
+  const toast = useToast();
+  const copyText = (value: string) => {
+    onCopy(value);
+    toast.show({description: '复制成功', placement: 'top'});
+  };
   return (
     <HStack mb={4} bg={'white'} px={4} py={2} alignItems="center">
       <Pressable
@@ -48,6 +64,9 @@ const Item = React.memo(({item, navigation}: {item: ItemProp}) => {
             fontWeight={'bold'}>
             {item.relateWeChat || '该用户还未填写微信号'}
           </Text>
+          <Pressable ml={2} onPress={() => copyText(item.relateWeChat)}>
+            <Icon name="copy" size={20} color="#9650FF" />
+          </Pressable>
         </HStack>
         {/* <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
           手机号：

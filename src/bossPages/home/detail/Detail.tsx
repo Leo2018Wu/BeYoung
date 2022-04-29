@@ -40,6 +40,7 @@ const Index = ({...props}) => {
   const {height, width} = useWindowDimensions();
   const {isOpen, onOpen, onClose} = useDisclose();
   const [dialogVisible, setIsDialogShow] = useState(false);
+  const [giftType, setGiftType] = useState('');
 
   const cancelRef = useRef(null);
 
@@ -77,7 +78,7 @@ const Index = ({...props}) => {
         return;
       }
       if (success) {
-        goChat();
+        goChat(giftType);
       }
     } catch (error) {
       console.log('presentGift', error);
@@ -95,14 +96,22 @@ const Index = ({...props}) => {
     });
   };
 
-  const goChat = async () => {
+  const goChat = async (type: string) => {
     const {data: userRelation} = await runFetchRelation({
       relateUserId: userId,
     });
-    if (userRelation.canChat) {
-      jumpChatPage();
+    if (type === 'chat') {
+      if (userRelation.canChat) {
+        jumpChatPage();
+      } else {
+        onOpen();
+      }
     } else {
-      onOpen();
+      if (userRelation.weChatFlag) {
+        props.navigation.navigate('WeChatNum');
+      } else {
+        onOpen();
+      }
     }
   };
 
@@ -144,7 +153,7 @@ const Index = ({...props}) => {
             borderRadius: 40,
           }}>
           <Gifts
-            isOpenChat={true}
+            giftType={giftType}
             clickItem={(item: object) => {
               onClose();
               presentGift(item);
@@ -254,7 +263,10 @@ const Index = ({...props}) => {
             },
           ]}>
           <Pressable
-            onPress={() => goChat()}
+            onPress={() => {
+              setGiftType('chat');
+              goChat('chat');
+            }}
             justifyContent={'center'}
             alignItems="center"
             shadow={2}
@@ -266,6 +278,10 @@ const Index = ({...props}) => {
             <Text fontSize="md">聊天</Text>
           </Pressable>
           <Pressable
+            onPress={() => {
+              setGiftType('contact');
+              goChat('contact');
+            }}
             shadow={2}
             justifyContent={'center'}
             alignItems="center"
