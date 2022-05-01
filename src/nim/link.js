@@ -21,6 +21,7 @@ const onSysMsgs = sysmsgs => {
 };
 
 const onSession = session => {
+  console.log('sessionsession', session);
   //会话信息
   const sessionList = constObj.nim.mergeSessions(
     store.getState().session.sessionList,

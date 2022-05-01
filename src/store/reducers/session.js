@@ -3,6 +3,7 @@ import constObj from '../constant';
 const initialState = {
   currentSessionId: null,
   sessionList: [],
+  relateChatAccount: [], // 聊过天的相关用户账号
 };
 
 export default (state = initialState, action) => {
@@ -14,8 +15,14 @@ export default (state = initialState, action) => {
       return Object.assign({...state}, {currentSessionId: null});
     case 'SESSIONSLIST':
       const {sessionList} = action;
-      return Object.assign({...state}, {sessionList});
-
+      console.log('sessionList', state.relateChatAccount);
+      const data = sessionList.filter(
+        item => state.relateChatAccount.findIndex(e => e === item.to) !== -1,
+      );
+      return Object.assign({...state}, {sessionList: data});
+    case 'RELATECHATUSERACCOUNT':
+      const {relateChatAccount} = action;
+      return Object.assign({...state}, {relateChatAccount});
     // case 'DELSESSION':
     //   console.log('DELSESSION', action, state);
     //   const {sessionId} = action;

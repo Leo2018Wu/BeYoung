@@ -3,6 +3,7 @@ import {
   fetchMyInfo,
   fetchWalletInfo,
   querySysDic,
+  fetchRelateChatAccount,
 } from '../../api/common';
 import {fetchMyGift} from '../../api/gift';
 import fetchData from '../../util/request';
@@ -18,6 +19,13 @@ export const getChatUsers = params => dispatch => {
       }, {});
       dispatch({type: 'CHATUSERINFO', userInfosMap: map});
     }
+  });
+};
+
+// 获取聊过天的对象
+export const getRelateChatAccount = params => dispatch => {
+  fetchData(fetchRelateChatAccount.url, params).then(res => {
+    dispatch({type: 'RELATECHATUSERACCOUNT', relateChatAccount: res.data});
   });
 };
 

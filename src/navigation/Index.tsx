@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {fetchChatAccount} from '../api/common';
 import useRequest from '../hooks/useRequest';
 import {login, logout} from '../nim/link';
-import {getMyInfo, getAllDicts} from '../store/action';
+import {getMyInfo, getAllDicts, getRelateChatAccount} from '../store/action';
 import constObj from '../store/constant';
 import getStorage from '../util/Storage';
 import StackBossMain from './boss/Main';
@@ -41,6 +41,7 @@ const Index = () => {
   };
 
   useEffect(() => {
+    dispatch(getRelateChatAccount());
     dispatch(getMyInfo());
     dispatch(getAllDicts());
     getStorage(['LOGIN_NAVIGAITON_NAME']).then(res => {
@@ -52,10 +53,15 @@ const Index = () => {
     });
     DeviceEventEmitter.addListener('LOGIN_EVENT', res => {
       if (!res) {
+        console.log('DeviceEventEmitterDeviceEventEmitter');
+
+        //清除 聊天关联账号信息
+        dispatch({type: 'RELATECHATUSERACCOUNT', relateChatAccount: []});
         if (constObj.nim) {
           logout();
         }
       } else {
+        dispatch(getRelateChatAccount());
         dispatch(getMyInfo());
         dispatch(getAllDicts());
         getAccount();

@@ -112,3 +112,11 @@ export const fetchStatistic = {
     manual: false,
   },
 };
+
+// 获取聊天相关账号
+export const fetchRelateChatAccount = {
+  url: 'cgi/core/user/fetchRelateChatAccount',
+  options: {
+    manual: false,
+  },
+};
