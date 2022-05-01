@@ -330,8 +330,10 @@ const Msgs = ({...props}) => {
                     <Box key={idx} mb={4}>
                       {ele.flow === 'in' && (
                         <ChatLeft
+                          navigation={props.navigation}
                           msg={Object.assign(ele, {
                             avatar: chatUserInfo[0]?.headImg,
+                            userId: chatUserInfo[0]?.userId,
                           })}
                         />
                       )}

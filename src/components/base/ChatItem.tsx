@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, Box, HStack, Center} from 'native-base';
+import {Text, Box, HStack, Center, Pressable} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import CFastImage from '../CFastImage';
 import {useSelector} from 'react-redux';
@@ -76,17 +76,24 @@ const ChatContent = ({...props}) => {
   return <Text fontSize={'sm'}>{showMsg}</Text>;
 };
 
-export const ChatLeft = ({msg}: any) => {
+export const ChatLeft = ({msg, navigation}: {msg: any; navigation: any}) => {
   const avatar = (
-    <CFastImage
-      url={msg.avatar}
-      styles={{
-        width: 42,
-        height: 42,
-        borderRadius: 4,
-        marginRight: 8,
-      }}
-    />
+    <Pressable
+      onPress={() => {
+        if (navigation && msg?.userId) {
+          navigation.navigate('HomeDetail', {userId: msg.userId});
+        }
+      }}>
+      <CFastImage
+        url={msg.avatar}
+        styles={{
+          width: 42,
+          height: 42,
+          borderRadius: 4,
+          marginRight: 8,
+        }}
+      />
+    </Pressable>
   );
   return (
     <HStack>
