@@ -144,6 +144,7 @@ const Index = ({...props}) => {
             clearButtonMode="while-editing"
             onChangeText={e => setValue(e)}
             flex={1}
+            maxLength={13}
             fontSize={'md'}
             onEndEditing={e => {
               console.log(3, e);

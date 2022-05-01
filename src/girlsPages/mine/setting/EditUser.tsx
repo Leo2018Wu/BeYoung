@@ -82,6 +82,7 @@ const Index = ({...props}) => {
             clearButtonMode="while-editing"
             onChangeText={e => setValue(e)}
             flex={1}
+            maxLength={13}
             fontSize={'md'}
             value={inputValue}
             placeholder="请输入昵称"
