@@ -11,6 +11,7 @@ import {
   KeyboardAvoidingView,
   Actionsheet,
   useDisclose,
+  View,
 } from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
@@ -24,6 +25,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRequest from '../../hooks/useRequest';
 import {fetchAccountUser} from '../../api/common';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
+import Intimacy from '../../components/base/Intimacy';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
 import ChatEmoji from '../../components/base/ChatEmoji';
@@ -200,19 +202,44 @@ const Msgs = ({...props}) => {
           <HStack
             px={4}
             style={{height: 52}}
-            justifyContent="space-between"
+            justifyContent="center"
             alignItems={'center'}>
             <Pressable
               h={'full'}
               onPress={() => props.navigation.goBack()}
               w={10}
+              style={{
+                position: 'absolute',
+                left: 16,
+              }}
               justifyContent="center">
               <Icon name="chevron-left" color={'white'} size={32} />
             </Pressable>
-            <Text color={'white'} fontSize="lg" fontWeight={'bold'}>
-              {chatUserInfo[0]?.nickName || '暂无昵称'}
-            </Text>
-            <Box h={'full'} justifyContent="center" w={10}>
+            <View>
+              <Text
+                alignSelf={'center'}
+                color={'white'}
+                fontSize="md"
+                fontWeight={'bold'}>
+                {chatUserInfo[0]?.nickName || '暂无昵称'}
+              </Text>
+              {chatUserInfo[0]?.intimacy ? (
+                <View>
+                  <Text fontSize={'xs'} textAlign={'center'} color={'#fff'}>
+                    亲密度{chatUserInfo[0]?.intimacy}
+                  </Text>
+                </View>
+              ) : // <Box
+              //   style={{
+              //     position: 'absolute',
+              //     right: 16,
+              //   }}>
+              //   <Intimacy num={chatUserInfo[0]?.intimacy} />
+              // </Box>
+              null}
+            </View>
+
+            {/* <Box h={'full'} justifyContent="center" w={10}>
               <CFastImage
                 url={chatUserInfo[0]?.headImg || ''}
                 styles={{
@@ -221,7 +248,7 @@ const Msgs = ({...props}) => {
                   borderRadius: 14,
                 }}
               />
-            </Box>
+            </Box> */}
           </HStack>
         </Box>
       </LinearGradient>
@@ -309,7 +336,8 @@ const Msgs = ({...props}) => {
           shadow={2}
           style={{
             // paddingBottom: !keyboradShow ? insets.bottom : 10,
-            backgroundColor: '#fff',
+            paddingBottom: Platform.OS === 'ios' ? 20 : 0,
+            backgroundColor: '#F1F0F3',
           }}>
           <HStack bg={'#F1F0F3'} py={2.5} alignItems="center" w={'full'} px={4}>
             <Pressable
