@@ -30,7 +30,7 @@ const ChatContent = ({...props}) => {
       showTextArray.push(showText);
     }
     return (
-      <HStack py={3} px={4} alignItems={'center'}>
+      <HStack py={2} px={2} flexWrap={'wrap'} alignItems={'center'}>
         {showTextArray.map((item, index) => {
           const id = `${item}${index}`;
           if (emoji[item]) {
