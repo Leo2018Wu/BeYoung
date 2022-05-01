@@ -25,6 +25,7 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRequest from '../../hooks/useRequest';
 import {fetchAccountUser} from '../../api/common';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
+import Intimacy from '../../components/base/Intimacy';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
 import Gifts from '../../components/base/Gifts';
@@ -230,19 +231,37 @@ const Msgs = ({...props}) => {
           <HStack
             px={4}
             style={{height: 52}}
-            justifyContent="space-between"
+            justifyContent="center"
             alignItems={'center'}>
             <Pressable
               h={'full'}
               onPress={() => props.navigation.goBack()}
               w={10}
+              style={{
+                position: 'absolute',
+                left: 16,
+              }}
               justifyContent="center">
               <Icon name="chevron-left" color={'white'} size={32} />
             </Pressable>
-            <Text color={'white'} fontSize="lg" fontWeight={'bold'}>
+            <Text
+              alignSelf={'center'}
+              color={'white'}
+              fontSize="lg"
+              fontWeight={'bold'}>
               {chatUserInfo[0]?.nickName || '暂无昵称'}
             </Text>
-            <Pressable
+            {chatUserInfo[0]?.intimacy ? (
+              <Box
+                style={{
+                  position: 'absolute',
+                  right: 16,
+                }}>
+                <Intimacy num={chatUserInfo[0]?.intimacy} />
+              </Box>
+            ) : null}
+
+            {/* <Pressable
               onPress={() =>
                 props.navigation.navigate('HomeDetail', {
                   userId: chatUserInfo[0]?.userId,
@@ -259,7 +278,7 @@ const Msgs = ({...props}) => {
                   borderRadius: 14,
                 }}
               />
-            </Pressable>
+            </Pressable> */}
           </HStack>
         </Box>
       </LinearGradient>
@@ -328,10 +347,10 @@ const Msgs = ({...props}) => {
           shadow={2}
           style={{
             // paddingBottom: !keyboradShow ? insets.bottom : 10,
-            // paddingBottom: 10,
-            backgroundColor: '#fff',
+            paddingBottom: 20,
+            backgroundColor: '#F1F0F3',
           }}>
-          <HStack bg={'#F1F0F3'} py={2.5} alignItems="center" w={'full'} px={4}>
+          <HStack py={2.5} alignItems="center" w={'full'} px={4}>
             <Pressable
               onPress={() => {
                 if (isEmojiShow) {

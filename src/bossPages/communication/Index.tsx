@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Badge, Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
 import {StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';

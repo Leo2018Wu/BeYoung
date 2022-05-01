@@ -144,14 +144,14 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
           }}
           direction={'row'}
           alignItems={'center'}>
-          <HStack mr={'auto'} alignItems={'center'}>
+          {/* <HStack mr={'auto'} alignItems={'center'}>
             <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
               评分
             </Text>
             <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
               {item.score}
             </Text>
-          </HStack>
+          </HStack> */}
           <Pressable
             onPress={() => returnFunc && returnFunc(item)}
             flexDirection={'row'}

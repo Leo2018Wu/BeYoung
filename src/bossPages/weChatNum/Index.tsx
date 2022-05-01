@@ -32,7 +32,7 @@ const Item = React.memo(({item, navigation}: {item: ItemProp}) => {
   const toast = useToast();
   const copyText = (value: string) => {
     onCopy(value);
-    toast.show({description: '复制成功', placement: 'top'});
+    toast.show({description: '复制成功', placement: 'top', duration: 1000});
   };
   return (
     <HStack mb={4} bg={'white'} px={4} py={2} alignItems="center">

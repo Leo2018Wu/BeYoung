@@ -14,6 +14,9 @@ import {
   useDisclose,
   AlertDialog,
   Button,
+  Modal,
+  useClipboard,
+  useToast,
 } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {StyleSheet, useWindowDimensions} from 'react-native';
@@ -39,6 +42,7 @@ const Index = ({...props}) => {
   const dispatch = useDispatch();
   const {height, width} = useWindowDimensions();
   const {isOpen, onOpen, onClose} = useDisclose();
+  const [weChatModal, setWechatModal] = useState(false);
   const [dialogVisible, setIsDialogShow] = useState(false);
   const [giftType, setGiftType] = useState('');
 
@@ -63,6 +67,9 @@ const Index = ({...props}) => {
     {userId},
     fetchStatistic.options,
   );
+
+  const {onCopy} = useClipboard();
+  const toast = useToast();
 
   const presentGift = async (item: object) => {
     try {
@@ -108,11 +115,19 @@ const Index = ({...props}) => {
       }
     } else {
       if (userRelation.weChatFlag) {
-        props.navigation.navigate('WeChatNum');
+        // 修改为弹窗展示
+        setWechatModal(true);
+        // props.navigation.navigate('WeChatNum');
       } else {
         onOpen();
       }
     }
+  };
+
+  const copyText = (value: string) => {
+    onCopy(value);
+    toast.show({description: '复制成功', placement: 'top', duration: 1000});
+    setWechatModal(false);
   };
 
   if (!userInfo) {
@@ -121,6 +136,29 @@ const Index = ({...props}) => {
 
   return (
     <MyContext.Provider value={userInfo}>
+      <Modal isOpen={weChatModal} onClose={() => setWechatModal(false)}>
+        <Modal.Content py={4}>
+          <HStack mb={4} justifyContent={'center'} alignItems={'center'}>
+            <Text fontSize={'md'}>女生微信：</Text>
+            <Text
+              color={'primary.100'}
+              fontWeight="bold"
+              fontSize={'lg'}
+              selectable>
+              {userInfo.weChat}
+            </Text>
+          </HStack>
+          <Divider />
+          <Pressable
+            pt={3}
+            alignItems="center"
+            onPress={() => copyText(userInfo.weChat)}>
+            <Text color={'primary.100'} fontWeight="bold" fontSize={'md'}>
+              复制微信号
+            </Text>
+          </Pressable>
+        </Modal.Content>
+      </Modal>
       <AlertDialog
         leastDestructiveRef={cancelRef}
         isOpen={dialogVisible}
