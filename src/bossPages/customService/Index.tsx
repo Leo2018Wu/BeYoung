@@ -22,7 +22,7 @@ const Index = () => {
 
   const copyText = (value: string) => {
     onCopy(value);
-    toast.show({description: '复制成功', placement: 'top'});
+    toast.show({description: '复制成功', placement: 'top', duration: 1000});
   };
 
   return (

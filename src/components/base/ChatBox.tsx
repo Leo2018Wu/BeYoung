@@ -60,7 +60,7 @@ const Index = ({pressCb}: {pressCb: Function}) => {
         py={2}
         style={{
           paddingBottom: 20,
-          backgroundColor: '#fff',
+          backgroundColor: '#F1F0F3',
         }}>
         <Pressable
           onPress={() => {
@@ -93,10 +93,14 @@ const Index = ({pressCb}: {pressCb: Function}) => {
           blurOnSubmit
           fontSize={'sm'}
           variant="filled"
-          mx={4}
+          mx={2}
+          paddingLeft={2}
+          p={1}
+          h={'full'}
+          flexWrap={'wrap'}
           type="text"
-          textAlignVertical="top"
-          h={8}
+          textAlignVertical="center"
+          backgroundColor={'#fff'}
           onChangeText={e => setValue(e)}
           value={textValue}
           maxLength={300}

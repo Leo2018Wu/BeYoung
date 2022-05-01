@@ -393,11 +393,12 @@ const Msgs = ({...props}) => {
               }}
               blurOnSubmit
               fontSize={'sm'}
-              variant="filled"
-              mx={4}
-              h={8}
+              mx={2}
+              paddingLeft={2}
+              p={1}
+              h={'full'}
               type="text"
-              textAlignVertical="top"
+              textAlignVertical="center"
               backgroundColor={'#fff'}
               onChangeText={e => setValue(e)}
               value={textValue}
