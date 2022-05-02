@@ -44,8 +44,8 @@ export default (state = initialState, action) => {
     //       },
     //     });
     //   return Object.assign({...state}, {sessionList: newList});
-    // case 'RESET':
-    //   return initialState;
+    case 'RESET':
+      return initialState;
     default:
       return state;
   }

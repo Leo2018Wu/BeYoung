@@ -145,7 +145,7 @@ export const logout = () => {
   constObj.nim.logout({
     done(error) {
       constObj.nim = null;
-      // store.dispatch({type: 'RESET'});
+      store.dispatch({type: 'RESET'});
       if (error) {
         console.log(error);
       }
