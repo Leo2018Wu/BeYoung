@@ -51,6 +51,7 @@ const Login = () => {
         {caseList &&
           caseList.map((item, index1) => (
             <Pressable
+              key={index1}
               onPress={() => setCase(index1)}
               style={{marginHorizontal: 15, justifyContent: 'center'}}>
               <View>
