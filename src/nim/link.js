@@ -58,7 +58,7 @@ const destroyNIM = () =>
 
 export const initNIM = (account, token, callback) => {
   constObj.nim = NIM.getInstance({
-    debug: true,
+    debug: __DEV__,
     appKey: configs.appkey,
     // account: '13916838994',
     // token: '1234567890',
