@@ -345,7 +345,9 @@ const Msgs = ({...props}) => {
                           })}
                         />
                       )}
-                      {ele.flow === 'out' && <ChatRight msg={ele} />}
+                      {ele.flow === 'out' && (
+                        <ChatRight navigation={props.navigation} msg={ele} />
+                      )}
                     </Box>
                   ))}
                 </Box>

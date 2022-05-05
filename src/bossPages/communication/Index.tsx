@@ -27,7 +27,6 @@ const genSessions = (sessions: any, userMap: any) => {
     });
   DeviceEventEmitter.emit('UNREADFLAG', true);
   console.log('list', list);
-
   return list;
 };
 

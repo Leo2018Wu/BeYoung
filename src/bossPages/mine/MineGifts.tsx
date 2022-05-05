@@ -37,10 +37,6 @@ const Index = ({...props}) => {
     props.dispatch(getMyGifts());
   }, []);
 
-  useEffect(() => {
-    console.log('--giftSkuList--', giftSkuList);
-  }, [giftSkuList]);
-
   return (
     <Box py={4} px={4} flex={1} bg="white">
       <ScrollView style={{flex: 1, height: '100%'}}>

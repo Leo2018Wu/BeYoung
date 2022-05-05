@@ -114,18 +114,20 @@ export const ChatLeft = ({msg, navigation}: {msg: any; navigation: any}) => {
   );
 };
 
-export const ChatRight = ({msg}: any) => {
+export const ChatRight = ({msg, navigation}: {msg: any; navigation: any}) => {
   const userInfo = useSelector(state => state.user.myUserInfo);
   const avatar = (
-    <CFastImage
-      url={userInfo?.headImg}
-      styles={{
-        width: 42,
-        height: 42,
-        borderRadius: 4,
-        marginLeft: 8,
-      }}
-    />
+    <Pressable onPress={() => navigation && navigation.navigate('Setting')}>
+      <CFastImage
+        url={userInfo?.headImg}
+        styles={{
+          width: 42,
+          height: 42,
+          borderRadius: 4,
+          marginLeft: 8,
+        }}
+      />
+    </Pressable>
   );
   return (
     <HStack alignItems={'center'}>
