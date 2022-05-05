@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Center, HStack, Image, Pressable, Text} from 'native-base';
+import {Center, HStack, Image, Pressable, Text, View} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {DeviceEventEmitter} from 'react-native';
 
 import HomeScreen from '../../bossPages/home/Home';
 import DailyScreen from '../../bossPages/daily/Index';
@@ -42,6 +43,14 @@ const MyTabs = () => {
   const MyTabBar = (props: any) => {
     const {state, descriptors, navigation} = props;
 
+    const [unreadCount, setUnreadCount] = useState('');
+
+    useEffect(() => {
+      DeviceEventEmitter.addListener('UNREADCOUNT', res => {
+        setUnreadCount(res);
+      });
+    }, []);
+
     return (
       <HStack
         // eslint-disable-next-line react-native/no-inline-styles
@@ -77,6 +86,23 @@ const MyTabs = () => {
               key={route.key}
               onPress={onPress}
               pb={INSET_BOTTOM / 2}>
+              {index == 2 && unreadCount ? (
+                <View
+                  style={{
+                    position: 'absolute',
+                    right: 20,
+                    top: 4,
+                    backgroundColor: 'red',
+                    borderRadius: 100,
+                    minWidth: 14,
+                    minHeight: 14,
+                    zIndex: 100,
+                  }}>
+                  <Text textAlign={'center'} fontSize={10} color={'#fff'}>
+                    {unreadCount}
+                  </Text>
+                </View>
+              ) : null}
               <Center h="full">
                 <Image
                   alt="tab_icon"

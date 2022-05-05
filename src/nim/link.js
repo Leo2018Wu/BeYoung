@@ -23,7 +23,6 @@ const onSysMsgs = sysmsgs => {
 
 const onSession = session => {
   console.log('sessionsession', session);
-  DeviceEventEmitter.emit('UNREADFLAG', session);
   //会话信息
   const sessionList = constObj.nim.mergeSessions(
     store.getState().session.sessionList,
@@ -35,6 +34,12 @@ const onSession = session => {
   //     return time2 - time1;
   // })
   store.dispatch({type: 'SESSIONSLIST', sessionList});
+  let count = 0;
+  store.getState().session.sessionList &&
+    store.getState().session.sessionList.forEach(e => {
+      count += e.unread;
+    });
+  DeviceEventEmitter.emit('UNREADCOUNT', count);
   console.log('store', store.getState());
 };
 

@@ -26,7 +26,6 @@ const MyTabs = () => {
 
   useEffect(() => {
     DeviceEventEmitter.addListener('UNREADCOUNT', res => {
-      console.log('--unreadCount--', unreadCount);
       setUnreadCount(res);
     });
   }, []);

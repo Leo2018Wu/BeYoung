@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Badge, Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
-import {StyleSheet, View, DeviceEventEmitter} from 'react-native';
+import {StyleSheet, View, DeviceEventEmitter, StatusBar} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -26,7 +26,6 @@ const genSessions = (sessions: any, userMap: any) => {
       };
     });
   DeviceEventEmitter.emit('UNREADFLAG', true);
-  console.log('list', list);
   return list;
 };
 
@@ -46,26 +45,19 @@ function Basic({...props}) {
   const insets = useSafeAreaInsets();
   useFocusEffect(
     React.useCallback(() => {
-      const chatUserIds =
-        props.listData && props.listData.map((item: any) => item.to);
-      props.dispatch(getChatUsers({accountIds: chatUserIds}));
-    }, []),
-  );
-
-  useEffect(() => {
-    DeviceEventEmitter.addListener('UNREADFLAG', res => {
-      console.log('--点进来了--');
-
-      if (res) {
+      DeviceEventEmitter.addListener('UNREADFLAG', res => {
         let count = 0;
         props.listData &&
           props.listData.forEach(e => {
             count += e.unread;
           });
         DeviceEventEmitter.emit('UNREADCOUNT', count);
-      }
-    });
-  }, []);
+      });
+      const chatUserIds =
+        props.listData && props.listData.map((item: any) => item.to);
+      props.dispatch(getChatUsers({accountIds: chatUserIds}));
+    }, []),
+  );
 
   const stickTopRow = (rowMap: any, key: any, item: any) => {
     nim &&
@@ -220,6 +212,7 @@ function Basic({...props}) {
 
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor="transparent" translucent />
       <LinearGradient
         start={{x: 0, y: 0.5}}
         end={{x: 1, y: 0.5}}
