@@ -115,10 +115,10 @@ const Index = ({...props}) => {
           alignItems={'center'}>
           <HStack mr={'auto'} alignItems={'center'}>
             <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              {/* 评分 */}
+              评分
             </Text>
             <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              {/* {item.score} */}
+              {item.score}
             </Text>
           </HStack>
           <HStack alignItems={'center'}>

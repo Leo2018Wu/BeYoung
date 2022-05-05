@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
+import {DeviceEventEmitter} from 'react-native';
 // import {useStore} from 'react-redux';
 import {store} from '../store/index';
 import constObj from '../store/constant';
@@ -22,6 +23,7 @@ const onSysMsgs = sysmsgs => {
 
 const onSession = session => {
   console.log('sessionsession', session);
+  DeviceEventEmitter.emit('UNREADFLAG', session);
   //会话信息
   const sessionList = constObj.nim.mergeSessions(
     store.getState().session.sessionList,

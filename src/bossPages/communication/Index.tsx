@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Badge, Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, DeviceEventEmitter} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -25,6 +25,7 @@ const genSessions = (sessions: any, userMap: any) => {
         chatUserInfo: userMap[item.to] || {},
       };
     });
+  DeviceEventEmitter.emit('UNREADFLAG', true);
   console.log('list', list);
 
   return list;
@@ -51,6 +52,21 @@ function Basic({...props}) {
       props.dispatch(getChatUsers({accountIds: chatUserIds}));
     }, []),
   );
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('UNREADFLAG', res => {
+      console.log('--点进来了--');
+
+      if (res) {
+        let count = 0;
+        props.listData &&
+          props.listData.forEach(e => {
+            count += e.unread;
+          });
+        DeviceEventEmitter.emit('UNREADCOUNT', count);
+      }
+    });
+  }, []);
 
   const stickTopRow = (rowMap: any, key: any, item: any) => {
     nim &&
@@ -101,6 +117,8 @@ function Basic({...props}) {
   };
 
   const chat = (session: any) => {
+    console.log('--session--', session);
+
     mapDispatch(
       {type: 'SESSIONID', currentSessionId: session.id},
       props.dispatch,

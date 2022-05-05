@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {DeviceEventEmitter} from 'react-native';
 import {Center, HStack, Pressable, Text, Image, View} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -20,6 +21,15 @@ const MyTabs = () => {
   const insets = useSafeAreaInsets(); // 安全区域边界信息
   const INSET_BOTTOM = insets.bottom; // 安全区域额底部高度
   const TABBAR_HEIGHT = 48; // 底部tab高度
+
+  const [unreadCount, setUnreadCount] = useState('');
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('UNREADCOUNT', res => {
+      console.log('--unreadCount--', unreadCount);
+      setUnreadCount(res);
+    });
+  }, []);
 
   const list = [
     {
@@ -87,6 +97,23 @@ const MyTabs = () => {
               onPress={onPress}
               bg={'#fff'}
               pb={INSET_BOTTOM / 2}>
+              {index == 3 && unreadCount != '' ? (
+                <View
+                  style={{
+                    position: 'absolute',
+                    right: 15,
+                    top: 0,
+                    backgroundColor: 'red',
+                    borderRadius: 50,
+                    minWidth: 18,
+                    minHeight: 18,
+                    zIndex: 100,
+                  }}>
+                  <Text textAlign={'center'} fontSize={'xs'} color={'#fff'}>
+                    {unreadCount}
+                  </Text>
+                </View>
+              ) : null}
               <Center h="full">
                 {index != 2 ? (
                   <View>
@@ -107,6 +134,7 @@ const MyTabs = () => {
                         }}
                       />
                     )}
+
                     <Text
                       style={{
                         color: isFocused ? '#8B5CFF' : '#999',
