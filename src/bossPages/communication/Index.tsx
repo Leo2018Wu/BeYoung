@@ -25,8 +25,6 @@ const genSessions = (sessions: any, userMap: any) => {
         chatUserInfo: userMap[item.to] || {},
       };
     });
-  console.log('list', list);
-
   return list;
 };
 

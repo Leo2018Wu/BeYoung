@@ -161,12 +161,6 @@ const Index = () => {
             return (
               <CustomFuncFlatList
                 key={keyData}
-                ref={e => {
-                  // setTimeout(() => {
-                  //   console.log(2312321, e);
-                  //   e.props.onRefresh();
-                  // }, 10 * 1000);
-                }}
                 url={queryComment.url}
                 par={{
                   dynamicId: value?.id,

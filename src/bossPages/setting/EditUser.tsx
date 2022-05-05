@@ -146,9 +146,6 @@ const Index = ({...props}) => {
             flex={1}
             maxLength={13}
             fontSize={'md'}
-            onEndEditing={e => {
-              console.log(3, e);
-            }}
             onSubmitEditing={() => {
               edit();
             }}
