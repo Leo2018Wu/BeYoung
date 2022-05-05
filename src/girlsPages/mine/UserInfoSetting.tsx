@@ -28,7 +28,7 @@ import layout from '../../components/Layout';
 const Setting = ({...props}) => {
   const [service, setService] = useState('');
   const [labelList, setLabelList] = useState([]);
-  const [grades, setGrades] = useState([]); // 渲染的年纪列表
+  const [grades, setGrades] = useState([]); // 渲染的年级列表
   const {run: runUpdate} = useRequest(updateUserInfo.url);
   const {isOpen, onOpen, onClose} = useDisclose();
 
@@ -271,7 +271,7 @@ const Setting = ({...props}) => {
             </View>
           </Pressable>
           <View style={styles.itemView}>
-            <Text>年纪</Text>
+            <Text>年级</Text>
             <Select
               selectedValue={service}
               width={40}

@@ -49,17 +49,22 @@ const Item = React.memo(({item, navigation}: {item: ItemProp}) => {
           }}
         />
       </Pressable>
-      <Text fontWeight={'bold'} ml={2} fontSize="md">
-        {item.relateNickName}
-      </Text>
-      <VStack ml={'auto'}>
+      <VStack ml={2}>
         <HStack>
-          <Text fontSize={'md'} style={{color: '#5F5E5E'}}>
+          {/* <Text fontWeight={'bold'} fontSize="md">
+            昵称:
+          </Text> */}
+          <Text fontWeight={'bold'} fontSize="md">
+            {item.relateNickName}
+          </Text>
+        </HStack>
+        <HStack>
+          <Text fontSize={'sm'} style={{color: '#5F5E5E'}}>
             微信号：
           </Text>
           <Text
             selectable
-            fontSize={'md'}
+            fontSize={'sm'}
             color={'primary.100'}
             fontWeight={'bold'}>
             {item.relateWeChat || '该用户还未填写微信号'}
