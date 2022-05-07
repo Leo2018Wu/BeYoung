@@ -76,15 +76,22 @@ const Msgs = ({...props}) => {
   const [isEmojiShow, setIsEmojiShow] = useState(false);
 
   const cancelRef = useRef(null);
-  const {result: chatUserInfo} = useRequest(
-    fetchAccountUser.url,
-    {
-      accountIds: [props.route.params.chatUserId],
-    },
-    fetchAccountUser.options,
-  );
+  const {run: runGetChatUsers} = useRequest(fetchAccountUser.url);
+
+  const [chatUserInfo, setChatUserInfo] = useState({});
 
   const {run: runGiveGift} = useRequest(giveGift.url);
+
+  const getData = async () => {
+    try {
+      const {data} = await runGetChatUsers({
+        accountIds: [props.route.params.chatUserId],
+      });
+      if (data.length >= 0 && data instanceof Array) {
+        setChatUserInfo(data[0]);
+      }
+    } catch (error) {}
+  };
 
   const scrollToEnd = () => {
     if (scrollRef.current) {
@@ -107,7 +114,7 @@ const Msgs = ({...props}) => {
       const {success, code} = await runGiveGift({
         giftId: item.id,
         num: 1,
-        receiveUserId: chatUserInfo[0]?.userId,
+        receiveUserId: chatUserInfo?.userId,
       });
       if (code === 50001) {
         // 余额不足情况
@@ -141,6 +148,7 @@ const Msgs = ({...props}) => {
   };
 
   useEffect(() => {
+    getData();
     scrollToEnd();
   }, [props.msgs]);
 
@@ -251,16 +259,16 @@ const Msgs = ({...props}) => {
                 color={'white'}
                 fontSize="md"
                 fontWeight={'bold'}>
-                {chatUserInfo[0]?.nickName || '暂无昵称'}
+                {chatUserInfo?.nickName || '暂无昵称'}
               </Text>
             </View>
-            {chatUserInfo[0]?.intimacy ? (
+            {chatUserInfo?.intimacy ? (
               <Box
                 style={{
                   position: 'absolute',
                   right: 16,
                 }}>
-                <Intimacy num={chatUserInfo[0]?.intimacy} />
+                <Intimacy num={chatUserInfo?.intimacy} />
               </Box>
             ) : //   <View>
             //   <Text fontSize={'xs'} textAlign={'center'} color={'#fff'}>
@@ -339,8 +347,8 @@ const Msgs = ({...props}) => {
                         <ChatLeft
                           navigation={props.navigation}
                           msg={Object.assign(ele, {
-                            avatar: chatUserInfo[0]?.headImg,
-                            userId: chatUserInfo[0]?.userId,
+                            avatar: chatUserInfo?.headImg,
+                            userId: chatUserInfo?.userId,
                           })}
                         />
                       )}
