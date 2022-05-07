@@ -25,7 +25,6 @@ const genSessions = (sessions: any, userMap: any) => {
         chatUserInfo: userMap[item.to] || {},
       };
     });
-  DeviceEventEmitter.emit('UNREADFLAG', true);
   return list;
 };
 
@@ -45,16 +44,12 @@ function Basic({...props}) {
   const insets = useSafeAreaInsets();
   useFocusEffect(
     React.useCallback(() => {
-      DeviceEventEmitter.addListener('UNREADFLAG', res => {
-        console.log('--props.listData--', props.listData);
-
-        let count = 0;
-        props.listData &&
-          props.listData.forEach(e => {
-            count += e.unread;
-          });
-        DeviceEventEmitter.emit('UNREADCOUNT', count);
-      });
+      let count = 0;
+      props.listData &&
+        props.listData.forEach(e => {
+          count += e.unread;
+        });
+      DeviceEventEmitter.emit('UNREADCOUNT', count);
       const chatUserIds =
         props.listData && props.listData.map((item: any) => item.to);
       props.dispatch(getChatUsers({accountIds: chatUserIds}));
