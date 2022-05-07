@@ -22,11 +22,11 @@ const Index = ({num}: {num: number | string}) => {
       <HStack alignItems={'center'}>
         <Image
           style={{width: 20, height: 20}}
-          source={require('../../images/heart1.jpeg')}
+          source={require('../../images/heart1.png')}
         />
         <Text
           ml={1}
-          style={{color: 'orange'}}
+          style={{color: '#e16531'}}
           fontSize="md"
           fontWeight={'bold'}>
           {num}
@@ -36,14 +36,13 @@ const Index = ({num}: {num: number | string}) => {
   } else if (num >= 36) {
     return (
       <HStack alignItems={'center'}>
-        {/* <Icon name="heart" size={20} color="orange" /> */}
         <Image
           style={{width: 20, height: 20}}
-          source={require('../../images/heart1.jpeg')}
+          source={require('../../images/heart1.png')}
         />
         <Text
           ml={1}
-          style={{color: 'orange'}}
+          style={{color: '#e16531'}}
           fontSize="md"
           fontWeight={'bold'}>
           {num}
@@ -55,12 +54,11 @@ const Index = ({num}: {num: number | string}) => {
       <HStack alignItems={'center'}>
         <Image
           style={{width: 20, height: 20}}
-          source={require('../../images/heart2.jpeg')}
+          source={require('../../images/heart2.png')}
         />
-        <Icon name="heart" size={20} color="yellow" />
         <Text
           ml={1}
-          style={{color: 'yellow'}}
+          style={{color: '#f4ea2a'}}
           fontSize="md"
           fontWeight={'bold'}>
           {num}
