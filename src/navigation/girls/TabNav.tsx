@@ -109,7 +109,7 @@ const MyTabs = () => {
                     zIndex: 100,
                   }}>
                   <Text textAlign={'center'} fontSize={'xs'} color={'#fff'}>
-                    {unreadCount}
+                    {unreadCount <= 99 ? unreadCount : '...'}
                   </Text>
                 </View>
               ) : null}

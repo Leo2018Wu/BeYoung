@@ -86,7 +86,7 @@ const MyTabs = () => {
               key={route.key}
               onPress={onPress}
               pb={INSET_BOTTOM / 2}>
-              {index == 2 && unreadCount != '' ? (
+              {index == 2 && unreadCount ? (
                 <View
                   style={{
                     position: 'absolute',
@@ -99,7 +99,7 @@ const MyTabs = () => {
                     zIndex: 100,
                   }}>
                   <Text textAlign={'center'} fontSize={10} color={'#fff'}>
-                    {unreadCount}
+                    {unreadCount <= 99 ? unreadCount : '...'}
                   </Text>
                 </View>
               ) : null}
