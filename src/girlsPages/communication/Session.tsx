@@ -73,13 +73,19 @@ const Msgs = ({...props}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [quickFlag, setQuickFlag] = useState(false); //判断表情回复或快捷回复
   const [isEmojiShow, setIsEmojiShow] = useState(false);
-  const {result: chatUserInfo} = useRequest(
-    fetchAccountUser.url,
-    {
-      accountIds: [props.route.params.chatUserId],
-    },
-    fetchAccountUser.options,
-  );
+  const {run: runGetChatUsers} = useRequest(fetchAccountUser.url);
+  const [chatUserInfo, setChatUserInfo] = useState({});
+
+  const getData = async () => {
+    try {
+      const {data} = await runGetChatUsers({
+        accountIds: [props.route.params.chatUserId],
+      });
+      if (data.length >= 0 && data instanceof Array) {
+        setChatUserInfo(data[0]);
+      }
+    } catch (error) {}
+  };
 
   const scrollToEnd = () => {
     if (scrollRef.current) {
@@ -105,6 +111,11 @@ const Msgs = ({...props}) => {
   const _keyboardDidHide = () => {
     setKeyborad(false);
   };
+
+  useEffect(() => {
+    getData();
+    scrollToEnd();
+  }, [props.msgs]);
 
   // 自定义表情回复
   const replyEmojFunc = async (item: object) => {
@@ -221,29 +232,22 @@ const Msgs = ({...props}) => {
                 color={'white'}
                 fontSize="md"
                 fontWeight={'bold'}>
-                {chatUserInfo[0]?.nickName || '暂无昵称'}
+                {chatUserInfo?.nickName || '暂无昵称'}
               </Text>
             </View>
-            {chatUserInfo[0]?.intimacy ? (
+            {chatUserInfo?.intimacy ? (
               <Box
                 style={{
                   position: 'absolute',
                   right: 16,
                 }}>
-                <Intimacy num={chatUserInfo[0]?.intimacy} />
+                <Intimacy num={chatUserInfo?.intimacy} />
               </Box>
             ) : // <View>
             //   <Text fontSize={'xs'} textAlign={'center'} color={'#fff'}>
-            //     亲密度{chatUserInfo[0]?.intimacy}
+            //     亲密度{chatUserInfo?.intimacy}
             //   </Text>
             // </View>
-            // <Box
-            //   style={{
-            //     position: 'absolute',
-            //     right: 16,
-            //   }}>
-            //   <Intimacy num={chatUserInfo[0]?.intimacy} />
-            // </Box>
             null}
 
             {/* <Box h={'full'} justifyContent="center" w={10}>
@@ -327,7 +331,7 @@ const Msgs = ({...props}) => {
                       {ele.flow === 'in' && (
                         <ChatLeft
                           msg={Object.assign(ele, {
-                            avatar: chatUserInfo[0]?.headImg,
+                            avatar: chatUserInfo?.headImg,
                           })}
                         />
                       )}
