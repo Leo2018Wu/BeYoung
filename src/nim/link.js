@@ -50,7 +50,6 @@ const destroyNIM = () =>
         done(error) {
           constObj.nim = null;
           store.dispatch({type: 'RESET'}); //需要去重置store里面的nim对象
-          console.log('destroyNIM', store.getState());
           if (error) {
             reject(error);
           } else {
@@ -149,13 +148,14 @@ export const login = (account, token) => {
 };
 
 export const logout = () => {
-  constObj.nim.logout({
-    done(error) {
-      constObj.nim = null;
-      store.dispatch({type: 'RESET'});
-      if (error) {
-        console.log(error);
-      }
-    },
-  });
+  constObj.nim.disconnect();
+  // constObj.nim.logout({
+  //   done(error) {
+  //     constObj.nim = null;
+  //     store.dispatch({type: 'RESET'});
+  //     if (error) {
+  //       console.log(error);
+  //     }
+  //   },
+  // });
 };

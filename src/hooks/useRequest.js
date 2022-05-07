@@ -74,7 +74,6 @@ const useRequest = (
         ) {
           AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
           AsyncStorage.setItem('USERINFO', '');
-          AsyncStorage.setItem('chatAccount', '');
           DeviceEventEmitter.emit('LOGIN_EVENT', '');
           logout();
           return;
