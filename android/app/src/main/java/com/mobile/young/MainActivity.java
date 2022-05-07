@@ -1,4 +1,4 @@
-package com.typescriptappnativebase;
+package com.zyxsnet.mobile.young;
 
 import com.facebook.react.ReactActivity;
 
