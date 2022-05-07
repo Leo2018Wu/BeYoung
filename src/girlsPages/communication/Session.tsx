@@ -223,21 +223,28 @@ const Msgs = ({...props}) => {
                 fontWeight={'bold'}>
                 {chatUserInfo[0]?.nickName || '暂无昵称'}
               </Text>
-              {chatUserInfo[0]?.intimacy ? (
-                <View>
-                  <Text fontSize={'xs'} textAlign={'center'} color={'#fff'}>
-                    亲密度{chatUserInfo[0]?.intimacy}
-                  </Text>
-                </View>
-              ) : // <Box
-              //   style={{
-              //     position: 'absolute',
-              //     right: 16,
-              //   }}>
-              //   <Intimacy num={chatUserInfo[0]?.intimacy} />
-              // </Box>
-              null}
             </View>
+            {chatUserInfo[0]?.intimacy ? (
+              <Box
+                style={{
+                  position: 'absolute',
+                  right: 16,
+                }}>
+                <Intimacy num={chatUserInfo[0]?.intimacy} />
+              </Box>
+            ) : // <View>
+            //   <Text fontSize={'xs'} textAlign={'center'} color={'#fff'}>
+            //     亲密度{chatUserInfo[0]?.intimacy}
+            //   </Text>
+            // </View>
+            // <Box
+            //   style={{
+            //     position: 'absolute',
+            //     right: 16,
+            //   }}>
+            //   <Intimacy num={chatUserInfo[0]?.intimacy} />
+            // </Box>
+            null}
 
             {/* <Box h={'full'} justifyContent="center" w={10}>
               <CFastImage
