@@ -15,10 +15,15 @@ export default (state = initialState, action) => {
       return Object.assign({...state}, {currentSessionId: null});
     case 'SESSIONSLIST':
       const {sessionList} = action;
-      console.log('sessionList', state.relateChatAccount);
-      const data = sessionList.filter(
-        item => state.relateChatAccount.findIndex(e => e === item.to) !== -1,
-      );
+      let data;
+      if (
+        state.relateChatAccount.length >= 0 &&
+        state.relateChatAccount instanceof Array
+      ) {
+        data = sessionList.filter(
+          item => state.relateChatAccount.findIndex(e => e === item.to) !== -1,
+        );
+      }
       return Object.assign({...state}, {sessionList: data});
     case 'RELATECHATUSERACCOUNT':
       const {relateChatAccount} = action;

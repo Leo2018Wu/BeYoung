@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-community/async-storage';
 import {StatusBar} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {DeviceEventEmitter} from 'react-native';
@@ -20,20 +19,13 @@ const Index = () => {
   const [isLogin, setIsLogin] = useState(''); // 判断是否登录和登录的性别
   const {run: runChatAccount} = useRequest(fetchChatAccount.url);
 
-  const initLogin = (chatAccount: any) => {
-    if (!constObj.nim && chatAccount.account && chatAccount.token) {
-      login(chatAccount.account, chatAccount.token); // 初始化聊天账号
-    }
-  };
-
   const getAccount = async () => {
     try {
       const {data: chatAccount} = await runChatAccount();
+      console.log('chatAccount', chatAccount);
+
       if (chatAccount.account) {
-        // 拿到了聊天账号
-        AsyncStorage.setItem('chatAccount', JSON.stringify(chatAccount), () => {
-          initLogin(chatAccount); // 初始化聊天账号
-        });
+        login(chatAccount.account, chatAccount.token); // 初始化聊天账号
       }
     } catch (error) {
       console.log('error', error);
@@ -53,8 +45,6 @@ const Index = () => {
     });
     DeviceEventEmitter.addListener('LOGIN_EVENT', res => {
       if (!res) {
-        console.log('DeviceEventEmitterDeviceEventEmitter');
-
         //清除 聊天关联账号信息
         dispatch({type: 'RELATECHATUSERACCOUNT', relateChatAccount: []});
         if (constObj.nim) {
