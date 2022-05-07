@@ -46,6 +46,8 @@ function Basic({...props}) {
   useFocusEffect(
     React.useCallback(() => {
       DeviceEventEmitter.addListener('UNREADFLAG', res => {
+        console.log('--props.listData--', props.listData);
+
         let count = 0;
         props.listData &&
           props.listData.forEach(e => {

@@ -86,7 +86,7 @@ const MyTabs = () => {
               key={route.key}
               onPress={onPress}
               pb={INSET_BOTTOM / 2}>
-              {index == 2 && unreadCount ? (
+              {index == 2 && unreadCount != '' ? (
                 <View
                   style={{
                     position: 'absolute',
