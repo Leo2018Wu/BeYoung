@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
-import {DeviceEventEmitter} from 'react-native';
 // import {useStore} from 'react-redux';
 import {store} from '../store/index';
 import constObj from '../store/constant';
@@ -34,12 +33,6 @@ const onSession = session => {
   //     return time2 - time1;
   // })
   store.dispatch({type: 'SESSIONSLIST', sessionList});
-  let count = 0;
-  store.getState().session.sessionList &&
-    store.getState().session.sessionList.forEach(e => {
-      count += e.unread;
-    });
-  DeviceEventEmitter.emit('UNREADCOUNT', count);
   console.log('store', store.getState());
 };
 
@@ -130,6 +123,9 @@ export const initNIM = (account, token, callback) => {
       //     icon: '', title: msg.from, content: showText, time: `${msg.time}`,
       //   });
       // }
+    },
+    onsysmsgunread: data => {
+      // console.log('onsysmsgunread', data);
     },
     onsessions: onSession,
     onupdatesession: onSession,

@@ -2,12 +2,12 @@ import React, {useState, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {Center, HStack, Image, Pressable, Text, View} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {DeviceEventEmitter} from 'react-native';
 
 import HomeScreen from '../../bossPages/home/Home';
 import DailyScreen from '../../bossPages/daily/Index';
 import CommunicateScreen from '../../bossPages/communication/Index';
 import MineScreen from '../../bossPages/mine/Mine';
+import {connect} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +16,13 @@ interface routeItem {
   name: string;
 }
 
-const MyTabs = () => {
+const mapStateToProps = (state: any) => {
+  return {
+    unreadMsgNum: state.session.sessionList.reduce((t, v) => t + v.unread, 0),
+  };
+};
+
+const MyTabs = ({...props}) => {
   const insets = useSafeAreaInsets(); // 安全区域边界信息
   const INSET_BOTTOM = insets.bottom; // 安全区域额底部高度
   const TABBAR_HEIGHT = 48; // 底部tab高度
@@ -40,17 +46,8 @@ const MyTabs = () => {
     },
   ];
 
-  const MyTabBar = (props: any) => {
-    const {state, descriptors, navigation} = props;
-
-    const [unreadCount, setUnreadCount] = useState('');
-
-    useEffect(() => {
-      DeviceEventEmitter.addListener('UNREADCOUNT', res => {
-        setUnreadCount(res);
-      });
-    }, []);
-
+  const MyTabBar = (propsItem: any) => {
+    const {state, descriptors, navigation} = propsItem;
     return (
       <HStack
         // eslint-disable-next-line react-native/no-inline-styles
@@ -86,7 +83,7 @@ const MyTabs = () => {
               key={route.key}
               onPress={onPress}
               pb={INSET_BOTTOM / 2}>
-              {index == 2 && unreadCount ? (
+              {index === 2 && props.unreadMsgNum ? (
                 <View
                   style={{
                     position: 'absolute',
@@ -99,7 +96,7 @@ const MyTabs = () => {
                     zIndex: 100,
                   }}>
                   <Text textAlign={'center'} fontSize={10} color={'#fff'}>
-                    {unreadCount <= 99 ? unreadCount : '...'}
+                    {props.unreadMsgNum <= 99 ? props.unreadMsgNum : '...'}
                   </Text>
                 </View>
               ) : null}
@@ -164,4 +161,4 @@ const MyTabs = () => {
   );
 };
 
-export default MyTabs;
+export default connect(mapStateToProps)(MyTabs);

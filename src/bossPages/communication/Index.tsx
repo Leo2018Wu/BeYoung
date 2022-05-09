@@ -1,6 +1,6 @@
 import React from 'react';
 import {Badge, Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
-import {StyleSheet, View, DeviceEventEmitter, StatusBar} from 'react-native';
+import {StyleSheet, View, StatusBar} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -16,18 +16,15 @@ import {useFocusEffect} from '@react-navigation/native';
 
 // 处理会话数据以便渲染使用
 const genSessions = (sessions: any, userMap: any) => {
-  let count = 0;
   const list =
     sessions &&
     sessions.map((item: any, index: any) => {
-      count += item.unread;
       return {
         key: `${index}`,
         item: item,
         chatUserInfo: userMap[item.to] || {},
       };
     });
-  DeviceEventEmitter.emit('UNREADCOUNT', count);
   return list;
 };
 

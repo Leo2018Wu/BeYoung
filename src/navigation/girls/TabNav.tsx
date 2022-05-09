@@ -9,6 +9,7 @@ import CaseScreen from '../../girlsPages/case/Case';
 import CommunicateScreen from '../../bossPages/communication/Index';
 import MineScreen from '../../girlsPages/mine/Mine';
 import ReleaseDynamics from '../../girlsPages/releaseDynamics/ReleaseDynamics';
+import {connect} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,18 +18,16 @@ interface routeItem {
   name: string;
 }
 
-const MyTabs = () => {
+const mapStateToProps = (state: any) => {
+  return {
+    unreadMsgNum: state.session.sessionList.reduce((t, v) => t + v.unread, 0),
+  };
+};
+
+const MyTabs = ({...props}) => {
   const insets = useSafeAreaInsets(); // 安全区域边界信息
   const INSET_BOTTOM = insets.bottom; // 安全区域额底部高度
   const TABBAR_HEIGHT = 48; // 底部tab高度
-
-  const [unreadCount, setUnreadCount] = useState('');
-
-  useEffect(() => {
-    DeviceEventEmitter.addListener('UNREADCOUNT', res => {
-      setUnreadCount(res);
-    });
-  }, []);
 
   const list = [
     {
@@ -58,8 +57,8 @@ const MyTabs = () => {
     },
   ];
 
-  const MyTabBar = (props: any) => {
-    const {state, descriptors, navigation} = props;
+  const MyTabBar = (propsItem: any) => {
+    const {state, descriptors, navigation} = propsItem;
 
     return (
       <HStack
@@ -96,7 +95,7 @@ const MyTabs = () => {
               onPress={onPress}
               bg={'#fff'}
               pb={INSET_BOTTOM / 2}>
-              {index == 3 && unreadCount != '' ? (
+              {index === 3 && props.unreadMsgNum ? (
                 <View
                   style={{
                     position: 'absolute',
@@ -109,7 +108,7 @@ const MyTabs = () => {
                     zIndex: 100,
                   }}>
                   <Text textAlign={'center'} fontSize={'xs'} color={'#fff'}>
-                    {unreadCount <= 99 ? unreadCount : '...'}
+                    {props.unreadMsgNum <= 99 ? props.unreadMsgNum : '...'}
                   </Text>
                 </View>
               ) : null}
@@ -213,4 +212,4 @@ const MyTabs = () => {
   );
 };
 
-export default MyTabs;
+export default connect(mapStateToProps)(MyTabs);
