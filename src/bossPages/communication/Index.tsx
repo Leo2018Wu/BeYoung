@@ -16,15 +16,18 @@ import {useFocusEffect} from '@react-navigation/native';
 
 // 处理会话数据以便渲染使用
 const genSessions = (sessions: any, userMap: any) => {
+  let count = 0;
   const list =
     sessions &&
     sessions.map((item: any, index: any) => {
+      count += item.unread;
       return {
         key: `${index}`,
         item: item,
         chatUserInfo: userMap[item.to] || {},
       };
     });
+  DeviceEventEmitter.emit('UNREADCOUNT', count);
   return list;
 };
 
@@ -44,12 +47,6 @@ function Basic({...props}) {
   const insets = useSafeAreaInsets();
   useFocusEffect(
     React.useCallback(() => {
-      let count = 0;
-      props.listData &&
-        props.listData.forEach(e => {
-          count += e.unread;
-        });
-      DeviceEventEmitter.emit('UNREADCOUNT', count);
       const chatUserIds =
         props.listData && props.listData.map((item: any) => item.to);
       props.dispatch(getChatUsers({accountIds: chatUserIds}));
