@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.zyxsnet.mobile.young">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.zyxsnet.mobile.young">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -11,16 +12,22 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-      android:name=".MainApplication"
+      android:name="com.zyxsnet.mobile.young.MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:usesCleartextTraffic="true"
       android:requestLegacyExternalStorage="true"
-      android:theme="@style/AppTheme">
+      android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
+
+<!--        &lt;!&ndash;消息推送alipush&ndash;&gt;-->
+<!--        <meta-data android:name="com.alibaba.app.appkey" android:value="333706060"/> &lt;!&ndash; 你自己的阿里云- appKey &ndash;&gt;-->
+<!--        <meta-data android:name="com.alibaba.app.appsecret" android:value="730a8be985db41d18d6fb55ae6c00eab"/> &lt;!&ndash; 你自己的阿里云-appSecret &ndash;&gt;-->
+
       <activity
-        android:name=".MainActivity"
+        android:name="com.zyxsnet.mobile.young.MainActivity"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"

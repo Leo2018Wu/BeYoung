@@ -34,5 +34,14 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://www.jitpack.io' }
+
+        // 下面是添加的代码
+        maven {
+            url "http://maven.aliyun.com/nexus/content/repositories/releases/"
+        }
+        flatDir {
+            dirs project(':react-native-aliyun-push').file('libs')
+        }
+        // 添加结束
     }
 }
