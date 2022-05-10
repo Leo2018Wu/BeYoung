@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -187,6 +188,9 @@ android {
 }
 
 dependencies {
+
+    implementation project(':react-native-permissions')
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
@@ -195,6 +199,11 @@ dependencies {
 
     //下面是被添加的代码
     implementation project(':react-native-aliyun-push')
+    //添加结束
+
+    //下面是被添加的代码
+    implementation 'com.google.firebase:firebase-analytics:17.3.0'
+    implementation project(':react-native-push-notification')
     //添加结束
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
