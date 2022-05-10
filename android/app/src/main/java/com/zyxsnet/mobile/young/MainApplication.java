@@ -47,6 +47,19 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected List<ReactPackage> getPackages() {
+//            return Arrays.<ReactPackage>asList(
+//                    new MainReactPackage(),
+//                    new ReactNativePushNotificationPackage(),
+//                    new AliyunPushPackage(),
+//                    new AsyncStoragePackage(),
+//                    new LinearGradientPackage(),
+//                    new RNAliyunOssPackage(),
+//                    new PickerPackage(),
+//                    new RNPermissionsPackage(),
+//                    new FastImageViewPackage(),
+//                    new PagerViewPackage(),
+//                    new VectorIconsPackage()
+//            );
             @SuppressWarnings("UnnecessaryLocalVariable")
             List<ReactPackage> packages = new PackageList(this).getPackages();
             // Packages that cannot be autolinked yet can be added manually here, for example:
