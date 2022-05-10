@@ -531,12 +531,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example1.TypeScriptAppNativeBase;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zyxsnet.mobile1.young;
 				PRODUCT_NAME = TypeScriptAppNativeBase;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -557,12 +558,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.0.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example1.TypeScriptAppNativeBase;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zyxsnet.mobile1.young;
 				PRODUCT_NAME = TypeScriptAppNativeBase;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
