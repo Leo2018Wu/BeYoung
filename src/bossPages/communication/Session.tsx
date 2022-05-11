@@ -322,7 +322,7 @@ const Msgs = ({...props}) => {
             scrollRef.current = e;
             scrollToEnd();
           }}
-          onMomentumScrollBegin={() => {
+          onTouchStart={() => {
             setIsEmojiShow(false);
           }}
           pt={4}

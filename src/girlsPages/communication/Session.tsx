@@ -307,6 +307,9 @@ const Msgs = ({...props}) => {
             scrollRef.current = e;
             scrollToEnd();
           }}
+          onTouchStart={() => {
+            setIsEmojiShow(false);
+          }}
           pt={4}
           px={2}
           mb={5}
