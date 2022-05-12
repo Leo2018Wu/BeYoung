@@ -17,7 +17,7 @@ import CFastImage from '../../components/CFastImage';
 import Icon from 'react-native-vector-icons/Feather';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import LinearGradient from 'react-native-linear-gradient';
-import {StyleSheet, useWindowDimensions, NativeModules} from 'react-native';
+import {StyleSheet, useWindowDimensions} from 'react-native';
 import useRequest from '../../hooks/useRequest';
 import {queryFemaleUser} from '../../api/user';
 import {
@@ -54,7 +54,6 @@ interface GradeProps {
 }
 
 const Home = ({...props}) => {
-  console.log('NativeModules', NativeModules);
   const {width, height} = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const {isOpen, onOpen, onClose} = useDisclose();
