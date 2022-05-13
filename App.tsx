@@ -41,7 +41,7 @@ const App = () => {
     AliyunPush.addListener(handleAliyunPushMessage);
 
     //移除监听
-    AliyunPush.removeListener(handleAliyunPushMessage);
+    // AliyunPush.removeListener(handleAliyunPushMessage);
   }, []);
 
   const handleAliyunPushMessage = e => {
