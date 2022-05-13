@@ -43,7 +43,7 @@ export const sendCustomMsg = options => dispatch => {
 
 //获取本地当前消息列表
 export const getLocalMsgs = options => dispatch => {
-  const {sessionId, limit = 10} = options;
+  const {sessionId, limit = 100} = options;
   constObj.nim &&
     constObj.nim.getLocalMsgs({
       sessionId,
