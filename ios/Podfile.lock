@@ -2,7 +2,7 @@ PODS:
   - aliyun-oss-react-native-self (1.0.2):
     - AliyunOSSiOS
     - React
-  - AliyunOSSiOS (2.10.11)
+  - AliyunOSSiOS (2.10.13)
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
     - React
@@ -98,6 +98,8 @@ PODS:
     - RCT-Folly (= 2020.01.13.00)
     - RCTRequired (= 0.64.1)
     - React-Core (= 0.64.1)
+  - RCTWeChat (1.1.26):
+    - React-Core
   - React (0.64.1):
     - React-Core (= 0.64.1)
     - React-Core/DevSupport (= 0.64.1)
@@ -379,7 +381,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.4):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - TOCropViewController (2.6.0)
+  - TOCropViewController (2.6.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -416,6 +418,7 @@ DEPENDENCIES:
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
+  - RCTWeChat (from `../node_modules/react-native-wechat-lib`)
   - React (from `../node_modules/react-native/`)
   - React-callinvoker (from `../node_modules/react-native/ReactCommon/callinvoker`)
   - React-Core (from `../node_modules/react-native/`)
@@ -497,6 +500,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
     :path: "../node_modules/react-native/Libraries/TypeSafety"
+  RCTWeChat:
+    :path: "../node_modules/react-native-wechat-lib"
   React:
     :path: "../node_modules/react-native/"
   React-callinvoker:
@@ -564,7 +569,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   aliyun-oss-react-native-self: 8c2152bf2cd6fc91c9d547b463f49cf0f85bf885
-  AliyunOSSiOS: 7bc7ca588207ce536c1dffe732c3d4fe342e23cf
+  AliyunOSSiOS: 8469b21f375813e0da340d63cbae1dadbfb0f0bf
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
@@ -589,6 +594,7 @@ SPEC CHECKSUMS:
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: ec2ebc96b7bfba3ca5c32740f5a0c6a014a274d2
   RCTTypeSafety: 22567f31e67c3e088c7ac23ea46ab6d4779c0ea5
+  RCTWeChat: 289c92186c1f55716a6378af55388292d94b2d9e
   React: a241e3dbb1e91d06332f1dbd2b3ab26e1a4c4b9d
   React-callinvoker: da4d1c6141696a00163960906bc8a55b985e4ce4
   React-Core: 46ba164c437d7dac607b470c83c8308b05799748
@@ -622,7 +628,7 @@ SPEC CHECKSUMS:
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
-  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
+  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
