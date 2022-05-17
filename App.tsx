@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {LogBox} from 'react-native';
+import {LogBox, AppState} from 'react-native';
 import {Provider} from 'react-redux';
 import {NativeBaseProvider, extendTheme, StatusBar} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
@@ -37,12 +37,28 @@ const App = () => {
         console.log('getDeviceId() failed');
       });
 
-    // //监听推送事件
-    AliyunPush.addListener(handleAliyunPushMessage);
+    AppState.addEventListener('change', _handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener('change', _handleAppStateChange);
+    };
 
     //移除监听
     // AliyunPush.removeListener(handleAliyunPushMessage);
   }, []);
+
+  const _handleAppStateChange = nextappState => {
+    //切换应用或者息屏时nextappState值为background
+    if (nextappState !== 'active') {
+      // let e = {
+      //   extras: {
+      //     page: 'CommunicateScreen',
+      //   },
+      // };
+      // pushTest(e);
+      AliyunPush.addListener(handleAliyunPushMessage);
+    }
+  };
 
   const handleAliyunPushMessage = e => {
     console.log('Message Received. ' + JSON.stringify(e));
@@ -76,6 +92,7 @@ const App = () => {
 
   const LocalNotification = e => {
     PushNotification.localNotification({
+      extras: e.extras,
       channelId: '1',
       id: e.extras._ALIYUN_NOTIFICATION_ID_,
       autoCancel: true,
@@ -94,7 +111,7 @@ const App = () => {
       ignoreInForeground: false,
       shortcutId: 'shortcut-id',
       invokeApp: true,
-      actions: '["打开","关闭"]',
+      // actions: '["打开","关闭"]',
       /* iOS and Android properties */
       title: e.title || e.body.title,
       message: e.body || e.body.body,
@@ -107,6 +124,23 @@ const App = () => {
     // todo  在localNotification本地接收到通知后应该立即取消该通知  通过id（必需的）在cancelLocalNotification中取消通知
     PushNotification.cancelLocalNotification({
       id: e.extras._ALIYUN_NOTIFICATION_ID_,
+    });
+  };
+
+  const pushTest = e => {
+    PushNotification.localNotification({
+      channelId: '1',
+      extras: e.extras,
+      autoCancel: true,
+      bigText:
+        'This is local notification demo in React Native app. Only shown, when expanded.',
+      subText: 'Local Notification Demo',
+      title: 'Local Notification Title',
+      message: 'Expand me to see more',
+      vibrate: true,
+      vibration: 300,
+      playSound: true,
+      soundName: 'default',
     });
   };
 
