@@ -9,8 +9,8 @@ import {
   Platform,
 } from 'react-native';
 import useRequest from '../../hooks/useRequest';
-import {fetchRechargeItems, rechargeApplyWX} from '../../api/wallet';
-import * as wechat from 'react-native-wechat-lib';
+import {fetchRechargeItems, rechargeApplyAli} from '../../api/wallet';
+import Alipay from '@uiw/react-native-alipay';
 import util from '../../util/util';
 import {connect} from 'react-redux';
 import {getMyWallet} from '../../store/action';
@@ -20,6 +20,8 @@ interface ItemProps {
   coinNum: string | number;
   rmbAmount: string | number;
 }
+
+const ALI_APPID = 2021003129620044;
 
 const Bar = ({title = '充值项目'}) => {
   return (
@@ -50,9 +52,10 @@ const Index = ({...props}) => {
     },
     fetchRechargeItems.options,
   );
-  const {run: runChargeWx} = useRequest(rechargeApplyWX.url);
+  const {run: runChargeAli} = useRequest(rechargeApplyAli.url);
 
   useEffect(() => {
+    Alipay.setAlipayScheme(`alipay${ALI_APPID}`);
     props.dispatch(getMyWallet());
   }, []);
 
@@ -70,33 +73,25 @@ const Index = ({...props}) => {
     });
   }, []);
 
-  const charge = async () => {
+  const alipay = async () => {
     try {
-      const {data, success} = await runChargeWx({
+      const {data, success} = await runChargeAli({
         rechargeItemId: activeItem,
-        tradeType: 'APP',
+        platform: Platform.OS === 'android' ? 'ANDROID' : 'IOS',
       });
-      console.log('data', data);
-      if (!success) {
-        return;
+      if (success) {
+        const {resultStatus} = await Alipay.alipay(data);
+        if (resultStatus === '9000') {
+          props.dispatch(getMyWallet());
+        }
       }
-      const {prepayId, nonceStr, timeStamp, signType, partnerId} = data;
-      wechat
-        .pay({
-          partnerId, // 商家向财付通申请的商家id
-          prepayId, // 预支付订单
-          nonceStr, // 随机串，防重发
-          timeStamp, // 时间戳，防重发
-          package: data.package, // 商家根据财付通文档填写的数据和签名
-          sign: signType, // 商家根据微信开放平台文档对数据做的签名
-        })
-        .then(res => {
-          console.log(res);
-        })
-        .catch(er => {
-          console.log('er', er);
-        });
-    } catch (error) {}
+    } catch (error) {
+      console.log('alipay:error-->>>', error);
+    }
+  };
+
+  const charge = async () => {
+    alipay();
   };
 
   const goDetail = () => {
