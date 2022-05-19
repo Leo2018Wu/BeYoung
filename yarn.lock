@@ -2339,6 +2339,11 @@
   dependencies:
     eslint-visitor-keys "^1.1.0"
 
+"@uiw/react-native-alipay@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@uiw/react-native-alipay/-/react-native-alipay-4.0.3.tgz#dfbaf65df1daaae38f743fa73cd3d6213739fbb8"
+  integrity sha512-P8Tf1ZgNmkza4ufZb6dGsPIk1ZCUG6Wll82XibtOeyZ0il5sB8WTwVR3LQEoN/kyKipOznsQ6+QKG7fHt9b9UQ==
+
 "@yarnpkg/lockfile@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"

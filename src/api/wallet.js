@@ -19,6 +19,12 @@ export const rechargeApplyWX = {
   options: {},
 };
 
+// 支付宝充值申请
+export const rechargeApplyAli = {
+  url: 'cgi/core/recharge/rechargeApplyByAlipay',
+  options: {},
+};
+
 // 充值记录
 export const fetchRechargeRecord = {
   url: 'cgi/core/recharge/fetchRechargeRecord',

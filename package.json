@@ -18,6 +18,7 @@
     "@react-navigation/elements": "^1.2.1",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
+    "@uiw/react-native-alipay": "^4.0.3",
     "aliyun-oss-react-native-self": "^1.0.2",
     "native-base": "3.3.5",
     "react": "17.0.1",
