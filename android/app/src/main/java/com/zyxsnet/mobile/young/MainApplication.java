@@ -19,6 +19,7 @@ import com.facebook.react.ReactApplication;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import org.wonday.aliyun.push.AliyunPushPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.reactlibrary.RNAliyunOssPackage;
