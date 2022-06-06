@@ -1,5 +1,5 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Text, Box, HStack, Pressable, Button} from 'native-base';
+import {Text, Box, HStack, Pressable, Button, Modal, Image} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {
@@ -8,6 +8,8 @@ import {
   useWindowDimensions,
   Platform,
 } from 'react-native';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
+
 import useRequest from '../../hooks/useRequest';
 import {fetchRechargeItems, rechargeApplyAli} from '../../api/wallet';
 import Alipay from '@uiw/react-native-alipay';
@@ -22,6 +24,18 @@ interface ItemProps {
 }
 
 const ALI_APPID = 2021003129620044;
+const PAY_WAYS = [
+  // {
+  //   icon: require('../../images/wx_icon.png'),
+  //   name: '微信',
+  //   code: 'WX',
+  // },
+  {
+    icon: require('../../images/ali_icon.png'),
+    name: '支付宝',
+    code: 'ALI',
+  },
+];
 
 const Bar = ({title = '充值项目'}) => {
   return (
@@ -53,6 +67,7 @@ const Index = ({...props}) => {
     fetchRechargeItems.options,
   );
   const {run: runChargeAli} = useRequest(rechargeApplyAli.url);
+  const [payWayModal, setPayWayModal] = useState(false);
 
   useEffect(() => {
     Alipay.setAlipayScheme(`alipay${ALI_APPID}`);
@@ -74,6 +89,7 @@ const Index = ({...props}) => {
   }, []);
 
   const alipay = async () => {
+    setPayWayModal(false);
     try {
       const {data, success} = await runChargeAli({
         rechargeItemId: activeItem,
@@ -91,7 +107,7 @@ const Index = ({...props}) => {
   };
 
   const charge = async () => {
-    alipay();
+    setPayWayModal(true);
   };
 
   const goDetail = () => {
@@ -100,6 +116,35 @@ const Index = ({...props}) => {
 
   return (
     <Box flex={1}>
+      <Modal isOpen={payWayModal} onClose={() => setPayWayModal(false)}>
+        <Modal.Content p={4} alignItems="center">
+          <Text fontSize={'md'} mb={1} style={{color: '#222'}}>
+            请选择付款方式
+          </Text>
+          {PAY_WAYS.map((ele, idx) => (
+            <Pressable
+              onPress={() => alipay()}
+              py={2}
+              w={'full'}
+              flexDirection={'row'}
+              key={idx}>
+              <Image
+                alt="pay_icon"
+                style={{
+                  width: 25,
+                  height: 25,
+                  marginRight: 6,
+                }}
+                source={ele.icon}
+              />
+              <Text style={{color: '#2A2B2A'}} fontSize={'sm'} mr="auto">
+                {ele.name}
+              </Text>
+              <EvilIcons name="chevron-right" color="#C5C6C7" size={32} />
+            </Pressable>
+          ))}
+        </Modal.Content>
+      </Modal>
       <Box style={styles.top_section}>
         <ImageBackground
           style={styles.top_inner}
