@@ -524,7 +524,7 @@
 			baseConfigurationReference = 0796AC3C3FBD69334FF433C1 /* Pods-TypeScriptAppNativeBase.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TypeScriptAppNativeBase/TypeScriptAppNativeBase.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
@@ -554,7 +554,7 @@
 			baseConfigurationReference = CF1838D1B944ED97C157BFEF /* Pods-TypeScriptAppNativeBase.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "";
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TypeScriptAppNativeBase/TypeScriptAppNativeBase.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
