@@ -31,6 +31,8 @@ target 'TypeScriptAppNativeBase' do
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'RCTAliyunPush', :path => '../node_modules/react-native-aliyun-push'
+
   target 'TypeScriptAppNativeBaseTests' do
     inherit! :complete
     # Pods for testing
