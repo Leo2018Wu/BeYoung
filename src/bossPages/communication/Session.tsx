@@ -59,6 +59,7 @@ let _scrollTimer: any;
 const BOTTOM_FIXED_HEIGHT = 92; // 底部遮盖拦高度
 const mapStateToProps = (state: any) => {
   return {
+    relateChatAccount: state.session.relateChatAccount,
     myUserInfo: state.user.myUserInfo,
     msgs: state.msg.currentSessionMsgs || [],
     currentSessionId: state.session.currentSessionId,
@@ -81,6 +82,17 @@ const Msgs = ({...props}) => {
   const [chatUserInfo, setChatUserInfo] = useState({});
 
   const {run: runGiveGift} = useRequest(giveGift.url);
+
+  useEffect(() => {
+    const sameItem = (ele: any) => ele === props.route.params.chatUserId;
+    if (props.relateChatAccount.findIndex(sameItem) === -1) {
+      props.relateChatAccount.push(props.route.params.chatUserId);
+      props.dispatch({
+        type: 'RELATECHATUSERACCOUNT',
+        relateChatAccount: props.relateChatAccount,
+      });
+    }
+  }, []);
 
   const getData = async () => {
     try {
