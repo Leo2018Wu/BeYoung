@@ -522,9 +522,10 @@
 			baseConfigurationReference = 0796AC3C3FBD69334FF433C1 /* Pods-TypeScriptAppNativeBase.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FN3KR29Q44;
+				DEVELOPMENT_TEAM = 2DA9R6TCGB;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = TypeScriptAppNativeBase/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -537,7 +538,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zyxsnet.mobile1.young;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zyxsnet.mobile.young;
 				PRODUCT_NAME = TypeScriptAppNativeBase;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -550,9 +551,10 @@
 			baseConfigurationReference = CF1838D1B944ED97C157BFEF /* Pods-TypeScriptAppNativeBase.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FN3KR29Q44;
+				DEVELOPMENT_TEAM = 2DA9R6TCGB;
 				INFOPLIST_FILE = TypeScriptAppNativeBase/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -564,7 +566,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.zyxsnet.mobile1.young;
+				PRODUCT_BUNDLE_IDENTIFIER = com.zyxsnet.mobile.young;
 				PRODUCT_NAME = TypeScriptAppNativeBase;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
