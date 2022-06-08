@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {DeviceEventEmitter} from 'react-native';
 import {Center, HStack, Pressable, Text, Image, View} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
@@ -46,7 +45,7 @@ const MyTabs = ({...props}) => {
       icon_active: require('../../girlsPages/assets/tab_post_ed.png'),
     },
     {
-      name: 'Communicate',
+      name: 'CommunicateScreen',
       icon: require('../../girlsPages/assets/tab_message.png'),
       icon_active: require('../../girlsPages/assets/tab_message_ed.png'),
     },
@@ -197,7 +196,7 @@ const MyTabs = ({...props}) => {
           headerShown: false,
           tabBarLabel: '消息',
         }}
-        name="Communicate"
+        name="CommunicateScreen"
         component={CommunicateScreen}
       />
       <Tab.Screen

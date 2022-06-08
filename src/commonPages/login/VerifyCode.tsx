@@ -6,6 +6,7 @@ import {sendCode, verifyCode} from '../../api/common.js';
 import useRequest from '../../hooks/useRequest';
 import {useCountdown} from '../../hooks/useTimeDown';
 import AsyncStorage from '@react-native-community/async-storage';
+import AliyunPush from 'react-native-aliyun-push';
 
 const SEND_CODE_DURATION = 60 * 1000; // 发送验证码倒计时秒数
 const Index = ({...props}) => {
@@ -27,6 +28,13 @@ const Index = ({...props}) => {
   useEffect(() => {
     if (result) {
       AsyncStorage.setItem('USERINFO', JSON.stringify(result)); // 存储登录信息
+      AliyunPush.bindAccount(result.id)
+        .then(data => {
+          console.log(JSON.stringify(data));
+        })
+        .catch(error => {
+          console.log(JSON.stringify(error));
+        });
       if (!result.gender) {
         // 没有选择过性别进入性别选择页面
         props.navigation.navigate('ChooseSex');
