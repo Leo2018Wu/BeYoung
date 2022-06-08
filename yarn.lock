@@ -2339,11 +2339,6 @@
   dependencies:
     eslint-visitor-keys "^1.1.0"
 
-"@uiw/react-native-alipay@^4.0.3":
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/@uiw/react-native-alipay/-/react-native-alipay-4.0.3.tgz#dfbaf65df1daaae38f743fa73cd3d6213739fbb8"
-  integrity sha512-P8Tf1ZgNmkza4ufZb6dGsPIk1ZCUG6Wll82XibtOeyZ0il5sB8WTwVR3LQEoN/kyKipOznsQ6+QKG7fHt9b9UQ==
-
 "@yarnpkg/lockfile@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
@@ -7152,6 +7147,11 @@ react-is@^16.13.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
+
+react-native-alipay-latest@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmmirror.com/react-native-alipay-latest/-/react-native-alipay-latest-1.0.3.tgz#b7015850253b9b2bedc4aa6480c233a0ff16849b"
+  integrity sha512-dg88nFZIgSuoXWI3iTsSFklyUwKkuRypHs5/nD6bo6DB/f4FeMAT2zXDfK7X0IzYCxEe0KavOYQVqC9iaGNScg==
 
 react-native-aliyun-push@^1.0.22:
   version "1.0.22"

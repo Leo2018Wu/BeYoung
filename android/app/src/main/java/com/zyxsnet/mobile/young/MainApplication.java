@@ -16,6 +16,7 @@ import com.alibaba.sdk.android.push.register.MiPushRegister;
 import com.alibaba.sdk.android.push.register.OppoRegister;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.uiwjs.alipay.RNAlipayPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import org.wonday.aliyun.push.AliyunPushPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -50,6 +51,7 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
 //            return Arrays.<ReactPackage>asList(
 //                    new MainReactPackage(),
+//            new RNAlipayPackage(),
 //                    new ReactNativePushNotificationPackage(),
 //                    new AliyunPushPackage(),
 //                    new AsyncStoragePackage(),

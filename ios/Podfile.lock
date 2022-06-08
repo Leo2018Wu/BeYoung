@@ -353,7 +353,7 @@ PODS:
   - RealmJS (10.14.0):
     - GCDWebServer
     - React
-  - RNAlipay (4.0.3):
+  - RNAlipay (1.0.3):
     - React
   - RNCAsyncStorage (1.12.1):
     - React-Core
@@ -452,7 +452,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RealmJS (from `../node_modules/realm`)
-  - "RNAlipay (from `../node_modules/@uiw/react-native-alipay/ios`)"
+  - RNAlipay (from `../node_modules/react-native-alipay-latest/ios`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -562,7 +562,7 @@ EXTERNAL SOURCES:
   RealmJS:
     :path: "../node_modules/realm"
   RNAlipay:
-    :path: "../node_modules/@uiw/react-native-alipay/ios"
+    :path: "../node_modules/react-native-alipay-latest/ios"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCPushNotificationIOS:
@@ -635,7 +635,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: ff951a0c241bfaefc4940a3f1f1a229e7cb32fa6
   ReactCommon: bedc99ed4dae329c4fcf128d0c31b9115e5365ca
   RealmJS: 5a939376f3bdd94708abe2326d33d8f935b9fb37
-  RNAlipay: a657c3dac5cb6b2d92d66ab1124a5b1e61f27f55
+  RNAlipay: 903053b97039a24bf35e3aec090407004025991d
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
@@ -650,6 +650,6 @@ SPEC CHECKSUMS:
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: c481bac3a4d7c7bf31c3eda95895a67b93cfb32a
+PODFILE CHECKSUM: 64ce818cd1872f6ac34e0308b382dd5f6e40608d
 
 COCOAPODS: 1.11.2

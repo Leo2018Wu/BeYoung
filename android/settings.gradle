@@ -1,4 +1,7 @@
 rootProject.name = 'TypeScriptAppNativeBase'
+include ':alipaysdk-noutdid-15.8.02.210308182128'
+include ':react-native-alipay-latest'
+project(':react-native-alipay-latest').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-alipay-latest/android')
 include ':react-native-push-notification'
 project(':react-native-push-notification').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-push-notification/android')
 include ':react-native-aliyun-push'
