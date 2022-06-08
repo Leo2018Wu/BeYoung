@@ -39,6 +39,7 @@ const App = () => {
 
     AppState.addEventListener('change', _handleAppStateChange);
 
+    AliyunPush.setApplicationIconBadgeNumber(0);
     return () => {
       AppState.removeEventListener('change', _handleAppStateChange);
     };
