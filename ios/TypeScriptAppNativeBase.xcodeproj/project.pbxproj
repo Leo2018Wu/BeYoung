@@ -13,6 +13,20 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2FB1C3F53876132898975294 /* libPods-TypeScriptAppNativeBase-TypeScriptAppNativeBaseTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 168C86462FD814DED68C8213 /* libPods-TypeScriptAppNativeBase-TypeScriptAppNativeBaseTests.a */; };
 		3580A49C5116C7D5742852A4 /* libPods-TypeScriptAppNativeBase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC1F7BF6D8148A2B1A6A5C96 /* libPods-TypeScriptAppNativeBase.a */; };
+		47809837284F23DF000607EB /* AlicloudUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809833284F23DF000607EB /* AlicloudUtils.framework */; };
+		47809838284F23DF000607EB /* AlicloudUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809833284F23DF000607EB /* AlicloudUtils.framework */; };
+		4780983B284F23DF000607EB /* UTMini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809835284F23DF000607EB /* UTMini.framework */; };
+		4780983C284F23DF000607EB /* UTMini.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809835284F23DF000607EB /* UTMini.framework */; };
+		4780983D284F23DF000607EB /* CloudPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809836284F23DF000607EB /* CloudPushSDK.framework */; };
+		4780983E284F23DF000607EB /* CloudPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809836284F23DF000607EB /* CloudPushSDK.framework */; };
+		47809840284F23EF000607EB /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4780983F284F23EF000607EB /* libz.tbd */; };
+		47809842284F23F6000607EB /* libresolv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809841284F23F6000607EB /* libresolv.tbd */; };
+		47809844284F23FF000607EB /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809843284F23FF000607EB /* libsqlite3.tbd */; };
+		47809846284F2406000607EB /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809845284F2406000607EB /* CoreTelephony.framework */; };
+		47809848284F240C000607EB /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809847284F240C000607EB /* SystemConfiguration.framework */; };
+		4780984A284F2413000607EB /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47809849284F2413000607EB /* UserNotifications.framework */; };
+		4780984D284F36AD000607EB /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4780984C284F36AD000607EB /* UTDID.framework */; };
+		4780984E284F36AD000607EB /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4780984C284F36AD000607EB /* UTDID.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +58,16 @@
 		2E3CAF95096D4537973A02BB /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		3F9B9EE515514317AC76DED7 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		4570D1D6F83D42C4BCB62EA8 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		47809833284F23DF000607EB /* AlicloudUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlicloudUtils.framework; path = "../node_modules/react-native-aliyun-push/ios/libs/AlicloudUtils.framework"; sourceTree = "<group>"; };
+		47809835284F23DF000607EB /* UTMini.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UTMini.framework; path = "../node_modules/react-native-aliyun-push/ios/libs/UTMini.framework"; sourceTree = "<group>"; };
+		47809836284F23DF000607EB /* CloudPushSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudPushSDK.framework; path = "../node_modules/react-native-aliyun-push/ios/libs/CloudPushSDK.framework"; sourceTree = "<group>"; };
+		4780983F284F23EF000607EB /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		47809841284F23F6000607EB /* libresolv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libresolv.tbd; path = usr/lib/libresolv.tbd; sourceTree = SDKROOT; };
+		47809843284F23FF000607EB /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		47809845284F2406000607EB /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		47809847284F240C000607EB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		47809849284F2413000607EB /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		4780984C284F36AD000607EB /* UTDID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UTDID.framework; path = "../node_modules/react-native-aliyun-push/ios/libs/UTDID.framework"; sourceTree = "<group>"; };
 		4BA5F34A71294E109347C404 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		4E7C74990AA346AB8F4230AA /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		5D49DC68CEF44906B8678A33 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
@@ -69,6 +93,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				2FB1C3F53876132898975294 /* libPods-TypeScriptAppNativeBase-TypeScriptAppNativeBaseTests.a in Frameworks */,
+				4780983E284F23DF000607EB /* CloudPushSDK.framework in Frameworks */,
+				47809838284F23DF000607EB /* AlicloudUtils.framework in Frameworks */,
+				4780984E284F36AD000607EB /* UTDID.framework in Frameworks */,
+				4780983C284F23DF000607EB /* UTMini.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,7 +104,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4780984D284F36AD000607EB /* UTDID.framework in Frameworks */,
+				4780984A284F2413000607EB /* UserNotifications.framework in Frameworks */,
+				47809848284F240C000607EB /* SystemConfiguration.framework in Frameworks */,
+				47809846284F2406000607EB /* CoreTelephony.framework in Frameworks */,
+				47809844284F23FF000607EB /* libsqlite3.tbd in Frameworks */,
+				47809842284F23F6000607EB /* libresolv.tbd in Frameworks */,
+				47809840284F23EF000607EB /* libz.tbd in Frameworks */,
 				3580A49C5116C7D5742852A4 /* libPods-TypeScriptAppNativeBase.a in Frameworks */,
+				4780983D284F23DF000607EB /* CloudPushSDK.framework in Frameworks */,
+				47809837284F23DF000607EB /* AlicloudUtils.framework in Frameworks */,
+				4780983B284F23DF000607EB /* UTMini.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,6 +178,16 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				47809849284F2413000607EB /* UserNotifications.framework */,
+				47809847284F240C000607EB /* SystemConfiguration.framework */,
+				47809845284F2406000607EB /* CoreTelephony.framework */,
+				47809843284F23FF000607EB /* libsqlite3.tbd */,
+				4780984C284F36AD000607EB /* UTDID.framework */,
+				47809841284F23F6000607EB /* libresolv.tbd */,
+				4780983F284F23EF000607EB /* libz.tbd */,
+				47809833284F23DF000607EB /* AlicloudUtils.framework */,
+				47809836284F23DF000607EB /* CloudPushSDK.framework */,
+				47809835284F23DF000607EB /* UTMini.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				EC1F7BF6D8148A2B1A6A5C96 /* libPods-TypeScriptAppNativeBase.a */,
 				168C86462FD814DED68C8213 /* libPods-TypeScriptAppNativeBase-TypeScriptAppNativeBaseTests.a */,
@@ -530,6 +578,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DA9R6TCGB;
 				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/../../node_modules/@uiw/react-native-alipay/ios\"",
+					"\"${PODS_ROOT}/../../node_modules/react-native-aliyun-push/ios/libs\"",
+					"\"${PODS_ROOT}/../../node_modules/realm/react-native/ios\"",
+					"\"${PODS_ROOT}/OpenSSL-Universal/Frameworks\"",
+					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal\"",
+					"$(PROJECT_DIR)/../node_modules/react-native-aliyun-push/ios/libs\n\n",
+				);
 				INFOPLIST_FILE = TypeScriptAppNativeBase/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -559,6 +616,15 @@
 				CODE_SIGN_ENTITLEMENTS = TypeScriptAppNativeBase/TypeScriptAppNativeBase.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DA9R6TCGB;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/../../node_modules/@uiw/react-native-alipay/ios\"",
+					"\"${PODS_ROOT}/../../node_modules/react-native-aliyun-push/ios/libs\"",
+					"\"${PODS_ROOT}/../../node_modules/realm/react-native/ios\"",
+					"\"${PODS_ROOT}/OpenSSL-Universal/Frameworks\"",
+					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/OpenSSL-Universal\"",
+					"$(PROJECT_DIR)/../node_modules/react-native-aliyun-push/ios/libs\n\n",
+				);
 				INFOPLIST_FILE = TypeScriptAppNativeBase/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

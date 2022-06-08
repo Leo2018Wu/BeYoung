@@ -146,7 +146,7 @@ const MyTabs = ({...props}) => {
           headerShown: false,
           tabBarLabel: '消息',
         }}
-        name="Order"
+        name="CommunicateScreen"
         component={CommunicateScreen}
       />
       <Tab.Screen

@@ -1,4 +1,15 @@
 rootProject.name = 'TypeScriptAppNativeBase'
+include ':alipaysdk-noutdid-15.8.02.210308182128'
+include ':react-native-alipay-latest'
+project(':react-native-alipay-latest').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-alipay-latest/android')
+include ':react-native-push-notification'
+project(':react-native-push-notification').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-push-notification/android')
+include ':react-native-aliyun-push'
+project(':react-native-aliyun-push').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-aliyun-push/android')
+include ':@react-native-community_async-storage'
+project(':@react-native-community_async-storage').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/async-storage/android')
+include ':react-native-splash-screen'
+project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-splash-screen/android')
 include ':react-native-linear-gradient'
 project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
 include ':aliyun-oss-react-native-self'

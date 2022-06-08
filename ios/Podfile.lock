@@ -92,6 +92,8 @@ PODS:
     - boost-for-react-native
     - DoubleConversion
     - glog
+  - RCTAliyunPush (1.0.22):
+    - React
   - RCTRequired (0.64.1)
   - RCTTypeSafety (0.64.1):
     - FBLazyVector (= 0.64.1)
@@ -282,6 +284,8 @@ PODS:
     - React-Core
   - react-native-safe-area-context (3.2.0):
     - React-Core
+  - react-native-splash-screen (3.3.0):
+    - React-Core
   - React-perflogger (0.64.1)
   - React-RCTActionSheet (0.64.1):
     - React-Core/RCTActionSheetHeaders (= 0.64.1)
@@ -349,7 +353,7 @@ PODS:
   - RealmJS (10.14.0):
     - GCDWebServer
     - React
-  - RNAlipay (4.0.3):
+  - RNAlipay (1.0.3):
     - React
   - RNCAsyncStorage (1.12.1):
     - React-Core
@@ -418,6 +422,7 @@ DEPENDENCIES:
   - Permission-PhotoLibrary (from `../node_modules/react-native-permissions/ios/PhotoLibrary`)
   - Permission-PhotoLibraryAddOnly (from `../node_modules/react-native-permissions/ios/PhotoLibraryAddOnly`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
+  - RCTAliyunPush (from `../node_modules/react-native-aliyun-push`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
   - RCTTypeSafety (from `../node_modules/react-native/Libraries/TypeSafety`)
   - RCTWeChat (from `../node_modules/react-native-wechat-lib`)
@@ -433,6 +438,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -446,7 +452,7 @@ DEPENDENCIES:
   - React-runtimeexecutor (from `../node_modules/react-native/ReactCommon/runtimeexecutor`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - RealmJS (from `../node_modules/realm`)
-  - "RNAlipay (from `../node_modules/@uiw/react-native-alipay/ios`)"
+  - RNAlipay (from `../node_modules/react-native-alipay-latest/ios`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -499,6 +505,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-permissions/ios/PhotoLibraryAddOnly"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
+  RCTAliyunPush:
+    :path: "../node_modules/react-native-aliyun-push"
   RCTRequired:
     :path: "../node_modules/react-native/Libraries/RCTRequired"
   RCTTypeSafety:
@@ -525,6 +533,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-pager-view"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-splash-screen:
+    :path: "../node_modules/react-native-splash-screen"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -552,7 +562,7 @@ EXTERNAL SOURCES:
   RealmJS:
     :path: "../node_modules/realm"
   RNAlipay:
-    :path: "../node_modules/@uiw/react-native-alipay/ios"
+    :path: "../node_modules/react-native-alipay-latest/ios"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCPushNotificationIOS:
@@ -597,6 +607,7 @@ SPEC CHECKSUMS:
   Permission-PhotoLibrary: ddb5a158725b29cb12e9e477e8a5f5151c66cc3c
   Permission-PhotoLibraryAddOnly: 104e42dbe894b0fccb370be26dd1b4a3c23578eb
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
+  RCTAliyunPush: 1e7f68adc57ba95e88093a3ab6a3c2e509d4f4ff
   RCTRequired: ec2ebc96b7bfba3ca5c32740f5a0c6a014a274d2
   RCTTypeSafety: 22567f31e67c3e088c7ac23ea46ab6d4779c0ea5
   RCTWeChat: 289c92186c1f55716a6378af55388292d94b2d9e
@@ -610,6 +621,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 500a59626037be5b3b3d89c5151bc3baa9abf1a9
   react-native-pager-view: b1914469643f40042e65d78cbf3d3dfebd6fb0d9
   react-native-safe-area-context: f0906bf8bc9835ac9a9d3f97e8bde2a997d8da79
+  react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   React-perflogger: aad6d4b4a267936b3667260d1f649b6f6069a675
   React-RCTActionSheet: fc376be462c9c8d6ad82c0905442fd77f82a9d2a
   React-RCTAnimation: ba0a1c3a2738be224a08092fa7f1b444ab77d309
@@ -623,7 +635,7 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: ff951a0c241bfaefc4940a3f1f1a229e7cb32fa6
   ReactCommon: bedc99ed4dae329c4fcf128d0c31b9115e5365ca
   RealmJS: 5a939376f3bdd94708abe2326d33d8f935b9fb37
-  RNAlipay: a657c3dac5cb6b2d92d66ab1124a5b1e61f27f55
+  RNAlipay: 903053b97039a24bf35e3aec090407004025991d
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCPushNotificationIOS: 87b8d16d3ede4532745e05b03c42cff33a36cc45
   RNFastImage: 1f2cab428712a4baaf78d6169eaec7f622556dd7
@@ -638,6 +650,6 @@ SPEC CHECKSUMS:
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: c481bac3a4d7c7bf31c3eda95895a67b93cfb32a
+PODFILE CHECKSUM: 64ce818cd1872f6ac34e0308b382dd5f6e40608d
 
 COCOAPODS: 1.11.2

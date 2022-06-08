@@ -1,6 +1,6 @@
 import React from 'react';
 import {Badge, Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
-import {StyleSheet, View, StatusBar} from 'react-native';
+import {StyleSheet, View, StatusBar, DeviceEventEmitter} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 import {SwipeListView} from 'react-native-swipe-list-view';
@@ -44,6 +44,9 @@ function Basic({...props}) {
   const insets = useSafeAreaInsets();
   useFocusEffect(
     React.useCallback(() => {
+      DeviceEventEmitter.addListener('NOTIFICATION', res => {
+        props.navigation.navigate(res);
+      });
       const chatUserIds =
         props.listData && props.listData.map((item: any) => item.to);
       props.dispatch(getChatUsers({accountIds: chatUserIds}));

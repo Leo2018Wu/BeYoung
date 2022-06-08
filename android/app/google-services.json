@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "501169369681",
+    "project_id": "young-7ec4e",
+    "storage_bucket": "young-7ec4e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501169369681:android:e9c092f19199583dabfe70",
+        "android_client_info": {
+          "package_name": "com.zyxsnet.mobile.young"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "501169369681-gkpe4l009jrttah54nnvp4mp14vdj0ue.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACm7W7YQ02UhVdfUY12M-If0uC-FP1suM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "501169369681-gkpe4l009jrttah54nnvp4mp14vdj0ue.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

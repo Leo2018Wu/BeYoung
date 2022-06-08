@@ -12,7 +12,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import useRequest from '../../hooks/useRequest';
 import {fetchRechargeItems, rechargeApplyAli} from '../../api/wallet';
-import Alipay from '@uiw/react-native-alipay';
+import Alipay from 'react-native-alipay-latest';
 import util from '../../util/util';
 import {connect} from 'react-redux';
 import {getMyWallet} from '../../store/action';
