@@ -25,6 +25,18 @@ export const rechargeApplyAli = {
   options: {},
 };
 
+// IOS内购充值申请
+export const rechargeApplyByIos = {
+  url: 'cgi/core/recharge/rechargeApplyByIos',
+  options: {},
+};
+
+// IOS内购支付校验
+export const verifyApplePayResult = {
+  url: 'cgi/core/recharge/verifyApplePayResult',
+  options: {},
+};
+
 // 充值记录
 export const fetchRechargeRecord = {
   url: 'cgi/core/recharge/fetchRechargeRecord',
