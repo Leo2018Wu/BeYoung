@@ -28,6 +28,7 @@
 		4780984D284F36AD000607EB /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4780984C284F36AD000607EB /* UTDID.framework */; };
 		4780984E284F36AD000607EB /* UTDID.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4780984C284F36AD000607EB /* UTDID.framework */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F913F91A2851BDF8006217FB /* libRNIap.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F913F9192851BDF8006217FB /* libRNIap.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +83,7 @@
 		EC1F7BF6D8148A2B1A6A5C96 /* libPods-TypeScriptAppNativeBase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TypeScriptAppNativeBase.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EDA792571BE04ACF8D4CEFC3 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		F913F9192851BDF8006217FB /* libRNIap.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNIap.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		F9DA5B50284F435600DB9384 /* TypeScriptAppNativeBase.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TypeScriptAppNativeBase.entitlements; path = TypeScriptAppNativeBase/TypeScriptAppNativeBase.entitlements; sourceTree = "<group>"; };
 		FCA858F3987F4CC197A09421 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		FE215B93D78E4E868A09AA58 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F913F91A2851BDF8006217FB /* libRNIap.a in Frameworks */,
 				4780984D284F36AD000607EB /* UTDID.framework in Frameworks */,
 				4780984A284F2413000607EB /* UserNotifications.framework in Frameworks */,
 				47809848284F240C000607EB /* SystemConfiguration.framework in Frameworks */,
@@ -178,6 +181,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F913F9192851BDF8006217FB /* libRNIap.a */,
 				47809849284F2413000607EB /* UserNotifications.framework */,
 				47809847284F240C000607EB /* SystemConfiguration.framework */,
 				47809845284F2406000607EB /* CoreTelephony.framework */,
