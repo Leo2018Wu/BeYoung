@@ -71,8 +71,8 @@ static void InitializeFlipper(UIApplication *application) {
   [self.window makeKeyAndVisible];
   
   // 下面是添加的代码
-    [[AliyunPushManager sharedInstance] setParams:@"333706060"
-                                        appSecret:@"730a8be985db41d18d6fb55ae6c00eab"
+    [[AliyunPushManager sharedInstance] setParams:@"333706065"
+                                        appSecret:@"3e09515ec331411f95e4c3fc1bffa4fb"
                                      lauchOptions:launchOptions
                 createNotificationCategoryHandler:^{
                   //create customize notification category here
@@ -80,6 +80,15 @@ static void InitializeFlipper(UIApplication *application) {
     // 添加结束
   
   return YES;
+}
+
+- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
+{
+#if DEBUG
+  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
+#else
+  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+#endif
 }
 
 // 下面是添加的代码
@@ -127,14 +136,5 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   [[AliyunPushManager sharedInstance] application:application didRegisterUserNotificationSettings:notificationSettings];
 }
 // 添加结束
-
-- (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
-{
-#if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
-#else
-  return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
-#endif
-}
 
 @end

@@ -30,10 +30,10 @@ const Index = ({...props}) => {
       AsyncStorage.setItem('USERINFO', JSON.stringify(result)); // 存储登录信息
       AliyunPush.bindAccount(result.id)
         .then(data => {
-          console.log(JSON.stringify(data));
+          console.log('bindAccount success', data);
         })
         .catch(error => {
-          console.log(JSON.stringify(error));
+          console.log('bindAccount error', error);
         });
       if (!result.gender) {
         // 没有选择过性别进入性别选择页面

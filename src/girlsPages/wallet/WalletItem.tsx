@@ -19,7 +19,7 @@ const Login = () => {
         alignItems: 'center',
       }}>
       <Image
-        source={require('../assets/defaultAva.png')}
+        source={require('../assets/count.png')}
         style={{
           width: 50,
           height: 50,

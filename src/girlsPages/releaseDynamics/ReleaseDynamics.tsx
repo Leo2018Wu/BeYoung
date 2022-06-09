@@ -273,7 +273,7 @@ const styles = StyleSheet.create({
   banner: {
     ...Platform.select({
       ios: {
-        paddingTop: 28 + 40,
+        // paddingTop: 28 + 40,
       },
       android: {
         // paddingTop: layout.STATUSBAR_HEIGHT + 0,

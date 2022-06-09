@@ -82,38 +82,44 @@ const Mine = (props: any) => {
         <View style={styles.contain_inner}>
           <View style={styles.item_inner}>
             <Image
-              source={require('../assets/mineBg.png')}
+              source={require('../assets/zhifubao.png')}
               style={{
                 width: 50,
                 height: 50,
               }}
               resizeMode="cover"
             />
-            <Text style={{color: '#000', fontSize: 14}}>绑定支付宝</Text>
+            <Text style={{color: '#000', fontSize: 14, marginTop: 4}}>
+              绑定支付宝
+            </Text>
           </View>
           <View style={styles.item_inner}>
             <Image
-              source={require('../assets/mineBg.png')}
+              source={require('../assets/weixin.png')}
               style={{
                 width: 50,
                 height: 50,
               }}
               resizeMode="cover"
             />
-            <Text style={{color: '#000', fontSize: 14}}>绑定微信</Text>
+            <Text style={{color: '#000', fontSize: 14, marginTop: 4}}>
+              绑定微信
+            </Text>
           </View>
           <Pressable
             onPress={() => navigation.navigate('TransferDetail')}
             style={styles.item_inner}>
             <Image
-              source={require('../assets/mineBg.png')}
+              source={require('../assets/mingxi.png')}
               style={{
                 width: 50,
                 height: 50,
               }}
               resizeMode="cover"
             />
-            <Text style={{color: '#000', fontSize: 14}}>交易明细</Text>
+            <Text style={{color: '#000', fontSize: 14, marginTop: 4}}>
+              交易明细
+            </Text>
           </Pressable>
         </View>
         <Text style={styles.withdrawal}>提现记录</Text>
