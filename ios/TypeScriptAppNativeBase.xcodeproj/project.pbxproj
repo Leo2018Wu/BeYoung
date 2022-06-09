@@ -68,6 +68,7 @@
 		47809847284F240C000607EB /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		47809849284F2413000607EB /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		4780984C284F36AD000607EB /* UTDID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UTDID.framework; path = "../node_modules/react-native-aliyun-push/ios/libs/UTDID.framework"; sourceTree = "<group>"; };
+		47FDC5A32851870E00FB5295 /* TypeScriptAppNativeBaseDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = TypeScriptAppNativeBaseDebug.entitlements; path = TypeScriptAppNativeBase/TypeScriptAppNativeBaseDebug.entitlements; sourceTree = "<group>"; };
 		4BA5F34A71294E109347C404 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		4E7C74990AA346AB8F4230AA /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		5D49DC68CEF44906B8678A33 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
@@ -141,6 +142,7 @@
 		13B07FAE1A68108700A75B9A /* TypeScriptAppNativeBase */ = {
 			isa = PBXGroup;
 			children = (
+				47FDC5A32851870E00FB5295 /* TypeScriptAppNativeBaseDebug.entitlements */,
 				F9DA5B50284F435600DB9384 /* TypeScriptAppNativeBase.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -574,7 +576,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = TypeScriptAppNativeBase/TypeScriptAppNativeBase.entitlements;
+				CODE_SIGN_ENTITLEMENTS = TypeScriptAppNativeBase/TypeScriptAppNativeBaseDebug.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2DA9R6TCGB;
 				ENABLE_BITCODE = NO;

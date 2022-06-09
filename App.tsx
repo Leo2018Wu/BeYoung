@@ -28,15 +28,6 @@ const App = () => {
     },
   });
   useEffect(() => {
-    // 获取deviceId
-    AliyunPush.getDeviceId()
-      .then(deviceId => {
-        console.log('deviceId:' + deviceId);
-      })
-      .catch(error => {
-        console.log('getDeviceId() failed');
-      });
-
     AppState.addEventListener('change', _handleAppStateChange);
 
     AliyunPush.setApplicationIconBadgeNumber(0);
@@ -50,22 +41,19 @@ const App = () => {
 
   const _handleAppStateChange = nextappState => {
     //切换应用或者息屏时nextappState值为background
-    if (nextappState !== 'active') {
-      // let e = {
-      //   extras: {
-      //     page: 'CommunicateScreen',
-      //   },
-      // };
-      // pushTest(e);
-      AliyunPush.addListener(handleAliyunPushMessage);
-    }
+    // if (nextappState !== 'active') {
+    // let e = {
+    //   extras: {
+    //     page: 'CommunicateScreen',
+    //   },
+    // };
+    // pushTest(e);
+    AliyunPush.addListener(handleAliyunPushMessage);
+    // }
   };
 
   const handleAliyunPushMessage = e => {
     console.log('Message Received. ' + JSON.stringify(e));
-    if (e.actionIdentifier == 'opened') {
-      alert('我的点击好像生效了');
-    }
 
     if (e.type == 'notification') {
       onNotification(e);
