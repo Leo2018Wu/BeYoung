@@ -36,6 +36,8 @@ target 'TypeScriptAppNativeBase' do
 
   pod 'RNAlipay', :path => '../node_modules/react-native-alipay-latest/ios'
 
+  pod 'RNIap', :path => '../node_modules/react-native-iap'
+
   target 'TypeScriptAppNativeBaseTests' do
     inherit! :complete
     # Pods for testing

@@ -1,5 +1,5 @@
-import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {Text, Box, HStack, Pressable, Button, Modal, Image} from 'native-base';
+import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {Text, Box, HStack, Pressable, Button, View} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {
@@ -7,35 +7,36 @@ import {
   StyleSheet,
   useWindowDimensions,
   Platform,
+  Alert,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
-import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import useRequest from '../../hooks/useRequest';
-import {fetchRechargeItems, rechargeApplyAli} from '../../api/wallet';
-import Alipay from 'react-native-alipay-latest';
+import RNIap, {
+  finishTransaction,
+  purchaseErrorListener,
+  purchaseUpdatedListener,
+  clearProductsIOS,
+} from 'react-native-iap';
+import {
+  fetchRechargeItems,
+  rechargeApplyByIos,
+  verifyApplePayResult,
+} from '../../api/wallet';
 import util from '../../util/util';
+import Iap from '../../iap/iosIap';
 import {connect} from 'react-redux';
 import {getMyWallet} from '../../store/action';
+import {useFocusEffect} from '@react-navigation/native';
+import AsyncStorage from '@react-native-community/async-storage';
+import getStorage from '../../util/Storage';
 
 interface ItemProps {
   id: string;
   coinNum: string | number;
   rmbAmount: string | number;
 }
-
-const ALI_APPID = 2021003129620044;
-const PAY_WAYS = [
-  // {
-  //   icon: require('../../images/wx_icon.png'),
-  //   name: '微信',
-  //   code: 'WX',
-  // },
-  {
-    icon: require('../../images/ali_icon.png'),
-    name: '支付宝',
-    code: 'ALI',
-  },
-];
 
 const Bar = ({title = '充值项目'}) => {
   return (
@@ -58,6 +59,11 @@ const Index = ({...props}) => {
   const {walletInfo} = props;
   const {width} = useWindowDimensions();
   const ITEM_WIDTH = (width - 32 - 8) / 2;
+  const purchaseUpdateCallback = useRef(null); // 监听支付请求回调
+  const purchaseErrorCallback = useRef(null); // 监听支付请求错误回调
+  const IapRef = useRef(new Iap()); // Iap 内购ref
+  const chargeApplyInfo = useRef(null); //发起IAP充值申请返回信息
+  const [payFlag, setPayFlag] = useState(false); // 拉起苹果支付弹窗
   const [activeItem, setItem] = useState(''); // 选中的充值项目id
   const {result: chargeList} = useRequest(
     fetchRechargeItems.url,
@@ -65,14 +71,9 @@ const Index = ({...props}) => {
       platform: Platform.OS === 'ios' ? 'IOS' : 'ANDROID',
     },
     fetchRechargeItems.options,
-  );
-  const {run: runChargeAli} = useRequest(rechargeApplyAli.url);
-  const [payWayModal, setPayWayModal] = useState(false);
-
-  useEffect(() => {
-    Alipay.setAlipayScheme(`alipay${ALI_APPID}`);
-    props.dispatch(getMyWallet());
-  }, []);
+  ); // 充值项列表
+  const {run: runRechargeApplyByIos} = useRequest(rechargeApplyByIos.url);
+  const {run: runVerifyApplePayResult} = useRequest(verifyApplePayResult.url);
 
   useLayoutEffect(() => {
     props.navigation.setOptions({
@@ -88,26 +89,100 @@ const Index = ({...props}) => {
     });
   }, []);
 
-  const alipay = async () => {
-    setPayWayModal(false);
-    try {
-      const {data, success} = await runChargeAli({
-        rechargeItemId: activeItem,
-        platform: Platform.OS === 'android' ? 'ANDROID' : 'IOS',
-      });
-      if (success) {
-        const {resultStatus} = await Alipay.alipay(data);
-        if (resultStatus === '9000') {
-          props.dispatch(getMyWallet());
-        }
+  useEffect(() => {
+    props.dispatch(getMyWallet());
+    return () => {
+      if (purchaseUpdateCallback.current) {
+        purchaseUpdateCallback.current.remove();
+        purchaseUpdateCallback.current = null;
       }
-    } catch (error) {
-      console.log('alipay:error-->>>', error);
+      if (purchaseErrorCallback.current) {
+        purchaseErrorCallback.current.remove();
+        purchaseErrorCallback.current = null;
+      }
+    };
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      checkUnFinishTrans();
+    }, []),
+  );
+
+  /**
+   * 检查已支付但未写入数据库的情况
+   */
+  const checkUnFinishTrans = async () => {
+    const rechargeId = await getStorage(['RECHARGE_ID']);
+    await RNIap.initConnection();
+    const purchases = await RNIap.getAvailablePurchases();
+    if (purchases && purchases.length > 0 && rechargeId) {
+      const params = Object.assign(purchases[0], {rechargeId});
+      vertifyPay(params);
     }
   };
 
+  const vertifyPay = async (params: any) => {
+    const {data} = await runVerifyApplePayResult(params);
+    if (data === '校验成功' || data === '已充值成功') {
+      AsyncStorage.removeItem('RECHARGE_ID');
+      props.dispatch(getMyWallet());
+    }
+  };
+
+  /**
+   *
+   * @param {IAP商品code} param0
+   * @param {发起充值订单返回的订单ID} param1
+   */
+  const initPurchase = async () => {
+    const {iapProductCode, rechargeRecordId} = chargeApplyInfo.current;
+    await IapRef.current.init([iapProductCode], rechargeRecordId);
+    purchaseUpdateCallback.current = purchaseUpdatedListener(async purchase => {
+      const receipt = purchase.transactionReceipt
+        ? purchase.transactionReceipt
+        : purchase.originalJson;
+      if (receipt) {
+        console.log('receipt', receipt);
+
+        try {
+          await vertifyPay(Object.assign(purchase, {rechargeRecordId}));
+          await finishTransaction(purchase);
+        } catch (ackErr) {
+          console.warn('ackErr', ackErr);
+        }
+      } else {
+        Alert.alert('苹果支付处理中', [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ,
+        ]);
+      }
+    });
+    purchaseErrorCallback.current = purchaseErrorListener(error => {
+      console.log('purchaseErrorListener', error);
+    });
+  };
+
   const charge = async () => {
-    setPayWayModal(true);
+    if (!activeItem) {
+      return;
+    }
+    try {
+      const {data} = await runRechargeApplyByIos({
+        rechargeItemId: activeItem,
+      });
+      AsyncStorage.setItem('RECHARGE_ID', data.rechargeRecordId);
+      setPayFlag(true);
+      chargeApplyInfo.current = data;
+      await initPurchase();
+      await clearProductsIOS();
+      await IapRef.current.getProducts();
+      await IapRef.current.requestPurchase();
+      setPayFlag(false);
+    } catch (error) {
+      setPayFlag(false);
+      console.log('chargeError', error);
+    }
   };
 
   const goDetail = () => {
@@ -116,34 +191,13 @@ const Index = ({...props}) => {
 
   return (
     <Box flex={1}>
-      <Modal isOpen={payWayModal} onClose={() => setPayWayModal(false)}>
-        <Modal.Content p={4} alignItems="center">
-          <Text fontSize={'md'} mb={1} style={{color: '#222'}}>
-            请选择付款方式
-          </Text>
-          {PAY_WAYS.map((ele, idx) => (
-            <Pressable
-              onPress={() => alipay()}
-              py={2}
-              w={'full'}
-              flexDirection={'row'}
-              key={idx}>
-              <Image
-                alt="pay_icon"
-                style={{
-                  width: 25,
-                  height: 25,
-                  marginRight: 6,
-                }}
-                source={ele.icon}
-              />
-              <Text style={{color: '#2A2B2A'}} fontSize={'sm'} mr="auto">
-                {ele.name}
-              </Text>
-              <EvilIcons name="chevron-right" color="#C5C6C7" size={32} />
-            </Pressable>
-          ))}
-        </Modal.Content>
+      <Modal animationType="fade" transparent visible={payFlag}>
+        <View style={[styles.toastViewer, {left: (width - 140) / 2}]}>
+          <View style={styles.iconView}>
+            <ActivityIndicator size="large" color={'white'} />
+          </View>
+          <Text style={styles.toastText}>支付处理中...</Text>
+        </View>
       </Modal>
       <Box style={styles.top_section}>
         <ImageBackground
@@ -238,5 +292,25 @@ const styles = StyleSheet.create({
     top: '50%',
     left: 0,
     transform: [{translateY: -7}],
+  },
+  toastViewer: {
+    width: 144,
+    minHeight: 120,
+    position: 'absolute',
+    top: '40%',
+    borderRadius: 10,
+    backgroundColor: 'rgba(0,0,0,0.8)',
+  },
+  iconView: {
+    flex: 0.7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  toastText: {
+    flex: 0.3,
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 14,
   },
 });
