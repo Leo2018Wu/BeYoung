@@ -1,9 +1,10 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useLayoutEffect} from 'react';
 import {LogBox, AppState} from 'react-native';
 import {Provider} from 'react-redux';
 import {NativeBaseProvider, extendTheme, StatusBar} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import AliyunPush from 'react-native-aliyun-push';
+import * as WeChat from 'react-native-wechat-lib';
 
 import Navigation from './src/navigation/Index';
 import colors from './src/theme/bossColor';
@@ -26,6 +27,19 @@ const App = () => {
         defaultProps: {},
       },
     },
+  });
+  useLayoutEffect(() => {
+    // 注册微信SDK
+    WeChat.registerApp(
+      'wx8ac16a972a6e12f7',
+      'https://worker.zyxsnet.com/young/',
+    )
+      .then(res => {
+        console.log('register', res);
+      })
+      .catch(err => {
+        console.log('registerFail', err);
+      });
   });
   useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);

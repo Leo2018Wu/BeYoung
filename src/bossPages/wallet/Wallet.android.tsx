@@ -8,10 +8,15 @@ import {
   useWindowDimensions,
   Platform,
 } from 'react-native';
+import * as wechat from 'react-native-wechat-lib';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import useRequest from '../../hooks/useRequest';
-import {fetchRechargeItems, rechargeApplyAli} from '../../api/wallet';
+import {
+  fetchRechargeItems,
+  rechargeApplyAli,
+  rechargeApplyWX,
+} from '../../api/wallet';
 import Alipay from 'react-native-alipay-latest';
 import util from '../../util/util';
 import {connect} from 'react-redux';
@@ -25,11 +30,11 @@ interface ItemProps {
 
 const ALI_APPID = 2021003129620044;
 const PAY_WAYS = [
-  // {
-  //   icon: require('../../images/wx_icon.png'),
-  //   name: '微信',
-  //   code: 'WX',
-  // },
+  {
+    icon: require('../../images/wx_icon.png'),
+    name: '微信',
+    code: 'WX',
+  },
   {
     icon: require('../../images/ali_icon.png'),
     name: '支付宝',
@@ -67,6 +72,7 @@ const Index = ({...props}) => {
     fetchRechargeItems.options,
   );
   const {run: runChargeAli} = useRequest(rechargeApplyAli.url);
+  const {run: runChargeWx} = useRequest(rechargeApplyWX.url);
   const [payWayModal, setPayWayModal] = useState(false);
 
   useEffect(() => {
@@ -106,6 +112,39 @@ const Index = ({...props}) => {
     }
   };
 
+  const wxPay = async () => {
+    console.log('wechatwechat', wechat);
+    // wechat.openWXApp();
+    setPayWayModal(false);
+    try {
+      const {data, success} = await runChargeWx({
+        rechargeItemId: activeItem,
+        tradeType: 'APP',
+      });
+      if (!success) {
+        return;
+      }
+      const {prepayId, nonceStr, timeStamp, signType, partnerId} = data;
+      wechat
+        .pay({
+          partnerId, // 商家向财付通申请的商家id
+          prepayId, // 预支付订单
+          nonceStr, // 随机串，防重发
+          timeStamp, // 时间戳，防重发
+          package: data.package, // 商家根据财付通文档填写的数据和签名
+          sign: signType, // 商家根据微信开放平台文档对数据做的签名
+        })
+        .then(() => {
+          props.dispatch(getMyWallet());
+        })
+        .catch(er => {
+          console.log('er', er);
+        });
+    } catch (error) {
+      console.log('wxpay:error-->>>', error);
+    }
+  };
+
   const charge = async () => {
     setPayWayModal(true);
   };
@@ -123,7 +162,13 @@ const Index = ({...props}) => {
           </Text>
           {PAY_WAYS.map((ele, idx) => (
             <Pressable
-              onPress={() => alipay()}
+              onPress={() => {
+                if (ele.code === 'ALI') {
+                  alipay();
+                } else if (ele.code === 'WX') {
+                  wxPay();
+                }
+              }}
               py={2}
               w={'full'}
               flexDirection={'row'}
