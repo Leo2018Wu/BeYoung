@@ -117,6 +117,7 @@ const MyTabs = ({...props}) => {
                     {!isFocused ? (
                       <Image
                         source={list[index].icon}
+                        alt="dairy"
                         style={{
                           width: 25,
                           height: 25,
@@ -125,6 +126,7 @@ const MyTabs = ({...props}) => {
                     ) : (
                       <Image
                         source={list[index].icon_active}
+                        alt="dairy"
                         style={{
                           width: 25,
                           height: 25,
@@ -146,6 +148,7 @@ const MyTabs = ({...props}) => {
                 ) : (
                   <Image
                     source={list[index].icon_active}
+                    alt="dairy"
                     style={{
                       width: 55,
                       height: 55,

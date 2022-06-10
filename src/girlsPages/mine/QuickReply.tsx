@@ -35,7 +35,6 @@ const Login = () => {
 
   useEffect(() => {
     if (result) {
-      console.log('-快捷-result--', result);
       let data = [];
       result.forEach((e, index) => {
         if (e.code != 'QUICK_REPLY_SCENE') {
@@ -114,7 +113,7 @@ const Login = () => {
           {list &&
             list.map((item, index) => {
               return (
-                <View>
+                <View key={index}>
                   <Text style={styles.quickTitle}>{item.name}</Text>
                   <Input
                     value={item.content}
