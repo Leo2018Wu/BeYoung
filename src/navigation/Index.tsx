@@ -37,9 +37,9 @@ const Index = () => {
     dispatch(getRelateChatAccount());
     dispatch(getMyInfo());
     dispatch(getAllDicts());
+    SplashScreen.hide();
     getStorage(['LOGIN_NAVIGAITON_NAME']).then(res => {
       setLoading(false);
-      SplashScreen.hide();
       if (res) {
         getAccount();
         setIsLogin(res);
