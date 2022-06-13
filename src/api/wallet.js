@@ -42,3 +42,9 @@ export const fetchRechargeRecord = {
   url: 'cgi/core/recharge/fetchRechargeRecord',
   options: {},
 };
+
+// 绑定钱包账户
+export const fetchBindAccount = {
+  url: 'cgi/core/wallet/bindAccount',
+  options: {},
+};

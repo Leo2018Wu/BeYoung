@@ -9,16 +9,20 @@ import {
   FlatList,
   Pressable,
 } from 'react-native';
+import useRequest from '../../hooks/useRequest';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
+import * as WeChat from 'react-native-wechat-lib';
 
 import layout from '../../components/Layout';
 import WalletItem from './WalletItem';
+import {fetchBindAccount} from '../../api/wallet';
 
 const Mine = (props: any) => {
   const {navigation} = props;
   const insets = useSafeAreaInsets();
+  const {run: runBindAccount} = useRequest(fetchBindAccount.url);
   const [list, setList] = useState([
     {id: 0},
     {id: 1},
@@ -27,6 +31,26 @@ const Mine = (props: any) => {
     {id: 3},
     {id: 4},
   ]);
+
+  // 微信授权登录 提现
+  const bindWechatCont = () => {
+    WeChat.sendAuthRequest('snsapi_userinfo')
+      .then(async res => {
+        console.log('--res---', res);
+        const {data, success} = await runChargeAli({
+          accountType: 'ACCOUNT_TYPE_WX_PAY',
+          accountNum: res.code,
+          tradeType: 'APP',
+        });
+      })
+      .catch(err => {
+        console.log('--err---', err);
+      });
+  };
+
+  const bindCount = () => {
+    bindWechatCont();
+  };
 
   return (
     <View style={{backgroundColor: '#fff', flex: 1}}>
@@ -80,7 +104,9 @@ const Mine = (props: any) => {
           </View>
         </ImageBackground>
         <View style={styles.contain_inner}>
-          <View style={styles.item_inner}>
+          <Pressable
+            onPress={() => navigation.navigate('WithdrawalCards')}
+            style={styles.item_inner}>
             <Image
               source={require('../assets/zhifubao.png')}
               style={{
@@ -92,8 +118,8 @@ const Mine = (props: any) => {
             <Text style={{color: '#000', fontSize: 14, marginTop: 4}}>
               绑定支付宝
             </Text>
-          </View>
-          <View style={styles.item_inner}>
+          </Pressable>
+          <Pressable onPress={() => bindCount()} style={styles.item_inner}>
             <Image
               source={require('../assets/weixin.png')}
               style={{
@@ -105,7 +131,7 @@ const Mine = (props: any) => {
             <Text style={{color: '#000', fontSize: 14, marginTop: 4}}>
               绑定微信
             </Text>
-          </View>
+          </Pressable>
           <Pressable
             onPress={() => navigation.navigate('TransferDetail')}
             style={styles.item_inner}>

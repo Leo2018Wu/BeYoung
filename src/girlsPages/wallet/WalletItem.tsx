@@ -24,6 +24,7 @@ const Login = () => {
           width: 50,
           height: 50,
         }}
+        alt="dairy"
       />
       <View style={styles.itemContain}>
         <View>
