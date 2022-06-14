@@ -88,7 +88,7 @@ const Login = () => {
         onEndReachedThreshold={0.1}
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => <PhotoItem item={item} />}
-        keyExtractor={item => item.id}
+        keyExtractor={(item: any) => `key${item.id}`}
       />
     </View>
   );

@@ -138,24 +138,6 @@ util.getSign = val => {
   return signs[index];
 };
 
-// 消息类型列表
-util.mapMsgType = function (msg) {
-  const map = {
-    text: '文本消息',
-    image: '图片消息',
-    file: '文件消息',
-    audio: '语音消息',
-    video: '视频消息',
-    geo: '地理位置消息',
-    tip: '提醒消息',
-    custom: '自定义消息',
-    notification: '系统通知',
-    robot: '机器人消息',
-  };
-  const type = msg.type;
-  return map[type] || '未知消息类型';
-};
-
 // 格式化时间
 util.formatTime = timestamp => {
   if (!timestamp || typeof timestamp === 'string') {
@@ -176,6 +158,20 @@ util.throttle = (fn, space) => {
       }, space);
     }
   };
+};
+// 金额位数
+util.formateMoney = (value, num) => {
+  num = num > 0 && num <= 20 ? num : 2;
+  value = parseFloat((value + '').replace(/[^\d\.-]/g, '')).toFixed(num) + ''; //将金额转成比如 123.45的字符串
+  var valueArr = value.split('.')[0].split('').reverse(); //将字符串的数变成数组
+  const valueFloat = value.split('.')[1]; // 取到 小数点后的值
+  let valueString = '';
+  for (let i = 0; i < valueArr.length; i++) {
+    valueString += valueArr[i];
+    // valueString += valueArr[i] + ((i + 1) % 3 == 0 && (i + 1) != valueArr.length ? "," : ""); //循环 取数值并在每三位加个','
+  }
+  const money = valueString.split('').reverse().join('') + '.' + valueFloat; //拼接上小数位
+  return money;
 };
 
 export default util;

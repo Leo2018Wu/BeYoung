@@ -115,7 +115,7 @@ const MyStack = () => {
         name="WithdrawalDetail"
         component={WithdrawalDetail}
         options={() => ({
-          title: '提现详情',
+          title: '交易详情',
           headerStyle: {backgroundColor: '#fff'},
         })}
       />

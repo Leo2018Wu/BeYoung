@@ -48,3 +48,39 @@ export const fetchBindAccount = {
   url: 'cgi/core/wallet/bindAccount',
   options: {},
 };
+
+//获取钱包账户列表
+export const fetchAccountList = {
+  url: 'cgi/core/wallet/fetchAccountList',
+  options: {},
+};
+
+//获取支付宝授权请求信息
+export const fetchAlipayAuthInfo = {
+  url: 'cgi/core/wallet/fetchAlipayAuthInfo',
+  options: {},
+};
+
+//删除钱包账户
+export const deleteAccount = {
+  url: 'cgi/core/wallet/deleteAccount',
+  options: {},
+};
+
+//查询我的提现记录
+export const queryMyWithdraws = {
+  url: 'cgi/core/withdraw/queryMyWithdraws',
+  options: {},
+};
+
+//获取钱包明细
+export const fetchWalletDetail = {
+  url: 'cgi/core/user/fetchWalletDetail',
+  options: {},
+};
+
+//申请提现
+export const fetchWithdraw = {
+  url: 'cgi/core/withdraw/withdraw',
+  options: {},
+};
