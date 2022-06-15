@@ -4077,7 +4077,7 @@ eventemitter2@^1.0.0:
 
 events@1.0.1:
   version "1.0.1"
-  resolved "https://registry.npmmirror.com/events/-/events-1.0.1.tgz#386f6471cbb609e7925e7bfe7468634b9e069ac2"
+  resolved "https://registry.yarnpkg.com/events/-/events-1.0.1.tgz#386f6471cbb609e7925e7bfe7468634b9e069ac2"
   integrity sha512-Ee2RsyA5p9FyGVnVvbb1j7VKg+ezi6IOcgis2crSNo1V7S/M0eUnMABobd/fRhm6L3p/jGhPJzDFQDRpYw3O+g==
 
 exec-sh@^0.3.2:
@@ -7298,7 +7298,7 @@ react-native-vector-icons@^9.1.0:
 
 react-native-wechat-lib@^1.1.26:
   version "1.1.26"
-  resolved "https://registry.npmmirror.com/react-native-wechat-lib/-/react-native-wechat-lib-1.1.26.tgz#60be6ba92399a38c9df5ca0fc4c1353b089f7210"
+  resolved "https://registry.yarnpkg.com/react-native-wechat-lib/-/react-native-wechat-lib-1.1.26.tgz#60be6ba92399a38c9df5ca0fc4c1353b089f7210"
   integrity sha512-icTFl4PIAdVqmVkEAgfpaGSukafzd1M4cEszwncwRrLEaCYI5hllDK/sgnFU5tj6535LwKwxC+30PC8poyObrw==
   dependencies:
     events "1.0.1"

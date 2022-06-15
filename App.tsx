@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect} from 'react';
+import React, {useEffect} from 'react';
 import {LogBox, AppState} from 'react-native';
 import {Provider} from 'react-redux';
 import {NativeBaseProvider, extendTheme, StatusBar} from 'native-base';
@@ -28,10 +28,10 @@ const App = () => {
       },
     },
   });
-  useLayoutEffect(() => {
+  useEffect(() => {
     // 注册微信SDK
     WeChat.registerApp(
-      'wx8ac16a972a6e12f7',
+      'wxbf897d24e484ccc8',
       'https://worker.zyxsnet.com/young/',
     )
       .then(res => {
@@ -40,8 +40,6 @@ const App = () => {
       .catch(err => {
         console.log('registerFail', err);
       });
-  });
-  useEffect(() => {
     AppState.addEventListener('change', _handleAppStateChange);
 
     AliyunPush.setApplicationIconBadgeNumber(0);

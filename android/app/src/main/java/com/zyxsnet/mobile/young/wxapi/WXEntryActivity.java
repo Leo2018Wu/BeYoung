@@ -1,4 +1,4 @@
-package com.zyxsnet.mobile.boss.wxapi;
+package com.zyxsnet.mobile.young.wxapi;
 
 import android.app.Activity;
 import android.os.Bundle;
