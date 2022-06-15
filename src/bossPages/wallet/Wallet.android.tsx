@@ -124,15 +124,17 @@ const Index = ({...props}) => {
       if (!success) {
         return;
       }
-      const {prepayId, nonceStr, timeStamp, signType, partnerId} = data;
+      console.log('--s--s-s', data);
+
+      const {prepayid, noncestr, timestamp, sign, partnerid} = data;
       wechat
         .pay({
-          partnerId, // 商家向财付通申请的商家id
-          prepayId, // 预支付订单
-          nonceStr, // 随机串，防重发
-          timeStamp, // 时间戳，防重发
-          package: data._package, // 商家根据财付通文档填写的数据和签名
-          sign: signType, // 商家根据微信开放平台文档对数据做的签名
+          partnerId: partnerid, // 商家向财付通申请的商家id
+          prepayId: prepayid, // 预支付订单
+          nonceStr: noncestr, // 随机串，防重发
+          timeStamp: timestamp, // 时间戳，防重发
+          package: data.package, // 商家根据财付通文档填写的数据和签名
+          sign: sign, // 商家根据微信开放平台文档对数据做的签名
         })
         .then(() => {
           props.dispatch(getMyWallet());

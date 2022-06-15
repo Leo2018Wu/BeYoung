@@ -5,6 +5,7 @@ import {NativeBaseProvider, extendTheme, StatusBar} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import AliyunPush from 'react-native-aliyun-push';
 import * as WeChat from 'react-native-wechat-lib';
+import Splash from 'react-native-splash-screen';
 
 import Navigation from './src/navigation/Index';
 import colors from './src/theme/bossColor';
@@ -29,6 +30,7 @@ const App = () => {
     },
   });
   useEffect(() => {
+    Splash.hide();
     // 注册微信SDK
     WeChat.registerApp(
       'wxbf897d24e484ccc8',
