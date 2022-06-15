@@ -13,6 +13,7 @@ import RepairHelp from '../../girlsPages/mine/photoSelect/RepairHelp';
 import Wallet from '../../girlsPages/wallet/Wallet';
 import TransferDetail from '../../girlsPages/wallet/TransferDetail';
 import WithdrawalDetail from '../../girlsPages/wallet/WithdrawalDetail';
+import WithdrawalCards from '../../girlsPages/wallet/WithdrawalCards';
 import Preview from '../../components/Preview';
 import EditUser from '../../girlsPages/mine/setting/EditUser';
 import EditName from '../../girlsPages/mine/setting/EditName';
@@ -114,7 +115,15 @@ const MyStack = () => {
         name="WithdrawalDetail"
         component={WithdrawalDetail}
         options={() => ({
-          title: '提现详情',
+          title: '交易详情',
+          headerStyle: {backgroundColor: '#fff'},
+        })}
+      />
+      <Stack.Screen
+        name="WithdrawalCards"
+        component={WithdrawalCards}
+        options={() => ({
+          title: '绑定账号',
           headerStyle: {backgroundColor: '#fff'},
         })}
       />

@@ -131,7 +131,7 @@ const Index = ({...props}) => {
           prepayId, // 预支付订单
           nonceStr, // 随机串，防重发
           timeStamp, // 时间戳，防重发
-          package: data.package, // 商家根据财付通文档填写的数据和签名
+          package: data._package, // 商家根据财付通文档填写的数据和签名
           sign: signType, // 商家根据微信开放平台文档对数据做的签名
         })
         .then(() => {

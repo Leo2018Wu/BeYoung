@@ -1,16 +1,17 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Pressable, StyleSheet} from 'react-native';
 import {View, Text, Image} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
+import util from '../../util/util';
 
 import layout from '../../components/Layout';
 
-const Login = () => {
+const Login = ({...props}) => {
   const navigation = useNavigation();
-  const [imgList, setImgList] = useState([{id: 0}, {id: 1}, {id: 2}]);
+  const {item} = props;
+
   return (
     <Pressable
-      onPress={() => navigation.navigate('WithdrawalDetail')}
       style={{
         flexDirection: 'row',
         paddingHorizontal: 20,
@@ -24,21 +25,24 @@ const Login = () => {
           width: 50,
           height: 50,
         }}
+        alt="dairy"
       />
       <View style={styles.itemContain}>
         <View>
-          <Text style={{color: '#554C5F', fontSize: 16}}>提现到微信</Text>
-          <Text style={{color: '#c7c7c7', fontSize: 12}}>11-11 10:20</Text>
+          <Text style={{color: '#554C5F', fontSize: 16}}>
+            提现到 {item.accountTypeName}
+          </Text>
+          <Text style={{color: '#c7c7c7', fontSize: 12}}>{item.applyTime}</Text>
         </View>
         <View
           style={{
             marginVertical: 10,
           }}>
-          <Text style={{color: '#554C5F', fontSize: 12, alignSelf: 'flex-end'}}>
+          {/* <Text style={{color: '#554C5F', fontSize: 12, alignSelf: 'flex-end'}}>
             RMB
-          </Text>
+          </Text> */}
           <Text style={{color: '#554C5F', fontSize: 20, fontWeight: 'bold'}}>
-            +6.00
+            -{util.formateMoney(item.coinAmount)}
           </Text>
         </View>
       </View>

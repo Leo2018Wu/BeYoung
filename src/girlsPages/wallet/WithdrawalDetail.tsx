@@ -3,10 +3,13 @@
 import React from 'react';
 import {View, Text, Image, ImageBackground, StyleSheet} from 'react-native';
 
-import DashLine from '../../components/DashLine';
 import layout from '../../components/Layout';
+import util from '../../util/util';
 
-export default function Index(props) {
+export default function Index({...props}) {
+  const {route} = props;
+  console.log('----s-s-s', route.params);
+
   return (
     <View
       style={{
@@ -15,7 +18,7 @@ export default function Index(props) {
         backgroundColor: '#fff',
       }}>
       <ImageBackground
-        resizeMode="cover"
+        resizeMode="stretch"
         source={require('../assets/record_detail_bg.png')}
         style={styles.container}>
         <Image
@@ -30,27 +33,37 @@ export default function Index(props) {
             flexDirection: 'row',
             marginTop: 16,
           }}>
-          <Text style={{color: '#000000', fontSize: 18, marginRight: 10}}>
+          {/* <Text style={{color: '#000000', fontSize: 18, marginRight: 10}}>
             钱包到账
+          </Text> */}
+          <Text style={styles.amount}>
+            {util.formateMoney(route.params.item.coinNum)}
           </Text>
-          <Text style={styles.amount}>1300</Text>
         </View>
         <View style={styles.bottom_container}>
           <View style={styles.bottom_item}>
             <Text style={styles.bottom_item_title}>收支类型</Text>
-            <Text style={styles.bottom_item_content}>提现</Text>
+            <Text style={styles.bottom_item_content}>
+              {route.params.item.revenueTypeName}
+            </Text>
           </View>
           <View style={styles.bottom_item}>
-            <Text style={styles.bottom_item_title}>提现时间</Text>
-            <Text style={styles.bottom_item_content}>2020-07-05 17:04:23</Text>
+            <Text style={styles.bottom_item_title}>创建时间</Text>
+            <Text style={styles.bottom_item_content}>
+              {route.params.item.createTime}
+            </Text>
           </View>
           <View style={styles.bottom_item}>
             <Text style={styles.bottom_item_title}>当前余额</Text>
-            <Text style={styles.bottom_item_content}>1244.00币</Text>
+            <Text style={styles.bottom_item_content}>
+              {util.formateMoney(route.params.item.coinBalance)}
+            </Text>
           </View>
           <View style={styles.bottom_item}>
             <Text style={styles.bottom_item_title}>交易单号</Text>
-            <Text style={styles.bottom_item_content}>176****8280</Text>
+            <Text style={styles.bottom_item_content}>
+              {route.params.item.tradeNo}
+            </Text>
           </View>
         </View>
       </ImageBackground>
