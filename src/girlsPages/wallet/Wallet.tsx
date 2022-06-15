@@ -39,6 +39,7 @@ const Index = ({...props}) => {
 
   const {run: runFetchWithdraw} = useRequest(fetchWithdraw.url);
   const [withdrawalFlag, setWithdrawalFlag] = useState(false);
+  const [keyData, setKeyData] = useState(0);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -75,6 +76,7 @@ const Index = ({...props}) => {
     });
     if (success) {
       setWithdrawalFlag(false);
+      setKeyData(Math.random());
       props.dispatch(getMyWallet());
     }
   };
@@ -184,6 +186,7 @@ const Index = ({...props}) => {
         <Text style={styles.withdrawal}>提现记录</Text>
       </View>
       <CustomFuncFlatList
+        key={keyData}
         renderItem={({item}: any) => <WalletItem item={item} />}
         url={queryMyWithdraws.url}
       />
