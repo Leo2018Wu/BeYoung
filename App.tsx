@@ -31,7 +31,7 @@ const App = () => {
   useLayoutEffect(() => {
     // 注册微信SDK
     WeChat.registerApp(
-      'wx8ac16a972a6e12f7',
+      'wxbf897d24e484ccc8',
       'https://worker.zyxsnet.com/young/',
     )
       .then(res => {
