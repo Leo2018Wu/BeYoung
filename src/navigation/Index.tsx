@@ -12,7 +12,6 @@ import StackBossMain from './boss/Main';
 import StackGirlsMain from './girls/Main';
 import StackLogin from './Login';
 import Splash from './Splash';
-import SplashScreen from 'react-native-splash-screen';
 
 const Index = () => {
   const dispatch = useDispatch();
@@ -37,7 +36,6 @@ const Index = () => {
     dispatch(getRelateChatAccount());
     dispatch(getMyInfo());
     dispatch(getAllDicts());
-    SplashScreen.hide();
     getStorage(['LOGIN_NAVIGAITON_NAME']).then(res => {
       setLoading(false);
       if (res) {

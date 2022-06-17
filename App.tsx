@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect} from 'react';
+import React, {useEffect} from 'react';
 import {LogBox, AppState} from 'react-native';
 import {Provider} from 'react-redux';
 import {NativeBaseProvider, extendTheme, StatusBar} from 'native-base';
@@ -9,6 +9,7 @@ import * as WeChat from 'react-native-wechat-lib';
 import Navigation from './src/navigation/Index';
 import colors from './src/theme/bossColor';
 import {store} from './src/store/index.js';
+import Splash from 'react-native-splash-screen';
 
 var PushNotification = require('react-native-push-notification');
 
@@ -28,7 +29,8 @@ const App = () => {
       },
     },
   });
-  useLayoutEffect(() => {
+  useEffect(() => {
+    Splash.hide();
     // 注册微信SDK
     WeChat.registerApp(
       'wxbf897d24e484ccc8',
