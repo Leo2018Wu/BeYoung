@@ -1,4 +1,6 @@
 rootProject.name = 'TypeScriptAppNativeBase'
+include ':@shm-open_react-native-wechat'
+project(':@shm-open_react-native-wechat').projectDir = new File(rootProject.projectDir, '../node_modules/@shm-open/react-native-wechat/android')
 include ':alipaysdk-noutdid-15.8.02.210308182128'
 include ':react-native-alipay-latest'
 project(':react-native-alipay-latest').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-alipay-latest/android')

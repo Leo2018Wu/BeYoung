@@ -38,6 +38,8 @@ target 'TypeScriptAppNativeBase' do
 
   pod 'RNIap', :path => '../node_modules/react-native-iap'
 
+  pod 'react-native-wechat', :path => '../node_modules/@shm-open/react-native-wechat'
+
   target 'TypeScriptAppNativeBaseTests' do
     inherit! :complete
     # Pods for testing

@@ -5,14 +5,15 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
-import com.theweflex.react.WeChatModule;
+import com.theweflex.react.WechatModule;
+
 
 public class WXEntryActivity extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WeChatModule.handleIntent(getIntent());
+        WechatModule.handleIntent(getIntent());
         finish();
     }
 }

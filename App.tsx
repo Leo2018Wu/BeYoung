@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import {NativeBaseProvider, extendTheme, StatusBar} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import AliyunPush from 'react-native-aliyun-push';
-import * as WeChat from 'react-native-wechat-lib';
+import * as WeChat from '@shm-open/react-native-wechat';
 import Splash from 'react-native-splash-screen';
 
 import Navigation from './src/navigation/Index';

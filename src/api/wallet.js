@@ -18,6 +18,11 @@ export const rechargeApplyWX = {
   url: 'cgi/core/recharge/rechargeApply',
   options: {},
 };
+// 微信充值申请V3
+export const rechargeApplyWXV3 = {
+  url: 'cgi/core/recharge/wxPayV3RechargeForApp',
+  options: {},
+};
 
 // 支付宝充值申请
 export const rechargeApplyAli = {

@@ -16,7 +16,7 @@ import {
 } from '../../api/wallet';
 import useRequest from '../../hooks/useRequest';
 import Alipay from 'react-native-alipay-latest';
-import * as WeChat from 'react-native-wechat-lib';
+import * as WeChat from '@shm-open/react-native-wechat';
 import QueryString from 'query-string';
 
 const Index = ({...props}) => {

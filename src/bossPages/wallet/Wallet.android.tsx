@@ -8,14 +8,15 @@ import {
   useWindowDimensions,
   Platform,
 } from 'react-native';
-import * as wechat from 'react-native-wechat-lib';
+import * as WeChat from '@shm-open/react-native-wechat';
+
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import useRequest from '../../hooks/useRequest';
 import {
   fetchRechargeItems,
   rechargeApplyAli,
-  rechargeApplyWX,
+  rechargeApplyWXV3,
 } from '../../api/wallet';
 import Alipay from 'react-native-alipay-latest';
 import util from '../../util/util';
@@ -72,7 +73,7 @@ const Index = ({...props}) => {
     fetchRechargeItems.options,
   );
   const {run: runChargeAli} = useRequest(rechargeApplyAli.url);
-  const {run: runChargeWx} = useRequest(rechargeApplyWX.url);
+  const {run: runChargeWx} = useRequest(rechargeApplyWXV3.url);
   const [payWayModal, setPayWayModal] = useState(false);
 
   useEffect(() => {
@@ -113,8 +114,6 @@ const Index = ({...props}) => {
   };
 
   const wxPay = async () => {
-    console.log('wechatwechat', wechat);
-    // wechat.openWXApp();
     setPayWayModal(false);
     try {
       const {data, success} = await runChargeWx({
@@ -124,18 +123,15 @@ const Index = ({...props}) => {
       if (!success) {
         return;
       }
-      console.log('--s--s-s', data);
-
       const {prepayid, noncestr, timestamp, sign, partnerid} = data;
-      wechat
-        .pay({
-          partnerId: partnerid, // 商家向财付通申请的商家id
-          prepayId: prepayid, // 预支付订单
-          nonceStr: noncestr, // 随机串，防重发
-          timeStamp: timestamp, // 时间戳，防重发
-          package: data.package, // 商家根据财付通文档填写的数据和签名
-          sign: sign, // 商家根据微信开放平台文档对数据做的签名
-        })
+      WeChat.pay({
+        partnerId: partnerid, // 商家向财付通申请的商家id
+        prepayId: prepayid, // 预支付订单
+        nonceStr: noncestr, // 随机串，防重发
+        timeStamp: timestamp, // 时间戳，防重发
+        package: data.package, // 商家根据财付通文档填写的数据和签名
+        sign, // 商家根据微信开放平台文档对数据做的签名
+      })
         .then(() => {
           props.dispatch(getMyWallet());
         })
@@ -165,10 +161,12 @@ const Index = ({...props}) => {
           {PAY_WAYS.map((ele, idx) => (
             <Pressable
               onPress={() => {
-                if (ele.code === 'ALI') {
-                  alipay();
-                } else if (ele.code === 'WX') {
-                  wxPay();
+                if (activeItem) {
+                  if (ele.code === 'ALI') {
+                    alipay();
+                  } else if (ele.code === 'WX') {
+                    wxPay();
+                  }
                 }
               }}
               py={2}

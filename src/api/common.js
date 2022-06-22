@@ -42,6 +42,7 @@ export const sendCode = {
   url: 'cgi/core/login/sendCode',
   options: {
     showMsg: true,
+    manual: false,
   },
 };
 

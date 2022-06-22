@@ -213,6 +213,7 @@ dependencies {
     implementation project(':react-native-push-notification')
     //添加结束
     implementation project(':react-native-splash-screen')
+    implementation project(path: ':@shm-open_react-native-wechat')
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'

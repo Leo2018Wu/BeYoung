@@ -16,27 +16,13 @@ import com.alibaba.sdk.android.push.register.MiPushRegister;
 import com.alibaba.sdk.android.push.register.OppoRegister;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.uiwjs.alipay.RNAlipayPackage;
-import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
-import org.wonday.aliyun.push.AliyunPushPackage;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.BV.LinearGradient.LinearGradientPackage;
-import com.facebook.react.shell.MainReactPackage;
-import com.reactlibrary.RNAliyunOssPackage;
-import com.reactnative.ivpusic.imagepicker.PickerPackage;
-import com.zoontek.rnpermissions.RNPermissionsPackage;
-import com.dylanvann.fastimage.FastImageViewPackage;
-import com.reactnativepagerview.PagerViewPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.theweflex.react.WeChatPackage;
+import com.theweflex.react.WechatPackage;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -50,24 +36,10 @@ public class MainApplication extends Application implements ReactApplication {
 
         @Override
         protected List<ReactPackage> getPackages() {
-//            return Arrays.<ReactPackage>asList(
-//                    new MainReactPackage(),
-//            new RNAlipayPackage(),
-//                    new ReactNativePushNotificationPackage(),
-//                    new AliyunPushPackage(),
-//                    new AsyncStoragePackage(),
-//                    new LinearGradientPackage(),
-//                    new RNAliyunOssPackage(),
-//                    new PickerPackage(),
-//                    new RNPermissionsPackage(),
-//                    new FastImageViewPackage(),
-//                    new PagerViewPackage(),
-//                    new VectorIconsPackage()
-//            );
             @SuppressWarnings("UnnecessaryLocalVariable")
             List<ReactPackage> packages = new PackageList(this).getPackages();
             // Packages that cannot be autolinked yet can be added manually here, for example:
-            packages.add(new WeChatPackage());
+            packages.add(new WechatPackage());
             return packages;
         }
 
