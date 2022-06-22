@@ -5,11 +5,6 @@ import {
   Image,
   View,
   VStack,
-  // {
-  //   routeName: 'logout',
-  //   iconUrl: require('../assets/logout.png'),
-  //   name: '退出登录',
-  // },
   Text,
   Button,
   Stack,
@@ -35,6 +30,7 @@ const Index = ({...props}) => {
     setIsBoss(boss);
     if (item.images && JSON.parse(item.images).length) {
       setImgList(JSON.parse(item.images));
+      console.log('---s-s----', imgList);
     }
   }, []);
 
@@ -83,9 +79,21 @@ const Index = ({...props}) => {
           style={{
             marginLeft: 56,
           }}
-          pt={4}>
+          pt={0}>
           <HStack mb={2} flexWrap={'wrap'}>
-            {imgList &&
+            {imgList.length === 1 ? (
+              <Image
+                alt="dairy"
+                borderRadius={10}
+                style={{
+                  marginRight: 8,
+                  width: IMG_ITEM_WIDTH * 2,
+                  height: IMG_ITEM_HEIGHT * 3,
+                }}
+                source={{uri: BASE_DOWN_URL + imgList}}
+              />
+            ) : (
+              imgList &&
               imgList.map((item, index) => (
                 <Image
                   key={index}
@@ -99,9 +107,10 @@ const Index = ({...props}) => {
                   }}
                   source={{uri: BASE_DOWN_URL + item}}
                 />
-              ))}
+              ))
+            )}
           </HStack>
-          <Text numberOfLines={3} fontSize={'sm'} color={'fontColors._72'}>
+          <Text fontSize={'sm'} color={'fontColors._72'}>
             {item.content}
           </Text>
         </View>
