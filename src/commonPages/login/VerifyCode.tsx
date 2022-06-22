@@ -22,10 +22,6 @@ const Index = ({...props}) => {
   const {count, reset} = useCountdown(SEND_CODE_DURATION);
 
   useEffect(() => {
-    runSendCode();
-  }, []);
-
-  useEffect(() => {
     if (result) {
       AsyncStorage.setItem('USERINFO', JSON.stringify(result)); // 存储登录信息
       AliyunPush.bindAccount(result.id)

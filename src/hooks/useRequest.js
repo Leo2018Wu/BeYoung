@@ -67,6 +67,14 @@ const useRequest = (
         const responseJSON = await response.json();
         console.log('responseJSON', responseJSON);
         const {success, data, message, type, code} = responseJSON;
+        if (!success) {
+          Toast.show({
+            description: message,
+            placement: 'top',
+            duration: 1500,
+          });
+          return;
+        }
         if (
           data === '访问凭据已过期，请重新登陆' ||
           data === '访问凭据为空，您缺少访问权限' ||
