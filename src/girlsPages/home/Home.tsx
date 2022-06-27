@@ -35,7 +35,7 @@ export default function TabViewExample() {
 
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    {key: 'dynamic', title: '动态'},
+    {key: 'dynamic', title: '学妹圈'},
     // {key: 'gift', title: '礼物'},
     // {key: 'like', title: '喜欢'},
     // {key: 'comment', title: '评论'},

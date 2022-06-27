@@ -23,6 +23,7 @@ import Session from '../../girlsPages/communication/Session';
 import Label from '../../girlsPages/mine/Label';
 import Service from '../../bossPages/customService/Index';
 import MineGifts from '../../girlsPages/mine/MineGifts';
+import Follow from '../../girlsPages/mine/Follow';
 
 const Stack = createNativeStackNavigator();
 
@@ -196,6 +197,14 @@ const MyStack = () => {
         }}
         name="MineGifts"
         component={MineGifts}
+      />
+      <Stack.Screen
+        options={{
+          title: '被关注',
+          headerStyle: {backgroundColor: '#fff'},
+        }}
+        name="Follow"
+        component={Follow}
       />
     </Stack.Navigator>
   );
