@@ -102,10 +102,16 @@ const Index = ({...props}) => {
   const alipay = async () => {
     try {
       const {data, success} = await runFetchAlipayAuthInfo({platform: 'IOS'});
+      console.log('--data--', data);
+
       if (success) {
         let {app_id} = QueryString.parse(data);
+        console.log('---app_id---', app_id);
+
         Alipay.setAlipayScheme('alipay' + app_id);
         let response = await Alipay.authInfo(data);
+        console.log('---response---', response);
+
         let {resultStatus, result, memo} = response;
         let {success, result_code, auth_code, user_id} =
           QueryString.parse(result);

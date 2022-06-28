@@ -54,3 +54,9 @@ export const likeDynamic = {
   url: 'cgi/core/dynamic/likeDynamic',
   options: {},
 };
+
+// 获取动态标签列表
+export const fetchDynamicLabels = {
+  url: 'cgi/core/label/fetchDynamicLabels',
+  options: {},
+};

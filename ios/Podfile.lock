@@ -2,7 +2,7 @@ PODS:
   - aliyun-oss-react-native-self (1.0.2):
     - AliyunOSSiOS
     - React
-  - AliyunOSSiOS (2.10.14)
+  - AliyunOSSiOS (2.10.11)
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.5.6):
     - React
@@ -390,7 +390,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.4):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - TOCropViewController (2.6.1)
+  - TOCropViewController (2.6.0)
   - WechatOpenSDK (1.8.7.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -592,13 +592,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   aliyun-oss-react-native-self: 8c2152bf2cd6fc91c9d547b463f49cf0f85bf885
-  AliyunOSSiOS: 2599b2799e2ec50b69f60d48ac956a7938d4ee12
+  AliyunOSSiOS: 7bc7ca588207ce536c1dffe732c3d4fe342e23cf
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 7b423f9e248eae65987838148c36eec1dbfe0b53
-  FBReactNativeSpec: 0289e9609f2f83ac40ee45ac2cb698768c08f22f
+  FBReactNativeSpec: 53942b1787b288a499b74145c00f104df5253d00
   Flipper: d3da1aa199aad94455ae725e9f3aa43f3ec17021
   Flipper-DoubleConversion: 38631e41ef4f9b12861c67d17cb5518d06badc41
   Flipper-Folly: 755929a4f851b2fb2c347d533a23f191b008554c
@@ -655,7 +655,7 @@ SPEC CHECKSUMS:
   RNVectorIcons: 7923e585eaeb139b9f4531d25a125a1500162a0b
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: f93010f3f6c031e2f8fb3081ca4ee6966c539815
-  TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
+  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   WechatOpenSDK: 6a4d1436c15b3b5fe2a0bd383f3046010186da44
   Yoga: a7de31c64fe738607e7a3803e3f591a4b1df7393
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

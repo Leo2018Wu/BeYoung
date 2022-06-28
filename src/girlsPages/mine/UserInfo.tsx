@@ -31,20 +31,6 @@ const Index = () => {
     <View style={styles.userView}>
       <View>
         <Pressable
-          onPress={() => navigation.navigate('MineGifts')}
-          style={styles.contain}>
-          <Image
-            source={require('../assets/gift.png')}
-            style={{
-              width: 16,
-              height: 16,
-            }}
-          />
-          <Text style={{fontSize: 12, color: '#fff', marginLeft: 2}}>
-            {myStatistic.giftNum || 0}
-          </Text>
-        </Pressable>
-        <Pressable
           onPress={() => navigation.navigate('UserInfoSetting')}
           style={{alignItems: 'center', marginVertical: 20}}>
           {/* <Image
@@ -67,20 +53,24 @@ const Index = () => {
         </Pressable>
       </View>
       <View style={styles.itemView}>
-        <View style={styles.item}>
+        <Pressable
+          onPress={() => navigation.navigate('Follow')}
+          style={styles.item}>
           <Text style={styles.topText}>{myStatistic.likeNum || 0}</Text>
-          <Text style={styles.btmText}>点赞</Text>
-        </View>
+          <Text style={styles.btmText}>被关注</Text>
+        </Pressable>
         <View style={styles.line} />
         <View style={styles.item}>
           <Text style={styles.topText}>{myStatistic.commentNum || 0}</Text>
           <Text style={styles.btmText}>评论</Text>
         </View>
         <View style={styles.line} />
-        <View style={styles.item}>
+        <Pressable
+          onPress={() => navigation.navigate('MineGifts')}
+          style={styles.item}>
           <Text style={styles.topText}>{myStatistic.dynamicNum || 0}</Text>
-          <Text style={styles.btmText}>动态</Text>
-        </View>
+          <Text style={styles.btmText}>礼物</Text>
+        </Pressable>
       </View>
     </View>
   );
