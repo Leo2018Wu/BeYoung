@@ -371,24 +371,26 @@ const Msgs = ({...props}) => {
           py={3}
           shadow={2}
           borderRadius={5}
-          w={'70%'}
+          width={260}
           bg="white">
           <Text numberOfLines={1}>{lastDailyInfo?.content}</Text>
-          <HStack mt={2} justifyContent={'space-between'}>
+          <HStack mt={2} justifyContent={'space-around'} overflow="hidden">
             {lastDailyInfo?.images
               ? JSON.parse(lastDailyInfo.images).map(
-                  (item: string, index: number) => (
-                    <Box key={index}>
-                      <CFastImage
-                        url={item}
-                        styles={{
-                          width: 60,
-                          height: 60,
-                          borderRadius: 8,
-                        }}
-                      />
-                    </Box>
-                  ),
+                  (item: string, index: number) => {
+                    return index <= 2 ? (
+                      <Box key={index}>
+                        <CFastImage
+                          url={item}
+                          styles={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 8,
+                          }}
+                        />
+                      </Box>
+                    ) : null;
+                  },
                 )
               : null}
           </HStack>

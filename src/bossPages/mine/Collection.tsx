@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {Box, Text, Center, FlatList} from 'native-base';
+import {Box, Text, FlatList, HStack, Pressable} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useFocusEffect} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
-import DailyItem from './DailyItem';
+import DailyItem from '../daily/DailyItem';
 import {
   pageConstant,
   PageEmpty,
@@ -12,7 +12,8 @@ import {
   PageLoading,
   PageLoadMore,
 } from '../../components/base/Pagination';
-import {queryDynamic} from '../../api/daily';
+import Icon from 'react-native-vector-icons/Feather';
+import {queryCollectedDynamic} from '../../api/daily';
 import LinearGradient from 'react-native-linear-gradient';
 
 const {
@@ -33,7 +34,7 @@ const mergeList = (sourceList: any, nowList: any) => {
   return nowList;
 };
 
-const Index = () => {
+const Index = ({...props}) => {
   const insets = useSafeAreaInsets();
   const [params, setParams] = useState({
     pageNum: 1, //分页页码
@@ -49,7 +50,7 @@ const Index = () => {
   const [queryList, setList] = useState([]); // 动态列表
   const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
-  const {run: runFetchDynamic} = useRequest(queryDynamic.url);
+  const {run: runFetchDynamic} = useRequest(queryCollectedDynamic.url);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -112,7 +113,6 @@ const Index = () => {
 
   const itemRefresh = async () => {
     _getList();
-    console.log('itemRefresh');
   };
 
   const _renderItem = ({item, index}: {item: any; index: number}) => {
@@ -146,11 +146,32 @@ const Index = () => {
         end={{x: 1, y: 0.5}}
         colors={['#B83AF3', '#6950FB']}>
         <Box justifyContent="center" style={{paddingTop: insets.top}}>
-          <Center style={{height: 52}}>
-            <Text color={'white'} fontSize="lg" fontWeight={'bold'}>
-              学妹圈
-            </Text>
-          </Center>
+          <HStack
+            px={4}
+            style={{height: 52}}
+            justifyContent="center"
+            alignItems={'center'}>
+            <Pressable
+              h={'full'}
+              onPress={() => props.navigation.goBack()}
+              w={10}
+              style={{
+                position: 'absolute',
+                left: 10,
+              }}
+              justifyContent="center">
+              <Icon name="chevron-left" color={'white'} size={30} />
+            </Pressable>
+            <Box>
+              <Text
+                alignSelf={'center'}
+                color={'white'}
+                fontSize="lg"
+                fontWeight={'bold'}>
+                收藏
+              </Text>
+            </Box>
+          </HStack>
         </Box>
       </LinearGradient>
 

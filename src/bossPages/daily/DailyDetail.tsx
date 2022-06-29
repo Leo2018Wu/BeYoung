@@ -13,7 +13,7 @@ import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
 import Gifts from '../../components/base/Gifts';
 import useRequest from '../../hooks/useRequest';
-import {commentDynamic, likeDynamic} from '../../api/daily';
+import {commentDynamic} from '../../api/daily';
 import {giveGift} from '../../api/gift';
 import DailyItem from './DailyItem';
 
@@ -26,7 +26,6 @@ const Index = ({...props}) => {
   const {item} = props.route.params;
   const [dynamicInfo, setDynamic] = useState(item || {});
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
-  const {run: runLikeDynamic} = useRequest(likeDynamic.url);
   const {run: runGiveGift} = useRequest(giveGift.url);
   const {isOpen, onOpen, onClose} = useDisclose();
   const [dialogVisible, setIsDialogShow] = useState(false);
@@ -48,14 +47,8 @@ const Index = ({...props}) => {
   };
 
   // 动态点赞回调函数
-  const itemClick = async ({id, liked}: {id: string; liked: boolean}) => {
-    const {success, data} = await runLikeDynamic({
-      dynamicId: id,
-      cancel: liked,
-    });
-    if (success) {
-      setDynamic(data);
-    }
+  const itemClick = async data => {
+    setDynamic(data);
   };
 
   // 赠送礼物
@@ -128,7 +121,7 @@ const Index = ({...props}) => {
         </Actionsheet.Content>
       </Actionsheet>
       <Box flex={1} pt={4} bg="white">
-        <Box px={5} pb={4}>
+        <Box p={4}>
           <DailyItem returnFunc={itemClick} item={dynamicInfo} />
         </Box>
         <Divider h={2.5} bg="bg.f5" />

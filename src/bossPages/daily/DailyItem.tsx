@@ -8,12 +8,16 @@ import {
   Button,
   Stack,
   Pressable,
+  Image,
 } from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {likeDynamic, collectDynamic} from '../../api/daily';
+
 import {useWindowDimensions} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {BASE_DOWN_URL} from '../../util/config';
+import useRequest from '../../hooks/useRequest';
 
 const genImages = (imgs: string) => {
   if (!imgs) {
@@ -24,6 +28,7 @@ const genImages = (imgs: string) => {
 };
 
 interface ItemProp {
+  id: string | number;
   userId: string;
   headImg: string;
   nickName: string;
@@ -31,8 +36,10 @@ interface ItemProp {
   content: string;
   score: number;
   liked: boolean;
+  collected: boolean;
   likeNum: string | number;
   commentNum: string | number;
+  collectNum: string | number;
   giftNum: string | number;
   images: string;
 }
@@ -45,11 +52,16 @@ const isEqual = (pre: any, next: any) => {
     pre.item.liked === next.item.liked &&
     pre.item.likeNum === next.item.likeNum &&
     pre.item.commentNum === next.item.commentNum &&
-    pre.item.giftNum === next.item.giftNum
+    pre.item.giftNum === next.item.giftNum &&
+    pre.item.collectNum === next.item.collectNum &&
+    pre.item.collected === next.item.collected
   );
 };
 
 const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
+  const {run: runLikeDynamic} = useRequest(likeDynamic.url);
+  const {run: runCollectDynamic} = useRequest(collectDynamic.url);
+
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 104) / 3;
@@ -61,6 +73,42 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
       return temp;
     });
     navigation.navigate('Preview', {index, imgUrls});
+  };
+
+  const likeClick = async ({
+    id,
+    liked,
+  }: {
+    id: string | number;
+    liked: boolean;
+  }) => {
+    try {
+      const {success, data} = await runLikeDynamic({
+        dynamicId: id,
+        cancel: liked,
+      });
+      if (success) {
+        returnFunc && returnFunc(data);
+      }
+    } catch (error) {}
+  };
+
+  const collectClick = async ({
+    id,
+    collected,
+  }: {
+    id: string | number;
+    collected: boolean;
+  }) => {
+    try {
+      const {success, data} = await runCollectDynamic({
+        dynamicId: id,
+        cancel: collected,
+      });
+      if (success) {
+        returnFunc && returnFunc(data);
+      }
+    } catch (error) {}
   };
 
   return (
@@ -99,6 +147,15 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
               {item.createTime}
             </Text>
           </VStack>
+          <Image
+            alt="fire_icon"
+            source={require('../../images/fire_icon.png')}
+            w={4}
+            h={5}
+          />
+          <Text style={{color: '#FF6035', marginTop: 4, marginLeft: 4}}>
+            223
+          </Text>
           {/* <Button
             disabled
             py={1}
@@ -144,16 +201,21 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
           }}
           direction={'row'}
           alignItems={'center'}>
-          {/* <HStack mr={'auto'} alignItems={'center'}>
-            <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              评分
-            </Text>
-            <Text fontSize={'xs'} style={{color: '#C7C4CC'}}>
-              {item.score}
-            </Text>
-          </HStack> */}
           <Pressable
-            onPress={() => returnFunc && returnFunc(item)}
+            onPress={() => collectClick(item)}
+            flexDirection={'row'}
+            alignItems={'center'}>
+            {item.collected ? (
+              <Icon name="star" size={18} color="#FDE220" />
+            ) : (
+              <Icon name="staro" size={18} color="#C7C4CC" />
+            )}
+            <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
+              {item.collectNum}
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => likeClick(item)}
             flexDirection={'row'}
             alignItems={'center'}>
             {item.liked ? (
