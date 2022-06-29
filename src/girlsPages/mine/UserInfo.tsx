@@ -3,14 +3,14 @@ import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
 import IconNew from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
-import {fetchMyInfo, fetchMyStatistic} from '../../api/common';
+import {fetchMyInfo, fetchStatistic} from '../../api/common';
 import {useFocusEffect} from '@react-navigation/native';
 import CFastImage from '../../components/CFastImage';
 
 const Index = () => {
   const navigation = useNavigation();
   const {result, run} = useRequest(fetchMyInfo.url);
-  const {run: runFetchMyStatistic} = useRequest(fetchMyStatistic.url, {});
+  const {run: runFetchStatistic} = useRequest(fetchStatistic.url, {});
   const [myStatistic, setMyStatistic] = useState({});
 
   useFocusEffect(
@@ -21,7 +21,7 @@ const Index = () => {
   );
 
   const getMyStatistic = async () => {
-    const {data, success} = await runFetchMyStatistic();
+    const {data, success} = await runFetchStatistic();
     if (success) {
       setMyStatistic(data);
     }
@@ -56,7 +56,7 @@ const Index = () => {
         <Pressable
           onPress={() => navigation.navigate('Follow')}
           style={styles.item}>
-          <Text style={styles.topText}>{myStatistic.likeNum || 0}</Text>
+          <Text style={styles.topText}>{myStatistic.fanNum || 0}</Text>
           <Text style={styles.btmText}>被关注</Text>
         </Pressable>
         <View style={styles.line} />
@@ -68,7 +68,7 @@ const Index = () => {
         <Pressable
           onPress={() => navigation.navigate('MineGifts')}
           style={styles.item}>
-          <Text style={styles.topText}>{myStatistic.dynamicNum || 0}</Text>
+          <Text style={styles.topText}>{myStatistic.giftNum || 0}</Text>
           <Text style={styles.btmText}>礼物</Text>
         </Pressable>
       </View>
