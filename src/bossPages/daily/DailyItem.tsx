@@ -147,12 +147,12 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
               {item.createTime}
             </Text>
           </VStack>
-          <Image
+          {/* <Image
             alt="fire_icon"
             source={require('../../images/fire_icon.png')}
             w={4}
             h={5}
-          />
+          /> */}
           <Text style={{color: '#FF6035', marginTop: 4, marginLeft: 4}}>
             223
           </Text>
