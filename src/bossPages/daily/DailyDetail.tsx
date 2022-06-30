@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Box,
   Divider,
@@ -6,15 +6,21 @@ import {
   useDisclose,
   AlertDialog,
   Button,
+  HStack,
+  Text,
+  VStack,
+  ScrollView,
+  Image,
 } from 'native-base';
-import {DeviceEventEmitter} from 'react-native';
+import {DeviceEventEmitter, StyleSheet} from 'react-native';
 import Tab from './DailyTab';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
 import Gifts from '../../components/base/Gifts';
+import CFastImage from '../../components/CFastImage';
 import useRequest from '../../hooks/useRequest';
 import {commentDynamic} from '../../api/daily';
-import {giveGift} from '../../api/gift';
+import {giveGift, queryDynamicGiftRank} from '../../api/gift';
 import DailyItem from './DailyItem';
 
 interface commentProp {
@@ -26,6 +32,22 @@ const Index = ({...props}) => {
   const {item} = props.route.params;
   const [dynamicInfo, setDynamic] = useState(item || {});
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
+  const {result: giftRankList} = useRequest(
+    queryDynamicGiftRank.url,
+    {
+      dynamicId: item.id, //动态ID
+      pageNum: 1,
+      pageSize: 10, //每页大小
+      orders: [
+        {
+          column: 'totalCoin',
+          dir: 'desc',
+          chinese: false,
+        },
+      ],
+    },
+    {manual: false},
+  );
   const {run: runGiveGift} = useRequest(giveGift.url);
   const {isOpen, onOpen, onClose} = useDisclose();
   const [dialogVisible, setIsDialogShow] = useState(false);
@@ -47,7 +69,7 @@ const Index = ({...props}) => {
   };
 
   // 动态点赞回调函数
-  const itemClick = async data => {
+  const itemClick = async (data: any) => {
     setDynamic(data);
   };
 
@@ -126,6 +148,65 @@ const Index = ({...props}) => {
         </Box>
         <Divider h={2.5} bg="bg.f5" />
         <Box flex={1}>
+          {giftRankList && giftRankList.length > 0 && (
+            <Box p={4}>
+              <HStack justifyContent={'space-between'} alignItems="center">
+                <Text style={{color: '#323232'}} fontWeight="bold">
+                  礼物榜
+                </Text>
+                <Text style={{color: '#474747'}}>
+                  <Text fontSize={'md'} color="primary.100">
+                    {giftRankList.length}
+                  </Text>
+                  个礼物
+                </Text>
+              </HStack>
+              <ScrollView
+                horizontal
+                contentContainerStyle={{
+                  paddingVertical: 20,
+                }}>
+                {giftRankList.map((giftItem: object, giftIndex: number) => (
+                  <VStack key={giftIndex} alignItems={'center'} mr={4}>
+                    <CFastImage
+                      url={giftItem.giveHeadImg}
+                      styles={{
+                        width: 46,
+                        height: 46,
+                        borderRadius: 46,
+                      }}
+                    />
+                    <HStack mt={2} alignItems="center">
+                      {giftIndex === 0 ? (
+                        <Image
+                          style={styles.rankIcon}
+                          alt="rank_ico"
+                          source={require('../../images/rank_first.png')}
+                        />
+                      ) : null}
+                      {giftIndex === 1 ? (
+                        <Image
+                          style={styles.rankIcon}
+                          alt="rank_ico"
+                          source={require('../../images/rank_second.png')}
+                        />
+                      ) : null}
+                      {giftIndex === 2 ? (
+                        <Image
+                          style={styles.rankIcon}
+                          alt="rank_ico"
+                          source={require('../../images/rank_third.png')}
+                        />
+                      ) : null}
+                      <Text fontSize={'sm'} style={{color: '#4E4E4E'}}>
+                        {giftItem.giveNickName}
+                      </Text>
+                    </HStack>
+                  </VStack>
+                ))}
+              </ScrollView>
+            </Box>
+          )}
           <Tab />
         </Box>
       </Box>
@@ -142,3 +223,11 @@ const Index = ({...props}) => {
   );
 };
 export default Index;
+
+const styles = StyleSheet.create({
+  rankIcon: {
+    width: 16,
+    height: 22,
+    marginRight: 4,
+  },
+});
