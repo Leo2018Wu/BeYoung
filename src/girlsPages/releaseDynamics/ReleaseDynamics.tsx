@@ -56,6 +56,8 @@ const Index = (props: any) => {
       setLoading(false);
       setTextAreaValue('');
       setList([]);
+      setLabelType('');
+      setLabelDetail('');
       navigation.navigate('Home');
     }
   }, [result]);
@@ -64,6 +66,7 @@ const Index = (props: any) => {
     const {data, success} = await runFetchDynamicLabels();
     if (success) {
       setTipsClassList(data);
+      setLabelType(data[0].name);
     }
   };
 

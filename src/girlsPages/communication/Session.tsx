@@ -279,17 +279,23 @@ const Msgs = ({...props}) => {
         {quickFlag ? (
           <Actionsheet.Content
             style={{
-              backgroundColor: '#1f2937',
+              backgroundColor: '#fff',
               borderRadius: 40,
             }}>
-            <ReplyEmoj
-              clickItem={(item: object) => {
-                replyEmojFunc(item);
-              }}
-              closeItem={() => {
-                onClose();
-              }}
-            />
+            <Box pb={0} w={'full'}>
+              <ScrollView height={48} showsVerticalScrollIndicator>
+                <HStack flexWrap={'wrap'}>
+                  <ReplyEmoj
+                    clickItem={(item: object) => {
+                      replyEmojFunc(item);
+                    }}
+                    closeItem={() => {
+                      onClose();
+                    }}
+                  />
+                </HStack>
+              </ScrollView>
+            </Box>
           </Actionsheet.Content>
         ) : (
           <Actionsheet.Content

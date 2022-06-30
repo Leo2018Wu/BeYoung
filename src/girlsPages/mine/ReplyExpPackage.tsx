@@ -22,6 +22,15 @@ const Index = () => {
   useEffect(() => {
     runFetchMyMedia({
       mediaType: 'MEDIA_TYPE_EMOGI', //媒体类型
+      pageNum: 1,
+      pageSize: 100,
+      orders: [
+        {
+          column: 'createTime',
+          dir: 'desc',
+          chinese: false,
+        },
+      ],
     });
   }, []);
 
@@ -35,10 +44,10 @@ const Index = () => {
 
   const chooseImg = async () => {
     try {
-      const images = await openPicker(9 - list.length);
+      const images = await openPicker(99 - list.length);
       const currentLength = images.length + list.length;
-      if (currentLength > 9) {
-        images.length = 9 - list.length;
+      if (currentLength > 99) {
+        images.length = 99 - list.length;
       }
       let arr = [];
       images.forEach((item1): any => {
@@ -78,6 +87,15 @@ const Index = () => {
       if (success) {
         runFetchMyMedia({
           mediaType: 'MEDIA_TYPE_EMOGI', //媒体类型
+          pageNum: 1,
+          pageSize: 100,
+          orders: [
+            {
+              column: 'createTime',
+              dir: 'desc',
+              chinese: false,
+            },
+          ],
         });
         setLoading(false);
       }

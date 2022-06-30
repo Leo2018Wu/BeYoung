@@ -34,7 +34,6 @@ const useRequest = (
   const [error] = useState(null);
 
   useEffect(() => {
-    console.log('options', options);
     if (!controllerRef.current) {
       // eslint-disable-next-line no-undef
       controllerRef.current = new AbortController();
