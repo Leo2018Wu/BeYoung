@@ -42,6 +42,7 @@ interface ItemProp {
   collectNum: string | number;
   giftNum: string | number;
   images: string;
+  hotness: number | string;
 }
 
 const isEqual = (pre: any, next: any) => {
@@ -147,15 +148,19 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
               {item.createTime}
             </Text>
           </VStack>
-          <Image
-            alt="fire_icon"
-            source={require('../../images/fire_icon.png')}
-            w={4}
-            h={5}
-          />
-          <Text style={{color: '#FF6035', marginTop: 4, marginLeft: 4}}>
-            223
-          </Text>
+          {item.hotness ? (
+            <Image
+              alt="fire_icon"
+              source={require('../../images/fire_icon.png')}
+              w={4}
+              h={5}
+            />
+          ) : null}
+          {item.hotness ? (
+            <Text style={{color: '#FF6035', marginTop: 4, marginLeft: 4}}>
+              {item.hotness}
+            </Text>
+          ) : null}
           {/* <Button
             disabled
             py={1}
