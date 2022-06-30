@@ -32,3 +32,9 @@ export const giveGift = {
   url: 'cgi/core/gift/giveGift',
   options: {},
 };
+
+// 动态礼物排行
+export const queryDynamicGiftRank = {
+  url: 'cgi/core/gift/queryDynamicGiftRank',
+  options: {},
+};

@@ -55,6 +55,18 @@ export const likeDynamic = {
   options: {},
 };
 
+// 收藏动态
+export const collectDynamic = {
+  url: 'cgi/core/dynamic/collectDynamic',
+  options: {},
+};
+
+// 查询收藏动态
+export const queryCollectedDynamic = {
+  url: 'cgi/core/dynamic/queryCollectedDynamic',
+  options: {},
+};
+
 // 获取动态标签列表
 export const fetchDynamicLabels = {
   url: 'cgi/core/label/fetchDynamicLabels',

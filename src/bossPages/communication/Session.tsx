@@ -14,6 +14,7 @@ import {
   AlertDialog,
   Button,
   View,
+  Divider,
 } from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
@@ -27,6 +28,7 @@ import useRequest from '../../hooks/useRequest';
 import {fetchAccountUser} from '../../api/common';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import Intimacy from '../../components/base/Intimacy';
+import {queryDynamic} from '../../api/daily';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
 import Gifts from '../../components/base/Gifts';
@@ -78,10 +80,19 @@ const Msgs = ({...props}) => {
 
   const cancelRef = useRef(null);
   const {run: runGetChatUsers} = useRequest(fetchAccountUser.url);
+  const {run: runQueryDynamic} = useRequest(queryDynamic.url);
 
   const [chatUserInfo, setChatUserInfo] = useState({});
+  const [lastDailyInfo, setDailyInfo] = useState({});
 
   const {run: runGiveGift} = useRequest(giveGift.url);
+
+  useEffect(() => {
+    if (chatUserInfo?.userId) {
+      // 获取最新发出的动态
+      getLatestDaily();
+    }
+  }, [chatUserInfo]);
 
   useEffect(() => {
     const sameItem = (ele: any) => ele === props.route.params.chatUserId;
@@ -93,6 +104,27 @@ const Msgs = ({...props}) => {
       });
     }
   }, []);
+
+  const getLatestDaily = async () => {
+    try {
+      const {data} = await runQueryDynamic({
+        userId: chatUserInfo.userId,
+        pageNum: 1, //分页页码
+        pageSize: 1, //每页大小
+        // eslint-disable-next-line no-sparse-arrays
+        orders: [
+          {
+            column: 'createTime', //排序字段名称
+            dir: 'desc', //排序方向，asc=顺序、desc=倒序，默认为顺序
+            chinese: false, //是否为中文排序，默认为否
+          },
+        ], //排序参数列表
+      });
+      setDailyInfo(data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getData = async () => {
     try {
@@ -329,6 +361,52 @@ const Msgs = ({...props}) => {
         }}
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         style={{height: '100%'}}>
+        <Pressable
+          onPress={() => {
+            props.navigation.navigate('DailyDetail', {item: lastDailyInfo});
+          }}
+          my={4}
+          mx="auto"
+          px={4}
+          py={3}
+          shadow={2}
+          borderRadius={5}
+          width={260}
+          bg="white">
+          <Text numberOfLines={1}>{lastDailyInfo?.content}</Text>
+          <HStack mt={2} justifyContent={'space-around'} overflow="hidden">
+            {lastDailyInfo?.images
+              ? JSON.parse(lastDailyInfo.images).map(
+                  (item: string, index: number) => {
+                    return index <= 2 ? (
+                      <Box key={index}>
+                        <CFastImage
+                          url={item}
+                          styles={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 8,
+                          }}
+                        />
+                      </Box>
+                    ) : null;
+                  },
+                )
+              : null}
+          </HStack>
+          <Divider mt={3} mb={2} />
+          <HStack
+            w={'full'}
+            alignItems="center"
+            justifyContent={'space-between'}>
+            <Text fontSize={'sm'} style={{color: '#B9B9B9'}}>
+              她发布的新动态
+            </Text>
+            <Text fontSize={'sm'} fontWeight="bold" color="primary.100">
+              去看看
+            </Text>
+          </HStack>
+        </Pressable>
         <ScrollView
           ref={(e: object) => {
             scrollRef.current = e;
