@@ -19,7 +19,7 @@ import ChatBox from '../../components/base/ChatBox';
 import Gifts from '../../components/base/Gifts';
 import CFastImage from '../../components/CFastImage';
 import useRequest from '../../hooks/useRequest';
-import {commentDynamic} from '../../api/daily';
+import {commentDynamic, fetchDynamic} from '../../api/daily';
 import {giveGift, queryDynamicGiftRank} from '../../api/gift';
 import DailyItem from './DailyItem';
 
@@ -29,13 +29,14 @@ interface commentProp {
 }
 
 const Index = ({...props}) => {
-  const {item} = props.route.params;
-  const [dynamicInfo, setDynamic] = useState(item || {});
+  const {dynamicId} = props.route.params;
+  const [dynamicInfo, setDynamic] = useState({});
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
+  const {run: runGetDynamic} = useRequest(fetchDynamic.url);
   const {result: giftRankList} = useRequest(
     queryDynamicGiftRank.url,
     {
-      dynamicId: item.id, //动态ID
+      dynamicId, //动态ID
       pageNum: 1,
       pageSize: 10, //每页大小
       orders: [
@@ -53,6 +54,19 @@ const Index = ({...props}) => {
   const [dialogVisible, setIsDialogShow] = useState(false);
 
   const cancelRef = useRef(null);
+
+  useEffect(() => {
+    getDynamic();
+  }, []);
+
+  const getDynamic = async () => {
+    try {
+      const {data} = await runGetDynamic({dynamicId});
+      setDynamic(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   //评论动态
   const commentDy = async (comment: commentProp, dynamicId: string) => {
@@ -102,7 +116,7 @@ const Index = ({...props}) => {
   };
 
   return (
-    <DailyDetailContext.Provider value={item}>
+    <DailyDetailContext.Provider value={dynamicId}>
       <AlertDialog
         leastDestructiveRef={cancelRef}
         isOpen={dialogVisible}

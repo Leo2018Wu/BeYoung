@@ -72,3 +72,15 @@ export const fetchDynamicLabels = {
   url: 'cgi/core/label/fetchDynamicLabels',
   options: {},
 };
+
+// 获取动态标签列表
+export const queryReply = {
+  url: 'cgi/core/dynamic/queryReply',
+  options: {},
+};
+
+// 获取动态详情
+export const fetchDynamic = {
+  url: 'cgi/core/dynamic/fetchDynamic',
+  options: {},
+};

@@ -361,52 +361,60 @@ const Msgs = ({...props}) => {
         }}
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         style={{height: '100%'}}>
-        <Pressable
-          onPress={() => {
-            props.navigation.navigate('DailyDetail', {item: lastDailyInfo});
-          }}
-          my={4}
-          mx="auto"
-          px={4}
-          py={3}
-          shadow={2}
-          borderRadius={5}
-          width={260}
-          bg="white">
-          <Text numberOfLines={1}>{lastDailyInfo?.content}</Text>
-          <HStack mt={2} justifyContent={'space-around'} overflow="hidden">
-            {lastDailyInfo?.images
-              ? JSON.parse(lastDailyInfo.images).map(
-                  (item: string, index: number) => {
-                    return index <= 2 ? (
-                      <Box key={index}>
-                        <CFastImage
-                          url={item}
-                          styles={{
-                            width: 60,
-                            height: 60,
-                            borderRadius: 8,
-                          }}
-                        />
-                      </Box>
-                    ) : null;
-                  },
-                )
-              : null}
-          </HStack>
-          <Divider mt={3} mb={2} />
-          <HStack
-            w={'full'}
-            alignItems="center"
-            justifyContent={'space-between'}>
-            <Text fontSize={'sm'} style={{color: '#B9B9B9'}}>
-              她发布的新动态
-            </Text>
-            <Text fontSize={'sm'} fontWeight="bold" color="primary.100">
-              去看看
-            </Text>
-          </HStack>
-        </Pressable>
+        {lastDailyInfo?.id ? (
+          <Pressable
+            onPress={() => {
+              props.navigation.navigate('DailyDetail', {
+                dynamicId: lastDailyInfo.id,
+              });
+            }}
+            my={4}
+            mx="auto"
+            px={4}
+            pb={3}
+            shadow={2}
+            borderRadius={5}
+            width={260}
+            bg="white">
+            {lastDailyInfo?.content ? (
+              <Text mt={3} numberOfLines={1}>
+                {lastDailyInfo?.content}
+              </Text>
+            ) : null}
+            <HStack mt={2} justifyContent={'space-around'} overflow="hidden">
+              {lastDailyInfo?.images
+                ? JSON.parse(lastDailyInfo.images).map(
+                    (item: string, index: number) => {
+                      return index <= 2 ? (
+                        <Box key={index}>
+                          <CFastImage
+                            url={item}
+                            styles={{
+                              width: 60,
+                              height: 60,
+                              borderRadius: 8,
+                            }}
+                          />
+                        </Box>
+                      ) : null;
+                    },
+                  )
+                : null}
+            </HStack>
+            <Divider mt={3} mb={2} />
+            <HStack
+              w={'full'}
+              alignItems="center"
+              justifyContent={'space-between'}>
+              <Text fontSize={'sm'} style={{color: '#B9B9B9'}}>
+                她发布的新动态
+              </Text>
+              <Text fontSize={'sm'} fontWeight="bold" color="primary.100">
+                去看看
+              </Text>
+            </HStack>
+          </Pressable>
+        ) : null}
         <ScrollView
           ref={(e: object) => {
             scrollRef.current = e;

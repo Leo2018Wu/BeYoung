@@ -103,7 +103,7 @@ const Index = () => {
               key={keyData}
               url={queryGiftGiving.url}
               par={{
-                dynamicId: value?.id,
+                dynamicId: value,
               }}
               renderItem={({item}: {item: any}) => <Item item={item} />}
             />
