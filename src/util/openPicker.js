@@ -2,7 +2,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import {Alert, Linking, Platform} from 'react-native';
 import {check, PERMISSIONS} from 'react-native-permissions';
 
-export const openPicker = async (maxFiles = 9, multiple = true) => {
+export const openPicker = async (maxFiles = 99, multiple = true) => {
   let granted;
   if (Platform.OS === 'ios') {
     granted = await check(PERMISSIONS.IOS.PHOTO_LIBRARY);

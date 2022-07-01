@@ -24,6 +24,8 @@ import Label from '../../girlsPages/mine/Label';
 import Service from '../../bossPages/customService/Index';
 import MineGifts from '../../girlsPages/mine/MineGifts';
 import Follow from '../../girlsPages/mine/Follow';
+import About from '../../commonPages/About';
+import Protocol from '../../commonPages/Protocol';
 
 const Stack = createNativeStackNavigator();
 
@@ -205,6 +207,21 @@ const MyStack = () => {
         }}
         name="Follow"
         component={Follow}
+      />
+      <Stack.Screen
+        options={{
+          title: '关于',
+          headerStyle: {backgroundColor: '#fff'},
+        }}
+        name="About"
+        component={About}
+      />
+      <Stack.Screen
+        options={{
+          title: '用户协议',
+        }}
+        name="Protocol"
+        component={Protocol}
       />
     </Stack.Navigator>
   );

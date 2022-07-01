@@ -20,7 +20,6 @@ const areEqual = (pre: any, next: any) => {
 };
 
 const Item = React.memo(({item}: {item: ItemProps}) => {
-  console.log('---礼物item---', item);
   if (item.delFlag) {
     return null;
   }

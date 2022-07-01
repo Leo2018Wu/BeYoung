@@ -7,7 +7,7 @@ import {
   NavigationState,
   SceneRendererProps,
 } from 'react-native-tab-view';
-import GirlsComment from '../../girlsPages/home/Dynamic/Comment';
+import GirlsComment from './Comment';
 import GirlsGift from '../../girlsPages/home/Dynamic/Gift';
 
 type Route = {

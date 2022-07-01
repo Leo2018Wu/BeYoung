@@ -6,12 +6,12 @@ import {
   View,
   VStack,
   Text,
-  Button,
   Stack,
   Divider,
   ScrollView,
+  Pressable,
 } from 'native-base';
-import {useWindowDimensions, DeviceEventEmitter, Pressable} from 'react-native';
+import {useWindowDimensions, DeviceEventEmitter} from 'react-native';
 import Tab from './DailyTab';
 import {BASE_DOWN_URL} from '../../util/config';
 import CFastImage from '../../components/CFastImage';
@@ -20,6 +20,7 @@ import ChatBox from '../../components/base/ChatBox';
 import useRequest from '../../hooks/useRequest';
 import {commentDynamic} from '../../api/daily';
 import Icon from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Index = ({...props}) => {
   const {item} = props.route.params;
@@ -32,6 +33,7 @@ const Index = ({...props}) => {
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
 
   useEffect(() => {
+    AsyncStorage.setItem('DYNAMIC_ID', item.id);
     if (item.images && JSON.parse(item.images).length) {
       setImgList(JSON.parse(item.images));
     }
@@ -46,7 +48,8 @@ const Index = ({...props}) => {
       const {success} = await runCommentDymaic({
         dynamicId,
         replyId,
-        content: data.value,
+        content: data.content,
+        images: data.images,
       });
       if (success) {
         DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());

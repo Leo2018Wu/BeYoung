@@ -121,3 +121,19 @@ export const fetchRelateChatAccount = {
     manual: false,
   },
 };
+
+// 查询关注我的人
+export const queryFollowedMe = {
+  url: 'cgi/core/relation/queryFollowedMe',
+  options: {
+    manual: false,
+  },
+};
+
+// 关注
+export const follow = {
+  url: 'cgi/core/relation/follow',
+  options: {
+    manual: false,
+  },
+};

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Center, HStack, Pressable, Text} from 'native-base';
+import {Box, Center, HStack, Pressable, Text, ScrollView} from 'native-base';
 import {connect} from 'react-redux';
 import useRequest from '../../hooks/useRequest';
 import {fetchMyMedia} from '../../api/photoSelect';
@@ -20,6 +20,15 @@ const Index = ({...props}) => {
   useEffect(() => {
     runFetchMyMedia({
       mediaType: 'MEDIA_TYPE_EMOGI', //媒体类型
+      pageNum: 1,
+      pageSize: 100,
+      orders: [
+        {
+          column: 'createTime',
+          dir: 'desc',
+          chinese: false,
+        },
+      ],
     });
   }, []);
 
@@ -38,61 +47,60 @@ const Index = ({...props}) => {
   };
 
   return (
-    <Box pb={0} w={'full'}>
-      <HStack minHeight={20} flexWrap={'wrap'}>
-        {myMedia.length ? (
-          myMedia.map((item: any) => (
-            <Pressable
-              key={item.id}
-              onPress={() => {
-                present(item);
-              }}
-              alignItems="center"
-              style={{
-                width: GIFT_ITEM_WiIDTH,
-                height: GIFT_ITEM_WiIDTH,
-              }}>
-              <Box flex={1} py={0} justifyContent={'space-around'} w="full">
-                <Center flex={1}>
-                  <CFastImage
-                    url={`${BASE_DOWN_URL + item.url}`}
-                    styles={{
-                      width: GIFT_ITEM_WiIDTH / 1.5,
-                      height: GIFT_ITEM_WiIDTH / 1.5,
-                    }}
-                  />
-                </Center>
-              </Box>
-            </Pressable>
-          ))
-        ) : (
-          <Box
-            pb={4}
-            w={'full'}
-            h={'full'}
-            flex={1}
+    <>
+      {myMedia.length ? (
+        myMedia.map((item: any) => (
+          <Pressable
+            key={item.id}
+            onPress={() => {
+              present(item);
+            }}
+            alignItems="center"
             style={{
-              alignItems: 'center',
-              paddingTop: '5%',
-              flexDirection: 'row',
-              justifyContent: 'center',
+              width: GIFT_ITEM_WiIDTH,
+              height: GIFT_ITEM_WiIDTH,
             }}>
-            <Text fontSize={'md'} color={'#fff'}>
-              暂无自定义表情，请先
-            </Text>
-            <Text
-              onPress={() => {
-                closeItem();
-                navigation.navigate('ReplyExpPackage');
-              }}
-              fontSize={'md'}
-              color={'#8B5CFF'}>
-              添加
-            </Text>
-          </Box>
-        )}
-      </HStack>
-    </Box>
+            <Box flex={1} py={0} justifyContent={'space-around'} w="full">
+              <Center flex={1}>
+                <CFastImage
+                  url={`${BASE_DOWN_URL + item.url}`}
+                  styles={{
+                    width: GIFT_ITEM_WiIDTH / 1.5,
+                    height: GIFT_ITEM_WiIDTH / 1.5,
+                    borderRadius: 10,
+                  }}
+                />
+              </Center>
+            </Box>
+          </Pressable>
+        ))
+      ) : (
+        <Box
+          pb={4}
+          w={'full'}
+          h={'full'}
+          flex={1}
+          style={{
+            alignItems: 'center',
+            paddingTop: '5%',
+            flexDirection: 'row',
+            justifyContent: 'center',
+          }}>
+          <Text fontSize={'md'} color={'#000'}>
+            暂无自定义表情，请先
+          </Text>
+          <Text
+            onPress={() => {
+              closeItem();
+              navigation.navigate('ReplyExpPackage');
+            }}
+            fontSize={'md'}
+            color={'#8B5CFF'}>
+            添加
+          </Text>
+        </Box>
+      )}
+    </>
   );
 };
 

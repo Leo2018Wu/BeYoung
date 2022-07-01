@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Box, HStack, ScrollView, Text} from 'native-base';
+import {Box, HStack, ScrollView, View, Pressable} from 'native-base';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Icons from 'react-native-vector-icons/AntDesign';
+import ReplyEmoj from './ReplyEmoj';
 
 import emojiObj from '../../res/emoji';
-import {TouchableOpacity, Image} from 'react-native';
+import {TouchableOpacity, Image, StyleSheet} from 'react-native';
 
 const genEmojiList = (type, emojiList) => {
   const result = {};
@@ -30,43 +33,81 @@ const genEmojiList = (type, emojiList) => {
   return result;
 };
 
-const Index = ({onSelectEmoji}) => {
+const Index = ({onSelectEmoji, onSelectPackage}) => {
   const [emojisMap, setEmojisMap] = useState([]);
+  const [activitIndex, setActivitIndex] = useState(0);
 
   useEffect(() => {
     setEmojisMap(genEmojiList('emoji', emojiObj.emojiList));
   }, []);
 
-  const selectEmoji = key => {
-    onSelectEmoji(key);
-  };
-
   return (
     <Box flex={1}>
-      <ScrollView bg={'bg.f5'} showsVerticalScrollIndicator px={4}>
+      <View flexDirection={'row'} margin={2}>
+        <Pressable
+          onPress={() => setActivitIndex(0)}
+          style={[
+            styles.defStyle,
+            activitIndex === 0
+              ? {backgroundColor: '#fff'}
+              : {backgroundColor: '#F7F7F9'},
+          ]}>
+          <FontAwesome5 name="smile" size={28} color="#000000" />
+        </Pressable>
+        <Pressable
+          onPress={() => setActivitIndex(1)}
+          style={[
+            styles.defStyle,
+            activitIndex === 1
+              ? {backgroundColor: '#fff'}
+              : {backgroundColor: '#F7F7F9'},
+          ]}>
+          <Icons name="hearto" size={26} color="#000000" />
+        </Pressable>
+        <Pressable
+          onPress={() => setActivitIndex(2)}
+          style={[
+            styles.defStyle,
+            activitIndex === 2
+              ? {backgroundColor: '#fff'}
+              : {backgroundColor: '#F7F7F9'},
+          ]}>
+          <Icons name="staro" size={28} color="#000000" />
+        </Pressable>
+      </View>
+      <ScrollView bg={'bg.f5'} showsVerticalScrollIndicator px={2}>
         <HStack justifyContent={'space-between'} flexWrap={'wrap'}>
-          {Object.keys(emojisMap).map(name => {
-            const emojis = emojisMap[name].list;
-            return (
-              emojis &&
-              emojis.map(item => (
-                <TouchableOpacity
-                  onPress={() => selectEmoji(item.key)}
-                  key={item.img}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    marginHorizontal: 4,
-                    marginVertical: 4,
-                  }}>
-                  <Image
-                    source={item.img}
-                    style={{width: 6 * 6, height: 6 * 6}}
-                  />
-                </TouchableOpacity>
-              ))
-            );
-          })}
+          {activitIndex === 0 &&
+            Object.keys(emojisMap).map(name => {
+              const emojis = emojisMap[name].list;
+              return (
+                emojis &&
+                emojis.map(item => (
+                  <TouchableOpacity
+                    onPress={() => onSelectEmoji(item.key)}
+                    key={item.img}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      marginHorizontal: 4,
+                      marginVertical: 4,
+                    }}>
+                    <Image
+                      source={item.img}
+                      style={{width: 6 * 6, height: 6 * 6}}
+                    />
+                  </TouchableOpacity>
+                ))
+              );
+            })}
+          {activitIndex === 1 ? (
+            <ReplyEmoj
+              clickItem={(item: object) => {
+                console.log('---s-s-s-', item);
+                onSelectPackage(item.url);
+              }}
+            />
+          ) : null}
         </HStack>
       </ScrollView>
     </Box>
@@ -74,3 +115,13 @@ const Index = ({onSelectEmoji}) => {
 };
 
 export default Index;
+
+const styles = StyleSheet.create({
+  defStyle: {
+    padding: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginRight: 10,
+  },
+});

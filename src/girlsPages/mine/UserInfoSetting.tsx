@@ -324,6 +324,19 @@ const Setting = ({...props}) => {
                 })}
             </View>
           </Pressable>
+          <Pressable
+            onPress={() => props.navigation.navigate('About')}
+            style={styles.itemView}>
+            <Text>关于</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <IconNew name="right" size={16} color="#919191" />
+            </View>
+          </Pressable>
           <Pressable onPress={() => onOpen()} style={styles.itemView}>
             <Text>退出登录</Text>
             <View

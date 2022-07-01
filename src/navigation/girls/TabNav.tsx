@@ -113,7 +113,7 @@ const MyTabs = ({...props}) => {
               ) : null}
               <Center h="full">
                 {index != 2 ? (
-                  <View>
+                  <View style={{alignItems: 'center'}}>
                     {!isFocused ? (
                       <Image
                         source={list[index].icon}
@@ -172,7 +172,7 @@ const MyTabs = ({...props}) => {
       <Tab.Screen
         options={{
           headerShown: false,
-          tabBarLabel: '动态',
+          tabBarLabel: '学妹圈',
         }}
         name="Home"
         component={HomeScreen}
