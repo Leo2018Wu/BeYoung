@@ -9,7 +9,7 @@ import {
   Actionsheet,
   FlatList,
   VStack,
-  ScrollView,
+  Button,
 } from 'native-base';
 
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -19,6 +19,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import LinearGradient from 'react-native-linear-gradient';
 import {StyleSheet, useWindowDimensions} from 'react-native';
 import useRequest from '../../hooks/useRequest';
+import {getDictName} from '../../util/dictAnaly';
 import {queryFemaleUser} from '../../api/user';
 import {
   pageConstant,
@@ -39,6 +40,12 @@ const {
   IS_LIST,
 } = pageConstant;
 
+interface GradeProps {
+  id: string;
+  name: string;
+  code: string;
+}
+
 const mergeList = (sourceList: any, nowList: any) => {
   if (sourceList) {
     nowList = sourceList.concat(nowList);
@@ -47,20 +54,24 @@ const mergeList = (sourceList: any, nowList: any) => {
   return nowList;
 };
 
-interface GradeProps {
-  id: string;
-  name: string;
-  code: string;
-}
-
 const Home = ({...props}) => {
+  const NAVLIST = [
+    {
+      name: '关注',
+      key: 'NAV_FOLLOW',
+    },
+    {
+      name: '发现',
+      key: 'NAV_FOUND',
+    },
+  ];
   const {width, height} = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const {isOpen, onOpen, onClose} = useDisclose();
   const [params, setParams] = useState({
     pageNum: 1, //分页页码
     pageSize: 10, //每页大小
-    grade: '', //年级 即为选中的tab
+    followed: false,
     orders: [
       {
         column: 'createTime', //排序字段名称
@@ -69,14 +80,26 @@ const Home = ({...props}) => {
       },
     ], //排序参数列表
   });
+  const [filterParams, setFilterParams] = useState({
+    grade: '',
+    profession: '',
+  }); // 筛选参数条件
   const [grades, setGrades] = useState([]); // 渲染的年纪列表
   const [queryList, setList] = useState([]); // 动态列表
   const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
+  const [navKey, setNavKey] = useState('NAV_FOUND');
   const {result: gradeDicts} = useRequest(
     querySysDic.url,
     {
       pCode: 'GRADE',
+    },
+    querySysDic.options,
+  );
+  const {result: professions} = useRequest(
+    querySysDic.url,
+    {
+      pcode: 'PROFESSION',
     },
     querySysDic.options,
   );
@@ -85,7 +108,7 @@ const Home = ({...props}) => {
   useEffect(() => {
     if (gradeDicts) {
       const renderGrades = gradeDicts.filter(item => item.pCode !== item.code);
-      setParams({...params, grade: renderGrades[0].code});
+      // setParams({...params, grade: renderGrades[0].code});
       setGrades(renderGrades);
     }
   }, [gradeDicts]);
@@ -212,7 +235,9 @@ const Home = ({...props}) => {
               <Text fontSize={'md'} color={'white'}>
                 {item.nickName}
               </Text>
-              <Text color={'white'}>爱好：{item.hobbies || '暂未填写'}</Text>
+              <Text color={'white'}>
+                年级：{getDictName(grades, item.grade)}
+              </Text>
             </Box>
           </VStack>
         </Box>
@@ -239,11 +264,105 @@ const Home = ({...props}) => {
 
   return (
     <Box flex={1}>
-      <Actionsheet isOpen={isOpen} onClose={onClose}>
+      <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
-          <Actionsheet.Item>Delete</Actionsheet.Item>
-          <Actionsheet.Item>Share</Actionsheet.Item>
-          <Actionsheet.Item>Play</Actionsheet.Item>
+          <Actionsheet.Item
+            _text={{
+              fontWeight: 'bold',
+            }}
+            style={{justifyContent: 'center'}}>
+            筛选
+          </Actionsheet.Item>
+          <HStack w={'full'} mt={3} mb={5}>
+            <Text
+              w={'15%'}
+              ml="auto"
+              fontSize={'sm'}
+              style={{color: '#484848'}}>
+              年级：
+            </Text>
+            <HStack w={'80%'} flexWrap="wrap">
+              {grades &&
+                grades.map((item: GradeProps) => (
+                  <Pressable
+                    onPress={() =>
+                      setFilterParams({...filterParams, grade: item.code})
+                    }
+                    style={[
+                      filterParams.grade === item.code
+                        ? {backgroundColor: '#9650FF'}
+                        : {backgroundColor: '#EEEEEE'},
+                      styles.filterItem,
+                    ]}
+                    alignItems={'center'}
+                    ml={2}
+                    key={item.id}
+                    px={4}
+                    py={0.5}>
+                    <Text
+                      style={
+                        filterParams.grade === item.code
+                          ? {color: '#fff'}
+                          : {color: '#292929'}
+                      }
+                      opacity={filterParams.grade === item.code ? 1 : 0.5}
+                      fontSize="sm">
+                      {item.name}
+                    </Text>
+                  </Pressable>
+                ))}
+            </HStack>
+          </HStack>
+          <HStack w={'full'} mb={5}>
+            <Text
+              w={'15%'}
+              ml="auto"
+              fontSize={'sm'}
+              style={{color: '#484848'}}>
+              专业：
+            </Text>
+            <HStack w={'80%'} flexWrap="wrap">
+              {professions &&
+                professions.map((item: GradeProps) => (
+                  <Pressable
+                    onPress={() =>
+                      setFilterParams({...filterParams, profession: item.code})
+                    }
+                    style={[
+                      filterParams.profession === item.code
+                        ? {backgroundColor: '#9650FF'}
+                        : {backgroundColor: '#EEEEEE'},
+                      styles.filterItem,
+                    ]}
+                    alignItems={'center'}
+                    ml={2}
+                    key={item.id}
+                    px={4}
+                    py={0.5}>
+                    <Text
+                      style={
+                        filterParams.profession === item.code
+                          ? {color: '#fff'}
+                          : {color: '#292929'}
+                      }
+                      opacity={filterParams.profession === item.code ? 1 : 0.5}
+                      fontSize="sm">
+                      {item.name}
+                    </Text>
+                  </Pressable>
+                ))}
+            </HStack>
+          </HStack>
+          <Button
+            onPress={() => {
+              onClose();
+              setParams({...params, ...filterParams});
+            }}
+            mb={4}
+            bgColor={'primary.100'}
+            w={'50%'}>
+            确定
+          </Button>
         </Actionsheet.Content>
       </Actionsheet>
       <LinearGradient
@@ -251,35 +370,32 @@ const Home = ({...props}) => {
         end={{x: 1, y: 0.5}}
         colors={['#B83AF3', '#6950FB']}>
         <Box justifyContent="center" style={{paddingTop: insets.top}}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={true}
+          <Box
             flexDirection={'row'}
+            px={3}
+            justifyContent="center"
+            alignItems={'center'}
             w="full"
-            contentContainerStyle={{
+            style={{
               height: 52,
-              alignItems: 'center',
-              paddingHorizontal: 12,
             }}>
-            {grades &&
-              grades.map((item: GradeProps) => (
-                <Pressable
-                  onPress={() => setParams({...params, grade: item.code})}
-                  style={params.grade === item.code ? styles.gradeBg : {}}
-                  alignItems={'center'}
-                  ml={2}
-                  key={item.id}
-                  px={3}
-                  py={0.5}>
-                  <Text
-                    color={'white'}
-                    opacity={params.grade === item.code ? 1 : 0.5}
-                    fontSize={params.grade === item.code ? 'lg' : 'md'}>
-                    {item.name}
-                  </Text>
-                </Pressable>
-              ))}
-            {/* <Pressable
+            {NAVLIST.map((ele, idx) => (
+              <Pressable
+                onPress={() => {
+                  setNavKey(ele.key);
+                  setParams({...params, followed: idx === 0});
+                }}
+                px={3}
+                key={idx}>
+                <Text
+                  opacity={navKey === ele.key ? 1 : 0.5}
+                  color={'white'}
+                  fontSize={navKey === ele.key ? 'lg' : 'md'}>
+                  {ele.name}
+                </Text>
+              </Pressable>
+            ))}
+            <Pressable
               flexDirection={'row'}
               onPress={() => onOpen()}
               ml={'auto'}
@@ -288,8 +404,8 @@ const Home = ({...props}) => {
                 全部
               </Text>
               <Icon name={'chevron-down'} size={20} color="#fff" />
-            </Pressable> */}
-          </ScrollView>
+            </Pressable>
+          </Box>
         </Box>
       </LinearGradient>
       <Box flex={1} px={2} pb={2}>
@@ -305,9 +421,9 @@ const Home = ({...props}) => {
 export default Home;
 
 const styles = StyleSheet.create({
-  gradeBg: {
-    backgroundColor: '#FFFFFF50',
+  filterItem: {
     borderRadius: 100,
+    marginBottom: 10,
   },
   item_cover: {
     flex: 1,

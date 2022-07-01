@@ -136,7 +136,7 @@ const MyTabs = ({...props}) => {
       <Tab.Screen
         options={{
           headerShown: false,
-          tabBarLabel: '动态',
+          tabBarLabel: '学妹圈',
         }}
         name="Daily"
         component={DailyScreen}
