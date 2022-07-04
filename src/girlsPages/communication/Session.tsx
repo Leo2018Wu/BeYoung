@@ -134,7 +134,7 @@ const Msgs = ({...props}) => {
     try {
       const content = {
         type: 2,
-        giftKey: item.url,
+        giftKey: item,
       };
       props.dispatch(
         sendCustomMsg({
@@ -387,7 +387,7 @@ const Msgs = ({...props}) => {
                 <FontAwesome name="keyboard-o" size={22} color="#000000" />
               )}
             </Pressable>
-            <Octicons
+            {/* <Octicons
               onPress={() => {
                 setQuickFlag(true);
                 onOpen();
@@ -398,7 +398,7 @@ const Msgs = ({...props}) => {
               name="package"
               color={'#9650FF'}
               size={22}
-            />
+            /> */}
             <Pressable
               onPress={() => {
                 setQuickFlag(false);
@@ -457,6 +457,11 @@ const Msgs = ({...props}) => {
               <ChatEmoji
                 onSelectEmoji={(key: string) => {
                   setValue(`${textValue + key}`);
+                }}
+                onSelectPackage={(key: string) => {
+                  console.log('--key--', key);
+                  // setPackageValue(key);
+                  replyEmojFunc(key);
                 }}
               />
             </Box>

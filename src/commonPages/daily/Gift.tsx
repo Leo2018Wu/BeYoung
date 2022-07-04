@@ -92,7 +92,7 @@ const Index = () => {
               <CustomFuncFlatList
                 url={queryGiftGiving.url}
                 par={{
-                  dynamicId: value?.id,
+                  dynamicId: value,
                 }}
                 renderItem={({item}: {item: ItemProps}) => <Item item={item} />}
               />

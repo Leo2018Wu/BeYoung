@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {Box, FlatList} from 'native-base';
+import {Box, Text, FlatList, HStack, Pressable, VStack} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useFocusEffect} from '@react-navigation/native';
-import useRequest from '../../../hooks/useRequest';
-import DailyItem from '../../../commonPages/daily/DailyItem';
+import useRequest from '../../hooks/useRequest';
 import {
   pageConstant,
   PageEmpty,
@@ -11,8 +10,11 @@ import {
   PageLoadAll,
   PageLoading,
   PageLoadMore,
-} from '../../../components/base/Pagination';
-import {queryDynamic} from '../../../api/daily';
+} from '../../components/base/Pagination';
+import CFastImage from '../../components/CFastImage';
+import Icon from 'react-native-vector-icons/Feather';
+import {queryReply} from '../../api/daily';
+import LinearGradient from 'react-native-linear-gradient';
 
 const {
   PAGE_IS_LOADING,
@@ -32,7 +34,47 @@ const mergeList = (sourceList: any, nowList: any) => {
   return nowList;
 };
 
-const Index = () => {
+const CommentItem = ({item}) => {
+  return (
+    <HStack>
+      <Box>
+        <CFastImage
+          url={item.headImg}
+          styles={{
+            width: 48,
+            height: 48,
+            borderRadius: 24,
+          }}
+        />
+      </Box>
+      <Box flex={1} ml={2}>
+        <HStack>
+          <VStack flex={1} justifyContent="space-between">
+            <Text fontSize={'md'} color={'fontColors.666'}>
+              {item.nickName}
+            </Text>
+            <Text numberOfLines={1} fontSize={'xs'} style={{color: '#cccccc'}}>
+              {item.content}
+            </Text>
+          </VStack>
+          <CFastImage
+            url={item.headImg}
+            styles={{
+              width: 44,
+              height: 44,
+              borderRadius: 4,
+            }}
+          />
+        </HStack>
+        <Box mt={2} p={2} borderRadius={4} bg="border.lightGray">
+          <Text numberOfLines={1}>{item.repliedComment.content}</Text>
+        </Box>
+      </Box>
+    </HStack>
+  );
+};
+
+const Index = ({...props}) => {
   const insets = useSafeAreaInsets();
   const [params, setParams] = useState({
     pageNum: 1, //分页页码
@@ -48,7 +90,7 @@ const Index = () => {
   const [queryList, setList] = useState([]); // 动态列表
   const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
-  const {run: runFetchDynamic} = useRequest(queryDynamic.url);
+  const {run: runQueryReply} = useRequest(queryReply.url);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -58,7 +100,7 @@ const Index = () => {
 
   const _getList = async () => {
     try {
-      const data = await runFetchDynamic(params);
+      const data = await runQueryReply(params);
       _dealData(data);
     } catch (error) {
       // 错误信息 比如网络错误
@@ -109,16 +151,18 @@ const Index = () => {
     }
   };
 
-  const itemRefresh = async () => {
-    _getList();
-    console.log('itemRefresh');
-  };
-
   const _renderItem = ({item, index}: {item: any; index: number}) => {
     return (
-      <Box key={index} mb={4}>
-        <DailyItem returnFunc={itemRefresh} item={item} />
-      </Box>
+      <Pressable
+        onPress={() =>
+          props.navigation.navigate('DailyDetail', {
+            dynamicId: item.userDynamicId,
+          })
+        }
+        key={index}
+        mb={4}>
+        <CommentItem item={item} />
+      </Pressable>
     );
   };
 
@@ -140,6 +184,40 @@ const Index = () => {
 
   return (
     <Box flex={1} bg="white">
+      <LinearGradient
+        start={{x: 0, y: 0.5}}
+        end={{x: 1, y: 0.5}}
+        colors={['#B83AF3', '#6950FB']}>
+        <Box justifyContent="center" style={{paddingTop: insets.top}}>
+          <HStack
+            px={4}
+            style={{height: 52}}
+            justifyContent="center"
+            alignItems={'center'}>
+            <Pressable
+              h={'full'}
+              onPress={() => props.navigation.goBack()}
+              w={10}
+              style={{
+                position: 'absolute',
+                left: 10,
+              }}
+              justifyContent="center">
+              <Icon name="chevron-left" color={'white'} size={30} />
+            </Pressable>
+            <Box>
+              <Text
+                alignSelf={'center'}
+                color={'white'}
+                fontSize="lg"
+                fontWeight={'bold'}>
+                评论
+              </Text>
+            </Box>
+          </HStack>
+        </Box>
+      </LinearGradient>
+
       <Box flex={1} px={4} my={4}>
         {pageStatus === IS_EMPTY && <PageEmpty />}
         {pageStatus === IS_LIST && renderList()}

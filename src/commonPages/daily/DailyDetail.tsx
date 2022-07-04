@@ -23,7 +23,7 @@ import CFastImage from '../../components/CFastImage';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
 import useRequest from '../../hooks/useRequest';
-import {commentDynamic} from '../../api/daily';
+import {commentDynamic, fetchDynamic} from '../../api/daily';
 import {queryDynamicGiftRank, queryGiftGiving} from '../../api/gift';
 import Icon from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -31,21 +31,22 @@ import Comment from '../../commonPages/daily/Comment';
 import Gifts from '../../commonPages/daily/Gift';
 
 const Index = ({...props}) => {
-  const {item} = props.route.params;
+  const {dynamicId} = props.route.params;
+  const [dynamicInfo, setDynamic] = useState({});
   const {isOpen, onOpen, onClose} = useDisclose();
-  console.log('-1-props-1-', props, item.id);
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 60) / 3;
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
   const [imgList, setImgList] = useState([]);
   const [replyFlag, setReplyFlag] = useState(false);
   const [giftGivingList, setGiftGivingList] = useState(0);
+  const {run: runGetDynamic} = useRequest(fetchDynamic.url);
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
   const {run: runGiftGivingList} = useRequest(queryGiftGiving.url);
   const {result: giftRankList} = useRequest(
     queryDynamicGiftRank.url,
     {
-      dynamicId: item.id, //动态ID
+      dynamicId, //动态ID
       pageNum: 1,
       pageSize: 10, //每页大小
       orders: [
@@ -59,24 +60,34 @@ const Index = ({...props}) => {
     {manual: false},
   );
 
+  useEffect(() => {
+    getDynamic();
+  }, []);
+
+  const getDynamic = async () => {
+    try {
+      const {data} = await runGetDynamic({dynamicId});
+      setDynamic(data);
+      AsyncStorage.setItem('DYNAMIC_ID', data.id);
+      if (data.images && JSON.parse(data.images).length) {
+        setImgList(JSON.parse(data.images));
+      }
+      DeviceEventEmitter.addListener('REPLY_FLAG', res => {
+        setReplyFlag(res);
+        DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(async () => {
     const {data, success} = await runGiftGivingList({
-      dynamicId: item.id,
+      dynamicId,
     });
     if (success) {
       setGiftGivingList(data);
     }
-  }, []);
-
-  useEffect(() => {
-    AsyncStorage.setItem('DYNAMIC_ID', item.id);
-    if (item.images && JSON.parse(item.images).length) {
-      setImgList(JSON.parse(item.images));
-    }
-    DeviceEventEmitter.addListener('REPLY_FLAG', res => {
-      setReplyFlag(res);
-      DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
-    });
   }, []);
 
   const comment = async (data: Object, dynamicId: string, replyId: string) => {
@@ -102,12 +113,12 @@ const Index = ({...props}) => {
   };
 
   return (
-    <DailyDetailContext.Provider value={item}>
+    <DailyDetailContext.Provider value={dynamicId}>
       <ScrollView showsVerticalScrollIndicator={false} py={4} bg="white">
         <Box px={5} pb={4}>
           <HStack alignItems="center">
             <CFastImage
-              url={item.headImg}
+              url={dynamicInfo.headImg}
               styles={{width: 50, height: 50, borderRadius: 50}}
             />
             <VStack flex={1} mr={'auto'} ml={2} justifyContent={'space-around'}>
@@ -116,14 +127,14 @@ const Index = ({...props}) => {
                 style={{
                   color: '#8E8895',
                 }}>
-                {item.nickName}
+                {dynamicInfo.nickName}
               </Text>
               <Text
                 fontSize={'xs'}
                 style={{
                   color: '#C7C4CC',
                 }}>
-                {item.createTime}
+                {dynamicInfo.createTime}
               </Text>
             </VStack>
           </HStack>
@@ -148,7 +159,7 @@ const Index = ({...props}) => {
                 ))}
             </HStack>
             <Text fontSize={'md'} color={'fontColors._72'}>
-              {item.content}
+              {dynamicInfo.content}
             </Text>
           </View>
           <Stack space={2} pt={2} direction={'row'} alignItems={'center'}>
@@ -159,7 +170,7 @@ const Index = ({...props}) => {
                 color={false ? '#9650FF' : '#C7C4CC'}
               />
               <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-                {item.likeNum}
+                {dynamicInfo.likeNum}
               </Text>
             </HStack>
             <HStack alignItems={'center'}>
@@ -169,7 +180,7 @@ const Index = ({...props}) => {
                 color={false ? '#9650FF' : '#C7C4CC'}
               />
               <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-                {item.commentNum}
+                {dynamicInfo.commentNum}
               </Text>
             </HStack>
             <HStack alignItems={'center'}>
@@ -179,7 +190,7 @@ const Index = ({...props}) => {
                 color={false ? '#9650FF' : '#C7C4CC'}
               />
               <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-                {item.giftNum}
+                {dynamicInfo.giftNum}
               </Text>
             </HStack>
           </Stack>
@@ -261,13 +272,13 @@ const Index = ({...props}) => {
         </Box>
         <Divider h={2.5} bg="bg.f5" />
         <Box flex={1} my={4}>
-          <Comment />
+          <Comment dynamicId={dynamicId} />
         </Box>
       </ScrollView>
       {replyFlag ? (
         <ChatBox
           pressCb={(data: Object) => {
-            comment(data, item.id, replyFlag.id);
+            comment(data, dynamicInfo.id, replyFlag.id);
           }}
         />
       ) : null}

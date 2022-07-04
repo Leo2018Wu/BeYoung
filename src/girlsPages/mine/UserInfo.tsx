@@ -60,10 +60,12 @@ const Index = () => {
           <Text style={styles.btmText}>被关注</Text>
         </Pressable>
         <View style={styles.line} />
-        <View style={styles.item}>
-          <Text style={styles.topText}>{myStatistic.commentNum || 0}</Text>
+        <Pressable
+          onPress={() => navigation.navigate('MineComment')}
+          style={styles.item}>
+          <Text style={styles.topText}>{myStatistic.replyNum || 0}</Text>
           <Text style={styles.btmText}>评论</Text>
-        </View>
+        </Pressable>
         <View style={styles.line} />
         <Pressable
           onPress={() => navigation.navigate('MineGifts')}
