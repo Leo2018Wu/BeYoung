@@ -168,35 +168,41 @@ const Index = (props: any) => {
         onClose={() => {
           setTipsFlag(false);
         }}>
-        <Modal.Content>
+        <Modal.Content style={{width: '90%'}}>
           <Modal.Body>
             <Text
               color={'#404040'}
-              fontSize={16}
+              fontSize={18}
               fontWeight={'bold'}
               textAlign={'center'}
               marginBottom={2}>
-              学妹圈发布规范
-            </Text>
-            <Text>不得在照片中发布广告。</Text>
-            <Text>不得在照片中展现其他方式的引流手段。</Text>
-            <Text>不得在照片中展示危险行为及动作。</Text>
-            <Text>
-              不得在照片中展示惊悚奇葩类内容：军装、低俗奇葩服装、扮鬼吓人、血腥恐怖妆容等。
-            </Text>
-            <Text>不得在照片中展示封建迷信内容（算命算卦、跳大神等）。</Text>
-            <Text>不得在照片中展现私密部位。</Text>
-            <Text>不得出现非法场景及背景。</Text>
-            <Text>
-              不得在文案中使用多音字、片假字、拆分字或外语等来表达黄赌毒及政治。
+              学妹圈发布内容规则
             </Text>
             <Text>
-              不得在文案中恶意炒作负面信息、辱骂他人及抱怨、讨论敏感社会事件。
+              信息发布规则适用于在青回平台上发布信息的所有用户，用户需遵守该规则发布信息内容。
+            </Text>
+            <Text fontWeight={'bold'}>一、发布文案规则</Text>
+            <Text>1.不得在文案中发布广告</Text>
+            <Text>
+              2.不得在文案中使用多音字、片假字、拆分字或外语等来表达黄赌毒及政治
             </Text>
             <Text>
-              不得在文案中出现个人信息微信号、QQ号、手机号及一切其他社交平台软件账号且不能以其他如英文、多音字等其他形式进行发送。
+              3.不得在文案中恶意炒作负面信息、辱骂他人及抱怨、讨论敏感社会事件
             </Text>
-            <Text>不得在文案中出现引流信息。</Text>
+            <Text>
+              4.不得在文案中出现个人信息微信号、QQ号、手机号及一切其他社交平台软件账号且不能以其他如英文、多音字等其他形式进行发送
+            </Text>
+            <Text>5.不得在文案中出现引流信息</Text>
+            <Text fontWeight={'bold'}>二、发布图片规则</Text>
+            <Text>1.不得在照片中发布广告</Text>
+            <Text>2.不得在照片中展现其他方式的引流手段</Text>
+            <Text>3.不得在照片中展示危险行为及动作</Text>
+            <Text>
+              4.不得在照片中展示惊悚奇葩类内容：军装、低俗奇葩服装、扮鬼吓人、血腥恐怖妆容等
+            </Text>
+            <Text>5.不得在照片中展示封建迷信内容（算命算卦、跳大神等）</Text>
+            <Text>6.不得在照片中展现敏感或私密部位</Text>
+            <Text>7.不得在照片中出现非法场景及背景</Text>
           </Modal.Body>
         </Modal.Content>
       </Modal>

@@ -8,7 +8,7 @@ import {
   SceneRendererProps,
 } from 'react-native-tab-view';
 import GirlsComment from './Comment';
-import GirlsGift from '../../girlsPages/home/Dynamic/Gift';
+import GirlsGift from './Gift';
 
 type Route = {
   key: string;
