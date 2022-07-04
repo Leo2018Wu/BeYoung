@@ -130,6 +130,14 @@ export const queryFollowedMe = {
   },
 };
 
+// 查询我关注的人
+export const queryFollowed = {
+  url: 'cgi/core/relation/queryFollowed',
+  options: {
+    manual: false,
+  },
+};
+
 // 关注
 export const follow = {
   url: 'cgi/core/relation/follow',
