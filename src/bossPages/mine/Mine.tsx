@@ -135,7 +135,7 @@ const Home = ({...props}) => {
               <Text color={'fontColors.gray'} fontSize="xs">
                 关注
               </Text>
-              <Text fontSize={'xl'}>218</Text>
+              <Text fontSize={'xl'}>{numInfo?.followNum}</Text>
             </Pressable>
           </HStack>
         </Box>
