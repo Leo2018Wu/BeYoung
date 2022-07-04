@@ -23,11 +23,6 @@ const link_group1_list = [
     icon: require('../../images/mine_link_icon1.png'),
     pageName: 'WeChatNum',
   },
-  {
-    name: '我的礼物',
-    icon: require('../../images/mine_link_icon2.png'),
-    pageName: 'MineGifts',
-  },
   // {
   //   name: '帮助教程',
   //   icon: require('../../images/mine_link_icon3.png'),
@@ -113,27 +108,36 @@ const Home = ({...props}) => {
           <Text fontWeight={'bold'} mb={4} mt={2} fontSize={'2xl'}>
             {userInfo?.nickName || '暂无昵称'}
           </Text>
-          {/* <Divider my={4} /> */}
-          {/* <HStack justifyContent={'space-around'}>
-            <VStack flex={1} alignItems={'center'}>
+          <Divider my={4} />
+          <HStack justifyContent={'space-around'}>
+            <Pressable
+              onPress={() => props.navigation.navigate('Collection')}
+              flex={1}
+              alignItems={'center'}>
               <Text color={'fontColors.gray'} fontSize="xs">
-                点赞
+                收藏
               </Text>
-              <Text fontSize={'xl'}>{numInfo?.likeNum}</Text>
-            </VStack>
-            <VStack flex={1} alignItems={'center'}>
+              <Text fontSize={'xl'}>{numInfo?.collectDynamicNum}</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => props.navigation.navigate('MineComment')}
+              flex={1}
+              alignItems={'center'}>
               <Text color={'fontColors.gray'} fontSize="xs">
                 评论
               </Text>
               <Text fontSize={'xl'}>{numInfo?.commentNum}</Text>
-            </VStack>
-            <VStack flex={1} alignItems={'center'}>
+            </Pressable>
+            <Pressable
+              onPress={() => props.navigation.navigate('MineFollow')}
+              flex={1}
+              alignItems={'center'}>
               <Text color={'fontColors.gray'} fontSize="xs">
                 关注
               </Text>
               <Text fontSize={'xl'}>218</Text>
-            </VStack>
-          </HStack> */}
+            </Pressable>
+          </HStack>
         </Box>
         <Box mt={5} shadow={1} borderRadius={4} bg="white">
           {link_group1_list.map((item, index) => (

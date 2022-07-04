@@ -163,7 +163,7 @@ const Index = () => {
                 key={keyData}
                 url={queryComment.url}
                 par={{
-                  dynamicId: value?.id,
+                  dynamicId: value,
                 }}
                 renderItem={({item}: {item: ItemProps}) => <Item item={item} />}
               />

@@ -116,7 +116,7 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
     <Box bg="white">
       <Pressable
         onPress={() => {
-          navigation.navigate('DailyDetail', {item: item});
+          navigation.navigate('DailyDetail', {dynamicId: item.id});
         }}>
         <HStack alignItems="center">
           <Pressable

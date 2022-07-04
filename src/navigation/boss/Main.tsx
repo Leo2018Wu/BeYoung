@@ -11,8 +11,11 @@ import WeChatNum from '../../bossPages/weChatNum/Index';
 import Session from '../../bossPages/communication/Session';
 import Wallet from '../../bossPages/wallet/Wallet';
 import TransferDetail from '../../bossPages/wallet/TransferDetail';
-import MineGifts from '../../bossPages/mine/MineGifts';
 import Preview from '../../commonPages/PreviewImgs';
+import Collection from '../../bossPages/mine/Collection';
+import MineGifts from '../../bossPages/mine/MineGifts';
+import MineComment from '../../bossPages/mine/MineComment';
+import MineFollow from '../../bossPages/mine/FollowGirl';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +39,30 @@ const MyStack = () => {
         }}
         name="HomeDetail"
         component={HomeDetail}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerBackVisible: true,
+        }}
+        name="Collection"
+        component={Collection}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerBackVisible: true,
+        }}
+        name="MineComment"
+        component={MineComment}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerBackVisible: true,
+        }}
+        name="MineFollow"
+        component={MineFollow}
       />
       <Stack.Screen
         name="EditUser"
@@ -84,14 +111,6 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          title: '我的礼物',
-          headerBackTitle: '我的',
-        }}
-        name="MineGifts"
-        component={MineGifts}
-      />
-      <Stack.Screen
-        options={{
           headerStyle: {
             backgroundColor: '#9650FF',
           },
@@ -101,6 +120,14 @@ const MyStack = () => {
         }}
         name="Setting"
         component={Setting}
+      />
+      <Stack.Screen
+        options={{
+          title: '我的礼物',
+          headerBackTitle: '我的',
+        }}
+        name="MineGifts"
+        component={MineGifts}
       />
       <Stack.Screen
         options={{

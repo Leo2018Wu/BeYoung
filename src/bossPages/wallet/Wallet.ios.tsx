@@ -1,6 +1,7 @@
 import React, {useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {Text, Box, HStack, Pressable, Button, View} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import {
   ImageBackground,
@@ -212,7 +213,18 @@ const Index = ({...props}) => {
         </ImageBackground>
       </Box>
       <Box shadow={2} p={4} flex={1} bg={'white'} style={styles.main}>
-        <Bar />
+        <HStack alignItems={'center'} justifyContent="space-between">
+          <Bar />
+          <Pressable
+            onPress={() => props.navigation.navigate('MineGifts')}
+            flexDirection={'row'}
+            alignItems="center">
+            <Text fontSize={'md'} color={'primary.100'}>
+              我的礼物
+            </Text>
+            <EvilIcons name="chevron-right" color="#9650FF" size={32} />
+          </Pressable>
+        </HStack>
         <HStack flexWrap={'wrap'} mt={4}>
           {chargeList &&
             chargeList.map((item: ItemProps, index: number) => (
@@ -271,7 +283,6 @@ const styles = StyleSheet.create({
   top_section: {
     minHeight: 136,
     paddingHorizontal: 16,
-    backgroundColor: '#fff4db',
   },
   top_inner: {
     flex: 1,
