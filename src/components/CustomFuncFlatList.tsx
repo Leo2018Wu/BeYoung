@@ -38,12 +38,14 @@ const Index = forwardRef(
       renderItem,
       horizontal = false,
       numColumns = 1,
+      listHeader,
     }: {
       url: string;
       par?: object;
       renderItem: any;
       horizontal?: boolean;
       numColumns?: number;
+      listHeader?: any;
     },
     refParams,
   ) => {
@@ -139,20 +141,21 @@ const Index = forwardRef(
           onRefresh={() => _onRefresh()}
           data={queryList}
           refreshing={pageStatus === IS_LOADDING}
+          ListHeaderComponent={listHeader}
           renderItem={renderItem}
-          // ListEmptyComponent={<PageEmpty />}
+          ListEmptyComponent={<PageEmpty content="暂无动态" />}
           ListFooterComponent={renderFooter()}
           keyExtractor={(item, index) => `key${index}`}
           onEndReached={() => _onEndReached()}
-          onEndReachedThreshold={0.01}
+          onEndReachedThreshold={0.1}
         />
       );
     };
 
     return (
       <Box flex={1}>
-        {pageStatus === IS_EMPTY && <PageEmpty />}
-        {pageStatus === IS_LIST && renderList()}
+        {/* {pageStatus === IS_EMPTY && <PageEmpty />} */}
+        {(pageStatus === IS_LIST || pageStatus === IS_EMPTY) && renderList()}
         {pageStatus === IS_LOADDING && <PageLoading />}
         {pageStatus === IS_NET_ERROR && <PageError />}
       </Box>
