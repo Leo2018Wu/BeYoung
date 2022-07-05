@@ -73,7 +73,7 @@ export const fetchDynamicLabels = {
   options: {},
 };
 
-// 获取动态标签列表
+// 查询收到的评论回复
 export const queryReply = {
   url: 'cgi/core/dynamic/queryReply',
   options: {},
@@ -82,5 +82,11 @@ export const queryReply = {
 // 获取动态详情
 export const fetchDynamic = {
   url: 'cgi/core/dynamic/fetchDynamic',
+  options: {},
+};
+
+// 获取未读评论/回复数
+export const fetchUnreadComment = {
+  url: 'cgi/core/dynamic/fetchUnreadComment',
   options: {},
 };
