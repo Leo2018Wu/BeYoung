@@ -1,8 +1,7 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   Text,
-  Image,
   HStack,
   VStack,
   Badge,
@@ -10,85 +9,116 @@ import {
   Stack,
   Pressable,
   View,
-  Actionsheet,
-  useDisclose,
-  AlertDialog,
-  Button,
-  Modal,
-  useClipboard,
+  ScrollView,
   useToast,
 } from 'native-base';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {StyleSheet, useWindowDimensions} from 'react-native';
-import Tab from './Tab';
 import util from '../../../util/util';
+
 import useRequest from '../../../hooks/useRequest';
 import {
   fetchChatAccount,
   fetchStatistic,
   fetchUserInfo,
+  follow,
 } from '../../../api/common';
-import {fetchRelation} from '../../../api/user';
+import CustomFuncFlatList from '../../../components/CustomFuncFlatList';
+import {queryDynamic} from '../../../api/daily';
+import {
+  fetchRelation,
+  queryMedia,
+  queryMyRelation,
+  startRelation,
+} from '../../../api/user';
 
 import CFastImage from '../../../components/CFastImage';
 import {useDispatch} from 'react-redux';
-import MyContext from './Context';
 import {PageLoading} from '../../../components/base/Pagination';
-import Gifts from '../../../components/base/Gifts';
-import {giveGift} from '../../../api/gift';
+import DailyItem from '../../daily/DailyItem';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+
+interface ItemProp {
+  id: string | number;
+  userId: string;
+  headImg: string;
+  nickName: string;
+  createTime: string;
+  content: string;
+  score: number;
+  likeNum: string;
+  liked: boolean;
+  images: string;
+  commentNum: number;
+  giftNum: number;
+  hot: boolean;
+  collected: boolean;
+  collectNum: string | number;
+  hotness: string | number;
+}
 
 const Index = ({...props}) => {
   const userId = props.route.params.userId;
+  const insets = useSafeAreaInsets();
+  const toast = useToast();
   const dispatch = useDispatch();
-  const {height, width} = useWindowDimensions();
-  const {isOpen, onOpen, onClose} = useDisclose();
-  const [weChatModal, setWechatModal] = useState(false);
-  const [dialogVisible, setIsDialogShow] = useState(false);
-  const [giftType, setGiftType] = useState('');
+  const {height} = useWindowDimensions();
+  const {run: runQueryMedia} = useRequest(queryMedia.url);
+  const {run: runFollow} = useRequest(follow.url);
+  const {result: myRelations} = useRequest(
+    queryMyRelation.url,
+    {
+      pageSize: 40,
+    },
+    {manual: false},
+  );
+  const {run: runStartRela} = useRequest(startRelation.url);
 
-  const cancelRef = useRef(null);
+  const [albumScenes, setScenes] = useState({}); // 图片场景列表
 
   const {result: chatAccountInfo} = useRequest(
     fetchChatAccount.url,
     {userId},
     fetchChatAccount.options,
   );
+  const [isStartRelationFlag, setRelationFlag] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const {run: runFetchRelation} = useRequest(fetchRelation.url);
-  const {run: runGiveGift} = useRequest(giveGift.url);
-  const {result: userInfo} = useRequest(
-    fetchUserInfo.url,
-    {
-      userId,
-    },
-    fetchUserInfo.options,
-  );
+  const {run: runFetchUesrInfo} = useRequest(fetchUserInfo.url);
   const {result: numInfo} = useRequest(
     fetchStatistic.url,
     {userId},
     fetchStatistic.options,
   );
 
-  const {onCopy} = useClipboard();
-  const toast = useToast();
+  useEffect(() => {
+    if (myRelations && myRelations.length > 0) {
+      setRelationFlag(
+        myRelations.findIndex(item => item.relateUserId === userId) !== -1,
+      );
+    }
+  }, [myRelations]);
+  useEffect(() => {
+    getUserInfo();
+    getAlbumScenes();
+  }, []);
 
-  const presentGift = async (item: object) => {
+  const getAlbumScenes = async () => {
     try {
-      const {success, code} = await runGiveGift({
-        giftId: item.id,
-        num: 1,
-        receiveUserId: userId,
+      const {data} = await runQueryMedia({
+        userId, //用户ID
+        mediaType: 'MEDIA_TYPE_IMAGE', //媒体类型
+        // scene: 'SCENE_DORMITORY', //场景
       });
-
-      if (code === 50001) {
-        // 余额不足情况
-        setIsDialogShow(true);
-        return;
-      }
-      if (success) {
-        goChat(giftType);
-      }
+      const sceneNameGroup = data.reduce(
+        (t, v) => (
+          !t[v.sceneName] && (t[v.sceneName] = []), t[v.sceneName].push(v), t
+        ),
+        {},
+      );
+      setScenes(sceneNameGroup);
     } catch (error) {
-      console.log('presentGift', error);
+      console.log(error);
     }
   };
 
@@ -103,165 +133,115 @@ const Index = ({...props}) => {
     });
   };
 
-  const goChat = async (type: string) => {
-    const {data: userRelation} = await runFetchRelation({
-      relateUserId: userId,
-    });
-    if (type === 'chat') {
-      if (userRelation.canChat) {
-        jumpChatPage();
-      } else {
-        onOpen();
+  const getUserInfo = async () => {
+    const {data} = await runFetchUesrInfo({userId});
+    setUserInfo(data);
+  };
+
+  const handleFollow = async () => {
+    try {
+      const {success} = await runFollow({
+        relateUserId: userId,
+        cancel: userInfo.hasFollowed,
+      });
+      if (success) {
+        getUserInfo();
       }
-    } else {
-      if (userRelation.weChatFlag) {
-        // 修改为弹窗展示
-        setWechatModal(true);
-        // props.navigation.navigate('WeChatNum');
-      } else {
-        onOpen();
-      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const copyText = (value: string) => {
-    onCopy(value);
-    toast.show({description: '复制成功', placement: 'top', duration: 1000});
-    setWechatModal(false);
+  const goChat = async () => {
+    const {data: userRelation} = await runFetchRelation({
+      relateUserId: userId,
+    });
+    if (userRelation.canChat) {
+      jumpChatPage();
+    } else {
+      // 不能聊天
+    }
+  };
+
+  const startRel = async () => {
+    const {success} = await runStartRela({relateUserId: userId});
+    if (success) {
+      toast.show({
+        description: '关系已开启，可通过赠送礼物、聊天等积累亲密度',
+        placement: 'top',
+        duration: 2500,
+      });
+      setRelationFlag(true);
+    }
   };
 
   if (!userInfo) {
     return <PageLoading />;
   }
 
-  return (
-    <MyContext.Provider value={userInfo}>
-      <Modal isOpen={weChatModal} onClose={() => setWechatModal(false)}>
-        <Modal.Content py={4}>
-          <HStack mb={4} justifyContent={'center'} alignItems={'center'}>
-            <Text fontSize={'md'}>女生微信：</Text>
-            <Text
-              color={'primary.100'}
-              fontWeight="bold"
-              fontSize={'lg'}
-              selectable>
-              {userInfo.weChat}
-            </Text>
-          </HStack>
-          <Divider />
-          <Pressable
-            pt={3}
-            alignItems="center"
-            onPress={() => copyText(userInfo.weChat)}>
-            <Text color={'primary.100'} fontWeight="bold" fontSize={'md'}>
-              复制微信号
-            </Text>
-          </Pressable>
-        </Modal.Content>
-      </Modal>
-      <AlertDialog
-        leastDestructiveRef={cancelRef}
-        isOpen={dialogVisible}
-        onClose={() => setIsDialogShow(false)}>
-        <AlertDialog.Content>
-          <AlertDialog.CloseButton />
-          <AlertDialog.Header>提示</AlertDialog.Header>
-          <AlertDialog.Body
-            justifyContent={'center'}
-            alignItems={'center'}
-            minHeight={98}>
-            您的余额不足，需要去充值吗？
-          </AlertDialog.Body>
-          <AlertDialog.Footer justifyContent={'center'}>
-            <Button
-              colorScheme="blue"
-              onPress={() => {
-                setIsDialogShow(false);
-                props.navigation.navigate('Wallet');
-              }}>
-              去充值
-            </Button>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog>
-      <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
-        <Actionsheet.Content
-          style={{
-            backgroundColor: '#1f2937',
-            borderRadius: 40,
-          }}>
-          <Gifts
-            giftType={giftType}
-            clickItem={(item: object) => {
-              onClose();
-              presentGift(item);
-            }}
-          />
-        </Actionsheet.Content>
-      </Actionsheet>
-      <View flex={1}>
-        <CFastImage
-          url={userInfo.headImg}
-          styles={{
-            width: '100%',
-            height: height / 3,
-          }}
-        />
-        <Box
-          mt={-10}
-          shadow={2}
-          w="full"
-          px={4}
-          pt={4}
-          bg="white"
-          borderRadius={10}>
+  const HeaderComponent = () => (
+    <View p={4} bg="white">
+      <HStack>
+        <Box style={styles.avatar}>
+          <CFastImage url={userInfo.headImg} styles={styles.headImg} />
+        </Box>
+        <VStack py={1} ml={2} justifyContent="space-around">
+          <Text fontSize={'xl'} fontWeight="bold">
+            {userInfo.nickName || '暂无昵称'}
+          </Text>
           <HStack>
-            <Box style={styles.avatar}>
-              <CFastImage url={userInfo.headImg} styles={styles.headImg} />
-            </Box>
-
-            <VStack py={1} ml={2} justifyContent="space-around">
-              <Text fontSize={'xl'} fontWeight="bold">
-                {userInfo.nickName}
+            <Badge flexDirection={'row'} mr={2} style={styles.badge_age}>
+              <Icon name="ios-female" size={10} color="white" />
+              <Text color={'white'}>
+                {util.getAge(util.getBirthday(userInfo.cardNum)) || '18'}
               </Text>
-              <HStack>
-                <Badge flexDirection={'row'} mr={2} style={styles.badge_age}>
-                  <Icon name="ios-female" size={10} color="white" />
-                  <Text color={'white'}>
-                    {util.getAge(util.getBirthday(userInfo.cardNum)) || '18'}
-                  </Text>
-                </Badge>
-                <Badge px={3} style={styles.badge_sign}>
-                  <Text color={'white'}>
-                    {util.getSign(util.getBirthday(userInfo.cardNum)) || '双鱼'}
-                  </Text>
-                </Badge>
-              </HStack>
-            </VStack>
+            </Badge>
+            <Badge px={3} style={styles.badge_sign}>
+              <Text color={'white'}>
+                {util.getSign(util.getBirthday(userInfo.cardNum)) || '双鱼'}
+              </Text>
+            </Badge>
           </HStack>
-          <HStack mt={2} alignItems={'center'}>
-            <Text color={'fontColors._6f'} fontSize={'md'} mr={1}>
-              点赞
-            </Text>
-            <Text color={'fontColors._6f'} fontSize={'lg'} mr={3}>
-              {numInfo?.likeNum}
-            </Text>
-            <Text color={'fontColors._6f'} fontSize={'md'} mr={1}>
-              评论
-            </Text>
-            <Text color={'fontColors._6f'} fontSize={'lg'} mr={3}>
-              {numInfo?.commentNum}
-            </Text>
-            <Text color={'fontColors._6f'} fontSize={'md'} mr={1}>
-              礼物
-            </Text>
-            <Text color={'fontColors._6f'} fontSize={'lg'} mr={3}>
-              {numInfo?.giftNum}
-            </Text>
-          </HStack>
-          <Divider my={2} />
-          <Stack space={1} pb={2}>
-            <HStack>
+        </VStack>
+        <Pressable
+          onPress={() => handleFollow()}
+          ml={'auto'}
+          alignSelf="center"
+          justifyContent={'center'}
+          style={
+            userInfo?.hasFollowed ? styles.followed_btn : styles.notfollowed_btn
+          }>
+          <Text
+            style={{
+              color: userInfo?.hasFollowed ? '#CCCCCC' : '#FF6309',
+            }}>
+            {userInfo?.hasFollowed ? '已关注' : '关注'}
+          </Text>
+        </Pressable>
+      </HStack>
+      <HStack mt={2} alignItems={'center'}>
+        <Text color={'fontColors._6f'} fontSize={'md'} mr={1}>
+          点赞
+        </Text>
+        <Text color={'fontColors._6f'} fontSize={'lg'} mr={3}>
+          {numInfo?.likeNum}
+        </Text>
+        <Text color={'fontColors._6f'} fontSize={'md'} mr={1}>
+          评论
+        </Text>
+        <Text color={'fontColors._6f'} fontSize={'lg'} mr={3}>
+          {numInfo?.commentNum}
+        </Text>
+        <Text color={'fontColors._6f'} fontSize={'md'} mr={1}>
+          礼物
+        </Text>
+        <Text color={'fontColors._6f'} fontSize={'lg'} mr={3}>
+          {numInfo?.giftNum}
+        </Text>
+      </HStack>
+      <Divider my={2} />
+      <Stack space={1} pb={2}>
+        {/* <HStack>
               <Image
                 style={styles.info_icon}
                 source={require('../../../images/info_icon.png')}
@@ -270,70 +250,125 @@ const Index = ({...props}) => {
               <Text ml={2} fontSize={'lg'} fontWeight="bold">
                 个人信息
               </Text>
-            </HStack>
-            <HStack alignItems={'center'}>
-              <Text fontSize={'md'} color="fontColors.999">
-                年纪：
-              </Text>
-              <Text fontSize={'md'} color="fontColors.333">
-                {userInfo.gradeName}
-              </Text>
-            </HStack>
-            <HStack alignItems={'center'}>
-              <Text fontSize={'md'} color="fontColors.999">
-                爱好：
-              </Text>
-              <Text fontSize={'md'} color="fontColors.333">
-                {userInfo.hobbies || '暂未填写'}
-              </Text>
-            </HStack>
-          </Stack>
-        </Box>
-        <Tab />
-        <HStack
-          safeArea
-          alignItems={'center'}
-          px={10}
-          style={[
-            styles.footer,
-            {
-              width,
-            },
-          ]}>
+            </HStack> */}
+        <HStack alignItems={'center'}>
+          <Text fontSize={'md'} color="fontColors.999">
+            年纪：
+          </Text>
+          <Text fontSize={'md'} color="fontColors.333">
+            {userInfo.gradeName}
+          </Text>
+        </HStack>
+        <HStack alignItems={'center'}>
+          <Text fontSize={'md'} color="fontColors.999">
+            爱好：
+          </Text>
+          <Text fontSize={'md'} color="fontColors.333">
+            {userInfo.hobbies || '暂未填写'}
+          </Text>
+        </HStack>
+      </Stack>
+      <Divider my={2} />
+      {Object.keys(albumScenes).length > 0 ? (
+        <View>
+          <Text fontSize={'md'} fontWeight="bold">
+            照片精选
+          </Text>
+          <ScrollView mt={2} horizontal>
+            {Object.keys(albumScenes).map((item, index) => (
+              <Pressable
+                key={index}
+                onPress={() =>
+                  props.navigation.navigate('SceneAlbum', {
+                    title: item,
+                    album: albumScenes[item],
+                  })
+                }
+                position={'relative'}>
+                <CFastImage
+                  url={albumScenes[item][0].url}
+                  styles={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: 8,
+                    marginRight: 10,
+                  }}
+                />
+                <View style={styles.cover_img_scene}>
+                  <Text fontSize={'2xs'} color={'white'}>
+                    {item}
+                  </Text>
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </View>
+      ) : null}
+      <Text
+        mt={Object.keys(albumScenes).length > 0 ? 2 : 0}
+        fontSize={'md'}
+        fontWeight="bold">
+        动态
+      </Text>
+    </View>
+  );
+
+  return (
+    <View flex={1}>
+      <CFastImage
+        url={userInfo.headImg}
+        styles={{
+          width: '100%',
+          height: height / 3,
+        }}
+      />
+      <CustomFuncFlatList
+        url={queryDynamic.url}
+        par={{userId}}
+        renderItem={({item}: {item: ItemProp}) => (
+          <Box px={3} pb={3} borderRadius={4} bg="white">
+            <DailyItem item={item} />
+          </Box>
+        )}
+        listHeader={<HeaderComponent />}
+      />
+      <HStack
+        px={4}
+        style={{
+          height: 80 + insets.bottom,
+          paddingBottom: insets.bottom,
+        }}
+        alignItems="center">
+        {isStartRelationFlag ? (
           <Pressable
-            onPress={() => {
-              setGiftType('chat');
-              goChat('chat');
-            }}
-            justifyContent={'center'}
-            alignItems="center"
+            onPress={() => goChat()}
             shadow={2}
-            bg="white"
-            borderRadius="full"
-            h={10}
-            mr={4}
-            flex={1}>
-            <Text fontSize="md">聊天</Text>
-          </Pressable>
-          <Pressable
-            onPress={() => {
-              setGiftType('contact');
-              goChat('contact');
-            }}
-            shadow={2}
-            justifyContent={'center'}
-            alignItems="center"
-            bg={'primary.100'}
-            h={10}
-            borderRadius="full"
-            flex={1}>
-            <Text color={'white'} fontSize="md">
-              联系方式
+            bg="primary.100"
+            style={styles.btn}>
+            <Text color={'white'} fontSize={'md'}>
+              聊天
             </Text>
           </Pressable>
-        </HStack>
-      </View>
-    </MyContext.Provider>
+        ) : (
+          <>
+            <Pressable
+              onPress={() => goChat()}
+              shadow={2}
+              style={[styles.btn, styles.chat_btn]}>
+              <Text fontSize={'md'}>聊天</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => startRel()}
+              bg={'primary.100'}
+              style={[styles.btn, styles.relation_btn]}>
+              <Text fontSize={'md'} color={'white'}>
+                开启关系
+              </Text>
+            </Pressable>
+          </>
+        )}
+      </HStack>
+    </View>
   );
 };
 
@@ -365,9 +400,40 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
   },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
+  notfollowed_btn: {
+    height: 26,
+    borderColor: '#FF6309',
+    borderWidth: 0.5,
+    borderRadius: 26,
+    paddingHorizontal: 14,
   },
+  followed_btn: {
+    backgroundColor: '#F4F4F4',
+    height: 26,
+    borderRadius: 26,
+    paddingHorizontal: 14,
+  },
+  cover_img_scene: {
+    position: 'absolute',
+    width: 70,
+    left: 0,
+    bottom: 0,
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    alignItems: 'center',
+    paddingVertical: 4,
+    backgroundColor: '#00000080',
+  },
+  btn: {
+    flex: 1,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 40,
+  },
+  chat_btn: {
+    backgroundColor: '#fff',
+    marginRight: 20,
+  },
+  relation_btn: {},
 });

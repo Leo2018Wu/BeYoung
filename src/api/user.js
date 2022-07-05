@@ -34,3 +34,14 @@ export const queryUnlockWeChat = {
     manual: false,
   },
 };
+
+// 查询我的关系
+export const queryMyRelation = {
+  url: 'cgi/core/user/queryMyRelation',
+  options: {},
+};
+// 开启关系
+export const startRelation = {
+  url: 'cgi/core/relation/startRelation',
+  options: {},
+};

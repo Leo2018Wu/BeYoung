@@ -8,6 +8,7 @@ import Setting from '../../bossPages/setting/Index';
 import EditUser from '../../bossPages/setting/EditUser';
 import Service from '../../bossPages/customService/Index';
 import WeChatNum from '../../bossPages/weChatNum/Index';
+import SceneAlbum from '../../bossPages/sceneAlbum/Index';
 import Session from '../../bossPages/communication/Session';
 import Wallet from '../../bossPages/wallet/Wallet';
 import TransferDetail from '../../bossPages/wallet/TransferDetail';
@@ -85,6 +86,13 @@ const MyStack = () => {
         }}
         name="Wallet"
         component={Wallet}
+      />
+      <Stack.Screen
+        options={{
+          title: '',
+        }}
+        name="SceneAlbum"
+        component={SceneAlbum}
       />
       <Stack.Screen
         options={{

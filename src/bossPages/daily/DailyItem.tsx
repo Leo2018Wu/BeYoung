@@ -65,7 +65,7 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
 
   const navigation = useNavigation();
   const {width} = useWindowDimensions();
-  const IMG_ITEM_WIDTH = (width - 104) / 3;
+  const IMG_ITEM_WIDTH = (width - 140) / 3;
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
 
   const preview = (index: number) => {
