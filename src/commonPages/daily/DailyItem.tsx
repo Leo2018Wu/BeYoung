@@ -79,7 +79,9 @@ const Index = ({...props}) => {
             </HStack>
             <Pressable
               onPress={() => {
-                navigation.navigate('DailyDetail', {item: item});
+                navigation.navigate('DailyDetail', {
+                  dynamicId: item.id,
+                });
               }}
               style={{
                 marginLeft: 56,

@@ -11,9 +11,10 @@ import {
   VStack,
   ScrollView,
   Image,
+  Pressable,
 } from 'native-base';
 import {DeviceEventEmitter, StyleSheet} from 'react-native';
-import Tab from './DailyTab';
+import Icon from 'react-native-vector-icons/AntDesign';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
 import Gifts from '../../components/base/Gifts';
@@ -21,7 +22,10 @@ import CFastImage from '../../components/CFastImage';
 import useRequest from '../../hooks/useRequest';
 import {commentDynamic, fetchDynamic} from '../../api/daily';
 import {giveGift, queryDynamicGiftRank} from '../../api/gift';
+import AsyncStorage from '@react-native-community/async-storage';
 import DailyItem from './DailyItem';
+import Comment from './Comment';
+import Gift from './Gift';
 
 interface commentProp {
   type: string;
@@ -52,6 +56,8 @@ const Index = ({...props}) => {
   const {run: runGiveGift} = useRequest(giveGift.url);
   const {isOpen, onOpen, onClose} = useDisclose();
   const [dialogVisible, setIsDialogShow] = useState(false);
+  const [replyFlag, setReplyFlag] = useState(false);
+  const [isFlag, setIsFlag] = useState(true);
 
   const cancelRef = useRef(null);
 
@@ -63,8 +69,28 @@ const Index = ({...props}) => {
     try {
       const {data} = await runGetDynamic({dynamicId});
       setDynamic(data);
+      AsyncStorage.setItem('DYNAMIC_ID', data.id);
+      DeviceEventEmitter.addListener('REPLY_FLAG', res => {
+        setReplyFlag(res);
+        DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
+      });
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  //回复
+  const comment = async (data: Object, dynamicId: string, replyId: string) => {
+    if (data.type === 'text') {
+      const {success} = await runCommentDymaic({
+        dynamicId,
+        replyId,
+        content: data.content,
+      });
+      if (success) {
+        setReplyFlag(false);
+        DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());
+      }
     }
   };
 
@@ -73,7 +99,7 @@ const Index = ({...props}) => {
     if (comment.type === 'text') {
       const {data, success} = await runCommentDymaic({
         dynamicId,
-        content: comment.value,
+        content: comment.content,
       });
       if (success) {
         setDynamic(data);
@@ -117,122 +143,148 @@ const Index = ({...props}) => {
 
   return (
     <DailyDetailContext.Provider value={dynamicId}>
-      <AlertDialog
-        leastDestructiveRef={cancelRef}
-        isOpen={dialogVisible}
-        onClose={() => setIsDialogShow(false)}>
-        <AlertDialog.Content>
-          <AlertDialog.CloseButton />
-          <AlertDialog.Header>提示</AlertDialog.Header>
-          <AlertDialog.Body
-            justifyContent={'center'}
-            alignItems={'center'}
-            minHeight={98}>
-            您的余额不足，需要去充值吗？
-          </AlertDialog.Body>
-          <AlertDialog.Footer justifyContent={'center'}>
-            <Button
-              colorScheme="blue"
-              onPress={() => {
-                setIsDialogShow(false);
-                props.navigation.navigate('Wallet');
-              }}>
-              去充值
-            </Button>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog>
-      <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
-        <Actionsheet.Content
-          style={{
-            backgroundColor: '#1f2937',
-            borderRadius: 40,
-          }}>
-          <Gifts
-            clickItem={(giftItem: object) => {
-              onClose();
-              presentGift(giftItem, dynamicInfo.userId, dynamicInfo.id);
-            }}
-          />
-        </Actionsheet.Content>
-      </Actionsheet>
-      <Box flex={1} pt={4} bg="white">
-        <Box p={4}>
-          <DailyItem returnFunc={itemClick} item={dynamicInfo} />
-        </Box>
-        <Divider h={2.5} bg="bg.f5" />
-        <Box flex={1}>
-          {giftRankList && giftRankList.length > 0 && (
-            <Box p={4}>
-              <HStack justifyContent={'space-between'} alignItems="center">
-                <Text style={{color: '#323232'}} fontWeight="bold">
-                  礼物榜
-                </Text>
-                <Text style={{color: '#474747'}}>
-                  <Text fontSize={'md'} color="primary.100">
-                    {giftRankList.length}
-                  </Text>
-                  个礼物
-                </Text>
-              </HStack>
-              <ScrollView
-                horizontal
-                contentContainerStyle={{
-                  paddingVertical: 20,
+      <ScrollView showsVerticalScrollIndicator={false} py={4} bg="white">
+        <AlertDialog
+          leastDestructiveRef={cancelRef}
+          isOpen={dialogVisible}
+          onClose={() => setIsDialogShow(false)}>
+          <AlertDialog.Content>
+            <AlertDialog.CloseButton />
+            <AlertDialog.Header>提示</AlertDialog.Header>
+            <AlertDialog.Body
+              justifyContent={'center'}
+              alignItems={'center'}
+              minHeight={98}>
+              您的余额不足，需要去充值吗？
+            </AlertDialog.Body>
+            <AlertDialog.Footer justifyContent={'center'}>
+              <Button
+                colorScheme="blue"
+                onPress={() => {
+                  setIsDialogShow(false);
+                  props.navigation.navigate('Wallet');
                 }}>
-                {giftRankList.map((giftItem: object, giftIndex: number) => (
-                  <VStack key={giftIndex} alignItems={'center'} mr={4}>
-                    <CFastImage
-                      url={giftItem.giveHeadImg}
-                      styles={{
-                        width: 46,
-                        height: 46,
-                        borderRadius: 46,
-                      }}
-                    />
-                    <HStack mt={2} alignItems="center">
-                      {giftIndex === 0 ? (
-                        <Image
-                          style={styles.rankIcon}
-                          alt="rank_ico"
-                          source={require('../../images/rank_first.png')}
-                        />
-                      ) : null}
-                      {giftIndex === 1 ? (
-                        <Image
-                          style={styles.rankIcon}
-                          alt="rank_ico"
-                          source={require('../../images/rank_second.png')}
-                        />
-                      ) : null}
-                      {giftIndex === 2 ? (
-                        <Image
-                          style={styles.rankIcon}
-                          alt="rank_ico"
-                          source={require('../../images/rank_third.png')}
-                        />
-                      ) : null}
-                      <Text fontSize={'sm'} style={{color: '#4E4E4E'}}>
-                        {giftItem.giveNickName}
-                      </Text>
-                    </HStack>
-                  </VStack>
-                ))}
-              </ScrollView>
-            </Box>
+                去充值
+              </Button>
+            </AlertDialog.Footer>
+          </AlertDialog.Content>
+        </AlertDialog>
+        <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+          {isFlag ? (
+            <Actionsheet.Content
+              style={{
+                backgroundColor: '#1f2937',
+                borderRadius: 40,
+              }}>
+              <Gifts
+                clickItem={(giftItem: object) => {
+                  onClose();
+                  presentGift(giftItem, dynamicInfo.userId, dynamicInfo.id);
+                }}
+              />
+            </Actionsheet.Content>
+          ) : (
+            <Actionsheet.Content>
+              <Box w={'100%'} h={500} py={4}>
+                <Gift />
+              </Box>
+            </Actionsheet.Content>
           )}
-          <Tab />
+        </Actionsheet>
+        <Box flex={1} pt={0} bg="white">
+          <Box p={4}>
+            <DailyItem returnFunc={itemClick} item={dynamicInfo} />
+          </Box>
+          <Divider h={2.5} bg="bg.f5" />
+          <Box flex={1}>
+            {giftRankList && giftRankList.length > 0 && (
+              <Box p={4}>
+                <HStack justifyContent={'space-between'} alignItems="center">
+                  <Text style={{color: '#323232'}} fontWeight="bold">
+                    礼物榜
+                  </Text>
+                  <Pressable
+                    onPress={() => {
+                      setIsFlag(false);
+                      onOpen();
+                    }}
+                    style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text style={{color: '#474747'}}>礼物列表</Text>
+                    <Icon name="right" size={16} color="#000" />
+                  </Pressable>
+                </HStack>
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={{
+                    paddingVertical: 20,
+                  }}>
+                  {giftRankList.map((giftItem: object, giftIndex: number) => (
+                    <VStack key={giftIndex} alignItems={'center'} mr={4}>
+                      <CFastImage
+                        url={giftItem.giveHeadImg}
+                        styles={{
+                          width: 46,
+                          height: 46,
+                          borderRadius: 46,
+                        }}
+                      />
+                      <HStack mt={2} alignItems="center">
+                        {giftIndex === 0 ? (
+                          <Image
+                            style={styles.rankIcon}
+                            alt="rank_ico"
+                            source={require('../../images/rank_first.png')}
+                          />
+                        ) : null}
+                        {giftIndex === 1 ? (
+                          <Image
+                            style={styles.rankIcon}
+                            alt="rank_ico"
+                            source={require('../../images/rank_second.png')}
+                          />
+                        ) : null}
+                        {giftIndex === 2 ? (
+                          <Image
+                            style={styles.rankIcon}
+                            alt="rank_ico"
+                            source={require('../../images/rank_third.png')}
+                          />
+                        ) : null}
+                        <Text fontSize={'sm'} style={{color: '#4E4E4E'}}>
+                          {giftItem.giveNickName}
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  ))}
+                </ScrollView>
+              </Box>
+            )}
+          </Box>
+          <Divider h={2.5} bg="bg.f5" />
+          <Box flex={1} my={4}>
+            <Comment dynamicId={dynamicId} />
+          </Box>
         </Box>
-      </Box>
-      <ChatBox
-        pressCb={(data: commentProp) => {
-          if (data.type === 'text') {
-            commentDy(data, dynamicInfo.id);
-          } else {
-            onOpen();
-          }
-        }}
-      />
+      </ScrollView>
+
+      {replyFlag ? (
+        <ChatBox
+          pressCb={(data: Object) => {
+            comment(data, dynamicInfo.id, replyFlag.id);
+          }}
+        />
+      ) : (
+        <ChatBox
+          pressCb={(data: commentProp) => {
+            if (data.type === 'text') {
+              commentDy(data, dynamicInfo.id);
+            } else {
+              setIsFlag(true);
+              onOpen();
+            }
+          }}
+        />
+      )}
     </DailyDetailContext.Provider>
   );
 };

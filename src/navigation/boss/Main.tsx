@@ -103,7 +103,7 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          title: '动态详情',
+          title: '详情',
           headerBackTitle: '动态',
         }}
         name="DailyDetail"

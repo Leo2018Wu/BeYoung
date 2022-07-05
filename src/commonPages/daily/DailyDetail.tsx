@@ -10,38 +10,85 @@ import {
   Divider,
   ScrollView,
   Pressable,
+  Actionsheet,
+  useDisclose,
 } from 'native-base';
-import {useWindowDimensions, DeviceEventEmitter} from 'react-native';
-import Tab from './DailyTab';
+import {
+  useWindowDimensions,
+  DeviceEventEmitter,
+  StyleSheet,
+} from 'react-native';
 import {BASE_DOWN_URL} from '../../util/config';
 import CFastImage from '../../components/CFastImage';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
 import useRequest from '../../hooks/useRequest';
-import {commentDynamic} from '../../api/daily';
+import {commentDynamic, fetchDynamic} from '../../api/daily';
+import {queryDynamicGiftRank, queryGiftGiving} from '../../api/gift';
 import Icon from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
+import Comment from '../../commonPages/daily/Comment';
+import Gifts from '../../commonPages/daily/Gift';
 
 const Index = ({...props}) => {
-  const {item} = props.route.params;
-  console.log('-1-props-1-', props, item.id);
+  const {dynamicId} = props.route.params;
+  const [dynamicInfo, setDynamic] = useState({});
+  const {isOpen, onOpen, onClose} = useDisclose();
   const {width} = useWindowDimensions();
   const IMG_ITEM_WIDTH = (width - 60) / 3;
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
   const [imgList, setImgList] = useState([]);
   const [replyFlag, setReplyFlag] = useState(false);
+  const [giftGivingList, setGiftGivingList] = useState(0);
+  const {run: runGetDynamic} = useRequest(fetchDynamic.url);
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
+  const {run: runGiftGivingList} = useRequest(queryGiftGiving.url);
+  const {result: giftRankList} = useRequest(
+    queryDynamicGiftRank.url,
+    {
+      dynamicId, //动态ID
+      pageNum: 1,
+      pageSize: 10, //每页大小
+      orders: [
+        {
+          column: 'totalCoin',
+          dir: 'desc',
+          chinese: false,
+        },
+      ],
+    },
+    {manual: false},
+  );
 
   useEffect(() => {
-    AsyncStorage.setItem('DYNAMIC_ID', item.id);
-    if (item.images && JSON.parse(item.images).length) {
-      setImgList(JSON.parse(item.images));
-    }
-    DeviceEventEmitter.addListener('REPLY_FLAG', res => {
-      setReplyFlag(res);
-      DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
-    });
+    getDynamic();
   }, []);
+
+  const getDynamic = async () => {
+    try {
+      const {data} = await runGetDynamic({dynamicId});
+      setDynamic(data);
+      AsyncStorage.setItem('DYNAMIC_ID', data.id);
+      if (data.images && JSON.parse(data.images).length) {
+        setImgList(JSON.parse(data.images));
+      }
+      DeviceEventEmitter.addListener('REPLY_FLAG', res => {
+        setReplyFlag(res);
+        DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // useEffect(async () => {
+  //   const {data, success} = await runGiftGivingList({
+  //     dynamicId,
+  //   });
+  //   if (success) {
+  //     setGiftGivingList(data);
+  //   }
+  // }, []);
 
   const comment = async (data: Object, dynamicId: string, replyId: string) => {
     if (data.type === 'text') {
@@ -66,12 +113,12 @@ const Index = ({...props}) => {
   };
 
   return (
-    <DailyDetailContext.Provider value={item}>
-      <ScrollView contentContainerStyle={{flex: 1}} py={4} bg="white">
+    <DailyDetailContext.Provider value={dynamicId}>
+      <ScrollView showsVerticalScrollIndicator={false} py={4} bg="white">
         <Box px={5} pb={4}>
           <HStack alignItems="center">
             <CFastImage
-              url={item.headImg}
+              url={dynamicInfo.headImg}
               styles={{width: 50, height: 50, borderRadius: 50}}
             />
             <VStack flex={1} mr={'auto'} ml={2} justifyContent={'space-around'}>
@@ -80,14 +127,14 @@ const Index = ({...props}) => {
                 style={{
                   color: '#8E8895',
                 }}>
-                {item.nickName}
+                {dynamicInfo.nickName}
               </Text>
               <Text
                 fontSize={'xs'}
                 style={{
                   color: '#C7C4CC',
                 }}>
-                {item.createTime}
+                {dynamicInfo.createTime}
               </Text>
             </VStack>
           </HStack>
@@ -112,7 +159,7 @@ const Index = ({...props}) => {
                 ))}
             </HStack>
             <Text fontSize={'md'} color={'fontColors._72'}>
-              {item.content}
+              {dynamicInfo.content}
             </Text>
           </View>
           <Stack space={2} pt={2} direction={'row'} alignItems={'center'}>
@@ -123,7 +170,7 @@ const Index = ({...props}) => {
                 color={false ? '#9650FF' : '#C7C4CC'}
               />
               <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-                {item.likeNum}
+                {dynamicInfo.likeNum}
               </Text>
             </HStack>
             <HStack alignItems={'center'}>
@@ -133,7 +180,7 @@ const Index = ({...props}) => {
                 color={false ? '#9650FF' : '#C7C4CC'}
               />
               <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-                {item.commentNum}
+                {dynamicInfo.commentNum}
               </Text>
             </HStack>
             <HStack alignItems={'center'}>
@@ -143,20 +190,89 @@ const Index = ({...props}) => {
                 color={false ? '#9650FF' : '#C7C4CC'}
               />
               <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
-                {item.giftNum}
+                {dynamicInfo.giftNum}
               </Text>
             </HStack>
           </Stack>
         </Box>
         <Divider h={2.5} bg="bg.f5" />
+        <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+          <Actionsheet.Content>
+            <Box w={'100%'} h={500} py={4}>
+              <Gifts />
+            </Box>
+          </Actionsheet.Content>
+        </Actionsheet>
         <Box flex={1}>
-          <Tab />
+          {giftRankList && giftRankList.length > 0 && (
+            <Box p={4}>
+              <HStack justifyContent={'space-between'} alignItems="center">
+                <Text style={{color: '#323232'}} fontWeight="bold">
+                  礼物榜
+                </Text>
+                <Pressable
+                  onPress={() => onOpen()}
+                  style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <Text style={{color: '#474747'}}>礼物列表</Text>
+                  <Icon name="right" size={16} color="#000" />
+                </Pressable>
+              </HStack>
+              <ScrollView
+                horizontal
+                contentContainerStyle={{
+                  paddingVertical: 20,
+                }}>
+                {giftRankList.map((giftItem: object, giftIndex: number) => (
+                  <VStack key={giftIndex} alignItems={'center'} mr={4}>
+                    <CFastImage
+                      url={giftItem.giveHeadImg}
+                      styles={{
+                        width: 46,
+                        height: 46,
+                        borderRadius: 46,
+                      }}
+                    />
+                    <HStack mt={2} alignItems="center">
+                      {giftIndex === 0 ? (
+                        <Image
+                          style={styles.rankIcon}
+                          alt="rank_ico"
+                          source={require('../../images/rank_first.png')}
+                        />
+                      ) : null}
+                      {giftIndex === 1 ? (
+                        <Image
+                          style={styles.rankIcon}
+                          alt="rank_ico"
+                          source={require('../../images/rank_second.png')}
+                        />
+                      ) : null}
+                      {giftIndex === 2 ? (
+                        <Image
+                          style={styles.rankIcon}
+                          alt="rank_ico"
+                          source={require('../../images/rank_third.png')}
+                        />
+                      ) : null}
+                      <Text fontSize={'sm'} style={{color: '#4E4E4E'}}>
+                        {giftItem.giveNickName}
+                      </Text>
+                    </HStack>
+                  </VStack>
+                ))}
+              </ScrollView>
+            </Box>
+          )}
+        </Box>
+        <Divider h={2.5} bg="bg.f5" />
+        <Box flex={1} my={4}>
+          <Comment dynamicId={dynamicId} />
         </Box>
       </ScrollView>
       {replyFlag ? (
         <ChatBox
           pressCb={(data: Object) => {
-            comment(data, item.id, replyFlag.id);
+            comment(data, dynamicInfo.id, replyFlag.id);
           }}
         />
       ) : null}
@@ -164,3 +280,11 @@ const Index = ({...props}) => {
   );
 };
 export default Index;
+
+const styles = StyleSheet.create({
+  rankIcon: {
+    width: 16,
+    height: 22,
+    marginRight: 4,
+  },
+});

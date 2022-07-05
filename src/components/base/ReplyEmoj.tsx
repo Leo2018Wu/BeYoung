@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {ActivityIndicator} from 'react-native';
 import {Box, Center, HStack, Pressable, Text, ScrollView} from 'native-base';
 import {connect} from 'react-redux';
 import useRequest from '../../hooks/useRequest';
@@ -14,6 +15,7 @@ const Index = ({...props}) => {
   const {width} = useWindowDimensions();
   const GIFT_ITEM_WiIDTH = (width - 16) / 4;
   const [myMedia, setMyMedia] = useState([]);
+  const [flag, setFlag] = useState(true);
 
   const {run: runFetchMyMedia, result} = useRequest(fetchMyMedia.url);
 
@@ -35,6 +37,7 @@ const Index = ({...props}) => {
   useEffect(() => {
     if (result) {
       setMyMedia(result);
+      setFlag(false);
     }
   }, [result]);
 
@@ -45,6 +48,21 @@ const Index = ({...props}) => {
   const closeItem = () => {
     props.closeItem();
   };
+
+  if (flag) {
+    return (
+      <ActivityIndicator
+        size="large"
+        color="#0000ff"
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '30%',
+        }}
+      />
+    );
+  }
 
   return (
     <>

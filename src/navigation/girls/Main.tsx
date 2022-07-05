@@ -26,6 +26,7 @@ import MineGifts from '../../girlsPages/mine/MineGifts';
 import Follow from '../../girlsPages/mine/Follow';
 import About from '../../commonPages/About';
 import Protocol from '../../commonPages/Protocol';
+import MineComment from '../../girlsPages/mine/MineComment';
 
 const Stack = createNativeStackNavigator();
 
@@ -46,7 +47,7 @@ const MyStack = () => {
         name="DailyDetail"
         component={DailyDetail}
         options={() => ({
-          title: '动态详情',
+          title: '详情',
           headerStyle: {backgroundColor: '#fff'},
         })}
       />
@@ -222,6 +223,14 @@ const MyStack = () => {
         }}
         name="Protocol"
         component={Protocol}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          headerBackVisible: true,
+        }}
+        name="MineComment"
+        component={MineComment}
       />
     </Stack.Navigator>
   );

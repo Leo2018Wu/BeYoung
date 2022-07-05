@@ -1,10 +1,10 @@
 import React from 'react';
 import {HStack, Box, Text, VStack} from 'native-base';
-import CFastImage from '../../../components/CFastImage';
-import CustomFuncFlatList from '../../../components/CustomFuncFlatList';
-import {queryGiftGiving} from '../../../api/gift';
-import DailyDetailContext from '../../../commonPages/daily/context';
-import {BASE_DOWN_URL} from '../../../util/config';
+import CFastImage from '../../components/CFastImage';
+import CustomFuncFlatList from '../../components/CustomFuncFlatList';
+import {queryGiftGiving} from '../../api/gift';
+import DailyDetailContext from './context';
+import {BASE_DOWN_URL} from '../../util/config';
 interface ItemProps {
   content: string;
   delFlag: boolean;
@@ -92,7 +92,7 @@ const Index = () => {
               <CustomFuncFlatList
                 url={queryGiftGiving.url}
                 par={{
-                  dynamicId: value?.id,
+                  dynamicId: value,
                 }}
                 renderItem={({item}: {item: ItemProps}) => <Item item={item} />}
               />
