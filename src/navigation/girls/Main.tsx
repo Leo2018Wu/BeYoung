@@ -47,7 +47,7 @@ const MyStack = () => {
         name="DailyDetail"
         component={DailyDetail}
         options={() => ({
-          title: '动态详情',
+          title: '详情',
           headerStyle: {backgroundColor: '#fff'},
         })}
       />

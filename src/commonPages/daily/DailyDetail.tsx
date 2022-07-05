@@ -81,14 +81,14 @@ const Index = ({...props}) => {
     }
   };
 
-  useEffect(async () => {
-    const {data, success} = await runGiftGivingList({
-      dynamicId,
-    });
-    if (success) {
-      setGiftGivingList(data);
-    }
-  }, []);
+  // useEffect(async () => {
+  //   const {data, success} = await runGiftGivingList({
+  //     dynamicId,
+  //   });
+  //   if (success) {
+  //     setGiftGivingList(data);
+  //   }
+  // }, []);
 
   const comment = async (data: Object, dynamicId: string, replyId: string) => {
     if (data.type === 'text') {
@@ -213,13 +213,7 @@ const Index = ({...props}) => {
                 <Pressable
                   onPress={() => onOpen()}
                   style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Text style={{color: '#474747'}}>
-                    共
-                    <Text fontSize={'md'} color="primary.100">
-                      {giftGivingList.length}
-                    </Text>
-                    个礼物
-                  </Text>
+                  <Text style={{color: '#474747'}}>礼物列表</Text>
                   <Icon name="right" size={16} color="#000" />
                 </Pressable>
               </HStack>

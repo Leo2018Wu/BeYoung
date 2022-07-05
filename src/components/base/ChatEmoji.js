@@ -6,6 +6,7 @@ import ReplyEmoj from './ReplyEmoj';
 
 import emojiObj from '../../res/emoji';
 import {TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {useSelector} from 'react-redux';
 
 const genEmojiList = (type, emojiList) => {
   const result = {};
@@ -36,6 +37,7 @@ const genEmojiList = (type, emojiList) => {
 const Index = ({onSelectEmoji, onSelectPackage}) => {
   const [emojisMap, setEmojisMap] = useState([]);
   const [activitIndex, setActivitIndex] = useState(0);
+  const userInfo = useSelector(state => state.user.myUserInfo);
 
   useEffect(() => {
     setEmojisMap(genEmojiList('emoji', emojiObj.emojiList));
@@ -54,26 +56,30 @@ const Index = ({onSelectEmoji, onSelectPackage}) => {
           ]}>
           <FontAwesome5 name="smile" size={28} color="#000000" />
         </Pressable>
-        <Pressable
-          onPress={() => setActivitIndex(1)}
-          style={[
-            styles.defStyle,
-            activitIndex === 1
-              ? {backgroundColor: '#fff'}
-              : {backgroundColor: '#F7F7F9'},
-          ]}>
-          <Icons name="hearto" size={26} color="#000000" />
-        </Pressable>
-        <Pressable
-          onPress={() => setActivitIndex(2)}
-          style={[
-            styles.defStyle,
-            activitIndex === 2
-              ? {backgroundColor: '#fff'}
-              : {backgroundColor: '#F7F7F9'},
-          ]}>
-          <Icons name="staro" size={28} color="#000000" />
-        </Pressable>
+        {userInfo.gender === 'GENDER_MALE' ? null : (
+          <>
+            <Pressable
+              onPress={() => setActivitIndex(1)}
+              style={[
+                styles.defStyle,
+                activitIndex === 1
+                  ? {backgroundColor: '#fff'}
+                  : {backgroundColor: '#F7F7F9'},
+              ]}>
+              <Icons name="hearto" size={26} color="#000000" />
+            </Pressable>
+            <Pressable
+              onPress={() => setActivitIndex(2)}
+              style={[
+                styles.defStyle,
+                activitIndex === 2
+                  ? {backgroundColor: '#fff'}
+                  : {backgroundColor: '#F7F7F9'},
+              ]}>
+              <Icons name="staro" size={28} color="#000000" />
+            </Pressable>
+          </>
+        )}
       </View>
       <ScrollView bg={'bg.f5'} showsVerticalScrollIndicator px={2}>
         <HStack justifyContent={'space-between'} flexWrap={'wrap'}>

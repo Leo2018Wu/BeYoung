@@ -88,6 +88,7 @@ const areEqual = (pre: any, next: any) => {
 };
 
 const Item = React.memo(({ item }: { item: ItemProps }) => {
+
   const { isOpen, onOpen, onClose } = useDisclose();
   const [replyId, setReplyId] = useState(null);
   const [itemId, setItemId] = useState(null);
@@ -131,6 +132,16 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
             }}>
             {item.replies[index].nickName}
           </Text>
+          {item.replies[index].userId === userInfo.id && <Box
+            borderRadius={3}
+            px={1.5}
+            alignSelf={'center'}
+            py={0.5}
+            bg="primary.100">
+            <Text fontSize={'2xs'} color="white">
+              自己
+            </Text>
+          </Box>}
         </>
       );
     }
@@ -225,14 +236,15 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                           ml={2}
                           justifyContent={'space-between'}>
                           <HStack>
+                            <Text
+                              fontSize={'md'}
+                              style={{
+                                color: '#8E8895',
+                              }}>
+                              {item1.nickName || '青回'}
+                            </Text>
                             {item1.userId !== userInfo.id ? (
-                              <Text
-                                fontSize={'md'}
-                                style={{
-                                  color: '#8E8895',
-                                }}>
-                                {item1.nickName || '青回'}
-                              </Text>
+                              null
                             ) : (
                               <Box
                                 borderRadius={3}
@@ -270,7 +282,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                           }}
                         />
                       ) : null}
-                      {item1.userId !== userInfo.id ? (
+                      {item.updateUserId === userInfo.id && item1.userId !== userInfo.id ? (
                         <Pressable
                           onPress={() => setComment(item1)}
                           style={{ marginLeft: 56, width: 30, marginTop: 10 }}>
@@ -297,8 +309,8 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
               }}
             />}
           </Box>
-        </Actionsheet.Content>
-      </Actionsheet>
+        </Actionsheet.Content >
+      </Actionsheet >
       <HStack mb={2} alignItems="center">
         <CFastImage
           url={item.headImg}
@@ -328,41 +340,43 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
         </VStack>
       </HStack>
       <GenContent showText={item.content} />
-      {item.images &&
-        JSON.parse(item.images).length &&
-        JSON.parse(item.images)[0].length ? (
-        <CFastImage
-          url={JSON.parse(item.images)[0]}
-          styles={{
-            width: 80,
-            height: 80,
-            borderRadius: 10,
-            marginLeft: 48,
-          }}
-        />
-      ) : null}
-      {item.replies.length
-        ? item.replies.map((item1, index) => {
-          return (
-            <>
-              {index < 3 ? (
-                <Box mt={4} ml={10} width={'80%'}>
-                  <HStack mb={2} alignItems="center">
-                    <CFastImage
-                      url={item1.headImg}
-                      styles={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: 20,
-                      }}
-                    />
-                    <VStack
-                      flex={1}
-                      mr={'auto'}
-                      ml={2}
-                      justifyContent={'space-between'}>
-                      <HStack>
-                        {item1.userId !== userInfo.id ? (
+      {
+        item.images &&
+          JSON.parse(item.images).length &&
+          JSON.parse(item.images)[0].length ? (
+          <CFastImage
+            url={JSON.parse(item.images)[0]}
+            styles={{
+              width: 80,
+              height: 80,
+              borderRadius: 10,
+              marginLeft: 48,
+            }}
+          />
+        ) : null
+      }
+      {
+        item.replies.length
+          ? item.replies.map((item1, index) => {
+            return (
+              <>
+                {index < 3 ? (
+                  <Box mt={4} ml={10} width={'80%'}>
+                    <HStack mb={2} alignItems="center">
+                      <CFastImage
+                        url={item1.headImg}
+                        styles={{
+                          width: 30,
+                          height: 30,
+                          borderRadius: 20,
+                        }}
+                      />
+                      <VStack
+                        flex={1}
+                        mr={'auto'}
+                        ml={2}
+                        justifyContent={'space-between'}>
+                        <HStack>
                           <Text
                             fontSize={'md'}
                             style={{
@@ -370,72 +384,76 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                             }}>
                             {item1.nickName || '青回'}
                           </Text>
-                        ) : (
-                          <Box
-                            borderRadius={3}
-                            px={1.5}
-                            alignSelf={'center'}
-                            py={0.5}
-                            bg="primary.100">
-                            <Text fontSize={'2xs'} color="white">
-                              自己
-                            </Text>
-                          </Box>
-                        )}
-                        {getUserName(item1.replyId)}
-                      </HStack>
-                      <Text
-                        fontSize={'xs'}
-                        style={{
-                          color: '#C7C4CC',
-                        }}>
-                        {item1.createTime}
-                      </Text>
-                    </VStack>
-                  </HStack>
-                  <GenContent showText={item1.content} />
-                  {item1.images &&
-                    JSON.parse(item1.images).length &&
-                    JSON.parse(item1.images)[0].length ? (
-                    <CFastImage
-                      url={JSON.parse(item1.images)[0]}
-                      styles={{
-                        width: 80,
-                        height: 80,
-                        borderRadius: 10,
-                        marginLeft: 48,
-                      }}
-                    />
-                  ) : null}
-                  {item1.userId !== userInfo.id ? (
-                    <Pressable
-                      onPress={() => setReply(item1)}
-                      style={{ marginLeft: 56, width: 30, marginTop: 10 }}>
-                      <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-                        回复
-                      </Text>
-                    </Pressable>
-                  ) : null}
-                </Box>
-              ) : null}
-            </>
-          );
-        })
-        : null}
-      {item.replies.length > 3 ? (
-        <Pressable onPress={() => onOpen()} style={{ alignItems: 'center', flex: 1 }}>
-          <Text color={'#06B4FD'}>查看全部></Text>
-        </Pressable>
-      ) :
-        <Pressable
-          onPress={() => setReply(item)}
-          style={{ marginLeft: 56, width: 30, marginTop: 10 }}>
-          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-            回复
-          </Text>
-        </Pressable>
+                          {item1.userId !== userInfo.id ? (
+                            null
+                          ) : (
+                            <Box
+                              borderRadius={3}
+                              px={1.5}
+                              alignSelf={'center'}
+                              py={0.5}
+                              bg="primary.100">
+
+                              <Text fontSize={'2xs'} color="white">
+                                自己
+                              </Text>
+                            </Box>
+                          )}
+                          {getUserName(item1.replyId)}
+                        </HStack>
+                        <Text
+                          fontSize={'xs'}
+                          style={{
+                            color: '#C7C4CC',
+                          }}>
+                          {item1.createTime}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                    <GenContent showText={item1.content} />
+                    {item1.images &&
+                      JSON.parse(item1.images).length &&
+                      JSON.parse(item1.images)[0].length ? (
+                      <CFastImage
+                        url={JSON.parse(item1.images)[0]}
+                        styles={{
+                          width: 80,
+                          height: 80,
+                          borderRadius: 10,
+                          marginLeft: 48,
+                        }}
+                      />
+                    ) : null}
+                    {item.updateUserId === userInfo.id && item1.userId !== userInfo.id ? (
+                      <Pressable
+                        onPress={() => setReply(item1)}
+                        style={{ marginLeft: 56, width: 30, marginTop: 10 }}>
+                        <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                          回复
+                        </Text>
+                      </Pressable>
+                    ) : null}
+                  </Box>
+                ) : null}
+              </>
+            );
+          })
+          : null
       }
-    </Box>
+      {
+        item.updateUserId === userInfo.id ? (
+          item.replies.length > 3 ? <Pressable onPress={() => onOpen()} style={{ alignItems: 'center', flex: 1 }}>
+            <Text color={'#06B4FD'}>查看全部></Text>
+          </Pressable> : <Pressable
+            onPress={() => setReply(item)}
+            style={{ marginLeft: 56, width: 30, marginTop: 10 }}>
+            <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+              回复
+            </Text>
+          </Pressable>
+        ) : null
+      }
+    </Box >
   );
 }, areEqual);
 
@@ -446,7 +464,7 @@ const Index = ({ ...props }) => {
   const [params, setParams] = useState({
     dynamicId,
     pageNum: 1, //分页页码
-    pageSize: 10, //每页大小
+    pageSize: 100, //每页大小
     orders: [
       {
         column: 'likeNum',
@@ -482,8 +500,6 @@ const Index = ({ ...props }) => {
   const _getList = async () => {
     try {
       const data = await runQueryComment(params);
-      console.log('--data--', data);
-
       _dealData(data);
     } catch (error) {
       // 错误信息 比如网络错误
