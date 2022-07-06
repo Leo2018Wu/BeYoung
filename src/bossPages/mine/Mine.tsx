@@ -65,12 +65,24 @@ const Home = ({...props}) => {
   const userInfo = props.userInfo;
   const [unread, setUnread] = useState({});
   const {run: runFetchUnreadComment} = useRequest(fetchUnreadComment.url);
+  const [numInfo, setNumInfo] = useState(null);
+  const {run: runFetchStatistic} = useRequest(fetchStatistic.url);
 
   useFocusEffect(
     useCallback(() => {
       getUnreadComment();
+      getNumInfo();
     }, []),
   );
+
+  const getNumInfo = async () => {
+    try {
+      const {data} = await runFetchStatistic({userId: userInfo.id});
+      setNumInfo(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // 获取未读评论/回复数
   const getUnreadComment = async () => {
@@ -83,11 +95,6 @@ const Home = ({...props}) => {
   const jumpPage = (routeName: String) => {
     props.navigation.navigate(routeName);
   };
-  const {result: numInfo} = useRequest(
-    fetchStatistic.url,
-    {userId: userInfo.id},
-    fetchStatistic.options,
-  );
 
   return (
     <Box flex={1}>
