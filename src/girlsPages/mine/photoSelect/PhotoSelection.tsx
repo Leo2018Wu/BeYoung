@@ -13,9 +13,8 @@ const Login = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
   const [list, setList] = useState([]);
-  const [keyData, setKeyData] = useState(0);
 
-  const {result: sysDicts} = useRequest(
+  const {run: runSysDicts} = useRequest(
     querySysDic.url,
     {
       pCode: 'SCENE',
@@ -23,23 +22,24 @@ const Login = () => {
     querySysDic.options,
   );
 
-  useEffect(() => {
-    if (sysDicts) {
-      let data = [];
-      sysDicts.forEach(element => {
-        if (element.code != 'SCENE') {
-          data.push(element);
-        }
-      });
-      setList(data);
-    }
-  }, [sysDicts]);
-
   useFocusEffect(
     React.useCallback(() => {
-      setKeyData(Math.random());
+      getSysDicts();
     }, []),
   );
+
+  const getSysDicts = async () => {
+    const {data} = await runSysDicts();
+    if (data) {
+      let data1 = [];
+      data.forEach(element => {
+        if (element.code != 'SCENE') {
+          data1.push(element);
+        }
+      });
+      setList(data1);
+    }
+  };
 
   return (
     <View style={{padding: 15}}>
@@ -82,7 +82,6 @@ const Login = () => {
         </Text>
       </HStack>
       <FlatList
-        key={keyData}
         contentContainerStyle={styles.main}
         data={list}
         onEndReachedThreshold={0.1}

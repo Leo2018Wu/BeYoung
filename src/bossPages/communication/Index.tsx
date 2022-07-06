@@ -45,7 +45,10 @@ function Basic({...props}) {
   useFocusEffect(
     React.useCallback(() => {
       DeviceEventEmitter.addListener('NOTIFICATION', res => {
-        props.navigation.navigate(res);
+        const paramsData = res.pageParam.split('&')[0].split('=')[1];
+        props.navigation.navigate(res.page, {
+          dynamicId: paramsData,
+        });
       });
       const chatUserIds =
         props.listData && props.listData.map((item: any) => item.to);

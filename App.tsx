@@ -43,27 +43,30 @@ const App = () => {
         console.log('registerFail', err);
       });
     AppState.addEventListener('change', _handleAppStateChange);
+    AliyunPush.addListener(handleAliyunPushMessage);
+
+    //移除监听
+    AliyunPush.removeListener(handleAliyunPushMessage);
 
     AliyunPush.setApplicationIconBadgeNumber(0);
     return () => {
       AppState.removeEventListener('change', _handleAppStateChange);
     };
-
-    //移除监听
-    // AliyunPush.removeListener(handleAliyunPushMessage);
   }, []);
 
   const _handleAppStateChange = nextappState => {
     //切换应用或者息屏时nextappState值为background
-    // if (nextappState !== 'active') {
-    // let e = {
-    //   extras: {
-    //     page: 'CommunicateScreen',
-    //   },
-    // };
-    // pushTest(e);
-    AliyunPush.addListener(handleAliyunPushMessage);
-    // }
+    console.log('--nextappState---', nextappState !== 'active');
+
+    if (nextappState !== 'active') {
+      // 当应用在后台的时候
+      // let e = {
+      //   extras: {
+      //     page: 'CommunicateScreen',
+      //   },
+      // };
+      // pushTest(e);
+    }
   };
 
   const handleAliyunPushMessage = e => {
