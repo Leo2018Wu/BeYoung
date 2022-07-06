@@ -1,29 +1,42 @@
 import React, {useCallback, useState} from 'react';
-import {View, Text, Image, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable} from 'react-native';
 import IconNew from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
 import {fetchMyInfo, fetchStatistic} from '../../api/common';
 import {useFocusEffect} from '@react-navigation/native';
 import CFastImage from '../../components/CFastImage';
+import {fetchUnreadComment} from '../../api/daily';
 
 const Index = () => {
   const navigation = useNavigation();
   const {result, run} = useRequest(fetchMyInfo.url);
   const {run: runFetchStatistic} = useRequest(fetchStatistic.url, {});
+  const {run: runFetchUnreadComment} = useRequest(fetchUnreadComment.url);
   const [myStatistic, setMyStatistic] = useState({});
+  const [unread, setUnread] = useState({});
 
   useFocusEffect(
     useCallback(() => {
       run();
       getMyStatistic();
+      getUnreadComment();
     }, []),
   );
 
+  // 获取统计信息
   const getMyStatistic = async () => {
     const {data, success} = await runFetchStatistic();
     if (success) {
       setMyStatistic(data);
+    }
+  };
+
+  // 获取未读评论/回复数
+  const getUnreadComment = async () => {
+    const {data, success} = await runFetchUnreadComment();
+    if (success) {
+      setUnread(data);
     }
   };
 
@@ -33,13 +46,6 @@ const Index = () => {
         <Pressable
           onPress={() => navigation.navigate('UserInfoSetting')}
           style={{alignItems: 'center', marginVertical: 20}}>
-          {/* <Image
-            source={require('../assets/defaultAva.png')}
-            style={{
-              width: 85,
-              height: 85,
-            }}
-          /> */}
           <CFastImage
             url={result?.headImg}
             styles={{width: 85, height: 85, borderRadius: 50}}
@@ -63,7 +69,14 @@ const Index = () => {
         <Pressable
           onPress={() => navigation.navigate('MineComment')}
           style={styles.item}>
-          <Text style={styles.topText}>{myStatistic.replyNum || 0}</Text>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Text style={styles.topText}>{myStatistic.replyNum || 0}</Text>
+            {unread.unreadReply ? (
+              <Text style={{fontSize: 14, color: 'red'}}>
+                +{unread.unreadReply}
+              </Text>
+            ) : null}
+          </View>
           <Text style={styles.btmText}>评论</Text>
         </Pressable>
         <View style={styles.line} />
@@ -110,6 +123,7 @@ const styles = StyleSheet.create({
   item: {
     flex: 1,
     alignItems: 'center',
+    position: 'relative',
   },
   topText: {
     color: '#fff',

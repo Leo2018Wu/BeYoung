@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   Box,
   Divider,
@@ -8,14 +8,17 @@ import {
   Pressable,
   Text,
   VStack,
+  View,
 } from 'native-base';
 import Svg, {Circle, Defs, LinearGradient, Stop} from 'react-native-svg';
+import {useFocusEffect} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/EvilIcons';
 import CFastImage from '../../components/CFastImage';
 import {StyleSheet, useWindowDimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {fetchStatistic} from '../../api/common';
 import useRequest from '../../hooks/useRequest';
+import {fetchUnreadComment} from '../../api/daily';
 
 const link_group1_list = [
   {
@@ -60,6 +63,22 @@ const mapStateToProps = (state: any) => {
 const Home = ({...props}) => {
   const {width} = useWindowDimensions();
   const userInfo = props.userInfo;
+  const [unread, setUnread] = useState({});
+  const {run: runFetchUnreadComment} = useRequest(fetchUnreadComment.url);
+
+  useFocusEffect(
+    useCallback(() => {
+      getUnreadComment();
+    }, []),
+  );
+
+  // 获取未读评论/回复数
+  const getUnreadComment = async () => {
+    const {data, success} = await runFetchUnreadComment();
+    if (success) {
+      setUnread(data);
+    }
+  };
 
   const jumpPage = (routeName: String) => {
     props.navigation.navigate(routeName);
@@ -126,7 +145,14 @@ const Home = ({...props}) => {
               <Text color={'fontColors.gray'} fontSize="xs">
                 评论
               </Text>
-              <Text fontSize={'xl'}>{numInfo?.commentNum}</Text>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text fontSize={'xl'}>{numInfo?.replyNum}</Text>
+                {unread.unreadReply ? (
+                  <Text style={{fontSize: 14, color: 'red'}}>
+                    +{unread.unreadReply}
+                  </Text>
+                ) : null}
+              </View>
             </Pressable>
             <Pressable
               onPress={() => props.navigation.navigate('MineFollow')}

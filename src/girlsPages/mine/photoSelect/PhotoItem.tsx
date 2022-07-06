@@ -7,6 +7,7 @@ import {fetchCase, fetchMyMedia} from '../../../api/photoSelect';
 import useRequest from '../../../hooks/useRequest';
 import {BASE_DOWN_URL} from '../../../util/config';
 import CFastImage from '../../../components/CFastImage';
+import {useFocusEffect} from '@react-navigation/native';
 
 const Login = ({...props}) => {
   const {item} = props;
@@ -16,24 +17,27 @@ const Login = ({...props}) => {
   const [flag, setFlag] = useState(false);
   const [caseImgList, setCaseImgList] = useState([]);
 
-  useEffect(() => {
-    runFetchMyMedia({
+  useFocusEffect(
+    React.useCallback(() => {
+      getMyMedia();
+    }, []),
+  );
+
+  const getMyMedia = async () => {
+    const {data} = await runFetchMyMedia({
       mediaType: 'MEDIA_TYPE_IMAGE', //媒体类型
       scene: item.code, //场景
     });
-  }, []);
-
-  useEffect(() => {
-    if (result) {
-      if (!result.length) {
+    if (data) {
+      if (!data.length) {
         getFetchCase();
       } else {
-        setCaseImgList(result);
-        setCaseImg(result[0].url);
+        setCaseImgList(data);
+        setCaseImg(data[0].url);
         setFlag(true);
       }
     }
-  }, [result]);
+  };
 
   const getFetchCase = async () => {
     const {data} = await runFetchCase({scene: item.code});
