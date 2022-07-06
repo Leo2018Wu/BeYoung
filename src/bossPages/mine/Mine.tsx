@@ -23,11 +23,11 @@ const link_group1_list = [
     icon: require('../../images/mine_link_icon1.png'),
     pageName: 'WeChatNum',
   },
-  // {
-  //   name: '帮助教程',
-  //   icon: require('../../images/mine_link_icon3.png'),
-  //   pageName: '',
-  // },
+  {
+    name: '我的关系',
+    icon: require('../../images/mine_link_icon3.png'),
+    pageName: 'MyRelations',
+  },
 ];
 const link_group2_list = [
   {

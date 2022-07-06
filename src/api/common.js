@@ -145,3 +145,11 @@ export const follow = {
     manual: false,
   },
 };
+
+// 获取系统配置
+export const querySysConfig = {
+  url: 'cgi/core/dic/querySysConfig',
+  options: {
+    manual: false,
+  },
+};

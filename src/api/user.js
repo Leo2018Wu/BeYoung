@@ -45,3 +45,8 @@ export const startRelation = {
   url: 'cgi/core/relation/startRelation',
   options: {},
 };
+// 获取女生热度排行
+export const queryFemaleRank = {
+  url: 'cgi/core/user/queryFemaleRank',
+  options: {},
+};

@@ -15,6 +15,7 @@ import {
   Button,
   View,
   Divider,
+  Toast,
 } from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
@@ -25,7 +26,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRequest from '../../hooks/useRequest';
-import {fetchAccountUser} from '../../api/common';
+import {fetchAccountUser, querySysConfig} from '../../api/common';
+import {queryMyRelation, queryFemaleRank} from '../../api/user';
+import MSlider from '../../components/base/MSlider';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import Intimacy from '../../components/base/Intimacy';
 import {queryDynamic} from '../../api/daily';
@@ -38,8 +41,8 @@ import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
 
 const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
-  let groupMsg: {time: any; msgList: any[]}[] = [];
-  let lastGm: {time: any; msgList: any} | null = null;
+  let groupMsg = [];
+  let lastGm = null;
   msgList.forEach(msg => {
     if (lastGm == null) {
       lastGm = {time: msg[timeKey], msgList: [msg]};
@@ -57,9 +60,9 @@ const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
   return groupMsg;
 };
 
-let _scrollTimer: any;
+let _scrollTimer;
 const BOTTOM_FIXED_HEIGHT = 92; // 底部遮盖拦高度
-const mapStateToProps = (state: any) => {
+const mapStateToProps = state => {
   return {
     relateChatAccount: state.session.relateChatAccount,
     myUserInfo: state.user.myUserInfo,
@@ -82,20 +85,55 @@ const Msgs = ({...props}) => {
   const {run: runGetChatUsers} = useRequest(fetchAccountUser.url);
   const {run: runQueryDynamic} = useRequest(queryDynamic.url);
 
-  const [chatUserInfo, setChatUserInfo] = useState({});
-  const [lastDailyInfo, setDailyInfo] = useState({});
+  const [chatUserInfo, setChatUserInfo] = useState(null);
+  const [needPayChat, setPayChatGirlFlag] = useState(null);
+  const [lastDailyInfo, setDailyInfo] = useState(null);
+  const [levelList, setLevelList] = useState([]);
 
   const {run: runGiveGift} = useRequest(giveGift.url);
+  const {result: girlsHotRanks} = useRequest(
+    queryFemaleRank.url,
+    {pageSize: 10},
+    {manual: false},
+  );
+  const {result: myRelations} = useRequest(
+    queryMyRelation.url,
+    {},
+    {manual: false},
+  );
+  const {result: sysIntimacyGrades} = useRequest(
+    querySysConfig.url,
+    {code: 'INTIMACY_GRADE'},
+    {manual: false},
+  );
+
+  useEffect(() => {
+    if (chatUserInfo && girlsHotRanks) {
+      // 判断该女生是否为需要送礼聊天女生
+      setPayChatGirlFlag(
+        props.relateChatAccount.findIndex(
+          item => item === props.route.params.chatUserId,
+        ) === -1 &&
+          girlsHotRanks.findIndex(item => item.id === chatUserInfo.userId) !==
+            -1,
+      );
+    }
+    if (sysIntimacyGrades && levelList.length <= 0) {
+      setLevelList(JSON.parse(sysIntimacyGrades.value));
+    }
+  }, [sysIntimacyGrades, girlsHotRanks, chatUserInfo]);
 
   useEffect(() => {
     if (chatUserInfo?.userId) {
-      // 获取最新发出的动态
+      // 获取已发动态的最新一条
       getLatestDaily();
     }
   }, [chatUserInfo]);
 
   useEffect(() => {
-    const sameItem = (ele: any) => ele === props.route.params.chatUserId;
+    getData();
+
+    const sameItem = ele => ele === props.route.params.chatUserId;
     if (props.relateChatAccount.findIndex(sameItem) === -1) {
       props.relateChatAccount.push(props.route.params.chatUserId);
       props.dispatch({
@@ -153,7 +191,7 @@ const Msgs = ({...props}) => {
     props.dispatch(setCurrSession({sessionId: props.currentSessionId}));
   };
 
-  const presentGift = async (item: object) => {
+  const presentGift = async item => {
     try {
       const {success, code} = await runGiveGift({
         giftId: item.id,
@@ -177,6 +215,8 @@ const Msgs = ({...props}) => {
           }),
         );
         scrollToEnd();
+        // 送礼完成需要设置送礼聊天flag为false
+        setPayChatGirlFlag(false);
       }
     } catch (error) {
       console.log('presentGift', error);
@@ -192,7 +232,6 @@ const Msgs = ({...props}) => {
   };
 
   useEffect(() => {
-    getData();
     scrollToEnd();
   }, [props.msgs]);
 
@@ -230,6 +269,15 @@ const Msgs = ({...props}) => {
   }, []);
 
   const sendMsg = () => {
+    if (needPayChat) {
+      Toast.show({
+        description: '该女生为送礼解锁聊天用户，请先送礼物！',
+        placement: 'top',
+        duration: 2500,
+      });
+      onOpen();
+      return;
+    }
     props.dispatch(
       sendText({to: props.route.params.chatUserId, text: textValue}),
     );
@@ -238,13 +286,26 @@ const Msgs = ({...props}) => {
   };
 
   const {msgs} = props;
-  if (!chatUserInfo) {
+  if (!chatUserInfo || !myRelations || !levelList) {
     return (
       <Center flex={1}>
         <Spinner size={'lg'} color="primary.100" />
       </Center>
     );
   }
+
+  let curItem; // 当前等级item
+  const curIndex = levelList.findIndex(
+    level =>
+      chatUserInfo.intimacy >= level.start &&
+      chatUserInfo.intimacy <= level.end,
+  );
+  if (curIndex === -1 && chatUserInfo.intimacy > 2000) {
+    curItem = levelList[levelList.length - 1];
+  } else {
+    curItem = levelList[curIndex];
+  }
+
   return (
     <Box bg={'white'} flex={1} style={{paddingBottom: BOTTOM_FIXED_HEIGHT}}>
       <AlertDialog
@@ -314,30 +375,7 @@ const Msgs = ({...props}) => {
                 }}>
                 <Intimacy num={chatUserInfo?.intimacy} />
               </Box>
-            ) : //   <View>
-            //   <Text fontSize={'xs'} textAlign={'center'} color={'#fff'}>
-            //     亲密度{chatUserInfo[0]?.intimacy}
-            //   </Text>
-            // </View>
-            null}
-            {/* <Pressable
-              onPress={() =>
-                props.navigation.navigate('HomeDetail', {
-                  userId: chatUserInfo[0]?.userId,
-                })
-              }
-              h={'full'}
-              justifyContent="center"
-              w={10}>
-              <CFastImage
-                url={chatUserInfo[0]?.headImg || ''}
-                styles={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: 14,
-                }}
-              />
-            </Pressable> */}
+            ) : null}
           </HStack>
         </Box>
       </LinearGradient>
@@ -348,7 +386,7 @@ const Msgs = ({...props}) => {
             borderRadius: 40,
           }}>
           <Gifts
-            clickItem={(item: object) => {
+            clickItem={item => {
               onClose();
               presentGift(item);
             }}
@@ -383,22 +421,20 @@ const Msgs = ({...props}) => {
             ) : null}
             <HStack mt={2} justifyContent={'space-around'} overflow="hidden">
               {lastDailyInfo?.images
-                ? JSON.parse(lastDailyInfo.images).map(
-                    (item: string, index: number) => {
-                      return index <= 2 ? (
-                        <Box key={index}>
-                          <CFastImage
-                            url={item}
-                            styles={{
-                              width: 60,
-                              height: 60,
-                              borderRadius: 8,
-                            }}
-                          />
-                        </Box>
-                      ) : null;
-                    },
-                  )
+                ? JSON.parse(lastDailyInfo.images).map((item, index) => {
+                    return index <= 2 ? (
+                      <Box key={index}>
+                        <CFastImage
+                          url={item}
+                          styles={{
+                            width: 60,
+                            height: 60,
+                            borderRadius: 8,
+                          }}
+                        />
+                      </Box>
+                    ) : null;
+                  })
                 : null}
             </HStack>
             <Divider mt={3} mb={2} />
@@ -415,8 +451,42 @@ const Msgs = ({...props}) => {
             </HStack>
           </Pressable>
         ) : null}
+        {/* 亲密度区域begin */}
+        <View alignItems={'center'}>
+          <HStack py={4} alignItems={'flex-end'}>
+            <View alignItems={'center'} style={{width: 80}}>
+              <Text fontSize={'md'} style={{color: '#424243'}}>
+                LV{curItem.level}
+              </Text>
+              <Text fontSize={'xs'} style={{color: '#BBBBBB'}}>
+                目前等级
+              </Text>
+            </View>
+            <View justifyContent={'center'} style={{width: 140}}>
+              <Text fontWeight={'bold'} mb={2} alignSelf={'center'}>
+                亲密度{chatUserInfo.intimacy}
+              </Text>
+              <MSlider
+                size="md"
+                start={curItem.start}
+                end={curItem.end}
+                currentNum={chatUserInfo.intimacy}
+              />
+            </View>
+            <View alignItems={'center'} style={{width: 80}}>
+              <Text fontSize={'md'} style={{color: '#424243'}}>
+                {curItem.reward}
+              </Text>
+              <Text fontSize={'xs'} style={{color: '#BBBBBB'}}>
+                升级奖励
+              </Text>
+            </View>
+          </HStack>
+          <Divider />
+        </View>
+        {/* 亲密度区域end */}
         <ScrollView
-          ref={(e: object) => {
+          ref={e => {
             scrollRef.current = e;
             scrollToEnd();
           }}
@@ -428,7 +498,7 @@ const Msgs = ({...props}) => {
           mb={5}
           flex={1}>
           {genMsgs(msgs) &&
-            genMsgs(msgs).map((item: any, index: any) => {
+            genMsgs(msgs).map((item, index) => {
               return (
                 <Box key={index}>
                   {util.formatTime(item.time) && (
@@ -442,7 +512,7 @@ const Msgs = ({...props}) => {
                       {util.formatTime(item.time)}
                     </Text>
                   )}
-                  {item.msgList.map((ele: any, idx: number) => (
+                  {item.msgList.map((ele, idx) => (
                     <Box key={idx} mb={4}>
                       {ele.flow === 'in' && (
                         <ChatLeft
@@ -503,7 +573,7 @@ const Msgs = ({...props}) => {
               </Pressable>
             ) : null}
             <Input
-              ref={(e: object) => (inputRef.current = e)}
+              ref={e => (inputRef.current = e)}
               multiline
               enablesReturnKeyAutomatically={true}
               returnKeyType="send"
@@ -543,7 +613,7 @@ const Msgs = ({...props}) => {
               }}
               justifyContent={'center'}>
               <ChatEmoji
-                onSelectEmoji={(key: string) => {
+                onSelectEmoji={key => {
                   setValue(`${textValue + key}`);
                 }}
               />

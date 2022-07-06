@@ -9,6 +9,7 @@ import EditUser from '../../bossPages/setting/EditUser';
 import Service from '../../bossPages/customService/Index';
 import WeChatNum from '../../bossPages/weChatNum/Index';
 import SceneAlbum from '../../bossPages/sceneAlbum/Index';
+import MyRelations from '../../bossPages/myRelations/Index';
 import Session from '../../bossPages/communication/Session';
 import Wallet from '../../bossPages/wallet/Wallet';
 import TransferDetail from '../../bossPages/wallet/TransferDetail';
@@ -100,6 +101,13 @@ const MyStack = () => {
         }}
         name="Preview"
         component={Preview}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="MyRelations"
+        component={MyRelations}
       />
       <Stack.Screen
         options={{
