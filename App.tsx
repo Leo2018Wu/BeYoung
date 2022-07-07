@@ -43,10 +43,6 @@ const App = () => {
         console.log('registerFail', err);
       });
     AppState.addEventListener('change', _handleAppStateChange);
-    AliyunPush.addListener(handleAliyunPushMessage);
-
-    //移除监听
-    AliyunPush.removeListener(handleAliyunPushMessage);
 
     AliyunPush.setApplicationIconBadgeNumber(0);
     return () => {
@@ -57,7 +53,10 @@ const App = () => {
   const _handleAppStateChange = nextappState => {
     //切换应用或者息屏时nextappState值为background
     console.log('--nextappState---', nextappState !== 'active');
+    AliyunPush.addListener(handleAliyunPushMessage);
 
+    //移除监听
+    // AliyunPush.removeListener(handleAliyunPushMessage);
     if (nextappState !== 'active') {
       // 当应用在后台的时候
       // let e = {
