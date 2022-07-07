@@ -68,15 +68,20 @@ const Index = () => {
         <View style={styles.line} />
         <Pressable
           onPress={() => navigation.navigate('MineComment')}
-          style={styles.item}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text style={styles.topText}>{myStatistic.replyNum || 0}</Text>
-            {unread.unreadReply ? (
-              <Text style={{fontSize: 14, color: 'red'}}>
-                +{unread.unreadReply}
-              </Text>
-            ) : null}
-          </View>
+          style={[styles.item, {position: 'relative'}]}>
+          <Text style={styles.topText}>{myStatistic.replyNum || 0}</Text>
+          {unread.unreadReply ? (
+            <View
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: 50,
+                backgroundColor: 'red',
+                position: 'absolute',
+                right: '35%',
+              }}
+            />
+          ) : null}
           <Text style={styles.btmText}>评论</Text>
         </Pressable>
         <View style={styles.line} />
