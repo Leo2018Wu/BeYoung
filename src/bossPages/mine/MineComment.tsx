@@ -26,6 +26,13 @@ const {
   IS_LIST,
 } = pageConstant;
 
+const genImages = (imgs: string) => {
+  if (!imgs) {
+    return [];
+  }
+  return JSON.parse(imgs);
+};
+
 const mergeList = (sourceList: any, nowList: any) => {
   if (sourceList) {
     nowList = sourceList.concat(nowList);
@@ -49,7 +56,7 @@ const CommentItem = ({item}) => {
       </Box>
       <Box flex={1} ml={2}>
         <HStack>
-          <VStack flex={1} justifyContent="space-between">
+          <VStack style={{height: 44}} flex={1} justifyContent="space-between">
             <Text fontSize={'md'} color={'fontColors.666'}>
               {item.nickName}
             </Text>
@@ -57,14 +64,16 @@ const CommentItem = ({item}) => {
               {item.content}
             </Text>
           </VStack>
-          <CFastImage
-            url={item.headImg}
-            styles={{
-              width: 44,
-              height: 44,
-              borderRadius: 4,
-            }}
-          />
+          {genImages(item.images).map((ele: string) => (
+            <CFastImage
+              url={ele}
+              styles={{
+                width: 44,
+                height: 44,
+                borderRadius: 4,
+              }}
+            />
+          ))}
         </HStack>
         <Box mt={2} p={2} borderRadius={4} bg="border.lightGray">
           <Text numberOfLines={1}>{item.repliedComment.content}</Text>
