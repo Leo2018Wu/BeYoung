@@ -456,7 +456,8 @@ const Msgs = ({...props}) => {
             </View>
             <View justifyContent={'center'} style={{width: 140}}>
               <Text fontWeight={'bold'} mb={2} alignSelf={'center'}>
-                亲密度{chatUserInfo.intimacy}
+                亲密度
+                {chatUserInfo.intimacy <= 2000 ? chatUserInfo.intimacy : 'MAX'}
               </Text>
               <MSlider
                 size="md"
