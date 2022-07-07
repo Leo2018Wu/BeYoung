@@ -32,6 +32,13 @@ export default function Index({navigation}) {
             style={{color: '#5C6F98', fontSize: 10}}>
             《用户协议》
           </Text>
+          <Text
+            onPress={() => {
+              navigation.navigate('Protocol');
+            }}
+            style={{color: '#5C6F98', fontSize: 10}}>
+            《隐私政策》
+          </Text>
         </View>
         <Text style={{color: '#777777', fontSize: 15, marginBottom: 5}}>
           Copyright©2020-2024
