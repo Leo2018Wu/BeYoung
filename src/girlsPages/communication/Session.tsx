@@ -247,7 +247,7 @@ const Msgs = ({...props}) => {
                 {chatUserInfo?.nickName || '暂无昵称'}
               </Text>
             </View>
-            {chatUserInfo?.intimacy ? (
+            {/* {chatUserInfo?.intimacy ? (
               <Box
                 style={{
                   position: 'absolute',
@@ -260,7 +260,7 @@ const Msgs = ({...props}) => {
             //     亲密度{chatUserInfo?.intimacy}
             //   </Text>
             // </View>
-            null}
+            null} */}
 
             {/* <Box h={'full'} justifyContent="center" w={10}>
               <CFastImage
