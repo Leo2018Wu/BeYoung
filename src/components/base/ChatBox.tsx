@@ -4,6 +4,7 @@ import {
   Platform,
   Keyboard,
   StyleSheet,
+  DeviceEventEmitter,
 } from 'react-native';
 import {Pressable, HStack, Input, Box, View} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -38,6 +39,15 @@ const Index = ({pressCb}: {pressCb: Function}) => {
       Keyboard.removeListener('keyboardDidHide', () => {});
     };
   }, []);
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('KEYBOARD', res => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+      DeviceEventEmitter.removeListener('KEYBOARD', () => {});
+    });
+  }, [inputRef]);
 
   const sendMsg = (type = 'text') => {
     let images = [];
@@ -119,6 +129,7 @@ const Index = ({pressCb}: {pressCb: Function}) => {
             returnKeyType="send"
             onSubmitEditing={() => {
               sendMsg();
+              Keyboard.dismiss;
             }}
             blurOnSubmit
             fontSize={'sm'}
@@ -138,9 +149,12 @@ const Index = ({pressCb}: {pressCb: Function}) => {
             placeholderTextColor={'tip.placeholder'}
             flex={1}
           />
-          {content ? (
+          {content || packageValue ? (
             <FontAwesome
-              onPress={() => sendMsg()}
+              onPress={() => {
+                sendMsg();
+                inputRef.current.blur();
+              }}
               name="send"
               size={24}
               color="#9650FF"

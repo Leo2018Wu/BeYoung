@@ -7,7 +7,6 @@ import { queryComment, commentDynamic } from '../../api/daily';
 import { useSelector } from 'react-redux';
 import emojiObj from '../../res/emoji';
 import ChatBox from '../../components/base/ChatBox';
-import getStorage from '../../util/Storage';
 import useRequest from '../../hooks/useRequest';
 import { useFocusEffect } from '@react-navigation/native';
 import {
@@ -88,16 +87,11 @@ const areEqual = (pre: any, next: any) => {
 };
 
 const Item = React.memo(({ item }: { item: ItemProps }) => {
+  
   const { isOpen, onOpen, onClose } = useDisclose();
   const [replyId, setReplyId] = useState(null);
-  const [itemId, setItemId] = useState(null);
   const [flag, setFlag] = useState(false);
   const { run: runCommentDymaic } = useRequest(commentDynamic.url);
-
-  useEffect(async () => {
-    let d = await getStorage(['DYNAMIC_ID']);
-    setItemId(d);
-  }, []);
 
   const userInfo = useSelector(state => state.user.myUserInfo);
   if (item.delFlag) {
@@ -140,6 +134,9 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
   const setComment = data => {
     setReplyId(data.id);
     setFlag(true);
+    setTimeout(() => {
+      DeviceEventEmitter.emit('KEYBOARD', true);
+    }, 500);
   };
 
   const comment = async (data: Object, dynamicId: string, replyId: string) => {
@@ -301,7 +298,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
             </ScrollView>
             {flag && <ChatBox
               pressCb={(data: Object) => {
-                comment(data, itemId, replyId);
+                comment(data, item.userDynamicId, replyId);
               }}
             />}
           </Box>

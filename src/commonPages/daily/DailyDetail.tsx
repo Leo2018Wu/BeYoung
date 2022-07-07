@@ -24,9 +24,8 @@ import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
 import useRequest from '../../hooks/useRequest';
 import {commentDynamic, fetchDynamic} from '../../api/daily';
-import {queryDynamicGiftRank, queryGiftGiving} from '../../api/gift';
+import {queryDynamicGiftRank} from '../../api/gift';
 import Icon from 'react-native-vector-icons/AntDesign';
-import AsyncStorage from '@react-native-community/async-storage';
 import Comment from '../../commonPages/daily/Comment';
 import Gifts from '../../commonPages/daily/Gift';
 
@@ -39,10 +38,8 @@ const Index = ({...props}) => {
   const IMG_ITEM_HEIGHT = IMG_ITEM_WIDTH;
   const [imgList, setImgList] = useState([]);
   const [replyFlag, setReplyFlag] = useState(false);
-  const [giftGivingList, setGiftGivingList] = useState(0);
   const {run: runGetDynamic} = useRequest(fetchDynamic.url);
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
-  const {run: runGiftGivingList} = useRequest(queryGiftGiving.url);
   const {result: giftRankList} = useRequest(
     queryDynamicGiftRank.url,
     {
@@ -62,33 +59,26 @@ const Index = ({...props}) => {
 
   useEffect(() => {
     getDynamic();
+    DeviceEventEmitter.addListener('REPLY_FLAG', res => {
+      setReplyFlag(res);
+      setTimeout(() => {
+        DeviceEventEmitter.emit('KEYBOARD', true);
+      }, 500);
+      DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
+    });
   }, []);
 
   const getDynamic = async () => {
     try {
       const {data} = await runGetDynamic({dynamicId});
       setDynamic(data);
-      AsyncStorage.setItem('DYNAMIC_ID', data.id);
       if (data.images && JSON.parse(data.images).length) {
         setImgList(JSON.parse(data.images));
       }
-      DeviceEventEmitter.addListener('REPLY_FLAG', res => {
-        setReplyFlag(res);
-        DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
-      });
     } catch (error) {
       console.error(error);
     }
   };
-
-  // useEffect(async () => {
-  //   const {data, success} = await runGiftGivingList({
-  //     dynamicId,
-  //   });
-  //   if (success) {
-  //     setGiftGivingList(data);
-  //   }
-  // }, []);
 
   const comment = async (data: Object, dynamicId: string, replyId: string) => {
     if (data.type === 'text') {

@@ -22,7 +22,6 @@ import CFastImage from '../../components/CFastImage';
 import useRequest from '../../hooks/useRequest';
 import {commentDynamic, fetchDynamic} from '../../api/daily';
 import {giveGift, queryDynamicGiftRank} from '../../api/gift';
-import AsyncStorage from '@react-native-community/async-storage';
 import DailyItem from './DailyItem';
 import Comment from './Comment';
 import Gift from './Gift';
@@ -37,7 +36,8 @@ const Index = ({...props}) => {
   const [dynamicInfo, setDynamic] = useState({});
   const {run: runCommentDymaic} = useRequest(commentDynamic.url);
   const {run: runGetDynamic} = useRequest(fetchDynamic.url);
-  const {result: giftRankList} = useRequest(
+  const [giftRankList, setGiftRankList] = useState([]);
+  const {run: runGiftRankList} = useRequest(
     queryDynamicGiftRank.url,
     {
       dynamicId, //动态ID
@@ -63,19 +63,31 @@ const Index = ({...props}) => {
 
   useEffect(() => {
     getDynamic();
+    getGiftRankList();
+    DeviceEventEmitter.addListener('REPLY_FLAG', res => {
+      setReplyFlag(res);
+      setTimeout(() => {
+        DeviceEventEmitter.emit('KEYBOARD', true);
+      }, 500);
+      DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
+    });
   }, []);
 
   const getDynamic = async () => {
     try {
       const {data} = await runGetDynamic({dynamicId});
       setDynamic(data);
-      AsyncStorage.setItem('DYNAMIC_ID', data.id);
-      DeviceEventEmitter.addListener('REPLY_FLAG', res => {
-        setReplyFlag(res);
-        DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
-      });
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const getGiftRankList = async () => {
+    try {
+      const {data} = await runGiftRankList();
+      setGiftRankList(data);
+    } catch (error) {
+      console.log(err);
     }
   };
 
@@ -134,6 +146,7 @@ const Index = ({...props}) => {
       if (success) {
         setDynamic(data);
         DeviceEventEmitter.emit('PRESENT_GIFT', Math.random());
+        getGiftRankList();
         onClose();
       }
     } catch (error) {
