@@ -30,8 +30,8 @@ import {fetchAccountUser, querySysConfig} from '../../api/common';
 import {queryMyRelation, queryFemaleRank} from '../../api/user';
 import MSlider from '../../components/base/MSlider';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
-import Intimacy from '../../components/base/Intimacy';
-import {queryDynamic} from '../../api/daily';
+// import Intimacy from '../../components/base/Intimacy';
+import {fetchLastDynamic} from '../../api/daily';
 import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
 import Gifts from '../../components/base/Gifts';
@@ -83,7 +83,7 @@ const Msgs = ({...props}) => {
 
   const cancelRef = useRef(null);
   const {run: runGetChatUsers} = useRequest(fetchAccountUser.url);
-  const {run: runQueryDynamic} = useRequest(queryDynamic.url);
+  const {run: runQueryDynamic} = useRequest(fetchLastDynamic.url);
 
   const [chatUserInfo, setChatUserInfo] = useState(null);
   const [needPayChat, setPayChatGirlFlag] = useState(null);
@@ -147,18 +147,8 @@ const Msgs = ({...props}) => {
     try {
       const {data} = await runQueryDynamic({
         userId: chatUserInfo.userId,
-        pageNum: 1, //分页页码
-        pageSize: 1, //每页大小
-        // eslint-disable-next-line no-sparse-arrays
-        orders: [
-          {
-            column: 'createTime', //排序字段名称
-            dir: 'desc', //排序方向，asc=顺序、desc=倒序，默认为顺序
-            chinese: false, //是否为中文排序，默认为否
-          },
-        ], //排序参数列表
       });
-      setDailyInfo(data[0]);
+      setDailyInfo(data);
     } catch (error) {
       console.log(error);
     }
@@ -367,7 +357,7 @@ const Msgs = ({...props}) => {
                 {chatUserInfo?.nickName || '暂无昵称'}
               </Text>
             </View>
-            {chatUserInfo?.intimacy ? (
+            {/* {chatUserInfo?.intimacy ? (
               <Box
                 style={{
                   position: 'absolute',
@@ -375,7 +365,7 @@ const Msgs = ({...props}) => {
                 }}>
                 <Intimacy num={chatUserInfo?.intimacy} />
               </Box>
-            ) : null}
+            ) : null} */}
           </HStack>
         </Box>
       </LinearGradient>
@@ -399,9 +389,11 @@ const Msgs = ({...props}) => {
         }}
         behavior={Platform.OS === 'ios' ? 'position' : 'height'}
         style={{height: '100%'}}>
-        {lastDailyInfo?.id ? (
+        {lastDailyInfo && !lastDailyInfo.read ? (
           <Pressable
             onPress={() => {
+              // 设置已读最近动态状态
+              setDailyInfo({...lastDailyInfo, read: true});
               props.navigation.navigate('DailyDetail', {
                 dynamicId: lastDailyInfo.id,
               });
