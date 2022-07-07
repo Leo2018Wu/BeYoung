@@ -45,7 +45,10 @@ const Index = ({onSelectEmoji, onSelectPackage}) => {
 
   return (
     <Box flex={1}>
-      <View flexDirection={'row'} margin={2}>
+      <View
+        flexDirection={'row'}
+        padding={2}
+        style={{backgroundColor: '#F7F7F9'}}>
         <Pressable
           onPress={() => setActivitIndex(0)}
           style={[
