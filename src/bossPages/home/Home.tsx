@@ -285,9 +285,13 @@ const Home = ({...props}) => {
               {grades &&
                 grades.map((item: GradeProps) => (
                   <Pressable
-                    onPress={() =>
-                      setFilterParams({...filterParams, grade: item.code})
-                    }
+                    onPress={() => {
+                      if (filterParams.grade === item.code) {
+                        setFilterParams({...filterParams, grade: ''});
+                      } else {
+                        setFilterParams({...filterParams, grade: item.code});
+                      }
+                    }}
                     style={[
                       filterParams.grade === item.code
                         ? {backgroundColor: '#9650FF'}
@@ -325,9 +329,16 @@ const Home = ({...props}) => {
               {professions &&
                 professions.map((item: GradeProps) => (
                   <Pressable
-                    onPress={() =>
-                      setFilterParams({...filterParams, profession: item.code})
-                    }
+                    onPress={() => {
+                      if (filterParams.profession === item.code) {
+                        setFilterParams({...filterParams, profession: ''});
+                      } else {
+                        setFilterParams({
+                          ...filterParams,
+                          profession: item.code,
+                        });
+                      }
+                    }}
                     style={[
                       filterParams.profession === item.code
                         ? {backgroundColor: '#9650FF'}

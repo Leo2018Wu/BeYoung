@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Text} from 'native-base';
+import {Box} from 'native-base';
 
 const heightMap = {
   small: 12,
@@ -10,7 +10,11 @@ const getPercent = (num: number, total: number) => {
   if (isNaN(num) || isNaN(total)) {
     return 0;
   }
-  return total <= 0 ? 0 : Math.round((num / total) * 10000) / 100.0 + '%';
+  const percent =
+    Math.round((num / total) * 10000) / 100.0 < 100
+      ? Math.round((num / total) * 10000) / 100.0
+      : 100;
+  return total <= 0 ? 0 : percent + '%';
 };
 
 const Slider = ({

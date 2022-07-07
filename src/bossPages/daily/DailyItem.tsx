@@ -207,6 +207,7 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
           direction={'row'}
           alignItems={'center'}>
           <Pressable
+            p={2}
             onPress={() => collectClick(item)}
             flexDirection={'row'}
             alignItems={'center'}>
@@ -220,6 +221,7 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
             </Text>
           </Pressable>
           <Pressable
+            p={2}
             onPress={() => likeClick(item)}
             flexDirection={'row'}
             alignItems={'center'}>
@@ -232,13 +234,13 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
               {item.likeNum}
             </Text>
           </Pressable>
-          <HStack alignItems={'center'}>
+          <HStack p={2} alignItems={'center'}>
             <Icon name="message1" size={18} color="#C7C4CC" />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
               {item.commentNum}
             </Text>
           </HStack>
-          <HStack alignItems={'center'}>
+          <HStack p={2} alignItems={'center'}>
             <Icon name="gift" size={18} color="#C7C4CC" />
             <Text ml={1} fontSize={'xs'} style={{color: '#C7C4CC'}}>
               {item.giftNum}
