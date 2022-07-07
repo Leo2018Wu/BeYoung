@@ -148,18 +148,24 @@ const Home = ({...props}) => {
             <Pressable
               onPress={() => props.navigation.navigate('MineComment')}
               flex={1}
-              alignItems={'center'}>
+              alignItems={'center'}
+              style={{position: 'relative'}}>
               <Text color={'fontColors.gray'} fontSize="xs">
                 评论
               </Text>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text fontSize={'xl'}>{numInfo?.replyNum}</Text>
-                {unread.unreadReply ? (
-                  <Text style={{fontSize: 14, color: 'red'}}>
-                    +{unread.unreadReply}
-                  </Text>
-                ) : null}
-              </View>
+              <Text fontSize={'xl'}>{numInfo?.replyNum}</Text>
+              {unread.unreadReply ? (
+                <View
+                  style={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: 50,
+                    backgroundColor: 'red',
+                    position: 'absolute',
+                    right: '32%',
+                  }}
+                />
+              ) : null}
             </Pressable>
             <Pressable
               onPress={() => props.navigation.navigate('MineFollow')}
