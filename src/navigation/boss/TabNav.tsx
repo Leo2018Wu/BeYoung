@@ -29,12 +29,12 @@ const MyTabs = ({...props}) => {
 
   const list = [
     {
-      icon: require('../../images/tabs/tab1.png'),
-      icon_active: require('../../images/tabs/tab1_active.png'),
-    },
-    {
       icon: require('../../images/tabs/tab2.png'),
       icon_active: require('../../images/tabs/tab2_active.png'),
+    },
+    {
+      icon: require('../../images/tabs/tab1.png'),
+      icon_active: require('../../images/tabs/tab1_active.png'),
     },
     {
       icon: require('../../images/tabs/tab3.png'),
@@ -124,15 +124,7 @@ const MyTabs = ({...props}) => {
     <Tab.Navigator
       tabBar={props => <MyTabBar {...props} />}
       backBehavior="history"
-      initialRouteName="Home">
-      <Tab.Screen
-        options={{
-          headerShown: false,
-          tabBarLabel: '首页',
-        }}
-        name="Home"
-        component={HomeScreen}
-      />
+      initialRouteName="Daily">
       <Tab.Screen
         options={{
           headerShown: false,
@@ -140,6 +132,14 @@ const MyTabs = ({...props}) => {
         }}
         name="Daily"
         component={DailyScreen}
+      />
+      <Tab.Screen
+        options={{
+          headerShown: false,
+          tabBarLabel: '青回',
+        }}
+        name="Home"
+        component={HomeScreen}
       />
       <Tab.Screen
         options={{
