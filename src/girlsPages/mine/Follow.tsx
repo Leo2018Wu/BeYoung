@@ -172,16 +172,9 @@ const Index = ({...props}) => {
 
   const _renderItem = ({item, index}: {item: any; index: number}) => {
     return (
-      <Pressable
-        onPress={() =>
-          props.navigation.navigate('DailyDetail', {
-            dynamicId: item.userDynamicId,
-          })
-        }
-        key={index}
-        mb={4}>
+      <View key={index} mb={4}>
         <FollowItem item={item} />
-      </Pressable>
+      </View>
     );
   };
 

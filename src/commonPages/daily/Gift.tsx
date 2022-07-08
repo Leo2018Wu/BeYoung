@@ -82,7 +82,8 @@ const Item = React.memo(({item}: {item: ItemProps}) => {
   );
 }, areEqual);
 
-const Index = () => {
+const Index = ({...props}) => {
+  const {dynamicId} = props;
   return (
     <Box flex={1}>
       <Box px={3} flex={1} style={{}}>
@@ -92,7 +93,7 @@ const Index = () => {
               <CustomFuncFlatList
                 url={queryGiftGiving.url}
                 par={{
-                  dynamicId: value,
+                  dynamicId: dynamicId,
                 }}
                 renderItem={({item}: {item: ItemProps}) => <Item item={item} />}
               />

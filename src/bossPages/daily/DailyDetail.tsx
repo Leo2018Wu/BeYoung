@@ -199,7 +199,7 @@ const Index = ({...props}) => {
           ) : (
             <Actionsheet.Content>
               <Box w={'100%'} h={500} py={4}>
-                <Gift />
+                <Gift dynamicId={dynamicId} />
               </Box>
             </Actionsheet.Content>
           )}

@@ -20,7 +20,7 @@ const Login = ({...props}) => {
     }
   }, []);
 
-  const preview = (index = 0) => {
+  const preview = index => {
     const imgUrls = images.map((img: string) => {
       const temp = {url: `${BASE_DOWN_URL + img}`};
       return temp;
@@ -29,55 +29,21 @@ const Login = ({...props}) => {
   };
 
   return (
-    <View>
-      <Pressable onPress={() => preview()} style={styles.banner}>
-        <CFastImage
-          url={`${BASE_DOWN_URL + images[0]}`}
-          styles={{
-            width: '100%',
-            height: 210,
-            borderRadius: 10,
-          }}
-        />
-        {/* <View style={styles.optContain}>
-          <View style={styles.optView}>
-            <Image
-              source={require('../assets/follow.png')}
-              style={{
-                width: 17,
-                height: 16,
-                marginRight: 3,
+    <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+      {images.map((item, index) => {
+        return (
+          <Pressable onPress={() => preview(index)} style={styles.banner}>
+            <CFastImage
+              url={`${BASE_DOWN_URL + item}`}
+              styles={{
+                width: '100%',
+                height: 210,
+                borderRadius: 10,
               }}
-              alt="dairy"
             />
-            <Text style={styles.optSize}>{item.likeNum}</Text>
-          </View>
-          <View style={styles.optView}>
-            <Image
-              source={require('../assets/home_message.png')}
-              style={{
-                width: 17,
-                height: 16,
-                marginRight: 3,
-              }}
-              alt="dairy"
-            />
-            <Text style={styles.optSize}>{item.commentNum}</Text>
-          </View>
-          <View style={styles.optView}>
-            <Image
-              source={require('../assets/gift.png')}
-              style={{
-                width: 17,
-                height: 16,
-                marginRight: 3,
-              }}
-              alt="dairy"
-            />
-            <Text style={styles.optSize}>{item.giftNum}</Text>
-          </View>
-        </View> */}
-      </Pressable>
+          </Pressable>
+        );
+      })}
     </View>
   );
 };
@@ -85,29 +51,8 @@ const Login = ({...props}) => {
 export default Login;
 
 const styles = StyleSheet.create({
-  optContain: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    alignItems: 'center',
-    height: 25,
-    paddingHorizontal: 10,
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    borderBottomLeftRadius: 10,
-    borderBottomRightRadius: 10,
-  },
-  optView: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  optSize: {
-    color: '#fff',
-    fontSize: 10,
-  },
   banner: {
-    width: (layout.width - 50) / 2,
+    width: (layout.width - 55) / 2,
     position: 'relative',
     borderRadius: 10,
     marginHorizontal: 5,

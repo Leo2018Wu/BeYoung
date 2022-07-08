@@ -189,7 +189,7 @@ const Index = ({...props}) => {
         <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
           <Actionsheet.Content>
             <Box w={'100%'} h={500} py={4}>
-              <Gifts />
+              <Gifts dynamicId={dynamicId} />
             </Box>
           </Actionsheet.Content>
         </Actionsheet>

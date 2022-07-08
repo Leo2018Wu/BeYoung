@@ -75,7 +75,8 @@ const Item = React.memo(({item}: {item: any}) => {
   );
 }, areEqual);
 
-const Index = () => {
+const Index = ({...props}) => {
+  const {dynamicId} = props;
   const insets = useSafeAreaInsets();
   const [keyData, setKeyData] = useState(0);
 
@@ -103,7 +104,7 @@ const Index = () => {
               key={keyData}
               url={queryGiftGiving.url}
               par={{
-                dynamicId: value,
+                dynamicId: dynamicId,
               }}
               renderItem={({item}: {item: any}) => <Item item={item} />}
             />
