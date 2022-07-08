@@ -25,12 +25,7 @@ import {
 } from '../../../api/common';
 import CustomFuncFlatList from '../../../components/CustomFuncFlatList';
 import {queryDynamic} from '../../../api/daily';
-import {
-  fetchRelation,
-  queryMedia,
-  queryMyRelation,
-  startRelation,
-} from '../../../api/user';
+import {queryMedia, queryMyRelation, startRelation} from '../../../api/user';
 
 import CFastImage from '../../../components/CFastImage';
 import {useDispatch} from 'react-redux';
@@ -83,7 +78,6 @@ const Index = ({...props}) => {
   );
   const [isStartRelationFlag, setRelationFlag] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
-  const {run: runFetchRelation} = useRequest(fetchRelation.url);
   const {run: runFetchUesrInfo} = useRequest(fetchUserInfo.url);
   const {result: numInfo} = useRequest(
     fetchStatistic.url,
@@ -153,14 +147,7 @@ const Index = ({...props}) => {
   };
 
   const goChat = async () => {
-    const {data: userRelation} = await runFetchRelation({
-      relateUserId: userId,
-    });
-    if (userRelation.canChat) {
-      jumpChatPage();
-    } else {
-      // 不能聊天
-    }
+    jumpChatPage();
   };
 
   const startRel = async () => {

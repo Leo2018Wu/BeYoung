@@ -27,7 +27,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import useRequest from '../../hooks/useRequest';
 import {fetchAccountUser, querySysConfig} from '../../api/common';
-import {queryMyRelation, queryFemaleRank} from '../../api/user';
+import {queryMyRelation, fetchRelation} from '../../api/user';
 import MSlider from '../../components/base/MSlider';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 // import Intimacy from '../../components/base/Intimacy';
@@ -91,16 +91,13 @@ const Msgs = ({...props}) => {
   const [levelList, setLevelList] = useState([]);
 
   const {run: runGiveGift} = useRequest(giveGift.url);
-  const {result: girlsHotRanks} = useRequest(
-    queryFemaleRank.url,
-    {pageSize: 10},
-    {manual: false},
-  );
+
   const {result: myRelations} = useRequest(
     queryMyRelation.url,
     {},
     {manual: false},
   );
+  const {run: runFetchRelation} = useRequest(fetchRelation.url);
   const {result: sysIntimacyGrades} = useRequest(
     querySysConfig.url,
     {code: 'INTIMACY_GRADE'},
@@ -108,23 +105,15 @@ const Msgs = ({...props}) => {
   );
 
   useEffect(() => {
-    if (chatUserInfo && girlsHotRanks) {
-      // 判断该女生是否为需要送礼聊天女生
-      setPayChatGirlFlag(
-        props.relateChatAccount.findIndex(
-          item => item === props.route.params.chatUserId,
-        ) === -1 &&
-          girlsHotRanks.findIndex(item => item.id === chatUserInfo.userId) !==
-            -1,
-      );
-    }
     if (sysIntimacyGrades && levelList.length <= 0) {
       setLevelList(JSON.parse(sysIntimacyGrades.value));
     }
-  }, [sysIntimacyGrades, girlsHotRanks, chatUserInfo]);
+  }, [sysIntimacyGrades]);
 
   useEffect(() => {
     if (chatUserInfo?.userId) {
+      // 判断该女生是否为需要送礼聊天女生
+      checkNeedChat();
       // 获取已发动态的最新一条
       getLatestDaily();
     }
@@ -142,6 +131,13 @@ const Msgs = ({...props}) => {
       });
     }
   }, []);
+
+  const checkNeedChat = async () => {
+    const {data: userRelation} = await runFetchRelation({
+      relateUserId: chatUserInfo.userId,
+    });
+    setPayChatGirlFlag(userRelation.canChat);
+  };
 
   const getLatestDaily = async () => {
     try {
@@ -265,6 +261,8 @@ const Msgs = ({...props}) => {
         placement: 'top',
         duration: 2500,
       });
+      setIsEmojiShow(false);
+      Keyboard.dismiss();
       onOpen();
       return;
     }
