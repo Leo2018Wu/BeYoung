@@ -27,14 +27,14 @@ export default function Index({navigation}) {
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Text
             onPress={() => {
-              navigation.navigate('Protocol');
+              navigation.navigate('CommonUserProtocol');
             }}
             style={{color: '#5C6F98', fontSize: 10}}>
             《用户协议》
           </Text>
           <Text
             onPress={() => {
-              navigation.navigate('Protocol');
+              navigation.navigate('PrivateProtocol');
             }}
             style={{color: '#5C6F98', fontSize: 10}}>
             《隐私政策》

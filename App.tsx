@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
-import {LogBox, AppState} from 'react-native';
+import {LogBox, AppState, Platform} from 'react-native';
 import {Provider} from 'react-redux';
 import {NativeBaseProvider, extendTheme, StatusBar} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import AliyunPush from 'react-native-aliyun-push';
 import * as WeChat from '@shm-open/react-native-wechat';
 import Splash from 'react-native-splash-screen';
+// import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import Navigation from './src/navigation/Index';
 import colors from './src/theme/bossColor';
@@ -59,13 +60,13 @@ const App = () => {
     // AliyunPush.removeListener(handleAliyunPushMessage);
     if (nextappState !== 'active') {
       // 当应用在后台的时候
-      // let e = {
-      //   extras: {
-      //     page: 'CommunicateScreen',
-      //   },
-      // };
-      // pushTest(e);
     }
+    // let e = {
+    //   extras: {
+    //     page: 'CommunicateScreen',
+    //   },
+    // };
+    // pushTest(e);
   };
 
   const handleAliyunPushMessage = e => {
@@ -96,40 +97,43 @@ const App = () => {
   };
 
   const LocalNotification = e => {
-    PushNotification.localNotification({
-      extras: e.extras,
-      channelId: '1',
-      id: e.extras._ALIYUN_NOTIFICATION_ID_,
-      autoCancel: true,
-      bigText: e.body,
-      subText: e.title,
-      largeIcon: 'ic_launcher',
-      vibrate: true,
-      vibration: 300,
-      tag: 'some_tag',
-      group: 'group',
-      ongoing: false,
-      priority: 'high',
-      visibility: 'private',
-      importance: 'high',
-      allowWhileIdle: false,
-      ignoreInForeground: false,
-      shortcutId: 'shortcut-id',
-      invokeApp: true,
-      // actions: '["打开","关闭"]',
-      /* iOS and Android properties */
-      title: e.title || e.body.title,
-      message: e.body || e.body.body,
-      playSound: true,
-      number: 10,
-      soundName: 'default',
-      repeatType: 'time',
-    });
-
-    // todo  在localNotification本地接收到通知后应该立即取消该通知  通过id（必需的）在cancelLocalNotification中取消通知
-    PushNotification.cancelLocalNotification({
-      id: e.extras._ALIYUN_NOTIFICATION_ID_,
-    });
+    if (Platform.OS === 'android') {
+      PushNotification.localNotification({
+        extras: e.extras,
+        channelId: '1',
+        id: e.extras._ALIYUN_NOTIFICATION_ID_,
+        autoCancel: true,
+        bigText: e.body,
+        subText: e.title,
+        largeIcon: 'ic_launcher',
+        vibrate: true,
+        vibration: 300,
+        tag: 'some_tag',
+        group: 'group',
+        ongoing: false,
+        priority: 'high',
+        visibility: 'private',
+        importance: 'high',
+        allowWhileIdle: false,
+        ignoreInForeground: false,
+        shortcutId: 'shortcut-id',
+        invokeApp: true,
+        // actions: '["打开","关闭"]',
+        /* iOS and Android properties */
+        title: e.title || e.body.title,
+        message: e.body || e.body.body,
+        playSound: true,
+        number: 10,
+        soundName: 'default',
+        repeatType: 'time',
+      });
+      // todo  在localNotification本地接收到通知后应该立即取消该通知  通过id（必需的）在cancelLocalNotification中取消通知
+      PushNotification.cancelLocalNotification({
+        id: e.extras._ALIYUN_NOTIFICATION_ID_,
+      });
+    } else {
+      // PushNotificationIOS.removeAllPendingNotificationRequests();
+    }
   };
 
   const pushTest = e => {

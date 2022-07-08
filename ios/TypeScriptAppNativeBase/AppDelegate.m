@@ -42,6 +42,13 @@ static void InitializeFlipper(UIApplication *application) {
 //  return [RCTLinkingManager application:application openURL:url options:options];
 //}
 
+// ios 9.0+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+            options:(NSDictionary<NSString*, id> *)options
+{
+    return [RCTLinkingManager application:application openURL:url options:options];
+}
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -150,14 +157,5 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   return [WXApi handleOpenUniversalLink:userActivity delegate:self];
 }
 
-// ios 9.0+
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-            options:(NSDictionary<NSString*, id> *)options
-{
-  // Triggers a callback event.
-  // 触发回调事件
-  [RCTLinkingManager application:application openURL:url options:options];
-  return [WXApi handleOpenURL:url delegate:self];
-}
 
 @end

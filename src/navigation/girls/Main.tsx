@@ -25,7 +25,8 @@ import Service from '../../bossPages/customService/Index';
 import MineGifts from '../../girlsPages/mine/MineGifts';
 import Follow from '../../girlsPages/mine/Follow';
 import About from '../../commonPages/About';
-import Protocol from '../../commonPages/Protocol';
+import PrivateProtocol from '../../commonPages/PrivateProtocol';
+import CommonUserProtocol from '../../commonPages/CommonUserProtocol';
 import MineComment from '../../girlsPages/mine/MineComment';
 
 const Stack = createNativeStackNavigator();
@@ -219,10 +220,17 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
+          title: '隐私政策',
+        }}
+        name="PrivateProtocol"
+        component={PrivateProtocol}
+      />
+      <Stack.Screen
+        options={{
           title: '用户协议',
         }}
-        name="Protocol"
-        component={Protocol}
+        name="CommonUserProtocol"
+        component={CommonUserProtocol}
       />
       <Stack.Screen
         options={{
