@@ -136,7 +136,12 @@ const Msgs = ({...props}) => {
     const {data: userRelation} = await runFetchRelation({
       relateUserId: chatUserInfo.userId,
     });
-    setPayChatGirlFlag(userRelation.canChat);
+    // 是否热榜且是否已聊过天
+    setPayChatGirlFlag(
+      props.relateChatAccount.findIndex(
+        item => item === props.route.params.chatUserId,
+      ) === -1 && userRelation.canChat,
+    );
   };
 
   const getLatestDaily = async () => {
