@@ -17,6 +17,7 @@ import {
   useWindowDimensions,
   DeviceEventEmitter,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import {BASE_DOWN_URL} from '../../util/config';
 import CFastImage from '../../components/CFastImage';
@@ -28,6 +29,7 @@ import {queryDynamicGiftRank} from '../../api/gift';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Comment from '../../commonPages/daily/Comment';
 import Gifts from '../../commonPages/daily/Gift';
+import {getSoftInputModule} from '../../util/getSoftInputModule';
 
 const Index = ({...props}) => {
   const {dynamicId} = props.route.params;
@@ -58,6 +60,9 @@ const Index = ({...props}) => {
   );
 
   useEffect(() => {
+    if (Platform.OS === 'android') {
+      getSoftInputModule(1);
+    }
     getDynamic();
     DeviceEventEmitter.addListener('REPLY_FLAG', res => {
       setReplyFlag(res);

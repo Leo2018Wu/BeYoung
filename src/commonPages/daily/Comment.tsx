@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { DeviceEventEmitter } from 'react-native';
+import { DeviceEventEmitter, KeyboardAvoidingView, Platform } from 'react-native';
 import { HStack, Box, Actionsheet, Image, Text, VStack, Pressable, useDisclose, ScrollView, FlatList } from 'native-base';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CFastImage from '../../components/CFastImage';
@@ -216,7 +216,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
               {item.replies.length
                 ? item.replies.map((item1, index) => {
                   return (
-                    <Box mt={4} ml={10} width={'80%'}>
+                    <Box mt={4} ml={10} width={'80%'} key={index}>
                       <HStack mb={2} alignItems="center">
                         <CFastImage
                           url={item1.headImg}
@@ -299,11 +299,11 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                 </Text>
               </Pressable>
             </ScrollView>
-            {flag && <ChatBox
-              pressCb={(data: Object) => {
-                comment(data, item.userDynamicId, replyId);
-              }}
-            />}
+              {flag && <ChatBox
+                pressCb={(data: Object) => {
+                  comment(data, item.userDynamicId, replyId);
+                }}
+              />}
           </Box>
         </Actionsheet.Content >
       </Actionsheet >

@@ -6,15 +6,16 @@ import {NavigationContainer} from '@react-navigation/native';
 import AliyunPush from 'react-native-aliyun-push';
 import * as WeChat from '@shm-open/react-native-wechat';
 import Splash from 'react-native-splash-screen';
-// import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
 import Navigation from './src/navigation/Index';
 import colors from './src/theme/bossColor';
 import {store} from './src/store/index.js';
 
 var PushNotification = require('react-native-push-notification');
+var PushNotificationIOS = require('@react-native-community/push-notification-ios');
 
 const App = () => {
+  let activeOrbackground = 'active';
   LogBox.ignoreLogs(['Sending', 'Remote', 'NativeBase', 'Animated']);
   const config = {
     dependencies: {
@@ -43,40 +44,35 @@ const App = () => {
       .catch(err => {
         console.log('registerFail', err);
       });
-    AppState.addEventListener('change', _handleAppStateChange);
 
-    AliyunPush.setApplicationIconBadgeNumber(0);
-    return () => {
-      AppState.removeEventListener('change', _handleAppStateChange);
-    };
-  }, []);
+    AppState.addEventListener('change', state => {
+      if (state === 'active') {
+        activeOrbackground = 'active';
+        console.log('state active');
+      } else if (state === 'background') {
+        activeOrbackground = 'background';
+        console.log('background');
+      }
+    });
 
-  const _handleAppStateChange = nextappState => {
-    //切换应用或者息屏时nextappState值为background
-    console.log('--nextappState---', nextappState !== 'active');
     AliyunPush.addListener(handleAliyunPushMessage);
-
     //移除监听
     // AliyunPush.removeListener(handleAliyunPushMessage);
-    if (nextappState !== 'active') {
-      // 当应用在后台的时候
-    }
-    // let e = {
-    //   extras: {
-    //     page: 'CommunicateScreen',
-    //   },
-    // };
-    // pushTest(e);
-  };
+
+    AliyunPush.setApplicationIconBadgeNumber(0);
+  }, []);
 
   const handleAliyunPushMessage = e => {
     console.log('Message Received. ' + JSON.stringify(e));
 
-    if (e.type == 'notification') {
-      onNotification(e);
-    } else if (e.type == 'message') {
-      onMessage(e);
+    if (activeOrbackground === 'background') {
+      if (e.type == 'notification') {
+        onNotification(e);
+      } else if (e.type == 'message') {
+        onMessage(e);
+      }
     }
+
     //e结构说明:
     //e.type: "notification":通知 或者 "message":消息
     //e.title: 推送通知/消息标题
@@ -98,6 +94,8 @@ const App = () => {
 
   const LocalNotification = e => {
     if (Platform.OS === 'android') {
+      console.log('--进来了--');
+
       PushNotification.localNotification({
         extras: e.extras,
         channelId: '1',
@@ -132,25 +130,8 @@ const App = () => {
         id: e.extras._ALIYUN_NOTIFICATION_ID_,
       });
     } else {
-      // PushNotificationIOS.removeAllPendingNotificationRequests();
+      PushNotificationIOS.removeAllPendingNotificationRequests();
     }
-  };
-
-  const pushTest = e => {
-    PushNotification.localNotification({
-      channelId: '1',
-      extras: e.extras,
-      autoCancel: true,
-      bigText:
-        'This is local notification demo in React Native app. Only shown, when expanded.',
-      subText: 'Local Notification Demo',
-      title: 'Local Notification Title',
-      message: 'Expand me to see more',
-      vibrate: true,
-      vibration: 300,
-      playSound: true,
-      soundName: 'default',
-    });
   };
 
   return (

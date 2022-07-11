@@ -1,6 +1,7 @@
 package com.zyxsnet.mobile.young;
 
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen;
@@ -20,4 +21,9 @@ public class MainActivity extends ReactActivity {
     SplashScreen.show(this);
     super.onCreate(savedInstanceState);
   }
+
+
+
+
+
 }

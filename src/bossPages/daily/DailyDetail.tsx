@@ -13,7 +13,7 @@ import {
   Image,
   Pressable,
 } from 'native-base';
-import {DeviceEventEmitter, StyleSheet} from 'react-native';
+import {DeviceEventEmitter, StyleSheet, Platform} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import DailyDetailContext from './context.js';
 import ChatBox from '../../components/base/ChatBox';
@@ -25,6 +25,7 @@ import {giveGift, queryDynamicGiftRank} from '../../api/gift';
 import DailyItem from './DailyItem';
 import Comment from './Comment';
 import Gift from './Gift';
+import {getSoftInputModule} from '../../util/getSoftInputModule';
 
 interface commentProp {
   type: string;
@@ -62,6 +63,9 @@ const Index = ({...props}) => {
   const cancelRef = useRef(null);
 
   useEffect(() => {
+    if (Platform.OS === 'android') {
+      getSoftInputModule(1);
+    }
     getDynamic();
     getGiftRankList();
     DeviceEventEmitter.addListener('REPLY_FLAG', res => {

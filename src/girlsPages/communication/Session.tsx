@@ -13,6 +13,7 @@ import {
   useDisclose,
   View,
 } from 'native-base';
+import {InteractionManager, Keyboard, Platform} from 'react-native';
 import CFastImage from '../../components/CFastImage';
 import {connect} from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
@@ -26,13 +27,13 @@ import useRequest from '../../hooks/useRequest';
 import {fetchAccountUser} from '../../api/common';
 import {ChatLeft, ChatRight} from '../../components/base/ChatItem';
 import Intimacy from '../../components/base/Intimacy';
-import {InteractionManager, Keyboard, Platform} from 'react-native';
 import util from '../../util/util';
 import ChatEmoji from '../../components/base/ChatEmoji';
 import ReplyEmoj from '../../components/base/ReplyEmoj';
 import QuickReply from '../../components/base/QuickReply';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
+import {getSoftInputModule} from '../../util/getSoftInputModule';
 
 const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
   let groupMsg: {time: any; msgList: any[]}[] = [];
@@ -55,7 +56,7 @@ const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
 };
 
 let _scrollTimer: any;
-const BOTTOM_FIXED_HEIGHT = 92; // 底部遮盖拦高度
+const BOTTOM_FIXED_HEIGHT = 80; // 底部遮盖拦高度
 const mapStateToProps = (state: any) => {
   return {
     relateChatAccount: state.session.relateChatAccount,
@@ -78,6 +79,10 @@ const Msgs = ({...props}) => {
   const [chatUserInfo, setChatUserInfo] = useState({});
 
   useEffect(() => {
+    if (Platform.OS === 'android') {
+      getSoftInputModule(0);
+    }
+
     const sameItem = (ele: any) => ele === props.route.params.chatUserId;
     if (props.relateChatAccount.findIndex(sameItem) === -1) {
       props.relateChatAccount.push(props.route.params.chatUserId);

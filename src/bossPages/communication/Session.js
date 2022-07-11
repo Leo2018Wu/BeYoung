@@ -39,6 +39,7 @@ import ChatEmoji from '../../components/base/ChatEmoji';
 import {giveGift} from '../../api/gift';
 import {sendText, getLocalMsgs, sendCustomMsg} from '../../store/action/msg';
 import {setCurrSession, resetCurrSession} from '../../store/action/session';
+import {getSoftInputModule} from '../../util/getSoftInputModule';
 
 const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
   let groupMsg = [];
@@ -61,7 +62,7 @@ const genMsgs = (msgList = [], interval = 30 * 1000, timeKey = 'time') => {
 };
 
 let _scrollTimer;
-const BOTTOM_FIXED_HEIGHT = 92; // 底部遮盖拦高度
+const BOTTOM_FIXED_HEIGHT = 80; // 底部遮盖拦高度
 const mapStateToProps = state => {
   return {
     relateChatAccount: state.session.relateChatAccount,
@@ -120,6 +121,9 @@ const Msgs = ({...props}) => {
   }, [chatUserInfo]);
 
   useEffect(() => {
+    if (Platform.OS === 'android') {
+      getSoftInputModule(0);
+    }
     getData();
 
     const sameItem = ele => ele === props.route.params.chatUserId;
@@ -390,7 +394,7 @@ const Msgs = ({...props}) => {
         contentContainerStyle={{
           height: '100%',
         }}
-        behavior={Platform.OS === 'ios' ? 'position' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={{height: '100%'}}>
         {lastDailyInfo && !lastDailyInfo.read ? (
           <Pressable
