@@ -12,7 +12,7 @@ import {
   PageLoading,
   PageLoadMore,
 } from '../../../components/base/Pagination';
-import {queryMyDynamic} from '../../../api/daily';
+import {queryMyDynamic, delDynamic} from '../../../api/daily';
 
 const {
   PAGE_IS_LOADING,
@@ -49,12 +49,20 @@ const Index = () => {
   const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
   const {run: runQueryMyDynamic} = useRequest(queryMyDynamic.url);
+  const {run: runDelDynamic} = useRequest(delDynamic.url);
 
   useFocusEffect(
     React.useCallback(() => {
       _getList();
     }, [params]),
   );
+
+  const deleteDynamic = async dynamicId => {
+    const success = await runDelDynamic({dynamicId});
+    if (success) {
+      _getList();
+    }
+  };
 
   const _getList = async () => {
     try {
@@ -117,7 +125,13 @@ const Index = () => {
   const _renderItem = ({item, index}: {item: any; index: number}) => {
     return (
       <Box key={index} mb={4}>
-        <DailyItem returnFunc={itemRefresh} item={item} />
+        <DailyItem
+          returnFunc={itemRefresh}
+          item={item}
+          pressCb={dynamicId => {
+            deleteDynamic(dynamicId);
+          }}
+        />
       </Box>
     );
   };

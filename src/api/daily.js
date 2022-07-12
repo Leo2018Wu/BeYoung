@@ -90,8 +90,15 @@ export const fetchUnreadComment = {
   url: 'cgi/core/dynamic/fetchUnreadComment',
   options: {},
 };
+
 // 获取最新动态
 export const fetchLastDynamic = {
   url: 'cgi/core/dynamic/fetchLastDynamic',
+  options: {},
+};
+
+// 删除动态
+export const delDynamic = {
+  url: 'cgi/core/dynamic/delDynamic',
   options: {},
 };
