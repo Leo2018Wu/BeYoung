@@ -185,16 +185,18 @@ const Index = ({...props}) => {
                           styles={{
                             width: 100,
                             height: 100,
-                            margin: 8,
+                            marginTop: 10,
+                            marginRight: 12,
+                            marginBottom: 8,
                           }}
                         />
                       </Pressable>
                       <Pressable
                         style={{
-                          width: 14,
-                          height: 14,
+                          width: 20,
+                          height: 20,
                           position: 'absolute',
-                          right: 0,
+                          right: 2,
                           top: 0,
                         }}
                         onPress={() => {
@@ -203,7 +205,7 @@ const Index = ({...props}) => {
                           setList(JSON.parse(JSON.stringify(newData)));
                           delMedia(item1.id);
                         }}>
-                        <Icon name="closecircle" size={14} color="#B2B2B2" />
+                        <Icon name="closecircle" size={18} color="#B2B2B2" />
                       </Pressable>
                     </View>
                     {item1.auditStatus === 'AUDIT_STATUS_DENY' && (
@@ -252,6 +254,7 @@ const Index = ({...props}) => {
                         priority: FastImage.priority.normal,
                       }}
                       resizeMode={FastImage.resizeMode.contain}
+                      key={item1.id}
                     />
                   ))}
               </View>
@@ -270,7 +273,8 @@ const styles = StyleSheet.create({
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 8,
+    marginRight: 8,
+    marginBottom: 8,
     marginTop: 20,
   },
   linearGradient: {
