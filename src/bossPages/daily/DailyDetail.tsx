@@ -64,7 +64,7 @@ const Index = ({...props}) => {
 
   useEffect(() => {
     if (Platform.OS === 'android') {
-      getSoftInputModule(1);
+      getSoftInputModule(0);
     }
     getDynamic();
     getGiftRankList();
