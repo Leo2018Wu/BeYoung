@@ -537,7 +537,7 @@ const Msgs = ({...props}) => {
           shadow={2}
           style={{
             // paddingBottom: !keyboradShow ? insets.bottom : 10,
-            paddingBottom: Platform.OS === 'ios' ? 20 : 0,
+            paddingBottom: Platform.OS === 'ios' ? 20 : 5,
             backgroundColor: '#F1F0F3',
           }}>
           <HStack py={2.5} alignItems="center" w={'full'} px={4}>
