@@ -11,6 +11,7 @@ import {
   fetchAddMedia,
   fetchDelMedia,
 } from '../../api/photoSelect';
+import PhotoModal from '../mine/photoSelect/photoModal';
 
 const Index = () => {
   const [list, setList] = useState([]);
@@ -139,14 +140,7 @@ const Index = () => {
 
   return (
     <Box flex={1} bg="white">
-      <Modal animationType="fade" transparent visible={loading}>
-        <View style={styles.toastViewer}>
-          <View style={styles.iconView}>
-            <ActivityIndicator size="large" color={'#fff'} />
-          </View>
-          <Text style={styles.toastText}>正在上传...</Text>
-        </View>
-      </Modal>
+      {loading ? <PhotoModal /> : null}
       <Box px={4} py={4}>
         <View
           style={{flexDirection: 'row', flexWrap: 'wrap', marginBottom: 30}}>

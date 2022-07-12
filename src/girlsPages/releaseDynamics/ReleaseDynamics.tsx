@@ -4,9 +4,7 @@ import {
   TextInput,
   StatusBar,
   Platform,
-  ActivityIndicator,
   TouchableOpacity,
-  NativeModules,
 } from 'react-native';
 import {
   Box,
@@ -35,6 +33,7 @@ import util from '../../util/util';
 import {getSoftInputModule} from '../../util/getSoftInputModule';
 
 import layout from '../../components/Layout';
+import PhotoModal from '../mine/photoSelect/photoModal';
 
 const Index = (props: any) => {
   const {navigation} = props;
@@ -359,14 +358,7 @@ const Index = (props: any) => {
             </HStack>
           </LinearGradient>
         </Box>
-        <Modal isOpen={loading}>
-          <View style={styles.toastViewer}>
-            <View style={styles.iconView}>
-              <ActivityIndicator size="large" color={'#fff'} />
-            </View>
-            <Text style={styles.toastText}>正在上传...</Text>
-          </View>
-        </Modal>
+        {loading ? <PhotoModal /> : null}
         <Box my={0} px={4} py={4} bg="white">
           <TextInput
             style={{

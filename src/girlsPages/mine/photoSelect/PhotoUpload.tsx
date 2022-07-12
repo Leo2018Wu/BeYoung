@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Image, Modal, ActivityIndicator} from 'react-native';
-import {Box, Text, Pressable, View, Button, ScrollView} from 'native-base';
+import {StyleSheet, Image, ActivityIndicator} from 'react-native';
+import {Box, Text, Pressable, View, Modal, ScrollView} from 'native-base';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../../components/CFastImage';
 import FastImage from 'react-native-fast-image';
@@ -15,8 +15,7 @@ import {
 import useRequest from '../../../hooks/useRequest';
 import {BASE_DOWN_URL} from '../../../util/config';
 
-import Layout from '../../../components/Layout';
-
+import PhotoModal from './photoModal';
 interface ItemProps {
   url: string;
 }
@@ -25,6 +24,7 @@ const Index = ({...props}) => {
   const {item, caseImgList} = props.route.params;
   const [list, setList] = useState([]); // 照片列表
   const [loading, setLoading] = useState(false);
+  const [lookOpintion, setLookOpintion] = useState(false);
   const {run: runAddMedia} = useRequest(fetchAddMedia.url);
   const {run: runFetchCase, result} = useRequest(fetchCase.url);
   const {run: runFetchDelMedia} = useRequest(fetchDelMedia.url); // 删除媒体信息
@@ -151,14 +151,8 @@ const Index = ({...props}) => {
   return (
     <Box flex={1} bg="white">
       <ScrollView>
-        <Modal animationType="fade" transparent visible={loading}>
-          <View style={styles.toastViewer}>
-            <View style={styles.iconView}>
-              <ActivityIndicator size="large" color={'#fff'} />
-            </View>
-            <Text style={styles.toastText}>正在上传...</Text>
-          </View>
-        </Modal>
+        {loading ? <PhotoModal /> : null}
+
         <Box px={4} py={4}>
           <View
             style={{
@@ -173,33 +167,52 @@ const Index = ({...props}) => {
             {list &&
               list.map((item1: ItemProps, index: number) => {
                 return (
-                  <View style={{flexDirection: 'row'}} key={index}>
-                    <Pressable onPress={() => preview(index)}>
-                      <CFastImage
-                        url={item1.url}
-                        styles={{
-                          width: 100,
-                          height: 100,
-                          margin: 8,
+                  <View style={{marginTop: 10}} key={index}>
+                    <Modal
+                      isOpen={lookOpintion}
+                      onClose={() => setLookOpintion(false)}>
+                      <Modal.Content>
+                        <Modal.Header>审核未通过原因</Modal.Header>
+                        <Modal.Body>
+                          <Text>{item1.auditOpinion}</Text>
+                        </Modal.Body>
+                      </Modal.Content>
+                    </Modal>
+                    <View style={{flexDirection: 'row'}}>
+                      <Pressable onPress={() => preview(index)}>
+                        <CFastImage
+                          url={item1.url}
+                          styles={{
+                            width: 100,
+                            height: 100,
+                            margin: 8,
+                          }}
+                        />
+                      </Pressable>
+                      <Pressable
+                        style={{
+                          width: 14,
+                          height: 14,
+                          position: 'absolute',
+                          right: 0,
+                          top: 0,
                         }}
-                      />
-                    </Pressable>
-                    <Pressable
-                      style={{
-                        width: 14,
-                        height: 14,
-                        position: 'absolute',
-                        right: 0,
-                        top: 0,
-                      }}
-                      onPress={() => {
-                        const newData = [...list];
-                        newData.splice(index, 1);
-                        setList(JSON.parse(JSON.stringify(newData)));
-                        delMedia(item1.id);
-                      }}>
-                      <Icon name="closecircle" size={14} color="#B2B2B2" />
-                    </Pressable>
+                        onPress={() => {
+                          const newData = [...list];
+                          newData.splice(index, 1);
+                          setList(JSON.parse(JSON.stringify(newData)));
+                          delMedia(item1.id);
+                        }}>
+                        <Icon name="closecircle" size={14} color="#B2B2B2" />
+                      </Pressable>
+                    </View>
+                    {item1.auditStatus === 'AUDIT_STATUS_DENY' && (
+                      <Pressable
+                        onPress={() => setLookOpintion(true)}
+                        style={{marginLeft: 10}}>
+                        <Text color={'#F94B4B'}>审核未通过</Text>
+                      </Pressable>
+                    )}
                   </View>
                 );
               })}
@@ -258,29 +271,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     margin: 8,
-  },
-  toastViewer: {
-    width: 120,
-    minHeight: 120,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginLeft: -60,
-    marginTop: -60,
-    borderRadius: 10,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-  },
-  iconView: {
-    flex: 0.7,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-  },
-  toastText: {
-    flex: 0.3,
-    textAlign: 'center',
-    color: '#fff',
-    fontSize: 14,
+    marginTop: 20,
   },
   linearGradient: {
     position: 'absolute',
