@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CFastImage from '../../components/CFastImage';
 import { queryComment, commentDynamic } from '../../api/daily';
 import { useSelector } from 'react-redux';
-import emojiObj from '../../res/emoji';
 import ChatBox from '../../components/base/ChatBox';
 import useRequest from '../../hooks/useRequest';
 import { useFocusEffect } from '@react-navigation/native';
@@ -35,51 +34,6 @@ const {
   IS_NET_ERROR,
   IS_LIST,
 } = pageConstant;
-
-// 展示评论内容
-const GenContent = ({ ...props }) => {
-  const { emoji } = emojiObj.emojiList;
-  let { showText } = props;
-  const showTextArray = [];
-  if (/\[[^\]]+\]/.test(showText)) {
-    const emojiItems = showText.match(/\[[^\]]+\]/g);
-    emojiItems.forEach((item: string) => {
-      const wordIndex = showText.indexOf(item);
-      if (wordIndex > 0) {
-        showTextArray.push(showText.substr(0, wordIndex));
-        showText = showText.substr(wordIndex);
-      }
-      showTextArray.push(item);
-      showText = showText.substr(item.length);
-    });
-  }
-  if (showText.length > 0) {
-    showTextArray.push(showText);
-  }
-
-  return (
-    <HStack my={1} mx={0} style={{ marginLeft: 40 }}>
-      {showTextArray.map((item, index) => {
-        const id = `${item}${index}`;
-        if (emoji[item]) {
-          return (
-            <Image
-              key={id}
-              source={emoji[item].img}
-              style={{ width: 5 * 5, height: 5 * 5 }}
-              alt="dairy"
-            />
-          );
-        }
-        return (
-          <Text key={id} fontSize={'sm'}>
-            {item}
-          </Text>
-        );
-      })}
-    </HStack>
-  );
-};
 
 const areEqual = (pre: any, next: any) => {
   // 优化无关渲染
@@ -199,7 +153,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                   </Text>
                 </VStack>
               </HStack>
-              <GenContent showText={item.content} />
+              <Text fontSize={'sm'}>{item.content}</Text>
               {item.images &&
                 JSON.parse(item.images).length &&
                 JSON.parse(item.images)[0].length ? (
@@ -264,7 +218,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                           </Text>
                         </VStack>
                       </HStack>
-                      <GenContent showText={item1.content} />
+                      <Text fontSize={'sm'}>{item1.content}</Text>
                       {item1.images &&
                         JSON.parse(item1.images).length &&
                         JSON.parse(item1.images)[0].length ? (
@@ -335,7 +289,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
           </Text>
         </VStack>
       </HStack>
-      <GenContent showText={item.content} />
+      <Text fontSize={'sm'}>{item.content}</Text>
       {
         item.images &&
           JSON.parse(item.images).length &&
@@ -406,7 +360,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                         </Text>
                       </VStack>
                     </HStack>
-                    <GenContent showText={item1.content} />
+                    <Text fontSize={'sm'}>{item1.content}</Text>
                     {item1.images &&
                       JSON.parse(item1.images).length &&
                       JSON.parse(item1.images)[0].length ? (

@@ -1,47 +1,21 @@
-import React, {useEffect, useState} from 'react';
-import {Box, HStack, ScrollView, View, Pressable} from 'native-base';
+import React, {useState} from 'react';
+import {Box, HStack, ScrollView, View, Pressable, Text} from 'native-base';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/AntDesign';
 import ReplyEmoj from './ReplyEmoj';
 
-import emojiObj from '../../res/emoji';
-import {TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {emojiList} from '../../util/emoji';
+import {TouchableOpacity, StyleSheet, useWindowDimensions} from 'react-native';
 import {useSelector} from 'react-redux';
-
-const genEmojiList = (type, emojiList) => {
-  const result = {};
-  Object.keys(emojiList).forEach(name => {
-    const emojiMap = emojiList[name];
-    const list = [];
-    Object.keys(emojiMap).forEach(key => {
-      list.push({
-        type,
-        name,
-        key,
-        img: emojiMap[key].img,
-      });
-    });
-    if (list.length > 0) {
-      result[name] = {
-        type,
-        name,
-        list,
-        album: list[0].img,
-      };
-    }
-  });
-
-  return result;
-};
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const Index = ({onSelectEmoji, onSelectPackage}) => {
-  const [emojisMap, setEmojisMap] = useState([]);
+  const {width} = useWindowDimensions();
+  const insets = useSafeAreaInsets();
+  const EMOJI_WIDTH = (width - 24) / 8;
+  const EMOJI_HEIGHT = EMOJI_WIDTH;
   const [activitIndex, setActivitIndex] = useState(0);
   const userInfo = useSelector(state => state.user.myUserInfo);
-
-  useEffect(() => {
-    setEmojisMap(genEmojiList('emoji', emojiObj.emojiList));
-  }, []);
 
   return (
     <Box flex={1}>
@@ -84,35 +58,28 @@ const Index = ({onSelectEmoji, onSelectPackage}) => {
           </>
         )}
       </View>
-      <ScrollView bg={'bg.f5'} showsVerticalScrollIndicator px={2}>
-        <HStack justifyContent={'space-between'} flexWrap={'wrap'}>
+      <ScrollView
+        contentContainerStyle={{paddingBottom: insets.bottom}}
+        bg={'bg.f5'}
+        showsVerticalScrollIndicator
+        px={3}>
+        <HStack flexWrap={'wrap'}>
           {activitIndex === 0 &&
-            Object.keys(emojisMap).map(name => {
-              const emojis = emojisMap[name].list;
-              return (
-                emojis &&
-                emojis.map(item => (
-                  <TouchableOpacity
-                    onPress={() => onSelectEmoji(item.key)}
-                    key={item.img}
-                    style={{
-                      width: 40,
-                      height: 40,
-                      marginHorizontal: 4,
-                      marginVertical: 4,
-                    }}>
-                    <Image
-                      source={item.img}
-                      style={{width: 6 * 6, height: 6 * 6}}
-                    />
-                  </TouchableOpacity>
-                ))
-              );
-            })}
+            emojiList &&
+            emojiList.map((item, index) => (
+              <TouchableOpacity
+                onPress={() => onSelectEmoji(item)}
+                key={`emoji${index}`}
+                style={{
+                  width: EMOJI_WIDTH,
+                  height: EMOJI_HEIGHT,
+                }}>
+                <Text fontSize={'2xl'}>{item}</Text>
+              </TouchableOpacity>
+            ))}
           {activitIndex === 1 ? (
             <ReplyEmoj
               clickItem={(item: object) => {
-                console.log('---s-s-s-', item);
                 onSelectPackage(item.url);
               }}
             />
