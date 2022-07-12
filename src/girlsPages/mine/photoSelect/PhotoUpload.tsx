@@ -17,6 +17,10 @@ import {BASE_DOWN_URL} from '../../../util/config';
 
 import Layout from '../../../components/Layout';
 
+interface ItemProps {
+  url: string;
+}
+
 const Index = ({...props}) => {
   const {item, caseImgList} = props.route.params;
   const [list, setList] = useState([]); // 照片列表
@@ -136,6 +140,14 @@ const Index = ({...props}) => {
     });
   };
 
+  const preview = (index: number) => {
+    const imgUrls = list.map((ele: ItemProps) => {
+      const temp = {url: `${BASE_DOWN_URL + ele.url}`};
+      return temp;
+    });
+    props.navigation.navigate('Preview', {index, imgUrls});
+  };
+
   return (
     <Box flex={1} bg="white">
       <ScrollView>
@@ -159,17 +171,19 @@ const Index = ({...props}) => {
           <View
             style={{flexDirection: 'row', flexWrap: 'wrap', marginBottom: 30}}>
             {list &&
-              list.map((item1, index) => {
+              list.map((item1: ItemProps, index: number) => {
                 return (
-                  <View style={{flexDirection: 'row'}}>
-                    <CFastImage
-                      url={item1.url}
-                      styles={{
-                        width: 60,
-                        height: 60,
-                        margin: 8,
-                      }}
-                    />
+                  <View style={{flexDirection: 'row'}} key={index}>
+                    <Pressable onPress={() => preview(index)}>
+                      <CFastImage
+                        url={item1.url}
+                        styles={{
+                          width: 100,
+                          height: 100,
+                          margin: 8,
+                        }}
+                      />
+                    </Pressable>
                     <Pressable
                       style={{
                         width: 14,
@@ -197,8 +211,8 @@ const Index = ({...props}) => {
               <Image
                 source={require('../../assets/album_add_icon.png')}
                 style={{
-                  width: 60,
-                  height: 60,
+                  width: 100,
+                  height: 100,
                 }}
                 resizeMode="cover"
               />
@@ -239,8 +253,8 @@ export default Index;
 
 const styles = StyleSheet.create({
   img_item: {
-    width: 60,
-    height: 60,
+    width: 100,
+    height: 100,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 8,

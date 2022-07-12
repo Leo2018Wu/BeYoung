@@ -84,10 +84,10 @@ const Login = ({...props}) => {
               </Text>
             </View>
           </View>
-          <View style={{width: 100}}>
+          {/* <View style={{width: 100}}>
             <Text fontSize={'xs'}>完成此类别照片</Text>
             <Text fontSize={'xs'}>可获得10元红包</Text>
-          </View>
+          </View> */}
           <LinearGradient
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
