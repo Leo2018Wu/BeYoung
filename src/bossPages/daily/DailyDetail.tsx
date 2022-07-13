@@ -70,9 +70,11 @@ const Index = ({...props}) => {
     getGiftRankList();
     DeviceEventEmitter.addListener('REPLY_FLAG', res => {
       setReplyFlag(res);
-      setTimeout(() => {
-        DeviceEventEmitter.emit('KEYBOARD', true);
-      }, 500);
+      if (res) {
+        setTimeout(() => {
+          DeviceEventEmitter.emit('KEYBOARD', true);
+        }, 500);
+      }
       DeviceEventEmitter.removeListener('REPLY_FLAG', () => {});
     });
   }, []);

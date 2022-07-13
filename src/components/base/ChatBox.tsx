@@ -47,7 +47,7 @@ const Index = ({pressCb}: {pressCb: Function}) => {
       }
       DeviceEventEmitter.removeListener('KEYBOARD', () => {});
     });
-  }, [inputRef]);
+  }, []);
 
   const sendMsg = (type = 'text') => {
     let images = [];
