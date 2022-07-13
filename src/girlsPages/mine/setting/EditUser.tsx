@@ -97,7 +97,6 @@ const Index = ({...props}) => {
           <Input
             clearButtonMode="while-editing"
             onChangeText={e => setValue(e)}
-            keyboardType="phone-pad"
             flex={1}
             fontSize={'md'}
             value={inputValue}
