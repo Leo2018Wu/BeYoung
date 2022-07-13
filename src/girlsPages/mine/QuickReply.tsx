@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Pressable, StyleSheet} from 'react-native';
+import {Pressable, StyleSheet, Platform} from 'react-native';
 import {
   View,
   Text,
@@ -13,13 +13,14 @@ import {querySysDic} from '../../api/common';
 import {addQuickReply, fetchQuickReply} from '../../api/quickReply';
 import useRequest from '../../hooks/useRequest';
 import {useNavigation} from '@react-navigation/native';
+import {getSoftInputModule} from '../../util/getSoftInputModule';
+import util from '../../util/util';
 
 import layout from '../../components/Layout';
 
 const Login = () => {
   const navigation = useNavigation();
   const Toast = useToast();
-  const [goodsName, setGoodsName] = useState('');
   const [list, setList] = useState([]);
   const [btnFlag, setBtnFlag] = useState(false);
 
@@ -30,6 +31,9 @@ const Login = () => {
   const {run: runFetchQuickReply} = useRequest(fetchQuickReply.url);
 
   useEffect(() => {
+    if (Platform.OS === 'android') {
+      getSoftInputModule(0);
+    }
     runQuerySysDic();
   }, []);
 
@@ -61,16 +65,9 @@ const Login = () => {
   };
 
   const change = (text, index) => {
+    setBtnFlag(true);
     list[index].content = text;
     setList(JSON.parse(JSON.stringify(list)));
-    let index1 = list.findIndex(e => {
-      return !e.content;
-    });
-    if (index1 !== -1) {
-      setBtnFlag(false);
-    } else {
-      setBtnFlag(true);
-    }
   };
 
   const submit = async () => {
@@ -90,7 +87,12 @@ const Login = () => {
         quickReplies,
       });
       if (success) {
-        navigation.goBack();
+        // navigation.goBack();
+        Toast.show({
+          description: '保存成功',
+          placement: 'top',
+          duration: 1500,
+        });
       }
     } else {
       Toast.show({
@@ -128,9 +130,9 @@ const Login = () => {
               );
             })}
         </View>
-        <View style={styles.btnView}>
-          {btnFlag ? (
-            <Pressable onPress={() => submit()}>
+        {btnFlag && (
+          <View style={styles.btnView}>
+            <Pressable onPress={() => util.throttle(submit(), 3000)}>
               <LinearGradient
                 start={{x: 0, y: 0}}
                 end={{x: 1, y: 0}}
@@ -139,8 +141,8 @@ const Login = () => {
                 <Text style={styles.buttonText}>保存</Text>
               </LinearGradient>
             </Pressable>
-          ) : null}
-        </View>
+          </View>
+        )}
       </ScrollView>
     </NativeBaseProvider>
   );

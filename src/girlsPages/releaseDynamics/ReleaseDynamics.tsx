@@ -121,6 +121,12 @@ const Index = (props: any) => {
           labelType: labelType,
           labelDetail: labelDetail,
         });
+      } else {
+        toast.show({
+          description: '请输入帖子内容',
+          placement: 'top',
+          duration: 1000,
+        });
       }
     } catch (err) {}
   };

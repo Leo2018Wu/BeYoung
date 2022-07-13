@@ -8,7 +8,9 @@
 // 添加快捷回复
 export const addQuickReply = {
   url: 'cgi/core/user/addQuickReply',
-  options: {},
+  options: {
+    showMsg: true,
+  },
 };
 
 // 获取我的快捷回复
