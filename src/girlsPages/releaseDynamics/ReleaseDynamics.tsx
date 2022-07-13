@@ -63,7 +63,7 @@ const Index = (props: any) => {
   );
 
   useEffect(() => {
-    if ((textAreaValue || list) && labelDetail) {
+    if ((textAreaValue || list.length) && labelDetail) {
       setFlag(true);
     } else {
       setFlag(false);
