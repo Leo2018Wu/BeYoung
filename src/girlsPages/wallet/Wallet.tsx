@@ -33,14 +33,12 @@ const mapStateToProps = (state: any) => {
 
 const Index = ({...props}) => {
   const {navigation, walletInfo, route} = props;
-  const toast = useToast();
   const insets = useSafeAreaInsets();
   const [coinAmount, setCoinAmount] = useState(0);
 
   const {run: runFetchWithdraw} = useRequest(fetchWithdraw.url);
   const [withdrawalFlag, setWithdrawalFlag] = useState(false);
   const [keyData, setKeyData] = useState(0);
-  const [flag, setFlag] = useState(flag);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -49,20 +47,7 @@ const Index = ({...props}) => {
   );
 
   const goWithdraw = () => {
-    if (!coinAmount) {
-      toast.show({
-        description: '提现青回币不能为0',
-        placement: 'top',
-        duration: 1000,
-      });
-      return;
-    }
-    if (!route.params) {
-      toast.show({
-        description: '请选择提现账号',
-        placement: 'top',
-        duration: 1000,
-      });
+    if (!coinAmount || !route.params) {
       return;
     }
     getWithdraw();
@@ -286,17 +271,21 @@ const Index = ({...props}) => {
               <IconNew name="right" size={16} color="#000" />
             </Pressable>
           </View>
-          <TouchableOpacity
-            onPress={() => util.throttle(goWithdraw(), 2000)}
+          <Pressable
+            onPress={() => goWithdraw()}
             style={{width: '100%', marginTop: 10}}>
             <LinearGradient
               start={{x: 0, y: 0}}
               end={{x: 1, y: 0}}
-              colors={['#D988FF', '#8B5CFF']}
+              colors={
+                coinAmount && route.params
+                  ? ['#D988FF', '#8B5CFF']
+                  : ['#999999', '#999999']
+              }
               style={[styles.linearGradient, {width: '90%', marginLeft: '5%'}]}>
               <Text style={styles.buttonText}>提现</Text>
             </LinearGradient>
-          </TouchableOpacity>
+          </Pressable>
         </Modal.Content>
       </Modal>
     </View>

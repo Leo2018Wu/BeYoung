@@ -1,11 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  StatusBar,
-  Platform,
-  TouchableOpacity,
-} from 'react-native';
+import {StyleSheet, TextInput, StatusBar, Platform} from 'react-native';
 import {
   Box,
   Text,
@@ -29,7 +23,6 @@ import {openCamera} from '../../util/cameraPhoto';
 import {upload} from '../../util/newUploadOSS';
 import {addDynamic, fetchDynamicLabels} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
-import util from '../../util/util';
 import {getSoftInputModule} from '../../util/getSoftInputModule';
 
 import layout from '../../components/Layout';
@@ -52,7 +45,7 @@ const Index = (props: any) => {
   const [labelType, setLabelType] = useState('');
   const [labelDetail, setLabelDetail] = useState('');
   const [tipsFlag, setTipsFlag] = useState(false);
-  const [flag, setFlag] = useState(false);
+  const [btnFlag, setBtnFlag] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -64,9 +57,9 @@ const Index = (props: any) => {
 
   useEffect(() => {
     if ((textAreaValue || list.length) && labelDetail) {
-      setFlag(true);
+      setBtnFlag(true);
     } else {
-      setFlag(false);
+      setBtnFlag(false);
     }
   }, [textAreaValue, list, labelDetail]);
 
@@ -107,15 +100,7 @@ const Index = (props: any) => {
   };
 
   const checkSubmit = () => {
-    if (!flag) {
-      return;
-    }
-    if (!labelDetail) {
-      toast.show({
-        description: '请添加标签',
-        placement: 'top',
-        duration: 1000,
-      });
+    if (!btnFlag) {
       return;
     }
     try {
@@ -132,12 +117,6 @@ const Index = (props: any) => {
           content: textAreaValue,
           labelType: labelType,
           labelDetail: labelDetail,
-        });
-      } else {
-        toast.show({
-          description: '请输入帖子内容',
-          placement: 'top',
-          duration: 1000,
         });
       }
     } catch (err) {}
@@ -472,24 +451,22 @@ const Index = (props: any) => {
             <Text fontSize={'sm'}>{labelDetail || '请选择'}</Text>
           </View>
         </Box>
-        {flag && (
-          <TouchableOpacity
-            onPress={() => checkSubmit()}
-            style={{
-              width: '100%',
-              marginTop: 10,
-              position: 'absolute',
-              bottom: '5%',
-            }}>
-            <LinearGradient
-              start={{x: 0, y: 0}}
-              end={{x: 1, y: 0}}
-              colors={['#D988FF', '#8B5CFF']}
-              style={[styles.linearGradient, {width: '90%', marginLeft: '5%'}]}>
-              <Text style={styles.buttonText}>发布</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-        )}
+        <Pressable
+          onPress={() => checkSubmit()}
+          style={{
+            width: '100%',
+            marginTop: 10,
+            position: 'absolute',
+            bottom: '5%',
+          }}>
+          <LinearGradient
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 0}}
+            colors={btnFlag ? ['#D988FF', '#8B5CFF'] : ['#999999', '#999999']}
+            style={[styles.linearGradient, {width: '90%', marginLeft: '5%'}]}>
+            <Text style={styles.buttonText}>发布</Text>
+          </LinearGradient>
+        </Pressable>
       </Box>
     </ScrollView>
   );
