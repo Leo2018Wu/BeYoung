@@ -40,6 +40,7 @@ const Index = ({...props}) => {
   const {run: runFetchWithdraw} = useRequest(fetchWithdraw.url);
   const [withdrawalFlag, setWithdrawalFlag] = useState(false);
   const [keyData, setKeyData] = useState(0);
+  const [flag, setFlag] = useState(flag);
 
   useFocusEffect(
     React.useCallback(() => {

@@ -52,6 +52,7 @@ const Index = (props: any) => {
   const [labelType, setLabelType] = useState('');
   const [labelDetail, setLabelDetail] = useState('');
   const [tipsFlag, setTipsFlag] = useState(false);
+  const [flag, setFlag] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -60,6 +61,14 @@ const Index = (props: any) => {
       }
     }, []),
   );
+
+  useEffect(() => {
+    if ((textAreaValue || list) && labelDetail) {
+      setFlag(true);
+    } else {
+      setFlag(false);
+    }
+  }, [textAreaValue, list, labelDetail]);
 
   useEffect(() => {
     if (result) {
@@ -98,6 +107,9 @@ const Index = (props: any) => {
   };
 
   const checkSubmit = () => {
+    if (!flag) {
+      return;
+    }
     if (!labelDetail) {
       toast.show({
         description: '请添加标签',
@@ -460,22 +472,24 @@ const Index = (props: any) => {
             <Text fontSize={'sm'}>{labelDetail || '请选择'}</Text>
           </View>
         </Box>
-        <TouchableOpacity
-          onPress={() => util.throttle(checkSubmit(), 2000)}
-          style={{
-            width: '100%',
-            marginTop: 10,
-            position: 'absolute',
-            bottom: '5%',
-          }}>
-          <LinearGradient
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 0}}
-            colors={['#D988FF', '#8B5CFF']}
-            style={[styles.linearGradient, {width: '90%', marginLeft: '5%'}]}>
-            <Text style={styles.buttonText}>发布</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+        {flag && (
+          <TouchableOpacity
+            onPress={() => checkSubmit()}
+            style={{
+              width: '100%',
+              marginTop: 10,
+              position: 'absolute',
+              bottom: '5%',
+            }}>
+            <LinearGradient
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 0}}
+              colors={['#D988FF', '#8B5CFF']}
+              style={[styles.linearGradient, {width: '90%', marginLeft: '5%'}]}>
+              <Text style={styles.buttonText}>发布</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        )}
       </Box>
     </ScrollView>
   );
