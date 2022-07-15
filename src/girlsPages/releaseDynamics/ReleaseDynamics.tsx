@@ -271,6 +271,9 @@ const Index = (props: any) => {
                             setActIndex(index);
                             setAtvedIndex(0);
                             setLabelType(item.name);
+                            setLabelDetail(
+                              tipsClassList[index].subLabels[0].name,
+                            );
                           }}
                           style={[
                             {
