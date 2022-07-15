@@ -153,7 +153,7 @@ const Index = () => {
                     styles={{
                       width: 70,
                       height: 70,
-                      margin: 4,
+                      margin: 6,
                     }}
                   />
                   <Pressable
@@ -183,8 +183,8 @@ const Index = () => {
             <Image
               source={require('../assets/album_add_icon.png')}
               style={{
-                width: 60,
-                height: 60,
+                width: 70,
+                height: 70,
               }}
               resizeMode="cover"
             />
@@ -198,8 +198,8 @@ export default Index;
 
 const styles = StyleSheet.create({
   img_item: {
-    width: 60,
-    height: 60,
+    width: 70,
+    height: 70,
     justifyContent: 'center',
     alignItems: 'center',
     margin: 8,

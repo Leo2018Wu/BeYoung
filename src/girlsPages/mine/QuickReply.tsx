@@ -1,5 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {Pressable, StyleSheet, Platform} from 'react-native';
+import {
+  Pressable,
+  StyleSheet,
+  Platform,
+  KeyboardAvoidingView,
+} from 'react-native';
 import {
   View,
   Text,
@@ -136,32 +141,36 @@ const Login = () => {
           </Text>
         </Button>
       </HStack>
-      <ScrollView style={styles.quickContain}>
-        <View
-          style={{
-            paddingBottom: 20,
-            backgroundColor: '#fff',
-          }}>
-          {list &&
-            list.map((item, index) => {
-              return (
-                <View key={index}>
-                  <Text style={styles.quickTitle}>{item.name}</Text>
-                  <Input
-                    value={item.content}
-                    height={38}
-                    onChangeText={text => change(text, index)}
-                    variant="outline"
-                    placeholder="添加你的回复..."
-                    fontSize={14}
-                    borderRadius={10}
-                    borderColor={'#C7C4CC'}
-                  />
-                </View>
-              );
-            })}
-        </View>
-      </ScrollView>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+        style={{flex: 1}}>
+        <ScrollView style={styles.quickContain}>
+          <View
+            style={{
+              paddingBottom: 20,
+              backgroundColor: '#fff',
+            }}>
+            {list &&
+              list.map((item, index) => {
+                return (
+                  <View key={index}>
+                    <Text style={styles.quickTitle}>{item.name}</Text>
+                    <Input
+                      value={item.content}
+                      height={38}
+                      onChangeText={text => change(text, index)}
+                      variant="outline"
+                      placeholder="添加你的回复..."
+                      fontSize={14}
+                      borderRadius={10}
+                      borderColor={'#C7C4CC'}
+                    />
+                  </View>
+                );
+              })}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Box>
   );
 };
