@@ -10,7 +10,6 @@ import {
   Actionsheet,
   useDisclose,
   ScrollView,
-  useToast,
 } from 'native-base';
 import {useFocusEffect} from '@react-navigation/native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -30,7 +29,6 @@ import PhotoModal from '../mine/photoSelect/photoModal';
 
 const Index = (props: any) => {
   const {navigation} = props;
-  const toast = useToast();
   const insets = useSafeAreaInsets();
   const [textAreaValue, setTextAreaValue] = useState('');
   const [list, setList] = useState([]);
@@ -49,6 +47,7 @@ const Index = (props: any) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      getDynamicLabels();
       if (Platform.OS === 'android') {
         getSoftInputModule(1);
       }
@@ -78,7 +77,6 @@ const Index = (props: any) => {
     const {data, success} = await runFetchDynamicLabels();
     if (success) {
       setTipsClassList(data);
-      setLabelType(data[0].name);
     }
   };
 
@@ -270,10 +268,6 @@ const Index = (props: any) => {
                           onPress={() => {
                             setActIndex(index);
                             setAtvedIndex(0);
-                            setLabelType(item.name);
-                            setLabelDetail(
-                              tipsClassList[index].subLabels[0].name,
-                            );
                           }}
                           style={[
                             {
@@ -303,6 +297,7 @@ const Index = (props: any) => {
                           onPress={() => {
                             setAtvedIndex(index);
                             setLabelFLag(false);
+                            setLabelType(tipsClassList[actIndex].name);
                             setLabelDetail(item.name);
                           }}
                           style={{
@@ -409,20 +404,6 @@ const Index = (props: any) => {
                   </View>
                 );
               })}
-            {/* <Pressable
-            onPress={() => {
-              chooseImg();
-            }}
-            style={styles.img_item}>
-            <Image
-              source={require('../assets/album_add_icon.png')}
-              style={{
-                width: 60,
-                height: 60,
-              }}
-              resizeMode="cover"
-            />
-          </Pressable> */}
           </View>
           <Pressable
             onPress={() => {
@@ -436,7 +417,6 @@ const Index = (props: any) => {
           <Pressable
             onPress={() => {
               setLabelFLag(true);
-              getDynamicLabels();
             }}
             style={styles.titleView}>
             <Text fontSize={'sm'} color={'#727272'}>
@@ -447,12 +427,19 @@ const Index = (props: any) => {
               <Icon name="right" size={16} color="#999" />
             </View>
           </Pressable>
-          <View style={styles.btnView}>
+          <Pressable
+            onPress={() => {
+              setLabelFLag(true);
+            }}
+            style={styles.btnView}>
             <Text fontSize={'sm'} color={'#727272'}>
               对应气质
             </Text>
-            <Text fontSize={'sm'}>{labelDetail || '请选择'}</Text>
-          </View>
+            <View style={styles.rightView}>
+              <Text>{labelDetail || '请选择'}</Text>
+              <Icon name="right" size={16} color="#999" />
+            </View>
+          </Pressable>
         </Box>
         <Pressable
           onPress={() => checkSubmit()}
