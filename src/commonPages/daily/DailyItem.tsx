@@ -184,6 +184,7 @@ const Index = ({...props}) => {
               }}
               style={{
                 marginLeft: 56,
+                marginTop: 10,
               }}
               pt={0}>
               <HStack mb={2} flexWrap={'wrap'}>

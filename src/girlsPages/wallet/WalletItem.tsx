@@ -41,7 +41,12 @@ const Login = ({...props}) => {
           {/* <Text style={{color: '#554C5F', fontSize: 12, alignSelf: 'flex-end'}}>
             RMB
           </Text> */}
-          <Text style={{color: '#554C5F', fontSize: 20, fontWeight: 'bold'}}>
+          <Text
+            style={{
+              color: '#554C5F',
+              fontSize: 20,
+              fontWeight: 'bold',
+            }}>
             -{util.formateMoney(item.coinAmount)}
           </Text>
         </View>
