@@ -64,8 +64,8 @@ const MyStack = () => {
         name="QuickReply"
         component={QuickReply}
         options={() => ({
-          title: '快捷回复',
-          headerStyle: {backgroundColor: '#fff'},
+          headerShown: false,
+          headerBackVisible: true,
         })}
       />
       <Stack.Screen

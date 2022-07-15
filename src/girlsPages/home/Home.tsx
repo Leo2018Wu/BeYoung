@@ -53,8 +53,17 @@ export default function TabViewExample() {
         routes.map((item, index1) => (
           <Pressable
             onPress={() => setIndex(index1)}
-            style={{marginHorizontal: 15, justifyContent: 'center'}}>
-            <View>
+            style={{
+              marginHorizontal: 8,
+              justifyContent: 'center',
+              minWidth: 60,
+            }}>
+            <View
+              style={{
+                height: '100%',
+                flex: 1,
+                justifyContent: 'center',
+              }}>
               <Text style={index == index1 ? styles.texted : styles.text}>
                 {item.title}
               </Text>
@@ -106,9 +115,11 @@ const styles = StyleSheet.create({
   text: {
     color: '#554C5F',
     fontSize: 14,
+    textAlign: 'center',
   },
   texted: {
     color: '#554C5F',
     fontSize: 18,
+    textAlign: 'center',
   },
 });

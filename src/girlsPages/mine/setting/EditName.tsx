@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import {Pressable, Platform} from 'react-native';
 import {Box, Button, HStack, Input, Text, useToast} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {updateUserInfo} from '../../../api/common';
 import useRequest from '../../../hooks/useRequest';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Index = ({...props}) => {
   const params = props.route.params;
@@ -39,17 +41,33 @@ const Index = ({...props}) => {
         h={20}
         alignItems={'center'}
         justifyContent={'center'}
-        style={{paddingTop: insets.top}}>
+        style={{
+          paddingTop: Platform.OS === 'android' ? insets.top : insets.top - 10,
+        }}>
+        <Pressable
+          style={{
+            width: 24,
+            height: 24,
+            left: 20,
+            top: 45,
+            position: 'absolute',
+            zIndex: 10,
+          }}
+          onPress={() => {
+            props.navigation.goBack();
+          }}>
+          <Icon name="arrow-back" size={24} color="#000" />
+        </Pressable>
         <Text fontSize={'md'} fontWeight="bold">
           编辑信息
         </Text>
         {changeStatus && (
           <Button
             onPress={() => edit()}
-            w={16}
-            h={8}
             style={{
               backgroundColor: '#9650FF',
+              paddingHorizontal: 4,
+              paddingVertical: 2,
               position: 'absolute',
               right: 16,
               top: '25%',
@@ -59,11 +77,7 @@ const Index = ({...props}) => {
                 },
               ],
             }}>
-            <Text
-              fontWeight={'bold'}
-              color={'white'}
-              fontSize="sm"
-              lineHeight={16}>
+            <Text fontWeight={'bold'} color={'white'} fontSize="sm">
               完成
             </Text>
           </Button>
