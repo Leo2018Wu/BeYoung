@@ -23,7 +23,7 @@ export const openPicker = async (maxFiles = 99, multiple = true) => {
     ]);
   } else {
     const data = await ImagePicker.openPicker({
-      compressImageQuality: 0.8,
+      compressImageQuality: 0.5,
       multiple,
       maxFiles,
       mediaType: 'photo',

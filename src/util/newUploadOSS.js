@@ -23,7 +23,7 @@ const uuid = () => {
 
 export const upload = async (options = {}) => {
   try {
-    const {path = '', type = 'img', second = ''} = options;
+    const {path = '', type = 'img', second = '', index = null} = options;
     let suffix;
     if (type === 'img') {
       suffix = 'img' + uuid() + path.replace(/.+\./, '.').toLowerCase();
@@ -35,7 +35,11 @@ export const upload = async (options = {}) => {
     return new Promise((reslove, reject) => {
       AliyunOSS.asyncUpload(bucketname, suffix, path)
         .then(res => {
-          reslove(suffix);
+          if (index === null) {
+            reslove(suffix);
+          } else {
+            reslove({key: suffix, index});
+          }
         })
         .catch(err => {
           reject(err);

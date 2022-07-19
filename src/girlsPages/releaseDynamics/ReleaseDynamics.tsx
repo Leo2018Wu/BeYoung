@@ -125,7 +125,6 @@ const Index = (props: any) => {
         );
         setLoading(true);
         if (filterUploadFiles.length > 0) {
-          console.log('--filterUploadFiles--', filterUploadFiles);
           uploadDynamic(filterUploadFiles);
         }
       } else if (textAreaValue) {
@@ -148,16 +147,20 @@ const Index = (props: any) => {
     }
     return new Promise((reslove, reject) => {
       let arr = [];
-      files.forEach((item, index) => {
-        upload({path: item})
+      files.forEach(async (item, index) => {
+        upload({path: item, index})
           .then(res => {
             arr.push(res);
-            if (arr.length == files.length) {
-              reslove(arr);
+            if (arr.length === files.length) {
+              const sortArr = arr.sort((a, b) => {
+                return a.index - b.index;
+              });
+              const resultArr = sortArr.map(item => item.key);
+              reslove(resultArr);
             }
           })
           .catch(() => {
-            reject(new Errow('上传失败'));
+            reject(new Error('上传失败'));
           });
       });
     });
