@@ -16,7 +16,6 @@ const Login = () => {
 
   useEffect(() => {
     if (result) {
-      console.log('--s-s-s-drs', result, JSON.parse(result[0].imgs));
       setList(JSON.parse(result[0].imgs));
     }
   }, [result]);

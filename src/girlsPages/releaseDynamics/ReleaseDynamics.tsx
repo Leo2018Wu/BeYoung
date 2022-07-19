@@ -32,7 +32,7 @@ const Index = (props: any) => {
   const insets = useSafeAreaInsets();
   const [textAreaValue, setTextAreaValue] = useState('');
   const [list, setList] = useState([]);
-  const {run: runAddDynamic, result} = useRequest(addDynamic.url);
+  const {run: runAddDynamic} = useRequest(addDynamic.url);
   const {run: runFetchDynamicLabels} = useRequest(fetchDynamicLabels.url);
   const [loading, setLoading] = useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
@@ -47,12 +47,15 @@ const Index = (props: any) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getDynamicLabels();
       if (Platform.OS === 'android') {
         getSoftInputModule(1);
       }
     }, []),
   );
+
+  useEffect(() => {
+    getDynamicLabels();
+  }, []);
 
   useEffect(() => {
     if ((textAreaValue || list.length) && labelDetail) {
@@ -62,21 +65,35 @@ const Index = (props: any) => {
     }
   }, [textAreaValue, list, labelDetail]);
 
-  useEffect(() => {
-    if (result) {
-      setLoading(false);
-      setTextAreaValue('');
-      setList([]);
-      setLabelType('');
-      setLabelDetail('');
-      navigation.navigate('Home');
+  const goAddDynamic = async (imgs = null) => {
+    try {
+      const {success} = await runAddDynamic({
+        content: textAreaValue,
+        images: imgs,
+        labelType: labelType,
+        labelDetail: labelDetail,
+      });
+      if (success) {
+        setLoading(false);
+        setTextAreaValue('');
+        setList([]);
+        setLabelType('');
+        setLabelDetail('');
+        navigation.navigate('Home');
+      }
+    } catch (err) {
+      console.log('---s---', err);
     }
-  }, [result]);
+  };
 
   const getDynamicLabels = async () => {
-    const {data, success} = await runFetchDynamicLabels();
-    if (success) {
-      setTipsClassList(data);
+    try {
+      const {data, success} = await runFetchDynamicLabels();
+      if (success) {
+        setTipsClassList(data);
+      }
+    } catch (error) {
+      console.log('----错误---', error);
     }
   };
 
@@ -108,14 +125,11 @@ const Index = (props: any) => {
         );
         setLoading(true);
         if (filterUploadFiles.length > 0) {
+          console.log('--filterUploadFiles--', filterUploadFiles);
           uploadDynamic(filterUploadFiles);
         }
       } else if (textAreaValue) {
-        runAddDynamic({
-          content: textAreaValue,
-          labelType: labelType,
-          labelDetail: labelDetail,
-        });
+        goAddDynamic();
       }
     } catch (err) {}
   };
@@ -124,12 +138,7 @@ const Index = (props: any) => {
     multiUpload(files).then(res => {
       const filterFiles = list.filter(item => item.substr(0, 3) === 'img');
       let arr = filterFiles.concat(res);
-      runAddDynamic({
-        content: textAreaValue,
-        images: arr,
-        labelType: labelType,
-        labelDetail: labelDetail,
-      });
+      goAddDynamic(arr);
     });
   };
 
@@ -265,6 +274,7 @@ const Index = (props: any) => {
                     tipsClassList.map((item, index) => {
                       return (
                         <Pressable
+                          key={item.id}
                           onPress={() => {
                             setActIndex(index);
                             setAtvedIndex(0);
@@ -294,6 +304,7 @@ const Index = (props: any) => {
                     tipsClassList[actIndex].subLabels.map((item, index) => {
                       return (
                         <Pressable
+                          key={item.id}
                           onPress={() => {
                             setAtvedIndex(index);
                             setLabelFLag(false);
@@ -377,7 +388,7 @@ const Index = (props: any) => {
             {list &&
               list.map((item, index) => {
                 return (
-                  <View style={{flexDirection: 'row'}}>
+                  <View key={index} style={{flexDirection: 'row'}}>
                     <CFastImage
                       url={item}
                       styles={{

@@ -11,7 +11,7 @@ import {useFocusEffect} from '@react-navigation/native';
 
 const Login = ({...props}) => {
   const {item} = props;
-  const {run: runFetchMyMedia, result} = useRequest(fetchMyMedia.url); // 获取我的媒体信息
+  const {run: runFetchMyMedia} = useRequest(fetchMyMedia.url); // 获取我的媒体信息
   const {run: runFetchCase} = useRequest(fetchCase.url); // 获取案例图片
   const [caseImg, setCaseImg] = useState('');
   const [flag, setFlag] = useState(false);
