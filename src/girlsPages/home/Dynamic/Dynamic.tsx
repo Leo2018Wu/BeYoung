@@ -116,7 +116,7 @@ const Index = () => {
 
   const _renderItem = ({item, index}: {item: any; index: number}) => {
     return (
-      <Box key={index} mb={4}>
+      <Box key={item.id} mb={4}>
         <DailyItem returnFunc={itemRefresh} item={item} />
       </Box>
     );

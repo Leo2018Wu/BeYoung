@@ -143,7 +143,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                   </Text>
                 </VStack>
               </HStack>
-              <Text fontSize={'sm'}>{item.content}</Text>
+              <Text fontSize={'sm'} marginLeft={10}>{item.content}</Text>
               {item.images &&
                 JSON.parse(item.images).length &&
                 JSON.parse(item.images)[0].length ? (
@@ -215,7 +215,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                           </Text>
                         </VStack>
                       </HStack>
-                      <Text fontSize={'sm'}>{item1.content}</Text>
+                      <Text fontSize={'sm'} marginLeft={10}>{item1.content}</Text>
                       {item1.images &&
                         JSON.parse(item1.images).length &&
                         JSON.parse(item1.images)[0].length ? (
@@ -232,7 +232,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                       {item1.userId !== userInfo.id ? (
                         <Pressable
                           onPress={() => setComment(item1)}
-                          style={{ marginLeft: 56, width: 30, marginTop: 10 }}>
+                          style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
                           <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
                             回复
                           </Text>
@@ -244,7 +244,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                 : null}
               {/* <Pressable
                 onPress={() => setComment(item)}
-                style={{ marginLeft: 56, width: 30, marginTop: 10, marginBottom: 30 }}>
+                style={{ marginLeft: 56, width: 60, marginTop: 10, marginBottom: 30 }}>
                 <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
                   回复
                 </Text>
@@ -286,7 +286,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
           </Text>
         </VStack>
       </HStack>
-      <Text fontSize={'sm'}>{item.content}</Text>
+      <Text fontSize={'sm'} marginLeft={10}>{item.content}</Text>
       {item.images &&
         JSON.parse(item.images).length &&
         JSON.parse(item.images)[0].length ? (
@@ -360,7 +360,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                       </Text>
                     </VStack>
                   </HStack>
-                  <Text fontSize={'sm'}>{item1.content}</Text>
+                  <Text fontSize={'sm'} marginLeft={10}>{item1.content}</Text>
                   {item1.images &&
                     JSON.parse(item1.images).length &&
                     JSON.parse(item1.images)[0].length ? (
@@ -377,7 +377,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                   {item.userId === userInfo.id && item1.userId !== userInfo.id ? (
                     <Pressable
                       onPress={() => setReply(item1)}
-                      style={{ marginLeft: 56, width: 30, marginTop: 10 }}>
+                      style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
                       <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
                         回复
                       </Text>
