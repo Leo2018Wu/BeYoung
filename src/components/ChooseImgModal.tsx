@@ -86,6 +86,13 @@ export default function Index({hideModal, imgCb, visible}) {
         })
         .catch(err => {
           hideModal();
+          let tips = '';
+          if (err instanceof Object) {
+            tips = JSON.stringify(err);
+          } else {
+            tips = err;
+          }
+          Alert.alert(tips);
           console.log('选择图片失败', err);
         });
     }
