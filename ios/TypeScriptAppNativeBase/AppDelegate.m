@@ -1,5 +1,6 @@
 #import "AppDelegate.h"
 
+#import "RCTWechat.h"
 #import <React/RCTLinkingManager.h>
 #import <UserNotifications/UserNotifications.h>
 #import <RNCPushNotificationIOS.h>
@@ -28,27 +29,6 @@ static void InitializeFlipper(UIApplication *application) {
 #endif
 
 @implementation AppDelegate
-
-
-
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-  return [RCTLinkingManager application:application openURL:url
-                      sourceApplication:sourceApplication annotation:annotation];
-}
-
-//- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
-//{
-//  return [RCTLinkingManager application:application openURL:url options:options];
-//}
-
-// ios 9.0+
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
-            options:(NSDictionary<NSString*, id> *)options
-{
-    return [RCTLinkingManager application:application openURL:url options:options];
-}
-
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -152,9 +132,31 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
   continueUserActivity:(NSUserActivity *)userActivity
   restorationHandler:(void(^)(NSArray<id<UIUserActivityRestoring>> * __nullable
   restorableObjects))restorationHandler {
+  BOOL handled = [RCTWechat handleOpenUniversalLink:userActivity];
+  if (handled) {
+      return handled;
+  }
   // 触发回调方法
   [RCTLinkingManager application:application continueUserActivity:userActivity restorationHandler:restorationHandler];
   return [WXApi handleOpenUniversalLink:userActivity delegate:self];
+}
+
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+  return [RCTLinkingManager application:application openURL:url
+                            sourceApplication:sourceApplication annotation:annotation];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+            options:(NSDictionary<NSString*, id> *)options
+{
+    BOOL handled = [RCTWechat handleOpenURL:url];
+    if (handled) {
+        return handled;
+    }
+    return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 
