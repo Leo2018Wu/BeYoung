@@ -3,7 +3,7 @@
 #import "WXApi.h"
 #import <UserNotifications/UNUserNotificationCenter.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, WXApiDelegate, UNUserNotificationCenterDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, RCTBridgeDelegate, UNUserNotificationCenterDelegate, WXApiDelegate>
 
 @property (nonatomic, strong) UIWindow *window;
 

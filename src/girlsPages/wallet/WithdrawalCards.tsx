@@ -61,12 +61,10 @@ const Index = ({...props}) => {
 
   useEffect(() => {
     if (accountTypeList) {
-      console.log('--accountTypeList--', accountTypeList);
       const renderGrades = accountTypeList.filter(
         item => item.pCode !== item.code,
       );
       setDictList(renderGrades);
-      console.log('--dictList--', dictList);
     }
   }, [accountTypeList]);
 
@@ -123,10 +121,9 @@ const Index = ({...props}) => {
   };
 
   // 绑定账号为微信
-  const wxPay = async () => {
-    WeChat.sendAuthRequest('snsapi_userinfo')
-      .then(async res => {
-        console.log('--res---', res);
+  const wxPay = () => {
+    WeChat.sendAuthRequest('snsapi_userinfo', '')
+      .then(res => {
         getBindAccount('ACCOUNT_TYPE_WX_PAY', res.code);
       })
       .catch(err => {

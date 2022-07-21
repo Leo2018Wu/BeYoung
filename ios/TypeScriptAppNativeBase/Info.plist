@@ -26,17 +26,17 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string></string>
+			<string>alipay</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>uiwjspay</string>
+				<string>alipay2021002137640123</string>
 			</array>
 		</dict>
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>wexin</string>
+			<string>weixin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>wxbf897d24e484ccc8</string>
@@ -47,10 +47,9 @@
 	<string>1</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
-		<string>alipay</string>
 		<string>weixin</string>
-  	<string>wechat</string>
-  	<string>weixinULAPI</string>
+		<string>wechat</string>
+		<string>weixinULAPI</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

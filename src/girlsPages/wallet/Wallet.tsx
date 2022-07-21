@@ -61,6 +61,7 @@ const Index = ({...props}) => {
       coinAmount: coinAmount,
     });
     if (success) {
+      setCoinAmount(0);
       setWithdrawalFlag(false);
       setKeyData(Math.random());
       props.dispatch(getMyWallet());
@@ -233,7 +234,10 @@ const Index = ({...props}) => {
             }}>
             <Text color="#606060">提现至</Text>
             <Pressable
-              onPress={() => navigation.navigate('WithdrawalCards')}
+              onPress={() => {
+                setWithdrawalFlag(false);
+                navigation.navigate('WithdrawalCards');
+              }}
               style={{flexDirection: 'row', alignItems: 'center'}}>
               {route.params ? (
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -362,6 +366,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: '#DEDEDE',
     borderBottomWidth: 1,
-    marginBottom: 20,
+    marginVertical: 20,
   },
 });
