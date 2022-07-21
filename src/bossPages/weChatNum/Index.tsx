@@ -10,6 +10,7 @@ import {
 } from 'native-base';
 import CustomFuncFlatList from '../../components/CustomFuncFlatList';
 import Icon from 'react-native-vector-icons/Ionicons';
+import util from '../../util/util';
 
 import CFastImage from '../../components/CFastImage';
 import {queryUnlockWeChat} from '../../api/user';
@@ -67,7 +68,7 @@ const Item = React.memo(({item, navigation}: {item: ItemProp}) => {
             fontSize={'sm'}
             color={'primary.100'}
             fontWeight={'bold'}>
-            {item.relateWeChat || '该用户还未填写微信号'}
+            {util.hidePhone(item.relateWeChat) || '该用户还未填写微信号'}
           </Text>
           <Pressable ml={2} onPress={() => copyText(item.relateWeChat)}>
             <Icon name="copy" size={20} color="#9650FF" />

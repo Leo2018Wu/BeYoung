@@ -174,4 +174,14 @@ util.formateMoney = (value, num) => {
   return money;
 };
 
+// 隐藏手机号
+util.hidePhone = val => {
+  let reg = /^(.).+(.)$/g;
+  if (val) {
+    return val.replace(reg, '$1*****$2');
+  } else {
+    return '';
+  }
+};
+
 export default util;

@@ -22,6 +22,7 @@ import {fetchMyInfo} from '../../api/common';
 import {fetchMyLabels} from '../../api/label';
 import CFastImage from '../../components/CFastImage';
 import {querySysDic, updateUserInfo} from '../../api/common';
+import util from '../../util/util';
 
 import layout from '../../components/Layout';
 
@@ -218,7 +219,7 @@ const Setting = ({...props}) => {
                 alignItems: 'center',
               }}>
               <Text style={{color: '#919191', marginRight: 4}}>
-                {result?.cardNum || '请设置身份证号'}
+                {util.hidePhone(result?.cardNum) || '请设置身份证号'}
               </Text>
               <IconNew name="right" size={16} color="#919191" />
             </View>
@@ -232,7 +233,7 @@ const Setting = ({...props}) => {
                 alignItems: 'center',
               }}>
               <Text style={{color: '#919191', marginRight: 4}}>
-                {result?.phone}
+                {util.hidePhone(result?.phone)}
               </Text>
               <IconNew name="right" size={16} color="#919191" />
             </View>
@@ -248,7 +249,7 @@ const Setting = ({...props}) => {
                 alignItems: 'center',
               }}>
               <Text style={{color: '#919191', marginRight: 4}}>
-                {result?.weChat || '请设置微信号'}
+                {util.hidePhone(result?.weChat) || '请设置微信号'}
               </Text>
               <IconNew name="right" size={16} color="#919191" />
             </View>
@@ -264,7 +265,7 @@ const Setting = ({...props}) => {
                 alignItems: 'center',
               }}>
               <Text style={{color: '#919191', marginRight: 4}}>
-                {result?.qq || '请设置QQ号'}
+                {util.hidePhone(result?.qq) || '请设置QQ号'}
               </Text>
               <IconNew name="right" size={16} color="#919191" />
             </View>

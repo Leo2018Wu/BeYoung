@@ -4,6 +4,7 @@ import CFastImage from '../../components/CFastImage';
 import AsyncStorage from '@react-native-community/async-storage';
 import {DeviceEventEmitter, Pressable} from 'react-native';
 import {connect} from 'react-redux';
+import util from '../../util/util';
 
 const mapStateToProps = (state: any) => {
   return {
@@ -79,7 +80,7 @@ const Index = ({...props}) => {
           手机号
         </Text>
         <Text fontSize={'md'} style={{color: '#A6A6A6'}}>
-          {userInfo?.phone}
+          {util.hidePhone(userInfo?.phone)}
         </Text>
       </HStack>
       <Button

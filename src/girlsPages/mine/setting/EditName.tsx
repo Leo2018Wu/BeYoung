@@ -84,7 +84,7 @@ const Index = ({...props}) => {
         )}
       </HStack>
       <HStack px={4} alignItems={'center'} h={16}>
-        <Text w={85} textAlign={'right'} fontWeight={'bold'} fontSize={'md'}>
+        <Text w={100} textAlign={'right'} fontWeight={'bold'} fontSize={'md'}>
           姓名：
         </Text>
         <Input
@@ -97,7 +97,7 @@ const Index = ({...props}) => {
         />
       </HStack>
       <HStack px={4} alignItems={'center'} h={16}>
-        <Text w={85} textAlign={'right'} fontWeight={'bold'} fontSize={'md'}>
+        <Text w={100} textAlign={'right'} fontWeight={'bold'} fontSize={'md'}>
           身份证号：
         </Text>
         <Input
@@ -112,7 +112,7 @@ const Index = ({...props}) => {
         />
       </HStack>
       <HStack px={4} alignItems={'center'} h={16}>
-        <Text w={85} textAlign={'right'} fontWeight={'bold'} fontSize={'md'}>
+        <Text w={100} textAlign={'right'} fontWeight={'bold'} fontSize={'md'}>
           手机号：
         </Text>
         <Input
