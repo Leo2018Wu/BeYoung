@@ -121,14 +121,24 @@ const Index = ({...props}) => {
   };
 
   // 绑定账号为微信
-  const wxPay = () => {
-    WeChat.sendAuthRequest('snsapi_userinfo', '')
-      .then(res => {
-        getBindAccount('ACCOUNT_TYPE_WX_PAY', res.code);
-      })
-      .catch(err => {
-        console.log('--err---', err);
+  const wxPay = async () => {
+    const dat = await WeChat.isWXAppInstalled();
+    if (dat) {
+      WeChat.sendAuthRequest('snsapi_userinfo', '')
+        .then(res => {
+          getBindAccount('ACCOUNT_TYPE_WX_PAY', res.code);
+        })
+        .catch(err => {
+          console.log('--err---', err);
+        });
+    } else {
+      toast.show({
+        description: '您目前尚未安装微信，请先安装',
+        placement: 'top',
+        duration: 1500,
       });
+      setPayWayModal(false);
+    }
   };
 
   //绑定账号
@@ -302,8 +312,9 @@ const Index = ({...props}) => {
                   toast.show({
                     description: '已存在该账户类型或交易类型的账户',
                     placement: 'top',
-                    duration: 1000,
+                    duration: 1500,
                   });
+                  setPayWayModal(false);
                 }
               }}
               py={2}
