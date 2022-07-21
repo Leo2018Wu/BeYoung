@@ -38,6 +38,7 @@ export const openPicker = async (maxFiles = 9, multiple = true) => {
       mediaType: 'photo',
       compressImageMaxHeight: 1920,
       compressImageMaxWidth: 800,
+      smartAlbums: ['UserLibrary', 'RecentlyAdded', 'Imported', 'Screenshots'],
     });
     return data;
   }

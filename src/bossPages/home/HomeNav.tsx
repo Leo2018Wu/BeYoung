@@ -7,8 +7,8 @@ import {
   NavigationState,
   SceneRendererProps,
 } from 'react-native-tab-view';
-import Album from './detail/TabAlbum';
-import Daily from './detail/TabDaily';
+import Follow from './Main';
+import Found from './Main';
 
 type Route = {
   key: string;
@@ -19,10 +19,10 @@ type State = NavigationState<Route>;
 
 export default class CustomTabBarExample extends React.Component<{}, State> {
   state: State = {
-    index: 0,
+    index: 1,
     routes: [
-      {key: 'album', title: '照片精选'},
-      {key: 'daily', title: '她的动态'},
+      {key: 'follow', title: '关注'},
+      {key: 'found', title: '发现'},
     ],
   };
 
@@ -65,7 +65,7 @@ export default class CustomTabBarExample extends React.Component<{}, State> {
           </Animated.View>
           <Animated.View
             style={[styles.item, styles.activeItem, {opacity: activeOpacity}]}>
-            <Box style={styles.activeBlock} />
+            {/* <Box style={styles.activeBlock} /> */}
             <Text fontWeight="bold" fontSize="md" color="fontColors.333">
               {route.title}
             </Text>
@@ -89,13 +89,14 @@ export default class CustomTabBarExample extends React.Component<{}, State> {
   );
 
   private renderScene = SceneMap({
-    album: Album,
-    daily: Daily,
+    follow: Follow,
+    found: Found,
   });
 
   render() {
     return (
       <TabView
+        lazy
         navigationState={this.state}
         renderScene={this.renderScene}
         renderTabBar={this.renderTabBar}
