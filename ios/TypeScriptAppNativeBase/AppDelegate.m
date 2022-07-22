@@ -9,6 +9,8 @@
 #import <React/RCTRootView.h>
 #import "AliyunPushManager.h"
 
+#import <Bugly/Bugly.h>
+
 #ifdef FB_SONARKIT_ENABLED
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -65,6 +67,8 @@ static void InitializeFlipper(UIApplication *application) {
                   //create customize notification category here
     }];
     // 添加结束
+  
+  [Bugly startWithAppId:@"c4c2f27e52"];
   
   return YES;
 }
