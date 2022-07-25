@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Box, FlatList} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useFocusEffect} from '@react-navigation/native';
 import useRequest from '../../../hooks/useRequest';
 import DailyItem from '../../../commonPages/daily/DailyItem';
 import {
@@ -45,17 +44,15 @@ const Index = () => {
       },
     ], //排序参数列表
   });
-  const [queryList, setList] = useState([]); // 动态列表
+  const [queryList, setQueryList] = useState([]); // 动态列表
   const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
   const {run: runQueryMyDynamic} = useRequest(queryMyDynamic.url);
   const {run: runDelDynamic} = useRequest(delDynamic.url);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      _getList();
-    }, [params]),
-  );
+  useEffect(() => {
+    _getList();
+  }, [params]);
 
   const deleteDynamic = async dynamicId => {
     const success = await runDelDynamic({dynamicId});
@@ -85,7 +82,7 @@ const Index = () => {
       const isNextPage = data.length < total - queryList.length;
       setPagingStatus(isNextPage ? PAGE_IS_NEXTPAGE : PAGE_IS_END);
       setPageStatus(IS_LIST);
-      setList(params.pageNum <= 1 ? data : mergeList(queryList, data));
+      setQueryList(params.pageNum <= 1 ? data : mergeList(queryList, data));
     }
   };
 
@@ -124,7 +121,7 @@ const Index = () => {
 
   const _renderItem = ({item, index}: {item: any; index: number}) => {
     return (
-      <Box key={index} mb={4}>
+      <Box mb={4}>
         <DailyItem
           returnFunc={itemRefresh}
           item={item}

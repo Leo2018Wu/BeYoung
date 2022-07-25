@@ -8,26 +8,19 @@ import {
   Platform,
   Pressable,
 } from 'react-native';
-import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
+import {TabView, SceneMap} from 'react-native-tab-view';
 
 import Dynamic from './Dynamic/Dynamic';
 import Mine from './Dynamic/Mine';
-import Like from './Like';
-import Comment from './Comment';
 
 import layout from '../../components/Layout';
 
 const DynamicRoute = () => <Dynamic />;
-
 const MineRoute = () => <Mine />;
-const LikeRoute = () => <Like />;
-const CommentRoute = () => <Comment />;
 
 const renderScene = SceneMap({
   dynamic: DynamicRoute,
   mine: MineRoute,
-  like: LikeRoute,
-  comment: CommentRoute,
 });
 
 export default function TabViewExample() {
@@ -37,8 +30,6 @@ export default function TabViewExample() {
   const [routes] = React.useState([
     {key: 'dynamic', title: '学妹圈'},
     {key: 'mine', title: '我的'},
-    // {key: 'like', title: '喜欢'},
-    // {key: 'comment', title: '评论'},
   ]);
 
   const renderTabBar = (props: any) => (
