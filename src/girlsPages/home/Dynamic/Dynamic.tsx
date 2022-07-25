@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, FlatList} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {useFocusEffect} from '@react-navigation/native';
 import useRequest from '../../../hooks/useRequest';
 import DailyItem from '../../../commonPages/daily/DailyItem';
 import {
@@ -50,11 +49,9 @@ const Index = () => {
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
   const {run: runFetchDynamic} = useRequest(queryDynamic.url);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      _getList();
-    }, [params]),
-  );
+  useEffect(() => {
+    _getList();
+  }, [params]);
 
   const _getList = async () => {
     try {
@@ -116,7 +113,7 @@ const Index = () => {
 
   const _renderItem = ({item, index}: {item: any; index: number}) => {
     return (
-      <Box key={item.id} mb={4}>
+      <Box mb={4}>
         <DailyItem returnFunc={itemRefresh} item={item} />
       </Box>
     );
