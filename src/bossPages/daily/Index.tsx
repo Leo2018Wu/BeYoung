@@ -1,5 +1,13 @@
 import React, {useState} from 'react';
-import {Box, Text, Center, FlatList} from 'native-base';
+import {
+  Box,
+  Text,
+  Center,
+  FlatList,
+  Pressable,
+  HStack,
+  ScrollView,
+} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useFocusEffect} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
@@ -12,8 +20,9 @@ import {
   PageLoading,
   PageLoadMore,
 } from '../../components/base/Pagination';
-import {queryDynamic} from '../../api/daily';
+import {queryDynamic, fetchDynamicLabels} from '../../api/daily';
 import LinearGradient from 'react-native-linear-gradient';
+import {StyleSheet} from 'react-native';
 
 const {
   PAGE_IS_LOADING,
@@ -38,6 +47,7 @@ const Index = () => {
   const [params, setParams] = useState({
     pageNum: 1, //分页页码
     pageSize: 10, //每页大小
+    labelType: '', // 标签大类
     orders: [
       {
         column: 'createTime', //排序字段名称
@@ -50,6 +60,11 @@ const Index = () => {
   const [pageStatus, setPageStatus] = useState(IS_LOADDING); // 页面状态
   const [pagingStatus, setPagingStatus] = useState(''); // 分页状态
   const {run: runFetchDynamic} = useRequest(queryDynamic.url);
+  const {result: labelList} = useRequest(
+    fetchDynamicLabels.url,
+    {},
+    {manual: false},
+  );
 
   useFocusEffect(
     React.useCallback(() => {
@@ -155,6 +170,39 @@ const Index = () => {
       </LinearGradient>
 
       <Box flex={1} px={4} my={4}>
+        <ScrollView
+          horizontal
+          mb={4}
+          style={{display: 'flex', flexDirection: 'row', flexWrap: 'nowrap'}}>
+          {labelList &&
+            labelList.map((label, labelIndex) => (
+              <Pressable
+                style={[
+                  styles.labelItem,
+                  params.labelType === label.name ? styles.labelItemActive : {},
+                ]}
+                onPress={() => {
+                  if (params.labelType === label.name) {
+                    setParams({...params, labelType: ''});
+                  } else {
+                    setParams({...params, labelType: label.name});
+                  }
+                }}
+                key={labelIndex}>
+                <Text
+                  fontSize={'xs'}
+                  fontWeight="bold"
+                  style={{
+                    color:
+                      params.labelType === label.name
+                        ? 'primary.100'
+                        : '#807D92',
+                  }}>
+                  {label.name}
+                </Text>
+              </Pressable>
+            ))}
+        </ScrollView>
         {pageStatus === IS_EMPTY && <PageEmpty />}
         {pageStatus === IS_LIST && renderList()}
         {pageStatus === IS_LOADDING && <PageLoading />}
@@ -164,3 +212,18 @@ const Index = () => {
   );
 };
 export default Index;
+
+const styles = StyleSheet.create({
+  labelItem: {
+    paddingHorizontal: 12,
+    height: 26,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 48,
+    marginRight: 12,
+    backgroundColor: '#F5F7F8',
+  },
+  labelItemActive: {
+    backgroundColor: '#9650FF20',
+  },
+});
