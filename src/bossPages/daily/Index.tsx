@@ -173,6 +173,7 @@ const Index = () => {
         <ScrollView
           horizontal
           mb={4}
+          w="full"
           style={{display: 'flex', flexDirection: 'row', flexWrap: 'nowrap'}}>
           {labelList &&
             labelList.map((label, labelIndex) => (
@@ -194,9 +195,7 @@ const Index = () => {
                   fontWeight="bold"
                   style={{
                     color:
-                      params.labelType === label.name
-                        ? 'primary.100'
-                        : '#807D92',
+                      params.labelType === label.name ? '#9650FF' : '#807D92',
                   }}>
                   {label.name}
                 </Text>
