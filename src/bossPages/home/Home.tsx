@@ -14,7 +14,7 @@ const Home = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <Box flex={1} style={{paddingTop: insets.top}}>
+    <Box flex={1} style={{paddingTop: insets.top, backgroundColor: '#fff'}}>
       {/* <LinearGradient
         start={{x: 0, y: 0.5}}
         end={{x: 1, y: 0.5}}

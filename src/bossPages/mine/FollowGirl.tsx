@@ -172,11 +172,13 @@ const Index = ({...props}) => {
   };
 
   const _renderItem = ({item, index}: {item: any; index: number}) => {
+    console.log(123, item);
+
     return (
       <Pressable
         onPress={() =>
           props.navigation.navigate('HomeDetail', {
-            userId: item.updateUserId,
+            userId: item.id,
           })
         }
         key={index}
