@@ -54,7 +54,7 @@ const Index = () => {
             }}
           />
           <Text style={{fontSize: 12, color: '#fff', marginLeft: 2}}>
-            {myStatistic.giftNum || 0}
+            {myStatistic.hasGiftNum || 0}
           </Text>
         </Pressable>
         <Pressable
@@ -100,9 +100,9 @@ const Index = () => {
         </Pressable>
         <View style={styles.line} />
         <Pressable
-          onPress={() => navigation.navigate('MineGifts')}
+          onPress={() => navigation.navigate('ReceivedGift')}
           style={styles.item}>
-          <Text style={styles.topText}>{myStatistic.hasGiftNum || 0}</Text>
+          <Text style={styles.topText}>{myStatistic.giftNum || 0}</Text>
           <Text style={styles.btmText}>礼物</Text>
         </Pressable>
       </View>
