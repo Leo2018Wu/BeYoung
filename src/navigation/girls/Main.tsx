@@ -23,6 +23,7 @@ import Session from '../../girlsPages/communication/Session';
 import Label from '../../girlsPages/mine/Label';
 import Service from '../../bossPages/customService/Index';
 import MineGifts from '../../girlsPages/mine/MineGifts';
+import ReceivedGift from '../../girlsPages/mine/ReceivedGift';
 import Follow from '../../girlsPages/mine/Follow';
 import About from '../../commonPages/About';
 import PrivateProtocol from '../../commonPages/PrivateProtocol';
@@ -201,6 +202,14 @@ const MyStack = () => {
         }}
         name="MineGifts"
         component={MineGifts}
+      />
+      <Stack.Screen
+        options={{
+          title: '收到礼物',
+          headerBackTitle: '我的',
+        }}
+        name="ReceivedGift"
+        component={ReceivedGift}
       />
       <Stack.Screen
         options={{

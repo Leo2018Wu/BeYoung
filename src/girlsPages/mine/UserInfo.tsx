@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
 import IconNew from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
@@ -44,6 +44,20 @@ const Index = () => {
     <View style={styles.userView}>
       <View>
         <Pressable
+          onPress={() => navigation.navigate('MineGifts')}
+          style={styles.contain}>
+          <Image
+            source={require('../assets/gift.png')}
+            style={{
+              width: 16,
+              height: 16,
+            }}
+          />
+          <Text style={{fontSize: 12, color: '#fff', marginLeft: 2}}>
+            {myStatistic.hasGiftNum || 0}
+          </Text>
+        </Pressable>
+        <Pressable
           onPress={() => navigation.navigate('UserInfoSetting')}
           style={{alignItems: 'center', marginVertical: 20}}>
           <CFastImage
@@ -86,7 +100,7 @@ const Index = () => {
         </Pressable>
         <View style={styles.line} />
         <Pressable
-          onPress={() => navigation.navigate('MineGifts')}
+          onPress={() => navigation.navigate('ReceivedGift')}
           style={styles.item}>
           <Text style={styles.topText}>{myStatistic.giftNum || 0}</Text>
           <Text style={styles.btmText}>礼物</Text>
