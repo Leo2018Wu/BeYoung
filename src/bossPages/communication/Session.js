@@ -455,7 +455,7 @@ const Msgs = ({...props}) => {
           <HStack py={4} alignItems={'flex-end'}>
             <View alignItems={'center'} style={{width: 80}}>
               <Text fontSize={'md'} style={{color: '#424243'}}>
-                LV{curItem.level}
+                LV{curItem?.level}
               </Text>
               <Text fontSize={'xs'} style={{color: '#BBBBBB'}}>
                 目前等级
@@ -468,14 +468,14 @@ const Msgs = ({...props}) => {
               </Text>
               <MSlider
                 size="md"
-                start={curItem.start}
-                end={curItem.end}
+                start={curItem?.start}
+                end={curItem?.end}
                 currentNum={chatUserInfo.intimacy}
               />
             </View>
             <View alignItems={'center'} style={{width: 80}}>
               <Text fontSize={'md'} style={{color: '#424243'}}>
-                {curItem.reward}
+                {curItem?.reward}
               </Text>
               <Text fontSize={'xs'} style={{color: '#BBBBBB'}}>
                 升级奖励
