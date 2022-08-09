@@ -23,6 +23,7 @@ import {upload} from '../../util/newUploadOSS';
 import {addDynamic, fetchDynamicLabels} from '../../api/daily';
 import useRequest from '../../hooks/useRequest';
 import {getSoftInputModule} from '../../util/getSoftInputModule';
+import {BASE_DOWN_URL} from '../../util/config';
 
 import layout from '../../components/Layout';
 import PhotoModal from '../mine/photoSelect/photoModal';
@@ -175,6 +176,14 @@ const Index = (props: any) => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const preview = (index: number) => {
+    const imgUrls = list.map((img: string) => {
+      const temp = {url: img};
+      return temp;
+    });
+    navigation.navigate('Preview', {index, imgUrls});
   };
 
   return (
@@ -392,14 +401,16 @@ const Index = (props: any) => {
               list.map((item, index) => {
                 return (
                   <View key={index} style={{flexDirection: 'row'}}>
-                    <CFastImage
-                      url={item}
-                      styles={{
-                        width: 60,
-                        height: 60,
-                        margin: 8,
-                      }}
-                    />
+                    <Pressable onPress={() => preview(index)}>
+                      <CFastImage
+                        url={item}
+                        styles={{
+                          width: 60,
+                          height: 60,
+                          margin: 8,
+                        }}
+                      />
+                    </Pressable>
                     <Pressable
                       style={{
                         width: 14,

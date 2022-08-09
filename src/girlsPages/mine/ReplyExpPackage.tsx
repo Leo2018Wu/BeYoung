@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Image, Modal, ActivityIndicator} from 'react-native';
-import {Box, Text, Pressable, View} from 'native-base';
+import {StyleSheet, Image} from 'react-native';
+import {Box, Pressable, View} from 'native-base';
 import Icon from 'react-native-vector-icons/AntDesign';
 import CFastImage from '../../components/CFastImage';
 import {openPicker} from '../../util/openPicker';
@@ -12,8 +12,10 @@ import {
   fetchDelMedia,
 } from '../../api/photoSelect';
 import PhotoModal from '../mine/photoSelect/photoModal';
+import Layout from '../../components/Layout';
+import {BASE_DOWN_URL} from '../../util/config';
 
-const Index = () => {
+const Index = ({...props}) => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(false);
   const {run: runAddMedia} = useRequest(fetchAddMedia.url);
@@ -138,31 +140,41 @@ const Index = () => {
     });
   };
 
+  const preview = (index: number) => {
+    const imgUrls = list.map((img: string) => {
+      const temp = {url: `${BASE_DOWN_URL + img.url}`};
+      return temp;
+    });
+    props.navigation.navigate('Preview', {index, imgUrls});
+  };
+
   return (
     <Box flex={1} bg="white">
       {loading ? <PhotoModal /> : null}
-      <Box px={4} py={4}>
+      <Box px={2} py={4}>
         <View
           style={{flexDirection: 'row', flexWrap: 'wrap', marginBottom: 30}}>
           {list &&
             list.map((item, index) => {
               return (
                 <View style={{flexDirection: 'row'}}>
-                  <CFastImage
-                    url={item.url}
-                    styles={{
-                      width: 70,
-                      height: 70,
-                      margin: 6,
-                    }}
-                  />
+                  <Pressable onPress={() => preview(index)}>
+                    <CFastImage
+                      url={item.url}
+                      styles={{
+                        width: (Layout.width - 100) / 4,
+                        height: (Layout.width - 100) / 4,
+                        margin: 10,
+                      }}
+                    />
+                  </Pressable>
                   <Pressable
                     style={{
                       width: 14,
                       height: 14,
                       position: 'absolute',
-                      right: 0,
-                      top: 0,
+                      right: 2,
+                      top: 2,
                     }}
                     onPress={() => {
                       const newData = [...list];
@@ -183,8 +195,8 @@ const Index = () => {
             <Image
               source={require('../assets/album_add_icon.png')}
               style={{
-                width: 70,
-                height: 70,
+                width: (Layout.width - 100) / 4,
+                height: (Layout.width - 100) / 4,
               }}
               resizeMode="cover"
             />
@@ -198,33 +210,10 @@ export default Index;
 
 const styles = StyleSheet.create({
   img_item: {
-    width: 70,
-    height: 70,
+    width: (Layout.width - 100) / 4,
+    height: (Layout.width - 100) / 4,
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 8,
-  },
-  toastViewer: {
-    width: 120,
-    minHeight: 120,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginLeft: -60,
-    marginTop: -60,
-    borderRadius: 10,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-  },
-  iconView: {
-    flex: 0.7,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-  },
-  toastText: {
-    flex: 0.3,
-    textAlign: 'center',
-    color: '#fff',
-    fontSize: 14,
+    margin: 10,
   },
 });
