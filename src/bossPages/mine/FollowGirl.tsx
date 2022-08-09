@@ -175,8 +175,8 @@ const Index = ({...props}) => {
     return (
       <Pressable
         onPress={() =>
-          props.navigation.navigate('DailyDetail', {
-            dynamicId: item.userDynamicId,
+          props.navigation.navigate('HomeDetail', {
+            userId: item.updateUserId,
           })
         }
         key={index}
