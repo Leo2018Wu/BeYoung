@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {LogBox, Alert, Platform} from 'react-native';
+import {LogBox, Alert, Platform, DeviceEventEmitter} from 'react-native';
 import {Provider} from 'react-redux';
 import {NativeBaseProvider, extendTheme, StatusBar} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as WeChat from '@shm-open/react-native-wechat';
 import Splash from 'react-native-splash-screen';
 import AliyunPush from 'react-native-aliyun-push';
-import {request, PERMISSIONS} from 'react-native-permissions';
+import {openSettings} from 'react-native-permissions';
 
 import Navigation from './src/navigation/Index';
 import colors from './src/theme/bossColor';
@@ -40,13 +40,23 @@ export default class App extends Component {
 
   componentDidMount() {
     console.log('componentDidMount', this.notif);
-    // this.notif.checkPermission(({alert}) => {
-    //   if (!alert) {
-    //     console.log(32321);
-    //     request(PERMISSIONS.ANDROID.);
-    //   }
-    // });
-    AliyunPush.addListener(this.listenPush);
+    this.notif.checkPermission(({alert}) => {
+      if (!alert && Platform.OS === 'android') {
+        Alert.alert('推送权限', '推送权限暂未开启，是否要去打开权限', [
+          {
+            text: '取消',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: '确定',
+            onPress: () => openSettings(),
+            style: 'destructive',
+          },
+        ]);
+      }
+    });
+    AliyunPush.addListener(this.listenPush.bind(this));
 
     //监听推送事件
     LogBox.ignoreLogs(['Sending', 'Remote', 'NativeBase', 'Animated']);
@@ -94,11 +104,18 @@ export default class App extends Component {
   }
 
   listenPush(e) {
-    this.props.notif.localNotif(e);
+    if (Platform.OS !== 'ios') {
+      this.notif.localNotif(e);
+    } else {
+      if (e.actionIdentifier === 'opened') {
+        DeviceEventEmitter.emit('NOTIFICATION', e.extras);
+      }
+    }
   }
 
   onNotif(notif) {
     console.log('onNotif--- callback', notif);
+    DeviceEventEmitter.emit('NOTIFICATION', notif.data);
   }
 
   handlePerm(perms) {

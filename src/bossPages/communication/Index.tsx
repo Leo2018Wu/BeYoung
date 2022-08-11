@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Badge, Box, Center, HStack, Pressable, Text, VStack} from 'native-base';
 import {StyleSheet, View, StatusBar, DeviceEventEmitter} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -42,14 +42,19 @@ function Basic({...props}) {
   const nim = constant.nim;
 
   const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('NOTIFICATION', res => {
+      console.log('-------', res);
+      const paramsData = res.pageParam.split('&')[0].split('=')[1];
+      props.navigation.navigate(res.page, {
+        dynamicId: paramsData,
+      });
+    });
+  }, []);
+
   useFocusEffect(
     React.useCallback(() => {
-      DeviceEventEmitter.addListener('NOTIFICATION', res => {
-        const paramsData = res.pageParam.split('&')[0].split('=')[1];
-        props.navigation.navigate(res.page, {
-          dynamicId: paramsData,
-        });
-      });
       const chatUserIds =
         props.listData && props.listData.map((item: any) => item.to);
       props.dispatch(getChatUsers({accountIds: chatUserIds}));
