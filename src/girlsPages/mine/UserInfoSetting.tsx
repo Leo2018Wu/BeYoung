@@ -23,6 +23,7 @@ import {fetchMyLabels} from '../../api/label';
 import CFastImage from '../../components/CFastImage';
 import {querySysDic, updateUserInfo} from '../../api/common';
 import util from '../../util/util';
+import AliyunPush from 'react-native-aliyun-push';
 
 import layout from '../../components/Layout';
 
@@ -87,6 +88,15 @@ const Setting = ({...props}) => {
   };
 
   const logout = () => {
+    AliyunPush.unbindAccount()
+      .then(result => {
+        console.log('unbindAccount success');
+        console.log(JSON.stringify(result));
+      })
+      .catch(error => {
+        console.log('bindAccount error');
+        console.log(JSON.stringify(error));
+      });
     AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
     AsyncStorage.setItem('USERINFO', '');
     DeviceEventEmitter.emit('LOGIN_EVENT', '');

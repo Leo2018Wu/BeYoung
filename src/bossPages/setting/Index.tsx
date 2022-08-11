@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {DeviceEventEmitter, Pressable} from 'react-native';
 import {connect} from 'react-redux';
 import util from '../../util/util';
+import AliyunPush from 'react-native-aliyun-push';
 
 const mapStateToProps = (state: any) => {
   return {
@@ -16,6 +17,15 @@ const Index = ({...props}) => {
   const {userInfo} = props;
 
   const logOut = () => {
+    AliyunPush.unbindAccount()
+      .then(result => {
+        console.log('unbindAccount success');
+        console.log(JSON.stringify(result));
+      })
+      .catch(error => {
+        console.log('bindAccount error');
+        console.log(JSON.stringify(error));
+      });
     AsyncStorage.setItem('LOGIN_NAVIGAITON_NAME', '');
     AsyncStorage.setItem('USERINFO', '');
     DeviceEventEmitter.emit('LOGIN_EVENT', '');
