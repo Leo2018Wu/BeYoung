@@ -26,6 +26,7 @@ const MyStack = () => {
     <Stack.Navigator
       screenOptions={{
         headerTitleAlign: 'center',
+        headerBackTitle: '',
       }}>
       <Stack.Screen
         options={{
@@ -83,7 +84,6 @@ const MyStack = () => {
       <Stack.Screen
         options={{
           title: '钱包',
-          headerBackTitle: '我的',
         }}
         name="Wallet"
         component={Wallet}
@@ -104,7 +104,11 @@ const MyStack = () => {
       />
       <Stack.Screen
         options={{
-          headerShown: false,
+          headerStyle: {
+            backgroundColor: '#9650FF',
+          },
+          headerTintColor: '#fff',
+          title: '关系列表',
         }}
         name="MyRelations"
         component={MyRelations}
@@ -112,7 +116,7 @@ const MyStack = () => {
       <Stack.Screen
         options={{
           title: '详情',
-          headerBackTitle: '动态',
+          headerBackTitle: '',
         }}
         name="DailyDetail"
         component={DailyDetail}
@@ -120,7 +124,6 @@ const MyStack = () => {
       <Stack.Screen
         options={{
           title: '交易明细',
-          headerBackTitle: '钱包',
         }}
         name="TransferDetail"
         component={TransferDetail}
@@ -132,7 +135,6 @@ const MyStack = () => {
           },
           headerTintColor: '#fff',
           title: '设置',
-          headerBackTitle: '我的',
         }}
         name="Setting"
         component={Setting}
@@ -140,7 +142,6 @@ const MyStack = () => {
       <Stack.Screen
         options={{
           title: '我的礼物',
-          headerBackTitle: '我的',
         }}
         name="MineGifts"
         component={MineGifts}
@@ -152,7 +153,6 @@ const MyStack = () => {
           },
           headerTintColor: '#fff',
           title: '女生微信',
-          headerBackTitle: '我的',
         }}
         name="WeChatNum"
         component={WeChatNum}
@@ -160,7 +160,6 @@ const MyStack = () => {
       <Stack.Screen
         options={{
           title: '客服',
-          headerBackTitle: '我的',
         }}
         name="Service"
         component={Service}
