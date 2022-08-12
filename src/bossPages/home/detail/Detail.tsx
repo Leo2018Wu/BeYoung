@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Box,
   Text,
@@ -12,6 +12,7 @@ import {
   ScrollView,
   useToast,
 } from 'native-base';
+import Feather from 'react-native-vector-icons/Feather';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {StyleSheet, useWindowDimensions} from 'react-native';
 import util from '../../../util/util';
@@ -53,6 +54,7 @@ interface ItemProp {
 }
 
 const Index = ({...props}) => {
+  const FlatRef = useRef();
   const userId = props.route.params.userId;
   const insets = useSafeAreaInsets();
   const toast = useToast();
@@ -144,6 +146,11 @@ const Index = ({...props}) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const itemRefresh = async () => {
+    console.log('itemRefresh', FlatRef.current);
+    FlatRef.current.refresh();
   };
 
   const goChat = async () => {
@@ -238,7 +245,7 @@ const Index = ({...props}) => {
                 个人信息
               </Text>
             </HStack> */}
-        <HStack alignItems={'center'}>
+        {/* <HStack alignItems={'center'}>
           <Text fontSize={'md'} color="fontColors.999">
             年纪：
           </Text>
@@ -253,9 +260,9 @@ const Index = ({...props}) => {
           <Text fontSize={'md'} color="fontColors.333">
             {userInfo.hobbies || '暂未填写'}
           </Text>
-        </HStack>
+        </HStack> */}
       </Stack>
-      <Divider my={2} />
+      {/* <Divider my={2} /> */}
       {Object.keys(albumScenes).length > 0 ? (
         <View>
           <Text fontSize={'md'} fontWeight="bold">
@@ -302,6 +309,19 @@ const Index = ({...props}) => {
 
   return (
     <View flex={1}>
+      <Pressable
+        h={16}
+        onPress={() => props.navigation.goBack()}
+        w={10}
+        style={{
+          zIndex: 9,
+          position: 'absolute',
+          top: 16,
+          left: 10,
+        }}
+        justifyContent="center">
+        <Feather name="chevron-left" color={'white'} size={32} />
+      </Pressable>
       <CFastImage
         url={userInfo.headImg}
         styles={{
@@ -310,11 +330,12 @@ const Index = ({...props}) => {
         }}
       />
       <CustomFuncFlatList
+        ref={FlatRef}
         url={queryDynamic.url}
         par={{userId}}
         renderItem={({item}: {item: ItemProp}) => (
           <Box px={3} pb={3} borderRadius={4} bg="white">
-            <DailyItem item={item} />
+            <DailyItem returnFunc={itemRefresh} item={item} />
           </Box>
         )}
         listHeader={<HeaderComponent />}
