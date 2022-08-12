@@ -1,7 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Center, HStack, Text, VStack} from 'native-base';
-import LinearGradient from 'react-native-linear-gradient';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {Box, HStack, Text, VStack} from 'native-base';
 import MSlider from '../../components/base/MSlider';
 import CFastImage from '../../components/CFastImage';
 import CustomFuncFlatList from '../../components/CustomFuncFlatList';
@@ -17,7 +15,6 @@ interface ItemProp {
 }
 
 const Index = () => {
-  const insets = useSafeAreaInsets();
   const [levelList, setLevelList] = useState([]);
 
   const {result} = useRequest(
@@ -81,18 +78,6 @@ const Index = () => {
 
   return (
     <Box flex={1}>
-      <LinearGradient
-        start={{x: 0, y: 0.5}}
-        end={{x: 1, y: 0.5}}
-        colors={['#B83AF3', '#6950FB']}>
-        <Box justifyContent="center" style={{paddingTop: insets.top}}>
-          <Center style={{height: 52}}>
-            <Text color={'white'} fontSize="lg" fontWeight={'bold'}>
-              关系列表
-            </Text>
-          </Center>
-        </Box>
-      </LinearGradient>
       <Box flex={1}>
         <CustomFuncFlatList
           url={queryMyRelation.url}
