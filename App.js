@@ -104,10 +104,11 @@ export default class App extends Component {
   }
 
   listenPush(e) {
+    console.log('---e---', e);
     if (Platform.OS !== 'ios') {
       this.notif.localNotif(e);
     } else {
-      if (e.actionIdentifier === 'opened') {
+      if (e.actionIdentifier === 'opened' && e.extras) {
         DeviceEventEmitter.emit('NOTIFICATION', e.extras);
       }
     }
@@ -115,7 +116,9 @@ export default class App extends Component {
 
   onNotif(notif) {
     console.log('onNotif--- callback', notif);
-    DeviceEventEmitter.emit('NOTIFICATION', notif.data);
+    if (notif.data) {
+      DeviceEventEmitter.emit('NOTIFICATION', notif.data);
+    }
   }
 
   handlePerm(perms) {

@@ -48,15 +48,12 @@ const Index = (props: any) => {
 
   useFocusEffect(
     React.useCallback(() => {
+      getDynamicLabels();
       if (Platform.OS === 'android') {
         getSoftInputModule(1);
       }
     }, []),
   );
-
-  useEffect(() => {
-    getDynamicLabels();
-  }, []);
 
   useEffect(() => {
     if ((textAreaValue || list.length) && labelDetail) {

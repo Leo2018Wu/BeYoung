@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {Box, Pressable, Text} from 'native-base';
 import HomeNav from './HomeNav';
@@ -6,12 +6,24 @@ import Icon from 'react-native-vector-icons/Feather';
 
 import LinearGradient from 'react-native-linear-gradient';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Platform, StyleSheet} from 'react-native';
+import {Platform, StyleSheet, DeviceEventEmitter} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
 
 const Home = () => {
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener('NOTIFICATION', res => {
+      console.log('-------', res);
+      const paramsData = res.pageParam.split('&')[0].split('=')[1];
+      navigation.navigate(res.page, {
+        dynamicId: paramsData,
+      });
+    });
+  }, []);
 
   return (
     <Box flex={1} style={{paddingTop: insets.top, backgroundColor: '#fff'}}>

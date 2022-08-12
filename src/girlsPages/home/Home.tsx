@@ -7,8 +7,10 @@ import {
   StyleSheet,
   Platform,
   Pressable,
+  DeviceEventEmitter,
 } from 'react-native';
 import {TabView, SceneMap} from 'react-native-tab-view';
+import {useNavigation} from '@react-navigation/native';
 
 import Dynamic from './Dynamic/Dynamic';
 import Mine from './Dynamic/Mine';
@@ -24,6 +26,7 @@ const renderScene = SceneMap({
 });
 
 export default function TabViewExample() {
+  const navigation = useNavigation();
   const layout = useWindowDimensions();
 
   const [index, setIndex] = React.useState(0);
@@ -31,6 +34,16 @@ export default function TabViewExample() {
     {key: 'dynamic', title: '学妹圈'},
     {key: 'mine', title: '我的'},
   ]);
+
+  React.useEffect(() => {
+    DeviceEventEmitter.addListener('NOTIFICATION', res => {
+      console.log('-------', res);
+      const paramsData = res.pageParam.split('&')[0].split('=')[1];
+      navigation.navigate(res.page, {
+        dynamicId: paramsData,
+      });
+    });
+  }, []);
 
   const renderTabBar = (props: any) => (
     <View
