@@ -97,8 +97,10 @@ const Index = ({...props}) => {
         onPress={() => logOut()}
         mx={4}
         borderRadius={'full'}
-        mt="full"
-        style={{backgroundColor: '#EFEFEF'}}>
+        mt={500}
+        style={{
+          backgroundColor: '#EFEFEF',
+        }}>
         <Text fontWeight={'bold'} fontSize={'md'} color="primary.100">
           退出登录
         </Text>
