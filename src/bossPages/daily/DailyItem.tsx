@@ -148,7 +148,7 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
               {item.createTime}
             </Text>
           </VStack>
-          {item.hotness ? (
+          {item.hotness > 0 ? (
             <Image
               alt="fire_icon"
               source={require('../../images/fire_icon.png')}
@@ -156,7 +156,7 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
               h={5}
             />
           ) : null}
-          {item.hotness ? (
+          {item.hotness > 0 ? (
             <Text style={{color: '#FF6035', marginTop: 4, marginLeft: 4}}>
               {item.hotness}
             </Text>

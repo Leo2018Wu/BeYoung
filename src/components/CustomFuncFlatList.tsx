@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {forwardRef, useState} from 'react';
+import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Box, FlatList} from 'native-base';
 import useRequest from '../hooks/useRequest';
 import {useFocusEffect} from '@react-navigation/native';
@@ -71,6 +71,12 @@ const Index = forwardRef(
 
     const {run: runGetList} = useRequest(url);
 
+    useImperativeHandle(refParams, () => ({
+      refresh: () => {
+        _getList();
+      },
+    }));
+
     useFocusEffect(
       React.useCallback(() => {
         _getList();
@@ -129,6 +135,8 @@ const Index = forwardRef(
           return null;
       }
     };
+
+    // refParams._getList = _getList();
 
     const renderList = () => {
       return (
