@@ -79,16 +79,6 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
             }}>
             {item.replies[index].nickName}
           </Text>
-          {item.replies[index].userId === userInfo.id && <Box
-            borderRadius={3}
-            px={1.5}
-            alignSelf={'center'}
-            py={0.5}
-            bg="primary.100">
-            <Text fontSize={'2xs'} color="white">
-              自己
-            </Text>
-          </Box>}
         </>
       );
     }
@@ -193,20 +183,6 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                               }}>
                               {item1.nickName || '青回'}
                             </Text>
-                            {item1.userId !== userInfo.id ? (
-                              null
-                            ) : (
-                              <Box
-                                borderRadius={3}
-                                px={1.5}
-                                alignSelf={'center'}
-                                py={0.5}
-                                bg="primary.100">
-                                <Text fontSize={'2xs'} color="white">
-                                  自己
-                                </Text>
-                              </Box>
-                            )}
                             {getUserName(item1.replyId)}
                           </HStack>
                           <Text
@@ -334,21 +310,6 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                             }}>
                             {item1.nickName || '青回'}
                           </Text>
-                          {item1.userId !== userInfo.id ? (
-                            null
-                          ) : (
-                            <Box
-                              borderRadius={3}
-                              px={1.5}
-                              alignSelf={'center'}
-                              py={0.5}
-                              bg="primary.100">
-
-                              <Text fontSize={'2xs'} color="white">
-                                自己
-                              </Text>
-                            </Box>
-                          )}
                           {getUserName(item1.replyId)}
                         </HStack>
                         <Text
@@ -517,7 +478,7 @@ const Index = ({ ...props }) => {
   };
 
   return (
-    <Box flex={1}>
+    <Box flex={1} pb={10}>
       <Box
         px={3}
         flex={1}

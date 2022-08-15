@@ -211,7 +211,7 @@ const Index = ({...props}) => {
           )}
         </Actionsheet>
         <Box flex={1} pt={0} bg="white">
-          <Box p={4}>
+          <Box px={4} pb={4}>
             <DailyItem returnFunc={itemClick} item={dynamicInfo} />
           </Box>
           <Divider h={2.5} bg="bg.f5" />
