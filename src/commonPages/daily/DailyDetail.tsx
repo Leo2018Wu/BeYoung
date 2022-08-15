@@ -104,7 +104,7 @@ const Index = ({...props}) => {
       const temp = {url: `${BASE_DOWN_URL + img}`};
       return temp;
     });
-    props.navigation.navigate('Preview', {index, imgUrls});
+    props.navigation.navigate('Preview', {index, imgUrls, watermark: true});
   };
 
   return (
@@ -137,7 +137,21 @@ const Index = ({...props}) => {
             <HStack mb={2} flexWrap={'wrap'}>
               {imgList &&
                 imgList.map((item, index) => (
-                  <Pressable onPress={() => preview(index)}>
+                  <Pressable
+                    onPress={() => preview(index)}
+                    style={{position: 'relative'}}>
+                    <Text
+                      fontSize={8}
+                      color={'#fff'}
+                      fontWeight={'bold'}
+                      style={{
+                        position: 'absolute',
+                        bottom: 10,
+                        right: 12,
+                        zIndex: 100,
+                      }}>
+                      青回APP
+                    </Text>
                     <Image
                       key={index}
                       mb={2}

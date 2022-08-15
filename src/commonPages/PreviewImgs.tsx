@@ -2,12 +2,12 @@ import React from 'react';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Icon from 'react-native-vector-icons/Feather';
 import CFastImage from '../components/CFastImage';
-import {Spinner, Text, Box, Center, Pressable} from 'native-base';
+import {Spinner, View, Text, Box, Center, Pressable} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 // 必须传入正确地址 此处拼接无效
 export default function Index({...props}) {
-  const {imgUrls, index} = props.route.params;
+  const {imgUrls, index, watermark} = props.route.params;
 
   const Header = ({currentIndex}: {currentIndex: number | undefined}) => {
     if (!currentIndex) {
@@ -61,7 +61,26 @@ export default function Index({...props}) {
       )}
       loadingRender={() => <Spinner size={'lg'} color={'primary.100'} />}
       renderImage={({source, style}) => {
-        return <CFastImage url={source.uri} styles={style} />;
+        return (
+          <View style={{position: 'relative'}}>
+            {watermark ? (
+              <Text
+                fontSize={16}
+                color={'#fff'}
+                opacity={0.8}
+                fontWeight={'bold'}
+                style={{
+                  position: 'absolute',
+                  bottom: 10,
+                  right: 12,
+                  zIndex: 100,
+                }}>
+                青回APP
+              </Text>
+            ) : null}
+            <CFastImage url={source.uri} styles={style} />
+          </View>
+        );
       }}
       pageAnimateTime={600}
       enablePreload={true}
