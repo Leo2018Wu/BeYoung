@@ -1,11 +1,12 @@
 import React from 'react';
-import {Box, Button, Divider, HStack, Text} from 'native-base';
+import {Box, Button, Divider, HStack, Text, View} from 'native-base';
 import CFastImage from '../../components/CFastImage';
 import AsyncStorage from '@react-native-community/async-storage';
 import {DeviceEventEmitter, Pressable} from 'react-native';
 import {connect} from 'react-redux';
 import util from '../../util/util';
 import AliyunPush from 'react-native-aliyun-push';
+import IconNew from 'react-native-vector-icons/AntDesign';
 
 const mapStateToProps = (state: any) => {
   return {
@@ -93,11 +94,35 @@ const Index = ({...props}) => {
           {util.hidePhone(userInfo?.phone)}
         </Text>
       </HStack>
+      <Box px={2}>
+        <Divider h={0.25} />
+      </Box>
+      <Pressable onPress={() => props.navigation.navigate('About')}>
+        <HStack
+          py={1}
+          px={4}
+          h={12}
+          bg={'white'}
+          justifyContent={'space-between'}
+          alignItems="center">
+          <Text fontWeight={'bold'} fontSize={'md'} color={'fontColors.333'}>
+            关于
+          </Text>
+          <View
+            style={{
+              justifyContent: 'flex-end',
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <IconNew name="right" size={16} color="#919191" />
+          </View>
+        </HStack>
+      </Pressable>
       <Button
         onPress={() => logOut()}
         mx={4}
         borderRadius={'full'}
-        mt={500}
+        mt={'full'}
         style={{
           backgroundColor: '#EFEFEF',
         }}>
