@@ -136,8 +136,6 @@ const Index = forwardRef(
       }
     };
 
-    // refParams._getList = _getList();
-
     const renderList = () => {
       return (
         <FlatList

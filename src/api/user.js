@@ -50,3 +50,9 @@ export const queryFemaleRank = {
   url: 'cgi/core/user/queryFemaleRank',
   options: {},
 };
+
+// 获取我的任务
+export const fetchMyTask = {
+  url: 'cgi/core/user/fetchMyTask',
+  options: {},
+};
