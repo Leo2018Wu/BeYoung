@@ -102,3 +102,9 @@ export const delDynamic = {
   url: 'cgi/core/dynamic/delDynamic',
   options: {},
 };
+
+// 删除评论
+export const delComment = {
+  url: 'cgi/core/dynamic/delComment',
+  options: {},
+};

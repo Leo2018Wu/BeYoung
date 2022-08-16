@@ -189,31 +189,60 @@ const Index = ({...props}) => {
               pt={0}>
               <HStack mb={2} flexWrap={'wrap'}>
                 {imgList.length === 1 ? (
-                  <Image
-                    alt="dairy"
-                    borderRadius={10}
-                    style={{
-                      marginRight: 8,
-                      width: IMG_ITEM_WIDTH * 2,
-                      height: IMG_ITEM_HEIGHT * 3,
-                    }}
-                    source={{uri: BASE_DOWN_URL + imgList}}
-                  />
-                ) : (
-                  imgList &&
-                  imgList.map((item, index) => (
+                  <View style={{position: 'relative'}}>
+                    <Text
+                      fontSize={8}
+                      color={'#fff'}
+                      fontWeight={'bold'}
+                      style={{
+                        position: 'absolute',
+                        bottom: 5,
+                        right: 12,
+                        zIndex: 100,
+                      }}>
+                      青回APP
+                    </Text>
                     <Image
-                      key={index}
-                      mb={2}
                       alt="dairy"
                       borderRadius={10}
                       style={{
-                        marginRight: (index + 1) % 3 === 0 ? 0 : 8,
-                        width: IMG_ITEM_WIDTH,
-                        height: IMG_ITEM_HEIGHT,
+                        marginRight: 8,
+                        width: IMG_ITEM_WIDTH * 2,
+                        height: IMG_ITEM_HEIGHT * 3,
                       }}
-                      source={{uri: BASE_DOWN_URL + item}}
+                      source={{uri: BASE_DOWN_URL + imgList}}
                     />
+                  </View>
+                ) : (
+                  imgList &&
+                  imgList.map((item, index) => (
+                    <View style={{position: 'relative'}}>
+                      <Text
+                        fontSize={8}
+                        color={'#fff'}
+                        opacity={0.8}
+                        fontWeight={'bold'}
+                        style={{
+                          position: 'absolute',
+                          bottom: 10,
+                          right: 12,
+                          zIndex: 100,
+                        }}>
+                        青回APP
+                      </Text>
+                      <Image
+                        key={index}
+                        mb={2}
+                        alt="dairy"
+                        borderRadius={10}
+                        style={{
+                          marginRight: (index + 1) % 3 === 0 ? 0 : 8,
+                          width: IMG_ITEM_WIDTH,
+                          height: IMG_ITEM_HEIGHT,
+                        }}
+                        source={{uri: BASE_DOWN_URL + item}}
+                      />
+                    </View>
                   ))
                 )}
               </HStack>

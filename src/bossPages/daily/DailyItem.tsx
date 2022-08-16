@@ -73,7 +73,7 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
       const temp = {url: `${BASE_DOWN_URL + img}`};
       return temp;
     });
-    navigation.navigate('Preview', {index, imgUrls});
+    navigation.navigate('Preview', {index, imgUrls, watermark: true});
   };
 
   const likeClick = async ({
@@ -180,7 +180,22 @@ const Index = ({item, returnFunc}: {item: ItemProp; returnFunc?: Function}) => {
           pt={4}>
           <HStack mb={2} flexWrap={'wrap'}>
             {genImages(item.images).map((ele: string, index: number) => (
-              <Pressable onPress={() => preview(index)} key={index}>
+              <Pressable
+                onPress={() => preview(index)}
+                key={index}
+                style={{position: 'relative'}}>
+                <Text
+                  fontSize={8}
+                  color={'#fff'}
+                  fontWeight={'bold'}
+                  style={{
+                    position: 'absolute',
+                    bottom: 10,
+                    right: 12,
+                    zIndex: 100,
+                  }}>
+                  青回APP
+                </Text>
                 <CFastImage
                   url={ele}
                   styles={{

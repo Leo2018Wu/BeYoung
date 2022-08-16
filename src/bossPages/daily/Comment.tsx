@@ -1,9 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { DeviceEventEmitter } from 'react-native';
-import { HStack, Box, Actionsheet, Image, Text, VStack, Pressable, useDisclose, ScrollView, FlatList } from 'native-base';
+import {
+  HStack,
+  Box,
+  Actionsheet,
+  View,
+  Text,
+  VStack,
+  Pressable,
+  useDisclose,
+  ScrollView,
+  FlatList,
+  Modal
+} from 'native-base';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CFastImage from '../../components/CFastImage';
-import { queryComment, commentDynamic } from '../../api/daily';
+import { queryComment, commentDynamic, delComment } from '../../api/daily';
 import { useSelector } from 'react-redux';
 import ChatBox from '../../components/base/ChatBox';
 import useRequest from '../../hooks/useRequest';
@@ -41,11 +53,15 @@ const areEqual = (pre: any, next: any) => {
 };
 
 const Item = React.memo(({ item }: { item: ItemProps }) => {
-  
+
   const { isOpen, onOpen, onClose } = useDisclose();
   const [replyId, setReplyId] = useState(null);
   const [flag, setFlag] = useState(false);
   const { run: runCommentDymaic } = useRequest(commentDynamic.url);
+  const { run: runDelComment } = useRequest(delComment.url);
+  const [commentId, setCommentId] = useState({});
+
+  const [dialogVisible, setIsDialogShow] = useState(false);
 
   const userInfo = useSelector(state => state.user.myUserInfo);
   if (item.delFlag) {
@@ -107,14 +123,58 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
     }
   };
 
+  const goDelete = (commentId) => {
+    setCommentId(commentId);
+    setIsDialogShow(true);
+  };
+
+  const deleteComment = async (commentId) => {
+    console.log('------删除评论-----', commentId);
+    setIsDialogShow(false)
+    const {success} = await runDelComment({
+      commentId
+    })
+    if (success) {
+      DeviceEventEmitter.emit('REPLY_REFRESH', Math.random());
+    }
+  }
+
   return (
     <Box mb={6}>
+      <Modal isOpen={dialogVisible} onClose={() => setIsDialogShow(false)}>
+        <Modal.Content p={4} alignItems="center">
+          <Text fontSize={'lg'} mb={1} style={{ color: '#222' }}>
+            提示
+          </Text>
+          <Text fontSize={'md'} mb={1} style={{ color: '#222', marginTop: 10 }}>
+            删除评论后，评论下所有的回复都会被删除
+          </Text>
+          <View
+            style={{
+              width: '100%',
+              flexDirection: 'row',
+              marginTop: 20,
+              justifyContent: 'space-between',
+            }}>
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+              }}>
+              <Text onPress={() => deleteComment(commentId)}>确定</Text>
+            </View>
+            <View style={{ flex: 1, alignItems: 'center' }}>
+              <Text onPress={() => setIsDialogShow(false)}>取消</Text>
+            </View>
+          </View>
+        </Modal.Content>
+      </Modal>
       <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
           <Box w={'100%'} h={500}>
             <ScrollView
               showsVerticalScrollIndicator={false}
-              style={{ flex: 1, padding: 8, paddingBottom: 100 }}>
+              style={{ flex: 1, padding: 8, }}>
               <HStack mb={2} alignItems="center">
                 <CFastImage
                   url={item.headImg}
@@ -144,6 +204,23 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                 </VStack>
               </HStack>
               <Text fontSize={'sm'} marginLeft={10}>{item.content}</Text>
+
+              <View style={{ flexDirection: 'row' }}>
+                <Pressable
+                  onPress={() => setComment(item)}
+                  style={{ marginLeft: 56, width: 60, marginTop: 10, }}>
+                  <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                    回复
+                  </Text>
+                </Pressable>
+                <Pressable
+                  onPress={() => goDelete(item.id)}
+                  style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
+                  <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                    删除
+                  </Text>
+                </Pressable>
+              </View>
               {item.images &&
                 JSON.parse(item.images).length &&
                 JSON.parse(item.images)[0].length ? (
@@ -160,7 +237,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
               {item.replies.length
                 ? item.replies.map((item1, index) => {
                   return (
-                    <Box mt={4} ml={10} width={'80%'}>
+                    <Box mt={4} ml={10} mb={4} width={'80%'} key={index}>
                       <HStack mb={2} alignItems="center">
                         <CFastImage
                           url={item1.headImg}
@@ -176,34 +253,13 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                           ml={2}
                           justifyContent={'space-between'}>
                           <HStack>
-                            {item1.userId !== userInfo.id ? (
-                              <Text
-                                fontSize={'md'}
-                                style={{
-                                  color: '#8E8895',
-                                }}>
-                                {item1.nickName || '青回'}
-                              </Text>
-                            ) : (
-                              <>
-                                <Text
-                                  fontSize={'md'}
-                                  style={{
-                                    color: '#8E8895',
-                                  }}>
-                                  {item1.nickName || '青回'}
-                                </Text>
-                                <Box
-                                  borderRadius={3}
-                                  px={1.5}
-                                  alignSelf={'center'}
-                                  py={0.5}
-                                  bg="primary.100">
-                                  <Text fontSize={'2xs'} color="white">
-                                    自己
-                                  </Text>
-                                </Box></>
-                            )}
+                            <Text
+                              fontSize={'md'}
+                              style={{
+                                color: '#8E8895',
+                              }}>
+                              {item1.nickName || '青回'}
+                            </Text>
                             {getUserName(item1.replyId)}
                           </HStack>
                           <Text
@@ -229,7 +285,8 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                           }}
                         />
                       ) : null}
-                      {item1.userId !== userInfo.id ? (
+
+                      <View style={{ flexDirection: 'row' }}>
                         <Pressable
                           onPress={() => setComment(item1)}
                           style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
@@ -237,18 +294,18 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                             回复
                           </Text>
                         </Pressable>
-                      ) : null}
+                        <Pressable
+                          onPress={() => goDelete(item1.id)}
+                          style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
+                          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                            删除
+                          </Text>
+                        </Pressable>
+                      </View>
                     </Box>
                   );
                 })
                 : null}
-              {/* <Pressable
-                onPress={() => setComment(item)}
-                style={{ marginLeft: 56, width: 60, marginTop: 10, marginBottom: 30 }}>
-                <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-                  回复
-                </Text>
-              </Pressable> */}
             </ScrollView>
             {flag && <ChatBox
               pressCb={(data: Object) => {
@@ -300,12 +357,28 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
           }}
         />
       ) : null}
+      <View style={{ flexDirection: 'row' }}>
+        <Pressable
+          onPress={() => setReply(item)}
+          style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
+          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+            回复
+          </Text>
+        </Pressable>
+        <Pressable
+          onPress={() => goDelete(item.id)}
+          style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
+          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+            删除
+          </Text>
+        </Pressable>
+      </View>
       {item.replies.length
         ? item.replies.map((item1, index) => {
           return (
             <>
               {index < 3 ? (
-                <Box mt={4} ml={10} width={'80%'}>
+                <Box mt={4} ml={10} width={'80%'} key={item1.id}>
                   <HStack mb={2} alignItems="center">
                     <CFastImage
                       url={item1.headImg}
@@ -321,34 +394,13 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                       ml={2}
                       justifyContent={'space-between'}>
                       <HStack>
-                        {item1.userId !== userInfo.id ? (
-                          <Text
-                            fontSize={'md'}
-                            style={{
-                              color: '#8E8895',
-                            }}>
-                            {item1.nickName || '青回'}
-                          </Text>
-                        ) : (
-                          <>
-                          <Text
-                            fontSize={'md'}
-                            style={{
-                              color: '#8E8895',
-                            }}>
-                            {item1.nickName || '青回'}
-                          </Text>
-                          <Box
-                            borderRadius={3}
-                            px={1.5}
-                            alignSelf={'center'}
-                            py={0.5}
-                            bg="primary.100">
-                            <Text fontSize={'2xs'} color="white">
-                              自己
-                            </Text>
-                          </Box></>
-                        )}
+                        <Text
+                          fontSize={'md'}
+                          style={{
+                            color: '#8E8895',
+                          }}>
+                          {item1.nickName || '青回'}
+                        </Text>
                         {getUserName(item1.replyId)}
                       </HStack>
                       <Text
@@ -374,7 +426,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                       }}
                     />
                   ) : null}
-                  {item.userId === userInfo.id && item1.userId !== userInfo.id ? (
+                  <View style={{ flexDirection: 'row' }}>
                     <Pressable
                       onPress={() => setReply(item1)}
                       style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
@@ -382,7 +434,14 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                         回复
                       </Text>
                     </Pressable>
-                  ) : null}
+                    <Pressable
+                      onPress={() => goDelete(item1.id)}
+                      style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
+                      <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                        删除
+                      </Text>
+                    </Pressable>
+                  </View>
                 </Box>
               ) : null}
             </>
@@ -510,7 +569,7 @@ const Index = ({ ...props }) => {
   };
 
   return (
-    <Box flex={1}>
+    <Box flex={1} pb={10}>
       <Box
         px={3}
         flex={1}
