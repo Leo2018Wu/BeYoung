@@ -114,7 +114,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
           <Box w={'100%'} h={500}>
             <ScrollView
               showsVerticalScrollIndicator={false}
-              style={{ flex: 1, padding: 8 }}>
+              style={{ flex: 1, padding: 8, }}>
               <HStack mb={2} alignItems="center">
                 <CFastImage
                   url={item.headImg}
@@ -157,83 +157,83 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                   }}
                 />
               ) : null}
-              {item.replies.length
-                ? item.replies.map((item1, index) => {
-                  return (
-                    <Box mt={4} ml={10} width={'80%'} key={index}>
-                      <HStack mb={2} alignItems="center">
-                        <CFastImage
-                          url={item1.headImg}
-                          styles={{
-                            width: 30,
-                            height: 30,
-                            borderRadius: 20,
-                          }}
-                        />
-                        <VStack
-                          flex={1}
-                          mr={'auto'}
-                          ml={2}
-                          justifyContent={'space-between'}>
-                          <HStack>
-                            <Text
-                              fontSize={'md'}
-                              style={{
-                                color: '#8E8895',
-                              }}>
-                              {item1.nickName || '青回'}
-                            </Text>
-                            {getUserName(item1.replyId)}
-                          </HStack>
-                          <Text
-                            fontSize={'xs'}
-                            style={{
-                              color: '#C7C4CC',
-                            }}>
-                            {item1.createTime}
-                          </Text>
-                        </VStack>
-                      </HStack>
-                      <Text fontSize={'sm'} marginLeft={10}>{item1.content}</Text>
-                      {item1.images &&
-                        JSON.parse(item1.images).length &&
-                        JSON.parse(item1.images)[0].length ? (
-                        <CFastImage
-                          url={JSON.parse(item1.images)[0]}
-                          styles={{
-                            width: 80,
-                            height: 80,
-                            borderRadius: 10,
-                            marginLeft: 48,
-                          }}
-                        />
-                      ) : null}
-                      {item.updateUserId === userInfo.id && item1.userId !== userInfo.id ? (
-                        <Pressable
-                          onPress={() => setComment(item1)}
-                          style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
-                          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-                            回复
-                          </Text>
-                        </Pressable>
-                      ) : null}
-                    </Box>
-                  );
-                })
-                : null}
               <Pressable
-                onPress={() => setComment(item)}
-                style={{ marginLeft: 56, width: 60, marginTop: 10, marginBottom: 30 }}>
+                onPress={() => setReply(item)}
+                style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
                 <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
                   回复
                 </Text>
               </Pressable>
+              <Box pb={4}>
+                {item.replies.length
+                  ? item.replies.map((item1, index) => {
+                    return (
+                      <Box mt={4} ml={10} width={'80%'} key={index}>
+                        <HStack mb={2} alignItems="center">
+                          <CFastImage
+                            url={item1.headImg}
+                            styles={{
+                              width: 30,
+                              height: 30,
+                              borderRadius: 20,
+                            }}
+                          />
+                          <VStack
+                            flex={1}
+                            mr={'auto'}
+                            ml={2}
+                            justifyContent={'space-between'}>
+                            <HStack>
+                              <Text
+                                fontSize={'md'}
+                                style={{
+                                  color: '#8E8895',
+                                }}>
+                                {item1.nickName || '青回'}
+                              </Text>
+                              {getUserName(item1.replyId)}
+                            </HStack>
+                            <Text
+                              fontSize={'xs'}
+                              style={{
+                                color: '#C7C4CC',
+                              }}>
+                              {item1.createTime}
+                            </Text>
+                          </VStack>
+                        </HStack>
+                        <Text fontSize={'sm'} marginLeft={10}>{item1.content}</Text>
+                        {item1.images &&
+                          JSON.parse(item1.images).length &&
+                          JSON.parse(item1.images)[0].length ? (
+                          <CFastImage
+                            url={JSON.parse(item1.images)[0]}
+                            styles={{
+                              width: 80,
+                              height: 80,
+                              borderRadius: 10,
+                              marginLeft: 48,
+                            }}
+                          />
+                        ) : null}
+                        <Pressable
+                          onPress={() => setComment(item1)}
+                          style={{ marginLeft: 56, width: 60, marginTop: 10, }}>
+                          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                            回复
+                          </Text>
+                        </Pressable>
+                      </Box>
+                    );
+                  })
+                  : null}
+              </Box>
             </ScrollView>
-              {flag && <ChatBox
-                pressCb={(data: Object) => {
-                  comment(data, item.userDynamicId, replyId);
-                }}
-              />}
+            {flag && <ChatBox
+              pressCb={(data: Object) => {
+                comment(data, item.userDynamicId, replyId);
+              }}
+            />}
           </Box>
         </Actionsheet.Content >
       </Actionsheet >
@@ -335,15 +335,13 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                         }}
                       />
                     ) : null}
-                    {item.updateUserId === userInfo.id && item1.userId !== userInfo.id ? (
-                      <Pressable
-                        onPress={() => setReply(item1)}
-                        style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
-                        <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-                          回复
-                        </Text>
-                      </Pressable>
-                    ) : null}
+                    <Pressable
+                      onPress={() => setReply(item1)}
+                      style={{ marginLeft: 56, width: 60, marginTop: 10 }}>
+                      <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                        回复
+                      </Text>
+                    </Pressable>
                   </Box>
                 ) : null}
               </>
@@ -353,7 +351,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
       }
       {
         item.updateUserId === userInfo.id ? (
-          item.replies.length > 3 ? <Pressable onPress={() => onOpen()} style={{ alignItems: 'center', flex: 1 }}>
+          item.replies.length > 3 ? <Pressable onPress={() => onOpen()} style={{ alignItems: 'center', flex: 1, marginTop: 10 }}>
             <Text color={'#06B4FD'}>查看全部></Text>
           </Pressable> : <Pressable
             onPress={() => setReply(item)}
