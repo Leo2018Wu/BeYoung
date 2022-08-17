@@ -52,6 +52,8 @@ const useRequest = (
     try {
       if (userInfo) {
         headers.ACCESS_TOKEN = JSON.parse(userInfo).accessToken;
+      } else {
+        delete headers.ACCESS_TOKEN;
       }
       console.log('header', headers, BASE_URL + url);
       const response = await fetch(BASE_URL + url, {

@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect, useReducer} from 'react';
+import React, {useState, useCallback, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import {
   View,
@@ -18,7 +18,7 @@ import {DeviceEventEmitter} from 'react-native';
 import IconNew from 'react-native-vector-icons/AntDesign';
 import {useFocusEffect} from '@react-navigation/native';
 import useRequest from '../../hooks/useRequest';
-import {fetchMyInfo} from '../../api/common';
+import {fetchMyInfo, cancelUser} from '../../api/common';
 import {fetchMyLabels} from '../../api/label';
 import CFastImage from '../../components/CFastImage';
 import {querySysDic, updateUserInfo} from '../../api/common';
@@ -33,6 +33,7 @@ const Setting = ({...props}) => {
   const [grades, setGrades] = useState([]); // 渲染的年级列表
   const {run: runUpdate} = useRequest(updateUserInfo.url);
   const {isOpen, onOpen, onClose} = useDisclose();
+  const [cancelFlag, setCancelFlag] = useState(false);
 
   const {result: gradeDicts} = useRequest(
     querySysDic.url,
@@ -43,6 +44,7 @@ const Setting = ({...props}) => {
   );
   const {result, run} = useRequest(fetchMyInfo.url);
   const {run: runFetchMyLabels} = useRequest(fetchMyLabels.url);
+  const {run: runCancelUser} = useRequest(cancelUser.url);
 
   useFocusEffect(
     useCallback(() => {
@@ -87,6 +89,13 @@ const Setting = ({...props}) => {
     });
   };
 
+  const goCancelUser = async () => {
+    const {success} = await runCancelUser();
+    if (success) {
+      logout();
+    }
+  };
+
   const logout = () => {
     AliyunPush.unbindAccount()
       .then(result => {
@@ -105,44 +114,85 @@ const Setting = ({...props}) => {
   return (
     <NativeBaseProvider>
       <ScrollView style={styles.userInfoContain}>
-        <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
-          <Actionsheet.Content
-            style={{
-              backgroundColor: '#fff',
-              borderRadius: 40,
-            }}>
-            <Pressable
-              onPress={() => {
-                logout();
-              }}
-              px={6}
-              w="full"
-              h={10}
-              mb={2}
-              alignItems="center">
-              <Box flex={1} py={0} justifyContent={'center'} w="full">
-                <Text color={'#E04955'} textAlign={'center'}>
-                  退出登录
-                </Text>
-              </Box>
-            </Pressable>
-            <Box w="full" h={1} backgroundColor={'gray.200'} />
-            <Pressable
-              onPress={() => {
-                onClose();
-              }}
-              px={6}
-              w="full"
-              h={10}
-              alignItems="center">
-              <Box flex={1} py={0} justifyContent={'center'} w="full">
-                <Text color={'#999'} textAlign={'center'}>
-                  取消
-                </Text>
-              </Box>
-            </Pressable>
-          </Actionsheet.Content>
-        </Actionsheet>
+        {cancelFlag ? (
+          <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+            <Actionsheet.Content
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 40,
+              }}>
+              <Pressable
+                onPress={() => {
+                  goCancelUser();
+                }}
+                px={6}
+                w="full"
+                h={10}
+                mb={2}
+                alignItems="center">
+                <Box flex={1} py={0} justifyContent={'center'} w="full">
+                  <Text color={'#E04955'} textAlign={'center'}>
+                    注销
+                  </Text>
+                </Box>
+              </Pressable>
+              <Box w="full" h={1} backgroundColor={'gray.200'} />
+              <Pressable
+                onPress={() => {
+                  onClose();
+                }}
+                px={6}
+                w="full"
+                h={10}
+                alignItems="center">
+                <Box flex={1} py={0} justifyContent={'center'} w="full">
+                  <Text color={'#999'} textAlign={'center'}>
+                    取消
+                  </Text>
+                </Box>
+              </Pressable>
+            </Actionsheet.Content>
+          </Actionsheet>
+        ) : (
+          <Actionsheet hideDragIndicator isOpen={isOpen} onClose={onClose}>
+            <Actionsheet.Content
+              style={{
+                backgroundColor: '#fff',
+                borderRadius: 40,
+              }}>
+              <Pressable
+                onPress={() => {
+                  logout();
+                }}
+                px={6}
+                w="full"
+                h={10}
+                mb={2}
+                alignItems="center">
+                <Box flex={1} py={0} justifyContent={'center'} w="full">
+                  <Text color={'#E04955'} textAlign={'center'}>
+                    退出登录
+                  </Text>
+                </Box>
+              </Pressable>
+              <Box w="full" h={1} backgroundColor={'gray.200'} />
+              <Pressable
+                onPress={() => {
+                  onClose();
+                }}
+                px={6}
+                w="full"
+                h={10}
+                alignItems="center">
+                <Box flex={1} py={0} justifyContent={'center'} w="full">
+                  <Text color={'#999'} textAlign={'center'}>
+                    取消
+                  </Text>
+                </Box>
+              </Pressable>
+            </Actionsheet.Content>
+          </Actionsheet>
+        )}
         <View style={{paddingBottom: '30%'}}>
           <Pressable
             onPress={() =>
@@ -348,7 +398,28 @@ const Setting = ({...props}) => {
               <IconNew name="right" size={16} color="#919191" />
             </View>
           </Pressable>
-          <Pressable onPress={() => onOpen()} style={styles.itemView}>
+          <Pressable
+            onPress={() => {
+              setCancelFlag(true);
+              onOpen();
+            }}
+            style={styles.itemView}>
+            <Text>注销账号</Text>
+            <View
+              style={{
+                justifyContent: 'flex-end',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <IconNew name="right" size={16} color="#919191" />
+            </View>
+          </Pressable>
+          <Pressable
+            onPress={() => {
+              setCancelFlag(false);
+              onOpen();
+            }}
+            style={styles.itemView}>
             <Text>退出登录</Text>
             <View
               style={{

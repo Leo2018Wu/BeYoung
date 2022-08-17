@@ -131,7 +131,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
   const deleteComment = async (commentId) => {
     console.log('------删除评论-----', commentId);
     setIsDialogShow(false)
-    const {success} = await runDelComment({
+    const { success } = await runDelComment({
       commentId
     })
     if (success) {
@@ -213,13 +213,16 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                     回复
                   </Text>
                 </Pressable>
-                <Pressable
-                  onPress={() => goDelete(item.id)}
-                  style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
-                  <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-                    删除
-                  </Text>
-                </Pressable>
+                {
+                  item.userId === userInfo.id ?
+                    <Pressable
+                      onPress={() => goDelete(item.id)}
+                      style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
+                      <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                        删除
+                      </Text>
+                    </Pressable> : null
+                }
               </View>
               {item.images &&
                 JSON.parse(item.images).length &&
@@ -294,13 +297,16 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                             回复
                           </Text>
                         </Pressable>
-                        <Pressable
-                          onPress={() => goDelete(item1.id)}
-                          style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
-                          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-                            删除
-                          </Text>
-                        </Pressable>
+                        {
+                          item1.userId === userInfo.id ?
+                            <Pressable
+                              onPress={() => goDelete(item1.id)}
+                              style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
+                              <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                                删除
+                              </Text>
+                            </Pressable> : null
+                        }
                       </View>
                     </Box>
                   );
@@ -365,13 +371,16 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
             回复
           </Text>
         </Pressable>
-        <Pressable
-          onPress={() => goDelete(item.id)}
-          style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
-          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-            删除
-          </Text>
-        </Pressable>
+        {
+          item.userId === userInfo.id ?
+            <Pressable
+              onPress={() => goDelete(item.id)}
+              style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
+              <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                删除
+              </Text>
+            </Pressable> : null
+        }
       </View>
       {item.replies.length
         ? item.replies.map((item1, index) => {
@@ -434,13 +443,16 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
                         回复
                       </Text>
                     </Pressable>
-                    <Pressable
-                      onPress={() => goDelete(item1.id)}
-                      style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
-                      <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
-                        删除
-                      </Text>
-                    </Pressable>
+                    {
+                      item1.userId === userInfo.id ?
+                        <Pressable
+                          onPress={() => goDelete(item1.id)}
+                          style={{ marginLeft: 10, width: 60, marginTop: 10 }}>
+                          <Text fontSize={'sm'} style={{ color: '#8B5CFF' }}>
+                            删除
+                          </Text>
+                        </Pressable> : null
+                    }
                   </View>
                 </Box>
               ) : null}
@@ -449,7 +461,7 @@ const Item = React.memo(({ item }: { item: ItemProps }) => {
         })
         : null}
       {item.replies.length > 3 ? (
-        <Pressable onPress={() => onOpen()} style={{ alignItems: 'center', flex: 1 }}>
+        <Pressable onPress={() => onOpen()} style={{ alignItems: 'center', flex: 1, marginTop: 10 }}>
           <Text color={'#06B4FD'}>查看全部></Text>
         </Pressable>
       ) :

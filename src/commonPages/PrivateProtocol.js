@@ -12,7 +12,7 @@ export default function Index() {
   );
 
   return (
-    <ScrollView>
+    <ScrollView style={{paddingHorizontal: 10}}>
       <HTMLView value={protocol} stylesheet={styles} />
     </ScrollView>
   );
