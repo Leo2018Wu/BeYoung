@@ -153,3 +153,11 @@ export const querySysConfig = {
     manual: false,
   },
 };
+
+// 注销用户
+export const cancelUser = {
+  url: 'cgi/core/user/cancelUser',
+  options: {
+    manual: false,
+  },
+};
