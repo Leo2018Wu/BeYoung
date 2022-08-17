@@ -266,7 +266,7 @@ const Msgs = ({...props}) => {
   const sendMsg = () => {
     if (needPayChat) {
       Toast.show({
-        description: '该女生为送礼解锁聊天用户，请先送礼物！',
+        description: '她太忙了，快忙不过来了！',
         placement: 'top',
         duration: 2500,
       });

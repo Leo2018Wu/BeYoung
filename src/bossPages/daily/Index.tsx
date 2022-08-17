@@ -1,15 +1,8 @@
-import React, {useState} from 'react';
-import {
-  Box,
-  Text,
-  Center,
-  FlatList,
-  Pressable,
-  HStack,
-  ScrollView,
-} from 'native-base';
+import React, {useRef, useState} from 'react';
+import {Box, Text, Center, FlatList, Pressable, ScrollView} from 'native-base';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useFocusEffect} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/AntDesign';
 import useRequest from '../../hooks/useRequest';
 import DailyItem from './DailyItem';
 import {
@@ -43,7 +36,9 @@ const mergeList = (sourceList: any, nowList: any) => {
 };
 
 const Index = () => {
+  const flatRef = useRef(null);
   const insets = useSafeAreaInsets();
+  const [isToTop, setTop] = useState(() => false);
   const [params, setParams] = useState({
     pageNum: 1, //分页页码
     pageSize: 10, //每页大小
@@ -127,7 +122,6 @@ const Index = () => {
 
   const itemRefresh = async () => {
     _getList();
-    console.log('itemRefresh');
   };
 
   const _renderItem = ({item, index}: {item: any; index: number}) => {
@@ -138,9 +132,19 @@ const Index = () => {
     );
   };
 
+  const _onScroll = e => {
+    setTop(e.nativeEvent.contentOffset.y > 800);
+  };
+
+  const _scrollTop = () => {
+    flatRef.current.scrollToOffset({animated: true, y: 0});
+  };
+
   const renderList = () => {
     return (
       <FlatList
+        ref={flatRef}
+        onScroll={_onScroll}
         showsVerticalScrollIndicator={false}
         onRefresh={() => _onRefresh()}
         data={queryList}
@@ -202,6 +206,11 @@ const Index = () => {
               </Pressable>
             ))}
         </ScrollView>
+        {isToTop && (
+          <Pressable style={styles.toTop} onPress={() => _scrollTop()}>
+            <Icon name="totop" size={24} color="#333" />
+          </Pressable>
+        )}
         {pageStatus === IS_EMPTY && <PageEmpty />}
         {pageStatus === IS_LIST && renderList()}
         {pageStatus === IS_LOADDING && <PageLoading />}
@@ -224,5 +233,18 @@ const styles = StyleSheet.create({
   },
   labelItemActive: {
     backgroundColor: '#9650FF20',
+  },
+  toTop: {
+    zIndex: 99,
+    position: 'absolute',
+    bottom: 40,
+    right: 16,
+    borderColor: '#333',
+    borderWidth: 1,
+    borderRadius: 21,
+    width: 42,
+    height: 42,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

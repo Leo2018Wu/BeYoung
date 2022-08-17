@@ -1,15 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useCallback, useState} from 'react';
-import {
-  Box,
-  Divider,
-  HStack,
-  Image,
-  Pressable,
-  Text,
-  VStack,
-  View,
-} from 'native-base';
+import {Box, Divider, HStack, Image, Pressable, Text, View} from 'native-base';
 import Svg, {Circle, Defs, LinearGradient, Stop} from 'react-native-svg';
 import {useFocusEffect} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/EvilIcons';
@@ -43,10 +34,11 @@ const link_group2_list = [
     icon: require('../../images/mine_link_icon5.png'),
     pageName: 'Service',
   },
-  // {
-  //   name: '黑名单',
-  //   icon: require('../../images/mine_link_icon2.png'),
-  // },
+  {
+    name: '任务列表',
+    icon: require('../../images/mine_link_icon7.png'),
+    pageName: 'DailyTask',
+  },
   {
     name: '设置',
     icon: require('../../images/mine_link_icon6.png'),

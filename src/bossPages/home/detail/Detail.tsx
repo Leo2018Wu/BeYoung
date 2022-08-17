@@ -149,7 +149,6 @@ const Index = ({...props}) => {
   };
 
   const itemRefresh = async () => {
-    console.log('itemRefresh', FlatRef.current);
     FlatRef.current.refresh();
   };
 

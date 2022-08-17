@@ -21,6 +21,7 @@ import MineFollow from '../../bossPages/mine/FollowGirl';
 import About from '../../commonPages/About';
 import PrivateProtocol from '../../commonPages/PrivateProtocol';
 import CommonUserProtocol from '../../commonPages/CommonUserProtocol';
+import DailyTask from '../../bossPages/mine/DailyTask';
 
 const Stack = createNativeStackNavigator();
 
@@ -104,6 +105,13 @@ const MyStack = () => {
         }}
         name="Preview"
         component={Preview}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="DailyTask"
+        component={DailyTask}
       />
       <Stack.Screen
         options={{
